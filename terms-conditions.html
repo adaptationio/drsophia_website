@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms &amp; Conditions - Dr Sophia AI | Australian Consumer Law Compliance</title>
+    <style>
+        :root {
+            --brand-green-primary: #0F3430;
+            --brand-green-accent: #006333;
+            --brand-green-hover: #20CE88;
+            --brand-yellow-green: #E4EA6B;
+            --brand-light-bg: #ECECDB;
+            --brand-white: #FFFFFF;
+            --brand-text: #0F3430;
+        }
+
+        @font-face {
+            font-family: 'space grotesk';
+            src: url('assets/fonts/space-grotesk.woff2') format('woff2');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'space grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--brand-text); background-color: var(--brand-white); line-height: 1.7;
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background-color: rgba(236, 236, 219, 0.95); backdrop-filter: blur(10px);
+            padding: 1.25rem 5%; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(15, 52, 48, 0.1);
+        }
+
+        .nav-logo img { height: 50px; width: auto; transition: transform 0.3s ease; }
+        .nav-logo:hover img { transform: scale(1.05); }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+
+        .home-btn {
+            padding: 0.75rem 1.75rem; background-color: var(--brand-green-accent);
+            color: var(--brand-white); text-decoration: none; border-radius: 30px;
+            font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease;
+            border: 2px solid var(--brand-green-accent);
+        }
+
+        .home-btn:hover {
+            background-color: #e67e22; border-color: #e67e22;
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+        }
+
+        .language-switcher {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; background-color: var(--brand-white);
+            border-radius: 25px; border: 1px solid var(--brand-green-accent);
+            font-size: 0.9rem; transition: all 0.3s ease;
+        }
+
+        .language-switcher:hover { box-shadow: 0 2px 8px rgba(15, 52, 48, 0.15); }
+
+        .lang-option {
+            display: flex; align-items: center; gap: 0.35rem;
+            color: var(--brand-green-accent); text-decoration: none; transition: color 0.3s ease;
+        }
+
+        .lang-option:hover { color: #e67e22; }
+        .lang-option.active { font-weight: 600; color: var(--brand-green-primary); }
+        .flag { font-size: 1.1rem; }
+        .separator { color: var(--brand-green-accent); opacity: 0.4; }
+
+        main { max-width: 900px; margin: 0 auto; padding: 120px 5% 4rem; }
+
+        .page-header {
+            text-align: center; margin-bottom: 3rem; padding-bottom: 2rem;
+            border-bottom: 2px solid var(--brand-green-accent);
+        }
+
+        .page-title { font-size: clamp(32px, 5vw, 48px); color: var(--brand-green-accent); margin-bottom: 1rem; font-weight: 700; }
+        .company-info { font-size: 1rem; color: var(--brand-green-primary); margin-bottom: 0.5rem; }
+        .effective-date { font-size: 0.95rem; color: var(--brand-green-primary); font-style: italic; }
+
+        .content-section { margin-bottom: 2.5rem; }
+        .content-section h2 { font-size: 1.5rem; color: var(--brand-green-accent); margin-bottom: 1rem; font-weight: 600; }
+        .content-section h3 { font-size: 1.2rem; color: var(--brand-green-primary); margin: 1.5rem 0 0.75rem; font-weight: 600; }
+        .content-section p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.8; }
+        .content-section ul { margin: 1rem 0 1rem 1.5rem; list-style-type: disc; }
+        .content-section li { margin-bottom: 0.5rem; line-height: 1.8; }
+
+        .contact-box {
+            background-color: var(--brand-light-bg); padding: 2rem; border-radius: 12px;
+            margin-top: 2rem; border-left: 4px solid var(--brand-green-accent);
+        }
+
+        .contact-box h3 { color: var(--brand-green-accent); margin-bottom: 1rem; }
+        .contact-box p { margin-bottom: 0.5rem; }
+
+        .contact-box a {
+            color: var(--brand-green-accent); text-decoration: none;
+            font-weight: 600; transition: color 0.3s ease;
+        }
+
+        .contact-box a:hover { color: #e67e22; text-decoration: underline; }
+
+        footer {
+            background-color: var(--brand-light-bg); padding: 2rem 5%; text-align: center;
+            color: var(--brand-text); border-top: 1px solid rgba(15, 52, 48, 0.2);
+        }
+
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+        .footer-links a {
+            color: var(--brand-green-accent); text-decoration: none;
+            font-size: 0.95rem; transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover { color: #e67e22; text-decoration: underline; }
+        .copyright { font-size: 0.9rem; color: var(--brand-green-accent); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 4%; }
+            .nav-right { gap: 1rem; }
+            .home-btn { padding: 0.6rem 1.25rem; font-size: 0.85rem; }
+            .language-switcher { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
+            main { padding: 100px 4% 3rem; }
+            .content-section ul { margin-left: 1rem; }
+            .contact-box { padding: 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-logo img { height: 40px; }
+            .lang-text { display: none; }
+            .footer-links { flex-direction: column; gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">
+            <a href="index.html">
+                <img src="assets/images/logo-63.png" alt="Dr Sophia AI Logo">
+            </a>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="home-btn">Home</a>
+            <div class="language-switcher">
+                <span class="flag">&#x1F1EC;&#x1F1E7;</span>
+                <span class="lang-text">English</span>
+                <span class="separator">|</span>
+                <a href="terms-conditions-ar.html" class="lang-option">
+                    <span class="flag">&#x1F1E6;&#x1F1EA;</span>
+                    <span class="lang-text">العربية</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Terms &amp; Conditions</h1>
+            <p class="company-info">Dr Sophia AI Pty Ltd (ABN 84 691 537 292)</p>
+            <p class="effective-date">Effective date: 16 October 2025</p>
+            <p class="company-info">Website: www.drsophia.ai</p>
+        </div>
+
+        <section class="content-section">
+            <h2>1. Acceptance of these Terms</h2>
+            <p>These Terms &amp; Conditions (Terms) govern your access to and use of the website located at www.drsophia.ai (Site) operated by Dr Sophia AI Pty Ltd (ABN 84 691 537 292) (Dr Sophia AI, we, us, our). By accessing or using the Site, you agree to be bound by these Terms and our Privacy Policy. If you do not agree, you must not use the Site.</p>
+            <p>The Site is intended for Australian users and is not directed to persons under 18 years of age.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>2. Changes to the Site and Terms</h2>
+            <p>We may update the Site and these Terms from time to time. The latest version will be posted on the Site with the effective date. Your continued use of the Site after changes are posted constitutes acceptance of the updated Terms.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>3. Your use of the Site</h2>
+            <p>You must use the Site responsibly and only for lawful purposes. You must not:</p>
+            <ul>
+                <li>engage in any activity that is unlawful, infringes the rights of others, or is prohibited by these Terms;</li>
+                <li>interfere with or disrupt the operation or security of the Site, including by introducing malware, scraping, or excessive load;</li>
+                <li>attempt to gain unauthorised access to the Site or related systems;</li>
+                <li>use the Site to collect or harvest information about others; or</li>
+                <li>use the Site in a way that could damage our reputation or goodwill.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>4. Accounts and submissions</h2>
+            <p>The Site does not provide user accounts or require registration. We do not accept user-generated content submissions through the Site. If you contact us by email, you must ensure your information is accurate and lawful.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>5. Information only – no professional or medical advice</h2>
+            <p>Content on the Site is for general information only. It is not professional, clinical, or medical advice, and should not be relied upon to diagnose, treat, cure, or prevent any condition. You should seek the advice of an appropriately qualified professional for any questions about your circumstances.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>6. Third&#8209;party websites and services</h2>
+            <p>The Site may link to third&#8209;party websites or services. We do not endorse, control, or accept responsibility for third&#8209;party content, products, or services. Your use of any third&#8209;party site is at your own risk and subject to the terms and policies of that third party.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>7. Intellectual property</h2>
+            <p>Unless otherwise indicated, we own or license all intellectual property rights in the Site and its content (including text, graphics, logos, and design). You may view the Site for your personal, non&#8209;commercial use. You must not reproduce, distribute, modify, or create derivative works from any part of the Site without our prior written consent.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>8. Privacy</h2>
+            <p>Our handling of personal information is described in our Privacy Policy available on the Site. By using the Site, you acknowledge our Privacy Policy.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>9. Availability, security and viruses</h2>
+            <p>We use reasonable efforts to keep the Site available, secure, and free from errors, but we do not guarantee uninterrupted access or that the Site will be error&#8209;free or free from malware. You are responsible for implementing appropriate security measures on your devices and network.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>10. Warranties and liability</h2>
+            <p>Nothing in these Terms excludes, restricts, or modifies any consumer guarantees, rights, or remedies you may have under the Australian Consumer Law (ACL) which cannot be excluded, restricted, or modified by agreement.</p>
+            <p>Subject to the ACL and to the maximum extent permitted by law:</p>
+            <ul>
+                <li>(a) the Site and its content are provided "as is" and "as available" without warranties of any kind; and</li>
+                <li>(b) we exclude all liability for any indirect, incidental, special, consequential, or punitive loss, or loss of profit, revenue, opportunity, data or goodwill, arising out of or in connection with the Site or these Terms.</li>
+            </ul>
+            <p>To the extent our liability cannot be excluded but can be limited, our total aggregate liability in connection with the Site is limited to AUD $100.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>11. Indemnity</h2>
+            <p>You indemnify us and hold us harmless from and against any loss, damage, liability, cost, or expense (including reasonable legal fees) arising from your breach of these Terms or misuse of the Site.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>12. Suspension and termination</h2>
+            <p>We may suspend or terminate your access to the Site at any time without notice if we reasonably believe you have breached these Terms or for operational, security, or legal reasons.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>13. Governing law and jurisdiction</h2>
+            <p>These Terms are governed by the laws of South Australia, Australia. You submit to the non&#8209;exclusive jurisdiction of the courts of South Australia and the Commonwealth of Australia.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>14. Severability</h2>
+            <p>If any part of these Terms is held invalid, illegal, or unenforceable, that part will be severed and the remainder will continue in full force and effect.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>15. Contact us</h2>
+            <p>Questions about these Terms can be sent to:</p>
+            <div class="contact-box">
+                <h3>Ramona Prosek, Executive Assistant</h3>
+                <p><strong>Email:</strong> <a href="mailto:info@drsophia.ai">info@drsophia.ai</a></p>
+                <p><strong>Address:</strong> Suite 103, 121 King William Street, Adelaide SA 5000</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-conditions.html">Terms &amp; Conditions</a>
+        </div>
+        <p class="copyright">&copy; 2025 by Dr Sophia AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>
