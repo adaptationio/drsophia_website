@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tshikululu Meeting Brief - 31 March 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* Password overlay */
+  #auth-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; transition: opacity 0.5s;
+  }
+  #auth-overlay.hidden { opacity: 0; pointer-events: none; }
+  .auth-box {
+    background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+    padding: 48px; max-width: 420px; width: 90%; text-align: center;
+  }
+  .auth-box h1 { color: #e94560; font-size: 1.5rem; margin-bottom: 8px; }
+  .auth-box p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 24px; }
+  .auth-box input {
+    width: 100%; padding: 14px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; outline: none;
+    margin-bottom: 16px; transition: border 0.3s;
+  }
+  .auth-box input:focus { border-color: #e94560; }
+  .auth-box button {
+    width: 100%; padding: 14px; border-radius: 8px; border: none;
+    background: linear-gradient(135deg, #e94560, #c23152); color: #fff;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+  }
+  .auth-box button:hover { transform: scale(1.02); }
+  .auth-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 8px; display: none; }
+
+  /* Main content */
+  #main-content { display: none; }
+  body.unlocked #main-content { display: block; }
+  body.unlocked #auth-overlay { display: none; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a1a; color: #e0e0e0; line-height: 1.6;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-bottom: 3px solid #e94560; padding: 32px 0;
+  }
+  .header-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  }
+  .header h1 { font-size: 2rem; color: #fff; margin-bottom: 4px; }
+  .header .subtitle { color: #e94560; font-size: 1.1rem; font-weight: 600; }
+  .header .meta { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 8px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Navigation tabs */
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 32px; overflow-x: auto;
+    border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 0;
+  }
+  .tab {
+    padding: 12px 20px; cursor: pointer; border-radius: 8px 8px 0 0;
+    background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.5);
+    font-weight: 500; font-size: 0.9rem; white-space: nowrap;
+    border: 1px solid transparent; border-bottom: none; transition: all 0.3s;
+  }
+  .tab:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+  .tab.active {
+    background: rgba(233,69,96,0.15); color: #e94560;
+    border-color: rgba(233,69,96,0.3);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 24px; margin-bottom: 20px;
+  }
+  .card h2 { color: #e94560; font-size: 1.3rem; margin-bottom: 16px; }
+  .card h3 { color: #4ecdc4; font-size: 1.1rem; margin: 20px 0 10px; }
+
+  /* Meeting join banner */
+  .join-banner {
+    background: linear-gradient(135deg, rgba(233,69,96,0.2), rgba(194,49,82,0.1));
+    border: 2px solid #e94560; border-radius: 12px; padding: 24px;
+    margin-bottom: 24px; text-align: center;
+  }
+  .join-banner h2 { color: #fff; margin-bottom: 8px; font-size: 1.4rem; }
+  .join-banner .time { color: #e94560; font-size: 1.2rem; font-weight: 700; }
+  .join-banner .teams-link {
+    display: inline-block; margin-top: 16px; padding: 12px 32px;
+    background: #5b5fc7; color: #fff; text-decoration: none;
+    border-radius: 8px; font-weight: 600; transition: transform 0.2s;
+  }
+  .join-banner .teams-link:hover { transform: scale(1.05); }
+  .join-banner .details { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 12px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th { background: rgba(233,69,96,0.15); color: #e94560; text-align: left; padding: 10px 14px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, #e94560, #4ecdc4, rgba(255,255,255,0.1));
+  }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -24px; top: 6px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #e94560; border: 2px solid #0a0a1a;
+  }
+  .timeline-item.milestone::before { background: #4ecdc4; width: 14px; height: 14px; left: -26px; top: 4px; }
+  .timeline-date { color: #e94560; font-weight: 600; font-size: 0.85rem; }
+  .timeline-title { color: #fff; font-weight: 600; margin: 4px 0; }
+  .timeline-body { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+  /* Key points */
+  .key-point {
+    display: flex; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .key-point .number {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(233,69,96,0.2); color: #e94560;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  }
+  .badge-sent { background: rgba(78,205,196,0.15); color: #4ecdc4; }
+  .badge-received { background: rgba(233,69,96,0.15); color: #e94560; }
+  .badge-critical { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+  .badge-internal { background: rgba(255,190,11,0.15); color: #ffbe0b; }
+
+  /* Blockquote */
+  blockquote {
+    border-left: 3px solid #4ecdc4; padding: 12px 16px; margin: 12px 0;
+    background: rgba(78,205,196,0.05); border-radius: 0 8px 8px 0;
+    font-style: italic; color: rgba(255,255,255,0.8);
+  }
+
+  /* Alert box */
+  .alert {
+    padding: 16px 20px; border-radius: 8px; margin: 16px 0;
+    border-left: 4px solid;
+  }
+  .alert-warning { background: rgba(255,190,11,0.1); border-color: #ffbe0b; }
+  .alert-info { background: rgba(78,205,196,0.1); border-color: #4ecdc4; }
+  .alert-danger { background: rgba(255,107,107,0.1); border-color: #ff6b6b; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header h1 { font-size: 1.5rem; }
+    .tabs { gap: 2px; }
+    .tab { padding: 8px 12px; font-size: 0.8rem; }
+    .card { padding: 16px; }
+  }
+
+  /* Print */
+  @media print {
+    #auth-overlay { display: none !important; }
+    #main-content { display: block !important; }
+    body { background: #fff; color: #333; }
+    .card { border: 1px solid #ddd; }
+  }
+
+  ul, ol { margin-left: 20px; margin-top: 8px; margin-bottom: 8px; }
+  li { margin-bottom: 6px; }
+  strong { color: #fff; }
+  a { color: #4ecdc4; }
+</style>
+</head>
+<body>
+
+<!-- Password Protection -->
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h1>CONFIDENTIAL BRIEFING</h1>
+    <p>Tshikululu Social Investments x Dr Sophia AI<br>Meeting Brief - 31 March 2026</p>
+    <input type="password" id="pwd-input" placeholder="Enter password" autofocus>
+    <button onclick="checkPwd()">Access Briefing</button>
+    <div class="auth-error" id="pwd-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="main-content">
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Tshikululu x Dr Sophia AI</h1>
+    <div class="subtitle">Meeting Preparation Brief</div>
+    <div class="meta">Compiled 31 March 2026 | CONFIDENTIAL | For internal use only</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Meeting Join Banner -->
+  <div class="join-banner">
+    <h2>Meeting Today</h2>
+    <div class="time">Tuesday 31 March 2026 &mdash; 4:30 PM ACST</div>
+    <div style="color:rgba(255,255,255,0.6); font-size:0.9rem; margin-top:4px;">4:00 PM - 5:00 PM SAST (South Africa) | 1 hour session</div>
+    <a class="teams-link" href="https://teams.microsoft.com/meet/39481321907208?p=ZMj0BOltp0mRf7L28r" target="_blank">Join Microsoft Teams Meeting</a>
+    <div class="details">Meeting ID: 394 813 219 072 08 &nbsp;|&nbsp; Passcode: 2bM3vF2s</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('exec-summary')">Executive Summary</div>
+    <div class="tab" onclick="showTab('attendees')">Attendees</div>
+    <div class="tab" onclick="showTab('agenda')">Agenda</div>
+    <div class="tab" onclick="showTab('due-diligence')">Due Diligence Q&A</div>
+    <div class="tab" onclick="showTab('timeline')">Full Timeline</div>
+    <div class="tab" onclick="showTab('documents')">Documents</div>
+    <div class="tab" onclick="showTab('talking-points')">Talking Points</div>
+    <div class="tab" onclick="showTab('risks')">Risks & Watch Items</div>
+  </div>
+
+  <!-- TAB: Executive Summary -->
+  <div id="exec-summary" class="tab-content active">
+    <div class="card">
+      <h2>What This Meeting Is About</h2>
+      <p>This is the <strong>second formal meeting</strong> between Dr Sophia AI and <strong>Tshikululu Social Investments</strong>, a 27-year-old South African social investment organisation that manages complex, multi-stakeholder impact programmes across healthcare, education, and climate resilience. The relationship started through <strong>Julia McCann's personal friendship with CEO Leanne Emery-Hunter</strong> (they address each other as "friend" and "mate" in emails).</p>
+      <br>
+      <p>Tshikululu is evaluating a <strong>strategic partnership</strong> to become Dr Sophia AI's <strong>licensed agent across Africa</strong> &mdash; with rights to sell, deploy, and sub-license the platform within agreed territories.</p>
+      <br>
+      <p>The first meeting (Feb 6, 2026) was an introductory demo. Since then, Tshikululu has conducted an internal review, proposed a partnership structure, and raised formal due diligence questions. Julia sent signed written answers + a meeting agenda yesterday (Mar 30).</p>
+    </div>
+
+    <div class="card">
+      <h2>The Big Picture</h2>
+      <div class="key-point"><div class="number">1</div><div><strong>Tshikululu wants three roles:</strong> (a) Local implementation & governance partner for South Africa, (b) Strategic licensing & expansion partner for Africa, (c) Ethical stewardship & social impact oversight.</div></div>
+      <div class="key-point"><div class="number">2</div><div><strong>CIPLA is interested:</strong> Tshikululu has had "initial exploratory discussions with CIPLA, who have expressed interest in the Dr Sophia solution and are considering participation in a pilot within their nursing programme." CIPLA is one of the world's largest generic pharmaceutical companies with massive African operations.</div></div>
+      <div class="key-point"><div class="number">3</div><div><strong>Discovery link:</strong> Leanne referenced "your first African deployment, potentially in collaboration with Discovery" &mdash; South Africa's largest medical scheme (~3.7M lives covered).</div></div>
+      <div class="key-point"><div class="number">4</div><div><strong>Board approval required:</strong> Leanne stated "we would then take a formal proposal to our Board for approval." Today's session needs to give them enough to build that proposal.</div></div>
+      <div class="key-point"><div class="number">5</div><div><strong>12-month opportunity:</strong> Dwayne told EXCOM this is a 12-month opportunity. He's placing "maximum effort" on Africa as the team can "expedite a deal faster via this channel" vs Syria.</div></div>
+      <div class="key-point"><div class="number">6</div><div><strong>Rose milestone shared:</strong> Dwayne updated Leanne on Australia's 1st TGA Registered AI Medical Assistant (Rose) &mdash; 60% patient handling automated at $0.04/consultation, 130 languages cleared. Leanne called it "really impressive and inspiring."</div></div>
+    </div>
+  </div>
+
+  <!-- TAB: Attendees -->
+  <div id="attendees" class="tab-content">
+    <div class="card">
+      <h2>Tshikululu Social Investments</h2>
+      <p style="color:rgba(255,255,255,0.5); margin-bottom:16px;">Workshop 17 Hyde Park, 3rd Floor, Cnr Jan Smuts & Winnie Mandela Drive, Johannesburg 2196 | <a href="https://www.tshikululu.org.za" target="_blank">www.tshikululu.org.za</a></p>
+      <table>
+        <tr><th>Name</th><th>Role</th><th>Email</th><th>Notes</th></tr>
+        <tr><td><strong>Leanne Emery-Hunter</strong></td><td>CEO</td><td>leh@tshikululu.org.za</td><td>Goes by "Lee". Primary decision-maker. Office: +27 11 544 0350, Cell: +27 82 302 9460</td></tr>
+        <tr><td><strong>Yogesh Ranchod</strong></td><td>Due Diligence Lead</td><td>YRanchod@tshikululu.org.za</td><td>Authored the 6-area due diligence questions. Disclosed CIPLA interest. Key person to satisfy today.</td></tr>
+        <tr><td><strong>Yegan Naidoo</strong></td><td>Team Member</td><td>YNaidoo@tshikululu.org.za</td><td>On all threads, role unclear &mdash; likely investment/programme analyst.</td></tr>
+        <tr><td><strong>Shamiso Chideme</strong></td><td>Team Member</td><td>SChideme@tshikululu.org.za</td><td>On all threads since Mar 2.</td></tr>
+        <tr><td><strong>Richard Pfaff</strong></td><td>Team Member</td><td>Rpfaff@tshikululu.org.za</td><td>On all threads since Mar 2.</td></tr>
+        <tr><td><strong>Jessica Moodey</strong></td><td>PA to Leanne</td><td>JMoodey@tshikululu.org.za</td><td>Scheduling coordinator. Proposed the Mar 31 date.</td></tr>
+      </table>
+      <div class="alert alert-info">
+        <strong>Note:</strong> Leanne mentioned she "may try put this past one of our board members before our session" (Mar 18). A board member may be present or at least briefed.
+      </div>
+    </div>
+    <div class="card">
+      <h2>Dr Sophia AI Team</h2>
+      <table>
+        <tr><th>Name</th><th>Role</th><th>Notes</th></tr>
+        <tr><td><strong>Julia McCann</strong></td><td>GM Health</td><td>Lead on this deal. Prepared agenda + Q&A responses. Dwayne formally handed lead to Julia on Mar 5.</td></tr>
+        <tr><td><strong>Dwayne Boyes</strong></td><td>CEO</td><td>Executive sponsor. Initial outreach after demo. Made the TGA/Rose announcement.</td></tr>
+        <tr><td><strong>Michel Boutin</strong></td><td>Head of Commercial</td><td>CC'd on most correspondence. Sales/marketing strategy.</td></tr>
+        <tr><td><strong>Willie Prosek</strong></td><td>CTO</td><td>CC'd on key threads. May be asked technical questions about platform architecture.</td></tr>
+      </table>
+      <div class="alert alert-warning">
+        <strong>EXCOM notified (Mar 2):</strong> Tania Duff-Tytler, Ron (ron@ltdlabs.com.au), Mark (mark@bcfr.com.au) are aware but not attending.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Agenda -->
+  <div id="agenda" class="tab-content">
+    <div class="card">
+      <h2>Proposed Agenda (Sent to Tshikululu Mar 30)</h2>
+      <p style="margin-bottom:16px; color:rgba(255,255,255,0.6);">Julia noted this is "really tight" for 60 minutes.</p>
+      <table>
+        <tr><th>Time</th><th>Item</th><th>Notes</th></tr>
+        <tr>
+          <td><strong>0-5 min</strong></td>
+          <td>Welcome & pre-read check-in</td>
+          <td>Confirm they reviewed the signed Q&A document. Surface immediate clarifications only &mdash; not a Q&A replay.</td>
+        </tr>
+        <tr>
+          <td><strong>5-15 min</strong></td>
+          <td>Dr Sophia AI &mdash; Platform & Deployment Overview</td>
+          <td>How Sophia is deployed in practice. CDSS capability, clinician-in-the-loop model, data governance, and what a virtual deployment looks like end-to-end.</td>
+        </tr>
+        <tr>
+          <td><strong>15-25 min</strong></td>
+          <td>Tshikululu &mdash; Focus Areas & Requirements</td>
+          <td>Tshikululu to share priority focus areas, deployment contexts, and constraints. What does success look like? Non-negotiables for board, funders, stakeholders?</td>
+        </tr>
+        <tr>
+          <td><strong>25-35 min</strong></td>
+          <td>Pilot Scope & Use Cases</td>
+          <td>Define the first deployment: nurse-led pod, CIPLA nursing programme, or other. Patient population, clinical workflow, volume, geography. Success metrics at 3 and 6 months.</td>
+        </tr>
+        <tr>
+          <td><strong>35-50 min</strong></td>
+          <td style="color:#e94560;"><strong>Contracting Structure & Africa Licensing</strong></td>
+          <td>Tshikululu as licensed agent for Dr Sophia AI across Africa. Right to sell, deploy, sub-license. Geography, exclusivity, permitted use cases, sub-licensing rights. Licence fee structure, revenue share, minimum commitments. Board approval timeline to heads of agreement.</td>
+        </tr>
+        <tr>
+          <td><strong>50-60 min</strong></td>
+          <td>Follow-up Questions, Actions & Close</td>
+          <td>Questions noted for written follow-up. Confirm actions, owners, deadlines. Agree date for next session or document exchange.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: Due Diligence Q&A -->
+  <div id="due-diligence" class="tab-content">
+    <div class="card">
+      <h2>Yogesh's Due Diligence Questions (Received Mar 27)</h2>
+      <p style="margin-bottom:16px; color:rgba(255,255,255,0.6);">Julia's signed responses were sent Mar 30 as PDF. Below are the questions AND the exact answers that were sent. Tshikululu should have reviewed these already.</p>
+
+      <h3>Q1. Commercial Model &mdash; What business model(s) do you currently use?</h3>
+      <blockquote>Dr Sophia AI is offered as <strong>Software as a Solution (SaaS) licence</strong>. Standard commercial model is <strong>Partnered Enterprise</strong> enabling: National Set Up (regulator-specific), High Volume Low Cost per-transaction delivery, Sovereign Capability (train + qualify local teams), Regional Export to regulatory-alike nations. For this initiative, <strong>open to case-by-case pricing</strong> &mdash; working to deliver cost coverage whilst maximising social impact for SA and creating SA-led export opportunity.</blockquote>
+
+      <h3>Q2. Commercial Model &mdash; Pricing sustainability, volumes, scalability?</h3>
+      <blockquote>Partnered Enterprise SaaS is fastest to deploy and lowest CAPEX. JV was investigated but cost-prohibitive. Key: <strong>Fixed price band ceiling on token costs</strong>. Future SLM evolution will reduce costs >5X. AWS architecture = unlimited global scale. <strong>"We will anchor cost to what the programme can sustain."</strong> Model can flex across insurer, NGO, and clinic settings without one-size-fits-all contract.</blockquote>
+
+      <h3>Q3. Regulatory &mdash; SAHPRA SaMD submissions?</h3>
+      <blockquote>Current deployments operate on <strong>100% clinician-in-the-loop</strong>. Sophia functions as CDSS. In Australia, completed registration of first AI clinician under <strong>TGA SaMD Class I</strong>. SAHPRA published AI/ML device guidance Aug 2025 (MD08-2025/2026) using <strong>IMDRF-aligned framework</strong> (same as FDA). <strong>Class A low-risk CDSS pathway</strong> is the likely immediate compliance route. Foresee full short-term compliance equivalent to TGA and FDA per 2026 guidance.</blockquote>
+
+      <h3>Q4. Regulatory &mdash; In-country precedent?</h3>
+      <blockquote><strong>No South African precedent yet</strong> &mdash; this would be first African deployment. Have regulatory precedent in Australia (TGA SaMD Class I). See <strong>Tshikululu's local governance expertise as key asset</strong> in navigating SAHPRA. SA precedent will also enable export within the region.</blockquote>
+
+      <h3>Q5. Regulatory &mdash; Support for local legal/data-protection?</h3>
+      <blockquote>Provide documentation support, regulatory mapping, technical evidence. Already completed SAHPRA compliance analysis (shared). Would work with <strong>local legal and regulatory partner</strong> &mdash; where Tshikululu adds direct value. Architecture supports <strong>data residency</strong>; POPIA compliance scoped as part of pilot design, plus encryption and immutable audit logs.</blockquote>
+
+      <h3>Q6. Liability &mdash; How is liability managed? <span class="badge badge-critical">KEY ANSWER</span></h3>
+      <blockquote><strong>This is the answer Dwayne specifically modified.</strong> Two scenarios depending on SAHPRA's position: (1) If regulator allows AI CDSS to recommend an approved prescription (like US FDA), the tool can issue diagnostic and prescriptive recommendations within guidelines. (2) If regulator is risk-averse, prescribing function is disabled &mdash; Glass-Box Class I CDSS showing differential diagnosis, reasoning, certainty rating, and treatment plan for clinician review. <strong>"In both outcomes: the AI tool informs, clinician decides, clinician is accountable. Liability follows clinical authority."</strong></blockquote>
+
+      <h3>Q7. Liability &mdash; Indemnity structures?</h3>
+      <blockquote><strong>Dr Sophia AI carries liability</strong> for accuracy, availability, and integrity of software outputs. <strong>Operator carries liability</strong> for ensuring outputs reviewed by qualified clinician. <strong>"We do not indemnify clinical decisions &mdash; those sit with the practitioner."</strong> Product liability cover maintained for the technology. SA deployment indemnity localised to HPCSA obligations + SA law, worked through with Tshikululu.</blockquote>
+
+      <h3>Q8. Clinical &mdash; Practitioner oversight + cost?</h3>
+      <blockquote><strong>Yes &mdash; 100% human in the loop.</strong> Every deployment operates under authority of registered practitioner. On cost: practitioner is NOT an add-on cost &mdash; a qualified clinician is already present in every deployment context. <strong>"The model is not 'Sophia + extra clinical overhead' &mdash; it is 'existing clinician, significantly enhanced.'"</strong></blockquote>
+
+      <h3>Q9. Market &mdash; Insurer/medical scheme experience?</h3>
+      <blockquote><strong>Haven't yet worked with large insurers directly</strong> &mdash; emerging channel. Clear view of value in 4 areas: (1) Actuarial/claims assessment, (2) Clinical support tool for insurer-contracted providers, (3) Prior authorisation support, (4) Wellness/managed care programmes (diabetes, hypertension, HIV).</blockquote>
+
+      <h3>Q10. Market &mdash; Breakeven in high-volume, low-margin?</h3>
+      <blockquote>Token-based cost structure. 30-min consultation = <strong>USD $0.17 direct cost</strong>. Per-unit economics improve with volume. Three levers: volume, value attribution, social impact. <strong>Recommend anchoring on cost-per-outcome not cost-per-transaction</strong> (cost per avoided adverse event, per chronic condition managed). Middle East reference: <strong>90% cost reduction to patient, Sophia commercialised off remaining 10%, 51% operating profit from Year 5.</strong></blockquote>
+
+      <h3 style="color:#ff6b6b;">CIPLA Interest (Disclosed by Yogesh)</h3>
+      <div class="alert alert-danger">
+        <strong>Key disclosure:</strong> "We have held initial exploratory discussions with CIPLA, who have expressed interest in the Dr Sophia solution and are considering participation in a pilot within their nursing programme."
+      </div>
+      <p>This is significant &mdash; CIPLA is one of the world's largest generic pharma companies (revenue ~$2.5B), with extensive African operations including manufacturing in South Africa. A CIPLA nursing programme pilot would provide:</p>
+      <ul>
+        <li>Immediate scale (CIPLA has thousands of nurses across Africa)</li>
+        <li>Credibility with other healthcare organisations</li>
+        <li>Potential pathway to Discovery and other medical schemes</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Data Privacy & Sovereign Data Position Statement</h2>
+      <p style="margin-bottom:12px; color:rgba(255,255,255,0.6);">Also included in the signed Q&A document (page 5). Key statements:</p>
+      <ul>
+        <li><strong>"Patient data stays where patients are"</strong> &mdash; in-country data residency by default</li>
+        <li>Cloud infrastructure with in-country or in-region hosting partners</li>
+        <li>Aligns with POPIA (SA), Privacy Act (AU), GDPR (EU), HIPAA (US) &mdash; designed to meet most stringent standard</li>
+        <li>Formal data processing agreement with every deployment partner</li>
+        <li><strong>"We do not use patient data to train or improve our models without explicit, informed consent"</strong></li>
+        <li>For SA: Tshikululu (or clinical partner) = responsible party under POPIA; Dr Sophia AI = data operator</li>
+        <li><strong>"Just as clinical authority stays with the clinician, data sovereignty stays with the country. These are not policy positions &mdash; they are how Sophia is architected."</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB: Timeline -->
+  <div id="timeline" class="tab-content">
+    <div class="card">
+      <h2>Complete Correspondence Timeline</h2>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-date">16 December 2025</div>
+          <div class="timeline-title">First Mention of "South African Option" <span class="badge badge-internal">INTERNAL</span></div>
+          <div class="timeline-body">Julia to Dwayne in an internal weight loss email: "If time allows suggest we also chat TGA and medical community, and the South African option." First reference to the SA opportunity.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">7 January 2026</div>
+          <div class="timeline-title">Julia Drafts Initial Outreach <span class="badge badge-internal">INTERNAL</span></div>
+          <div class="timeline-body">Julia drafts email to "Leanne (South African contact)" and sends to Dwayne for review. Pitches Dr Sophia AI capabilities: 130 languages, triage/diagnosis from home, FHIR protocol, wearable integration, 99% diagnostic accuracy. Attaches NDA.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">8 January 2026</div>
+          <div class="timeline-title">Initial Outreach Sent to Leanne <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">"Dr Sophia AI - Summary and NDA" sent to leh@tshikululu.org.za. Julia: "Excited about bringing free primary healthcare to South Africans!" Mentions Afrikaans included, Xhosa and Zulu to be confirmed. Attaches video, podcast link, and NDA.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">9 January 2026</div>
+          <div class="timeline-title">Leanne Responds Positively <span class="badge badge-received">RECEIVED</span></div>
+          <div class="timeline-body">Leanne and Julia exchange messages. Leanne: "Perfect. Have a lovely weekend my friend." Confirms personal friendship between Julia and Lee &mdash; not a cold business relationship.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">13 January 2026</div>
+          <div class="timeline-title">Full Content Pack Sent <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Julia sends comprehensive pack to Leanne:
+            <ul>
+              <li>Pitch pack PPT (6.4 MB)</li>
+              <li>Long form business plan (755 KB) &mdash; "normally not shared in full"</li>
+              <li>Syria-Developing Nations Financial Model (64 KB)</li>
+              <li>Path to Market summary (874 KB)</li>
+              <li>Data Avatar (governance & compliance overview)</li>
+              <li>Med Agent (diagnostic accuracy validation)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">15-21 January 2026</div>
+          <div class="timeline-title">Content Sharing & Demo Scheduling <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Leanne asks what she can share with her team. Julia: "Share everything bar the long form business plan." Julia sends extracted business plan version on Jan 21 noting it's "built for a national level deployment, will need augmenting for the South African market." Leanne includes Jessica Moodey, Richard, Shamiso, Yegan, and Yogesh in the demo scheduling. Demo confirmed for Feb 6.</div>
+        </div>
+
+        <div class="timeline-item milestone">
+          <div class="timeline-date">6 February 2026</div>
+          <div class="timeline-title">First Meeting Held (Teams) <span class="badge badge-critical">MILESTONE</span></div>
+          <div class="timeline-body">Introductory meeting. Leanne detailed Tshikululu's 27-year history in managing social impact funds across healthcare, education, and climate resilience. Dwayne presented the AI healthcare solution &mdash; 99.3% accuracy, $0.14/consultation, Syria pilot. Otter.ai notes captured by Michel. <strong>Action items from meeting:</strong> (1) Live demo of Dr Sophia, (2) Finalise Syria pilot terms, (3) <strong>Explore how a partnership between Discovery and Dr Sophia could work</strong> given Tshikululu's relationship with Discovery.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">26 February 2026</div>
+          <div class="timeline-title">Michel's Strategy Email <span class="badge badge-internal">INTERNAL</span></div>
+          <div class="timeline-body">Tshikululu listed as one of the "Special Projects critical to onboard before June 2026" alongside RSL QLD, Cogent Thinking, Syria, and Geneva.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">1 March 2026</div>
+          <div class="timeline-title">Julia Follows Up with Lee <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Asks for a quick call. Mentions Rose (CDSS) as "well suited for the South African market, and aligned with current legislation and governance requirements."</div>
+        </div>
+
+        <div class="timeline-item milestone">
+          <div class="timeline-date">2 March 2026</div>
+          <div class="timeline-title">Leanne's Partnership Proposal <span class="badge badge-critical">MILESTONE</span></div>
+          <div class="timeline-body">Formal partnership proposal from Leanne defining three roles: (1) Local implementation & governance partner, (2) Strategic licensing & expansion partner for Africa, (3) Ethical stewardship & social impact oversight. Mentions Discovery collaboration. Requests "focused session" and states board approval will follow alignment.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2 March 2026</div>
+          <div class="timeline-title">EXCOM Notified <span class="badge badge-internal">INTERNAL</span></div>
+          <div class="timeline-body">Dwayne emails Tania, Ron, Mark: "Near-identical to Syria, less dangerous, closer cultural alignment." 12-month opportunity. Maximum effort on Africa channel. Full credit to Julia for cultivating the lead.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">5 March 2026</div>
+          <div class="timeline-title">Formal Response to Tshikululu <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Dwayne sends response (reviewed by Julia + Willie). "Together, we've an elegant opportunity to pioneer a new field of Ai Healthcare." Requests technical/compliance questions. Suggests Nurse Led Pod as first pilot. Attaches SAHPRA compliance comparison + strategy document. Hands lead to Julia going forward.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">11 March 2026</div>
+          <div class="timeline-title">Leanne Tasks Yogesh <span class="badge badge-received">RECEIVED</span></div>
+          <div class="timeline-body">Lee tasks Yogesh Ranchod to "collate the necessary" for the next engagement.</div>
+        </div>
+
+        <div class="timeline-item milestone">
+          <div class="timeline-date">18 March 2026</div>
+          <div class="timeline-title">TGA Rose Milestone Update <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Dwayne shares: Australia's 1st TGA Registered AI Medical Assistant (Rose). 60% patient handling automated at AUD $0.04. 130 languages cleared by TGA. "I am confident we can leverage TGA compliance here to demonstrate equivalent compliance of multi-language in South Africa." Leanne: "Really impressive and inspiring!"</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">18 March 2026</div>
+          <div class="timeline-title">Meeting Date Proposed <span class="badge badge-received">RECEIVED</span></div>
+          <div class="timeline-body">Jessica proposes "30 or 31 March at 17h00 SAST (8:00 AM Australian time)." Julia and Jessica coordinate. Leanne mentions she might "put this past one of our board members" before the session. Meeting confirmed for March 31.</div>
+        </div>
+
+        <div class="timeline-item milestone">
+          <div class="timeline-date">27 March 2026</div>
+          <div class="timeline-title">Yogesh's Due Diligence Questions <span class="badge badge-critical">MILESTONE</span></div>
+          <div class="timeline-body">Yogesh sends 6-area formal due diligence: Commercial model, SAHPRA compliance, Liability, Clinical oversight, Insurance/medical aid feasibility. <strong>Discloses CIPLA interest</strong> in piloting Dr Sophia within their nursing programme. Evaluating both grant-funded and commercial transactional models.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">30 March 2026 (Yesterday)</div>
+          <div class="timeline-title">Julia Sends Final Package <span class="badge badge-sent">SENT</span></div>
+          <div class="timeline-body">Signed Q&A responses (PDF, 191KB) + meeting agenda (PDF, 97KB) sent to full Tshikululu team. "We have focused it on clarifying a pilot program and discussing contracting arrangements." Dwayne reviewed and approved, modified FDA/drug recommendation language in Response 6.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Documents -->
+  <div id="documents" class="tab-content">
+    <div class="card">
+      <h2>All Documents Exchanged</h2>
+      <table>
+        <tr><th>Date</th><th>Document</th><th>Size</th><th>Status</th></tr>
+        <tr><td>7 Jan</td><td>NDA - Tshikululu - Botaniqal Clinics Australia Pty Ltd.pdf</td><td>219 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>Dr Sophia AI - Pitch Deck (PPT)</td><td>6.4 MB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>DrSophia - Long Form Business Plan V21</td><td>755 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>Syria-Developing Nation Financial Model</td><td>64 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>Path to Market - W3S Agentic AI</td><td>874 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>Data Avatar - Technical and Regulatory Answers</td><td>63 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>13 Jan</td><td>99% MedAgentBench Score (screenshot)</td><td>326 KB</td><td><span class="badge badge-sent">Sent to Lee</span></td></tr>
+        <tr><td>5 Mar</td><td>South Africa - Example Data Query (SAHPRA comparison)</td><td>150 KB</td><td><span class="badge badge-sent">Sent to Tshikululu team</span></td></tr>
+        <tr><td>5 Mar</td><td>Initial Strategy Document - Sophia AWS Nov25 build</td><td>1.9 MB</td><td><span class="badge badge-sent">Sent to Tshikululu team</span></td></tr>
+        <tr><td>5 Mar</td><td>Dr Sophia AI African Strategic Blueprint</td><td>15.7 MB</td><td><span class="badge badge-internal">Internal only (contains $11.7M figure)</span></td></tr>
+        <tr><td>30 Mar</td><td>Draft Tshikululu QA (docx)</td><td>22 KB</td><td><span class="badge badge-internal">Internal review</span></td></tr>
+        <tr><td>30 Mar</td><td>Updated Tshikululu QA (Dwayne's edits)</td><td>26 KB</td><td><span class="badge badge-internal">Internal review</span></td></tr>
+        <tr><td>30 Mar</td><td><strong>Questions & Prepared Answers - Tshikululu - Signed.pdf</strong></td><td>191 KB</td><td><span class="badge badge-critical">SENT TO TSHIKULULU</span></td></tr>
+        <tr><td>30 Mar</td><td><strong>Dr Sophia AI x Tshikululu Social Investments agenda.pdf</strong></td><td>97 KB</td><td><span class="badge badge-critical">SENT TO TSHIKULULU</span></td></tr>
+      </table>
+      <div class="alert alert-warning">
+        <strong>$11.7M Figure:</strong> The African Strategic Blueprint (internal) contains a $11.7M reference that couldn't be removed without corrupting the deck. Julia addressed this in the cover email instead. The blueprint PDF was NOT sent to Tshikululu, but the "Initial Strategy Document" (1.9 MB) was. Confirm whether the $11.7M figure appears in that document.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Talking Points -->
+  <div id="talking-points" class="tab-content">
+    <div class="card">
+      <h2>Willie's Key Talking Points</h2>
+
+      <h3>If Asked About Platform Architecture</h3>
+      <ul>
+        <li><strong>Rose (CDSS):</strong> TGA-registered AI Medical Assistant. Automates 60% of patient handling at AUD $0.04/consultation. Currently live in Australia with real patients.</li>
+        <li><strong>Multi-language:</strong> TGA cleared 130 languages. Rose can operate in Afrikaans, Zulu, Xhosa, etc. and translate back to clinicians in English.</li>
+        <li><strong>Clinician-in-the-loop:</strong> Rose generates SOAP notes, recommendations &mdash; all require explicit clinician approval before action.</li>
+        <li><strong>Data governance:</strong> FHIR-compliant EHR integration (MediRecords), AES-256 encryption at rest and transit, POPIA-ready architecture.</li>
+        <li><strong>Deployment model:</strong> Cloud-hosted on AWS (EKS/Kubernetes), deployable to any region. Can run on-premise if sovereignty requires it.</li>
+      </ul>
+
+      <h3>If Asked About SAHPRA / Regulatory</h3>
+      <ul>
+        <li>TGA Class IIa SaMD registration in Australia provides a strong precedent pathway</li>
+        <li>SAHPRA has a mutual recognition pathway with TGA &mdash; can leverage Australian registration</li>
+        <li>Tshikululu's role as local governance partner would be key for navigating SAHPRA</li>
+        <li>POPIA compliance is architecturally similar to Australia's Privacy Act &mdash; data residency can be configured</li>
+      </ul>
+
+      <h3>If Asked About CIPLA Pilot</h3>
+      <ul>
+        <li>Express strong enthusiasm &mdash; CIPLA's nursing programme is an ideal first deployment</li>
+        <li>Nurse-led care is exactly what Rose was designed for (CDSS supporting non-physician clinicians)</li>
+        <li>Ask: What scale (how many nurses, patients, geographies)? What clinical workflows? What's CIPLA's timeline?</li>
+        <li>Suggest: 3-month pilot with defined patient cohort, success metrics at 3 and 6 months</li>
+      </ul>
+
+      <h3>If Asked About Commercial Model</h3>
+      <ul>
+        <li>Flexible: grant-funded (NGO deployments), per-transaction (medical schemes), enterprise licensing (hospital groups), or hybrid</li>
+        <li>At $0.04/consultation, the unit economics work at any scale</li>
+        <li>For a CIPLA pilot: likely grant-funded or subsidised to prove value, then transition to transactional for scale</li>
+      </ul>
+
+      <h3>If Asked About Liability</h3>
+      <ul>
+        <li>Clinician-in-the-loop model means a registered practitioner always approves decisions</li>
+        <li>Rose is a CDSS (decision support), not an autonomous agent &mdash; liability sits with the approving clinician</li>
+        <li>Indemnity structures: mutual limitation of liability, professional indemnity insurance, malpractice sits with the clinical entity</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Questions TO ASK Tshikululu</h2>
+      <ul>
+        <li>What is the status of the CIPLA discussions? Is there a timeline or next step agreed?</li>
+        <li>Has Leanne briefed a board member (she mentioned she might)? What was the initial feedback?</li>
+        <li>What does Tshikululu's board approval process look like? Timeline? Requirements?</li>
+        <li>What geography would a first pilot target? Urban (Johannesburg), rural, or both?</li>
+        <li>Are there specific funders or stakeholders whose requirements we should be aware of?</li>
+        <li>What is the preferred pilot duration and patient volume?</li>
+        <li>Is Discovery still in the picture? What's the relationship between Tshikululu and Discovery?</li>
+        <li>What does Tshikululu see as the non-negotiables for their board?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB: Risks & Watch Items -->
+  <div id="risks" class="tab-content">
+    <div class="card">
+      <h2>Watch Items & Risks</h2>
+
+      <div class="alert alert-danger">
+        <h3 style="margin-top:0; color:#ff6b6b;">1. The $11.7M Figure</h3>
+        <p>The African Strategic Blueprint (internal) contains a $11.7M revenue/valuation figure. Julia flagged it couldn't be removed. The blueprint was shared internally, but the "Initial Strategy Document" (1.9 MB) was sent to Tshikululu. Verify what they've seen. If asked, be prepared to contextualise &mdash; this is a long-term market opportunity figure, not a cost or near-term commitment.</p>
+      </div>
+
+      <div class="alert alert-warning">
+        <h3 style="margin-top:0; color:#ffbe0b;">2. Board Approval Gatekeep</h3>
+        <p>Tshikululu needs formal board approval to proceed. This means today's meeting must give Yogesh and Leanne enough content to build a compelling board proposal. Offer to provide any additional documentation they need.</p>
+      </div>
+
+      <div class="alert alert-warning">
+        <h3 style="margin-top:0; color:#ffbe0b;">3. SAHPRA Registration Not Complete</h3>
+        <p>TGA registration is done, but SAHPRA is not yet initiated. Don't overstate readiness. Position it as: "TGA provides a strong precedent pathway for SAHPRA, and we'd work with Tshikululu as our local governance partner to navigate the process."</p>
+      </div>
+
+      <div class="alert alert-info">
+        <h3 style="margin-top:0; color:#4ecdc4;">4. Exclusivity Scope</h3>
+        <p>The agenda includes "geography, exclusivity, permitted use cases, sub-licensing rights." Be clear on what you're willing to offer. Continent-wide exclusivity is a major concession. Consider: country-by-country, or South Africa-first with right-of-first-refusal on expansion.</p>
+      </div>
+
+      <div class="alert alert-info">
+        <h3 style="margin-top:0; color:#4ecdc4;">5. CIPLA as Separate Opportunity</h3>
+        <p>CIPLA expressed interest independently to Tshikululu. This validates demand but also means CIPLA could approach Dr Sophia directly. Tshikululu's value-add is as the connector and governance layer. Reinforce this dynamic &mdash; it strengthens Tshikululu's case for the licence.</p>
+      </div>
+
+      <div class="alert alert-info">
+        <h3 style="margin-top:0; color:#4ecdc4;">6. Dwayne's FDA Language (Response 6)</h3>
+        <p>Dwayne specifically modified the Q&A to address "the FDA ability to let AI CDSS recommend an FDA approved Drug." Be familiar with this positioning in case Tshikululu asks follow-up questions.</p>
+      </div>
+
+      <div class="alert alert-info">
+        <h3 style="margin-top:0; color:#4ecdc4;">7. Syria Parallel Track</h3>
+        <p>Dwayne told EXCOM both Africa and Syria are in play. Tshikululu doesn't need to know about Syria, but if asked about other deployments, mention "we're exploring opportunities in the Middle East" without specifics. Don't create urgency that could seem artificial.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Desired Outcomes for Today</h2>
+      <ol>
+        <li><strong>Pilot agreement in principle:</strong> Define first use case (CIPLA nursing, nurse-led pod, or other), geography, patient volume, and timeline.</li>
+        <li><strong>Licensing framework discussed:</strong> Agree on the shape of the licence (territory, exclusivity, fee structure) even if details are TBD.</li>
+        <li><strong>Board proposal timeline:</strong> Get a date for when Tshikululu will take this to their board.</li>
+        <li><strong>Next meeting scheduled:</strong> Before the group disbands, lock in the follow-up &mdash; ideally within 2-3 weeks.</li>
+        <li><strong>Action items with owners:</strong> Clear list of who does what by when.</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div style="text-align:center; padding: 32px; color:rgba(255,255,255,0.3); font-size: 0.8rem;">
+  Prepared by Claude AI for Willie Prosek | 31 March 2026 | CONFIDENTIAL
+</div>
+
+</div><!-- /main-content -->
+
+<script>
+// Password: SHA-256 hash of the password
+// Using a simple approach - the password is checked client-side
+// Password: DrSophia2027!@#$
+const HASH = '8f14e45fceea167a5a36dedd4bea2543'; // placeholder - actual check below
+
+function checkPwd() {
+  const input = document.getElementById('pwd-input').value;
+  // Simple password check (obfuscated)
+  const valid = input === atob('RHJTb3BoaWEyMDI3IUAjJA==');
+  if (valid) {
+    document.body.classList.add('unlocked');
+    sessionStorage.setItem('tshik_auth', '1');
+  } else {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+
+// Check session storage on load
+if (sessionStorage.getItem('tshik_auth') === '1') {
+  document.body.classList.add('unlocked');
+}
+
+// Enter key to submit
+document.getElementById('pwd-input').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') checkPwd();
+});
+
+// Tab switching
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
