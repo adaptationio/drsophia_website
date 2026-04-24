@@ -201,6 +201,14 @@
     <p><strong>Action:</strong> confirm with Julia before you join. Clock your office arrival for the internal prep first.</p>
   </div>
 
+  <div class="urgent" style="background: linear-gradient(135deg, #0f3460, #16213e); border-color: #4ecdc4;">
+    <h2 style="color: #4ecdc4;">🎯 NEW INTEL — Sha'p Left digital stack · 24 Apr 06:00 UTC</h2>
+    <p><strong>Direct HTTP evidence:</strong> Sha'p Left's patient/clinic digital layer runs on the <strong>Sakeng Platform</strong> — an Angular PWA served from <code>shapleft-portal.sakeng.co.za</code> (identical template to <code>portal.sakeng.co.za</code>, same Cloudflare CDN, same Cloudinary media, same theme-color). Google Play app namespace <code>za.co.cipla.shapleft</code> confirms Cipla's own developer account is the publisher.</p>
+    <p><strong>Sakeng Investment Corporation</strong> (Midrand, Gauteng) — community-rewards + MVNO (Cell C) + wallet platform, NOT healthcare-native. CTO: <strong>Leopold Malan</strong>. They white-label their "Circles / Pay / Mobile" engine; Sha'p Left is a skinned Sakeng tenant.</p>
+    <p><strong>What this changes:</strong> The integration surface is most likely <em>Sakeng REST APIs</em>, not a clinical EMR. Dispensing + CCMDD + ERP still sit in other layers (probability-ranked in Counterparties tab). The 4-question integration checklist is superseded — see <strong>What We Demo</strong> tab for the refreshed 3 questions that land the Sakeng knowledge.</p>
+    <p style="font-size: 0.88rem; opacity: 0.85;">Confidence: ~75% Sakeng layer (direct HTTP/DOM evidence). ~40–55% dispensing/ERP hypotheses (market-share + adjacent-asset signals only).</p>
+  </div>
+
   <div class="join-banner">
     <h2>Cipla meeting — join link</h2>
     <div class="time">16:30 ACST · 17:00 AEST · 09:00 SAST — Fri 24 Apr 2026</div>
@@ -248,8 +256,9 @@
 
       <h3>What Willie specifically should know</h3>
       <ul>
-        <li>The <em>only</em> open personal action owed by Willie is the <strong>Africa procurement/inventory/finance software + Consult→Prescription integration read</strong> (Dwayne asked 16 Apr, Willie delivered a 2-para reply 17 Apr 06:30 — but this has <strong>not yet been converted into a formal written note</strong>). Julia will almost certainly triangulate live today; talking points are ready in the Commercial tab.</li>
-        <li>Willie is sick today (heading to office from home on cold+flu meds). Julia + Dwayne + Michel are on-call to carry the commercial/regulatory load. <strong>Willie's role is technical/platform credibility</strong> — the demo will be run by Julia, Willie sits in for technical depth.</li>
+        <li><strong>Sakeng is the rapport-opener</strong> (new 24 Apr intel). Sha'p Left's patient portal runs on Sakeng Investment Corporation's white-label Angular PWA — confirmed live by HTTP probe. Drop Sakeng by name in the integration segment and Rameez will realise you've done your homework. See Counterparties and What We Demo tabs for the refreshed integration script.</li>
+        <li>The <em>only</em> open personal action owed by Willie is the <strong>Africa procurement/inventory/finance software + Consult→Prescription integration read</strong> (Dwayne asked 16 Apr, Willie delivered a 2-para reply 17 Apr 06:30 — but this has <strong>not yet been converted into a formal written note</strong>). The 3-question integration checklist (refreshed) is in What We Demo tab.</li>
+        <li>Willie is sick today (heading to office from home on cold+flu meds). Julia + Dwayne + Michel are on-call to carry the commercial/regulatory load. <strong>Dwayne is driving the demo his way</strong> — the Sakeng intel is for your back-pocket, not for rewriting his flow.</li>
         <li>There is <strong>no personal commitment from Willie</strong> on WhatsApp/email that can be surfaced against him today. He is clean to run Julia/Dwayne's framing.</li>
       </ul>
 
@@ -376,6 +385,73 @@
       <p>Per Yogesh's 27 Mar DD email: "we have held initial exploratory discussions with CIPLA, who have expressed interest in the Dr Sophia solution and are considering participation in a pilot within their nursing programme."</p>
       <p>Tshikululu is the gate. Cipla is behind the gate. Today's meeting is the <strong>first time Cipla comes through that gate</strong> to meet us live. Important signal: if Yogesh had been able to block, he would have. Bringing Cipla principals in = he's endorsing us to them.</p>
       <blockquote>Watch-out: Cipla could theoretically bypass Tshikululu and deal with us directly. Don't give them reason to. Reinforce Tshikululu's connector + in-country governance value throughout the meeting.</blockquote>
+    </div>
+
+    <div class="card" style="border-color: #4ecdc4;">
+      <h2 style="color: #4ecdc4;">Sakeng Platform — Sha'p Left's confirmed digital vendor</h2>
+      <p><strong>The only piece of Sha'p Left's tech stack we can directly prove today.</strong> Live HTTP evidence: <code>shapleft-portal.sakeng.co.za</code> (Angular PWA, Cloudflare, Cloudinary, Material Icons, PWA manifest, last redeployed 25 Mar 2025). Identical template to <code>portal.sakeng.co.za</code>. Google Play app <code>za.co.cipla.shapleft</code> is published by Cipla's own developer namespace.</p>
+
+      <h3>About Sakeng Investment Corporation</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">Midrand</div><div class="label">HQ · Gauteng</div><div class="note">Midridge Office Park North</div></div>
+        <div class="kpi"><div class="value">Cell C</div><div class="label">MVNO partner</div><div class="note">Sakeng Mobile 2019/477504/07</div></div>
+        <div class="kpi"><div class="value">Leopold Malan</div><div class="label">CTO</div><div class="note">Platform technical lead</div></div>
+        <div class="kpi"><div class="value">Angular PWA</div><div class="label">Tech stack</div><div class="note">Cloudinary media · Cloudflare CDN</div></div>
+      </div>
+
+      <h3>What Sakeng actually does</h3>
+      <ul>
+        <li><strong>Circles</strong> — community / member management</li>
+        <li><strong>Sakeng Pay</strong> — wallet / payments</li>
+        <li><strong>Sakeng Mobile</strong> — SIM / eSIM MVNO</li>
+        <li><strong>Sakeng White Label App</strong> — tenant framework (Sha'p Left = skinned tenant)</li>
+      </ul>
+
+      <h3>Why this matters for the demo</h3>
+      <p>Sakeng's DNA is rewards / engagement / MVNO — <strong>not healthcare, not FHIR, not HPCSA-credentialed</strong>. Almost certainly:</p>
+      <ul>
+        <li><strong>Sakeng handles:</strong> booking, Dablapmed pick-up point lookups, patient engagement, chronic-med collection flow, member loyalty, possibly photo uploads</li>
+        <li><strong>Sakeng probably does NOT handle:</strong> clinical consult capture, dispensing (Schedule 4 scripts), CCMDD reporting, EMR</li>
+        <li><strong>Most likely integration path for Rose:</strong> Sakeng REST APIs → Cipla iPaaS → fan-out to whatever dispensing + ERP layers exist</li>
+      </ul>
+
+      <blockquote>When you mention Sakeng by name in the meeting, you're demonstrating homework Yogesh probably hasn't done. It's the fastest rapport accelerator we have. Use it early in the integration segment.</blockquote>
+
+      <h3>Probability-ranked hypotheses for the layers behind Sakeng</h3>
+
+      <h4>Dispensing / pharmacy (what the nurse clicks to script Schedule 4)</h4>
+      <table>
+        <thead><tr><th>Candidate</th><th>Probability</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RxSolution</strong> (MSH → SA DoH, free, CCMDD-aligned)</td><td><span class="pill pill-green">~55%</span></td><td>Purpose-built for SA primary care, free to implement, CCMDD-integrated, strong fit for R350 nurse-dispensed model. &gt;400 SA facilities.</td></tr>
+          <tr><td><strong>Unisolv (BCX)</strong></td><td><span class="pill pill-amber">~25%</span></td><td>65% SA private-pharmacy share · SAPC/POPIA default · industry norm for commercial path</td></tr>
+          <tr><td>Custom / Sakeng stock module</td><td><span class="pill pill-amber">~15%</span></td><td>Sakeng has commerce primitives · could wrap SEP pricing catalogue</td></tr>
+          <tr><td>ProPharm / ComputAssist / TouchPoint</td><td><span class="pill pill-grey">~5% combined</span></td><td>Long tail</td></tr>
+        </tbody>
+      </table>
+
+      <h4>EMR / clinical records</h4>
+      <table>
+        <thead><tr><th>Candidate</th><th>Probability</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RxSolution (doubles as lightweight EMR)</strong></td><td><span class="pill pill-green">~45%</span></td><td>Same reasoning as dispensing — SA nurse-led clinic default</td></tr>
+          <tr><td>Custom Sakeng workflow + paper</td><td><span class="pill pill-amber">~30%</span></td><td>Triage/vitals/booking via Sakeng; clinical notes potentially unstructured</td></tr>
+          <tr><td>GoodX / Healthbridge / Elixir Live</td><td><span class="pill pill-grey">~5–10% each</span></td><td>Priced for medical-aid-claiming GPs, not nurse entrepreneurs</td></tr>
+          <tr><td><strong>Brandmed</strong></td><td><span class="pill pill-grey">~5%</span></td><td>Yogesh 16 Apr: "actively reviewing" = <em>not deployed</em>. Don't assume it's running.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>CCMDD connectivity</h4>
+      <p><span class="pill pill-green">Very high confidence</span> Sha'p Left plugs into <strong>SYNCH</strong> (national CCMDD system, maintained by BroadReach since Oct 2021). Mandatory for the 50 Dablapmed pick-up points. Whether via direct API or through a dispensing vendor is the open question.</p>
+
+      <h4>Cipla SA ERP / back-office</h4>
+      <p><strong>Sage Evolution</strong> plausible at Cipla Medpro SA (~55%) — only public trail is the old CQuential case study Willie cited 17 Apr. Parent Cipla Limited (India) likely SAP ECC/S4HANA, uncontroversial for BSE-listed multinational.</p>
+
+      <h4>Middleware</h4>
+      <p><strong>Zero public evidence</strong> for MuleSoft / Boomi / SAP BTP / Azure Logic Apps at Sha'p Left. Working theory: <strong>Sakeng IS the middleware</strong> for the patient-facing layer. Any Cipla Medpro SAP-to-Sha'p Left traffic likely routes Sakeng REST → Cipla's iPaaS of choice → dispensing / ERP.</p>
+
+      <h3>Brandmed reality check</h3>
+      <p>Yogesh's 16 Apr email: Cipla is "actively reviewing alternative tools (such as Brandmed)." That phrasing means <strong>under evaluation, not in production at Sha'p Left today.</strong> Brandmed is a chronic-disease BT-device telemetry platform — not a nurse-clinic EMR. Treat Brandmed as a <em>potential future chronic-overlay partner</em>, not a current stack element.</p>
     </div>
   </div>
 
@@ -574,15 +650,16 @@
         <li><strong>Anchor on cost-per-outcome, not cost-per-transaction.</strong> "Direct token cost per 30-min consult is ~USD $0.17. But the right number for Cipla is R350 consult → 19.4 minutes down to 1–9 minutes → 2× pod capacity inside the same infrastructure. That's the lever."</li>
       </ul>
 
-      <h3>Operational integration segment (20 min after demo)</h3>
-      <p>This is where Willie's 17 Apr stack hypothesis gets aired. Julia will ask Rameez and Mamdoo to confirm:</p>
+      <h3>Operational integration segment (20 min after demo) — REFRESHED with Sakeng finding</h3>
+      <p>The old 4-question checklist was built before we knew about the Sakeng layer. <strong>Replaced with 3 sharper questions</strong> that anchor on what we've now proven (Sakeng) and force one-sentence answers on the layers we haven't:</p>
       <ol>
-        <li><strong>ERP at group + SA level.</strong> Our hypothesis: SAP ECC/S4HANA at group, Sage Evolution at Cipla Medpro SA (per CQuential public case study).</li>
-        <li><strong>Dispensing system at the Sha'p Left pods.</strong> Likely candidates: Unisolv (≈65% SA private pharmacy share), Rx Solution, or Brandmed's own stack.</li>
-        <li><strong>Brandmed as intended clinical front-end?</strong> Direct question to Mamdoo. If yes, we position as a chained call behind Brandmed; if no, we're the front-end.</li>
-        <li><strong>Preferred middleware.</strong> MuleSoft, Boomi, SAP BTP, or custom. This drives our 4–6-week pilot timeline per target.</li>
+        <li><strong>"When a nurse finishes a consult at, say, the Bellville hub — what do they actually click to dispense a Schedule 4 script? Is that Unisolv, RxSolution, something custom, or paper?"</strong> Forces identification of the dispensing layer in one answer.</li>
+        <li><strong>"Your patient-facing app and the <code>shapleft-portal.sakeng.co.za</code> portal — is Sakeng also where we'd plug an external clinical advisor like Rose, or is there a separate EMR API?"</strong> This is the conversation-opener Rameez won't expect. You've just shown him you know who their tech vendor is. Instant rapport + pins down whether Sakeng is the integration surface.</li>
+        <li><strong>"For the 50 Dablapmed pick-up points, how do you hand patient data to SYNCH/CCMDD — a file dump, a live API, or does your dispensing vendor handle it?"</strong> Pins CCMDD posture + tells you whether middleware already exists.</li>
       </ol>
-      <p><strong>Integration path we're offering:</strong> FHIR R4 → iPaaS (EventBridge/Lambda or customer's MuleSoft/Boomi/SAP BTP) → fan-out to dispensing + procurement + supply-chain. REST webhook first, structured FHIR second. Realistic pilot: 4–6 weeks per target system.</p>
+      <p><strong>Stretch question (use if rapport is strong):</strong> <em>"Who would we talk to if we wanted to evaluate an integration PoC — Leopold's team at Sakeng, or an internal Cipla Foundation tech owner?"</em> Uses Leopold Malan's name as proof of homework.</p>
+
+      <p><strong>Integration path we're offering:</strong> most likely <strong>Sakeng REST APIs</strong> → Cipla iPaaS (MuleSoft / Boomi / SAP BTP / Azure Logic Apps — TBC) → fan-out to dispensing + procurement + supply-chain. FHIR R4 as the clinical-payload format. REST webhook first, structured FHIR second. Realistic pilot: 4–6 weeks per target system <em>once</em> we know what those targets are — that's what today's 3 questions aim to extract.</p>
     </div>
 
     <div class="card">
@@ -759,9 +836,10 @@
     <div class="card">
       <h2>Risks &amp; watch-outs</h2>
 
-      <h3><span class="pill pill-red">High</span> Brandmed conflict</h3>
-      <p>Cipla Medpro owns 30% of Brandmed. Yogesh's 16 Apr email: Cipla is "actively reviewing alternative tools (such as Brandmed), although these do not currently offer full AI functionality."</p>
-      <p><strong>Play it:</strong> complement, don't replace. Brandmed does chronic; Rose does acute + triage. If Mamdoo asks "why not Brandmed?", answer <em>"Brandmed is excellent on the chronic journey — we layer on top for the acute and undiagnosed cases their platform doesn't target."</em> Don't disparage. Cipla owns the answer.</p>
+      <h3><span class="pill pill-amber">Medium</span> Brandmed — reviewed, not deployed</h3>
+      <p>Cipla Medpro owns 30% of Brandmed. Yogesh's 16 Apr email: Cipla is "actively reviewing alternative tools (such as Brandmed), although these do not currently offer full AI functionality." <strong>"Reviewing" = not deployed at Sha'p Left today</strong> — the Sakeng intel reinforces this (patient portal layer is Sakeng, not Brandmed).</p>
+      <p><strong>Play it:</strong> complement, don't replace. Brandmed does chronic-disease BT-device telemetry; Rose does acute + triage. If Mamdoo asks "why not Brandmed?", answer <em>"Brandmed is excellent on the chronic journey — we layer on top for the acute and undiagnosed cases their platform doesn't target. We'd complement, not compete."</em> Don't disparage. Cipla owns part of them.</p>
+      <p><strong>Intel confidence:</strong> <em>probability Brandmed is already in live Sha'p Left production ≈ 5%</em> per research. Don't assume it's running unless Rameez confirms.</p>
 
       <h3><span class="pill pill-red">High</span> SAHPRA readiness</h3>
       <p>We do not yet have SAHPRA submission. TGA CDSS exemption response was filed 23 Apr 03:18 UTC (9.5 hrs before COB — submitted cleanly). Expect Mamdoo to press on regulatory readiness for SA.</p>
@@ -830,6 +908,19 @@
         <li><a href="https://docs.drsophia.ai/benchmarks/rose-byzantine-consensus-whitepaper-v4.2-dec2025.pdf">rose-byzantine-consensus-whitepaper-v4.2-dec2025.pdf</a> — 19 pages · 340 KB · Nature Digital Medicine target</li>
       </ul>
 
+      <h3>Sha'p Left digital-stack intel (new 24 Apr)</h3>
+      <ul>
+        <li><strong>Confirmed Sakeng layer:</strong> <a href="https://shapleft-portal.sakeng.co.za/">shapleft-portal.sakeng.co.za</a> (live, HTTP 200, Angular PWA, last redeployed 25 Mar 2025)</li>
+        <li><strong>Template source:</strong> <a href="https://portal.sakeng.co.za/">portal.sakeng.co.za</a> (identical Angular template)</li>
+        <li><strong>Sakeng corporate:</strong> <a href="https://www.sakeng.co.za/">sakeng.co.za</a> (Midrand · MVNO + community platform · CTO Leopold Malan)</li>
+        <li><strong>ITWeb coverage — Sakeng MVNO launch:</strong> <a href="https://www.itweb.co.za/content/lLn147mjxQ4MJ6Aa">itweb.co.za/content/lLn147mjxQ4MJ6Aa</a></li>
+        <li><strong>Google Play app:</strong> <a href="https://play.google.com/store/apps/details?id=za.co.cipla.shapleft&hl=en_ZA">za.co.cipla.shapleft</a> (Cipla's own dev namespace)</li>
+        <li><strong>Cipla Foundation + FREF expansion:</strong> <a href="https://www.healthcaremea.com/2026/03/26/cipla-foundation-partners-with-fref-to-scale-shap-left-nurse-led-clinics/">HealthcareMEA · March 2026</a></li>
+        <li><strong>BCX Unisolv (65% SA pharmacy market):</strong> <a href="https://www.bcx.co.za/industries/healthcare-sector/unisolv/">bcx.co.za/industries/healthcare-sector/unisolv</a></li>
+        <li><strong>MSH RxSolution:</strong> <a href="https://msh.org/resources/rxsolution/">msh.org/resources/rxsolution</a> · <a href="https://www.ghsupplychain.org/news/going-digital-utilizing-rxsolution-improve-medicine-management-south-africas-eastern-cape">GHSC Eastern Cape case study</a></li>
+        <li><strong>SA DoH CCMDD:</strong> <a href="https://www.health.gov.za/ccmdd/">health.gov.za/ccmdd</a></li>
+      </ul>
+
       <h3>This brief</h3>
       <p><a href="https://docs.drsophia.ai/tshikululu/cipla-2026-04-24/">docs.drsophia.ai/tshikululu/cipla-2026-04-24/</a> · password-protected · same password as the 31 March brief at <a href="https://docs.drsophia.ai/tshikululu/">/tshikululu/</a>.</p>
 
@@ -885,6 +976,15 @@
         </tbody>
       </table>
 
+      <h3>Sha'p Left digital vendor (new 24 Apr)</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Org</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Leopold Malan</strong></td><td>CTO</td><td>Sakeng Investment Corporation (Midrand)</td><td>Platform tech lead for Sha'p Left portal + app. <a href="https://www.linkedin.com/in/leopold-malan-55751846/">LinkedIn</a>. Use his name in the integration segment as proof of homework — don't contact directly pre-meeting.</td></tr>
+          <tr><td>Sakeng Investment Corporation</td><td>Platform vendor</td><td>Midrand, Gauteng</td><td>Community platform + MVNO + Sakeng Pay wallet · Cell C MVNO partner · Angular PWA white-label engine · Reg: Sakeng Mobile 2019/477504/07</td></tr>
+        </tbody>
+      </table>
+
       <h3>Latent / adjacent</h3>
       <ul>
         <li><strong>Discovery Health</strong> — name-dropped by Leanne 2 Mar. Not on today's invite. Potential scale partner.</li>
@@ -895,9 +995,9 @@
   </div>
 
   <div class="footer-note">
-    <p><strong>Compiled:</strong> 24 April 2026 · <strong>By:</strong> team-botaniqal multi-agent research (3 agents × 8 min each, parallel) · <strong>Sources:</strong> 4 Willie mailboxes (drsophia.ai · ltdlabs.com.au · botaniqal.com.au · adaptation.io) · WhatsApp bridge DB (Botaniqal marketing check-in group) · Fleet wiki (cipla.md · tshikululu.md · drsophia-pipeline.md · dr-sophia-contacts.md) · Local docs (docs/tshikululu/ · docs/tga-correspondence/julia-submission/) · CSM hub (nil) · Memory files (project-correspondence-apr23.md · correspondence-status-apr10.md).</p>
+    <p><strong>Compiled:</strong> 24 April 2026 · <strong>By:</strong> team-botaniqal multi-agent research · <strong>Latest update:</strong> 24 Apr 06:00 UTC — Sakeng digital-vendor discovery (direct HTTP evidence against <code>shapleft-portal.sakeng.co.za</code>). · <strong>Sources:</strong> 4 Willie mailboxes (drsophia.ai · ltdlabs.com.au · botaniqal.com.au · adaptation.io) · WhatsApp bridge DB · Fleet wiki (cipla.md · tshikululu.md · drsophia-pipeline.md · dr-sophia-contacts.md) · Local docs (docs/tshikululu/ · docs/tga-correspondence/julia-submission/) · CSM hub (nil) · Memory files (project-correspondence-apr23.md · correspondence-status-apr10.md) · Public web (Sakeng corporate · ITWeb · Play Store · HealthcareMEA · BizNews · BCX · MSH · SA DoH CCMDD).</p>
     <p><strong>Password:</strong> same as 31 March brief. <strong>URL:</strong> docs.drsophia.ai/tshikululu/cipla-2026-04-24/</p>
-    <p><strong>Reliability:</strong> high-confidence on timeline, documents, commercial model, Q&amp;A, risks. Medium-confidence on Cipla internals (Paul Miller direct, Mamdoo identity, Sha'p Left EMR). Low-confidence on Mozambique / Goodbye Malaria, Discovery Health involvement.</p>
+    <p><strong>Reliability:</strong> high-confidence on timeline, documents, commercial model, Q&amp;A, risks. <strong>~75% confidence</strong> on Sakeng layer (direct HTTP/DOM evidence). <strong>~40–55% confidence</strong> on dispensing/EMR/ERP hypotheses (market-share + adjacent-asset signals only — awaiting Cipla confirmation). Low-confidence on Mozambique / Goodbye Malaria, Discovery Health involvement, Paul Miller direct contact.</p>
   </div>
 
 </div><!-- /container -->
