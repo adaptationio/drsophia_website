@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cipla / Tshikululu — Meeting Brief · 24 April 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  #auth-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; transition: opacity 0.5s;
+  }
+  body.unlocked #auth-overlay { display: none; }
+  .auth-box {
+    background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+    padding: 48px; max-width: 440px; width: 90%; text-align: center;
+  }
+  .auth-box h1 { color: #e94560; font-size: 1.55rem; margin-bottom: 8px; font-weight: 600; }
+  .auth-box .sub { color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-bottom: 24px; }
+  .auth-box input {
+    width: 100%; padding: 14px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; outline: none;
+    margin-bottom: 14px; font-family: inherit;
+  }
+  .auth-box input:focus { border-color: #e94560; }
+  .auth-box button {
+    width: 100%; padding: 14px; border-radius: 8px; border: none;
+    background: linear-gradient(135deg, #e94560, #c23152); color: #fff;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+  }
+  .auth-box button:hover { transform: scale(1.02); }
+  .auth-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 4px; display: none; }
+
+  #main-content { display: none; }
+  body.unlocked #main-content { display: block; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a1a; color: #e0e0e0; line-height: 1.65;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-bottom: 3px solid #e94560; padding: 32px 0;
+  }
+  .header-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .header .eyebrow { color: #4ecdc4; font-size: 0.82rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .header h1 { font-size: 2.1rem; color: #fff; margin-bottom: 4px; font-weight: 600; letter-spacing: -0.5px; }
+  .header .subtitle { color: #e94560; font-size: 1.05rem; font-weight: 600; }
+  .header .meta { color: rgba(255,255,255,0.5); font-size: 0.88rem; margin-top: 8px; }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .urgent {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff; padding: 22px 26px; border-radius: 12px; margin-bottom: 28px;
+    border: 2px solid #ffc857; box-shadow: 0 10px 30px rgba(233,69,96,0.25);
+  }
+  .urgent h2 { font-size: 1.05rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .urgent p { font-size: 0.98rem; line-height: 1.6; margin-bottom: 8px; }
+  .urgent strong { color: #ffc857; }
+
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 28px; overflow-x: auto;
+    border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 0;
+  }
+  .tab {
+    padding: 12px 18px; cursor: pointer; border-radius: 8px 8px 0 0;
+    background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.5);
+    font-weight: 500; font-size: 0.88rem; white-space: nowrap;
+    border: 1px solid transparent; border-bottom: none;
+  }
+  .tab:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .tab.active { background: rgba(233,69,96,0.14); color: #e94560; border-color: rgba(233,69,96,0.3); }
+  .tab-content { display: none; animation: fade 0.25s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 26px; margin-bottom: 20px;
+  }
+  .card h2 { color: #e94560; font-size: 1.25rem; margin-bottom: 14px; font-weight: 600; }
+  .card h3 { color: #4ecdc4; font-size: 1.05rem; margin: 20px 0 10px; font-weight: 600; }
+  .card h4 { color: #ffc857; font-size: 0.92rem; margin: 14px 0 6px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .card p { margin-bottom: 10px; color: #d4d4d8; }
+  .card ul, .card ol { padding-left: 22px; margin-bottom: 12px; color: #d4d4d8; }
+  .card li { margin-bottom: 6px; }
+  .card strong { color: #fff; }
+  .card em { color: #ffc857; font-style: normal; background: rgba(255,200,87,0.1); padding: 0 4px; border-radius: 3px; }
+  .card a { color: #4ecdc4; text-decoration: none; border-bottom: 1px dotted rgba(78,205,196,0.4); }
+  .card a:hover { border-bottom-style: solid; }
+  blockquote {
+    border-left: 3px solid #4ecdc4; padding: 10px 18px; margin: 14px 0;
+    background: rgba(78,205,196,0.05); color: #b4b4b8; font-style: italic; border-radius: 0 8px 8px 0;
+  }
+
+  .join-banner {
+    background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(78,205,196,0.05));
+    border: 2px solid #4ecdc4; border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: center;
+  }
+  .join-banner h2 { color: #fff; margin-bottom: 6px; font-size: 1.3rem; }
+  .join-banner .time { color: #4ecdc4; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; }
+  .join-banner .teams-link {
+    display: inline-block; margin-top: 14px; padding: 12px 28px;
+    background: #5b5fc7; color: #fff; text-decoration: none;
+    border-radius: 8px; font-weight: 600; transition: transform 0.2s;
+  }
+  .join-banner .teams-link:hover { transform: scale(1.03); }
+  .join-banner .details { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 12px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  th { background: rgba(233,69,96,0.15); color: #e94560; text-align: left; padding: 10px 14px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; color: #d4d4d8; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td.date { color: #4ecdc4; font-weight: 600; white-space: nowrap; }
+  td.tag { white-space: nowrap; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 18px 0; }
+  .kpi { background: rgba(78,205,196,0.07); border-left: 3px solid #4ecdc4; padding: 16px 18px; border-radius: 0 8px 8px 0; }
+  .kpi .value { font-size: 1.7rem; font-weight: 700; color: #4ecdc4; line-height: 1.1; }
+  .kpi .label { font-size: 0.8rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .kpi .note { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 4px; font-style: italic; }
+
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill-red { background: rgba(233,69,96,0.18); color: #ff6b8a; }
+  .pill-amber { background: rgba(255,200,87,0.18); color: #ffc857; }
+  .pill-green { background: rgba(52,199,89,0.18); color: #5ed680; }
+  .pill-blue { background: rgba(78,205,196,0.18); color: #4ecdc4; }
+  .pill-grey { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, #e94560, #4ecdc4, rgba(255,255,255,0.08));
+  }
+  .timeline-item { position: relative; margin-bottom: 22px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -23px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%; background: #e94560;
+    box-shadow: 0 0 0 3px rgba(233,69,96,0.15);
+  }
+  .timeline-date { color: #4ecdc4; font-size: 0.82rem; font-weight: 600; }
+  .timeline-title { color: #fff; font-weight: 600; margin: 2px 0 4px; font-size: 0.98rem; }
+  .timeline-body { color: rgba(255,255,255,0.75); font-size: 0.92rem; }
+
+  .checkpanel { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+  .check {
+    display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .check-box { flex: 0 0 18px; height: 18px; border-radius: 4px; background: rgba(78,205,196,0.15); border: 2px solid #4ecdc4; margin-top: 2px; }
+
+  .owner { display: inline-block; padding: 2px 8px; border-radius: 4px; background: rgba(78,205,196,0.15); color: #4ecdc4; font-size: 0.78rem; font-weight: 600; }
+  .owner.red { background: rgba(233,69,96,0.15); color: #ff6b8a; }
+  .owner.amber { background: rgba(255,200,87,0.15); color: #ffc857; }
+
+  .footer-note {
+    margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.02);
+    border-left: 3px solid rgba(255,255,255,0.15); border-radius: 0 8px 8px 0;
+    color: rgba(255,255,255,0.55); font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h1>Internal — Confidential</h1>
+    <p class="sub">Dr Sophia AI · Cipla / Tshikululu Meeting Brief</p>
+    <input type="password" id="pwd-input" placeholder="Enter password" autofocus>
+    <button onclick="checkPwd()">Unlock</button>
+    <div class="auth-error" id="pwd-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<div id="main-content">
+
+<div class="header">
+  <div class="header-inner">
+    <div class="eyebrow">Meeting Brief · Confidential</div>
+    <h1>Cipla / Tshikululu — First Live Demo</h1>
+    <div class="subtitle">Friday 24 April 2026 · Teams · Yogesh Ranchod (Tshikululu) organising</div>
+    <div class="meta">Compiled 24 Apr 2026 by team-botaniqal multi-agent research · Lead: Julia McCann · Exec sponsor: Dwayne Boyes · Sources: 4 mailboxes, WhatsApp bridge, fleet wiki, local docs</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="urgent">
+    <h2>⚠ Time-zone reconciliation — read first</h2>
+    <p>Memory note flagged the meeting as <strong>"Fri 24 Apr 09:00 ACST"</strong>. The actual calendar invite is <strong>09:00–10:30 SAST</strong> (Yogesh's local SA time), which is:</p>
+    <p>→ <strong>16:30–18:00 ACST (Adelaide)</strong> · <strong>17:00–18:30 AEST (Sydney)</strong> · <strong>07:00–08:30 UTC</strong></p>
+    <p>Cross-check: Willie's own WhatsApp note last night said <em>"tonight"</em> not "this morning" — confirms afternoon ACST. Julia also scheduled an <strong>internal prep at 10:30–11:30 ACST this morning</strong> (01:00–02:00 UTC) — attendees: Julia, Dwayne, Willie, Michel.</p>
+    <p><strong>Action:</strong> confirm with Julia before you join. Clock your office arrival for the internal prep first.</p>
+  </div>
+
+  <div class="join-banner">
+    <h2>Cipla meeting — join link</h2>
+    <div class="time">16:30 ACST · 17:00 AEST · 09:00 SAST — Fri 24 Apr 2026</div>
+    <div class="details">Organiser: Yogesh Ranchod · Meeting ID: <strong>342 968 536 046 71</strong> · Passcode: <strong>6LK66Vj7</strong></div>
+    <div class="details" style="margin-top:6px;">Internal prep (10:30 ACST today): Meeting ID <strong>472 220 437 063 43</strong> · Passcode <strong>e7Tm3V4R</strong></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('tab-summary', event)">1 · Summary</div>
+    <div class="tab" onclick="showTab('tab-meeting', event)">2 · Meeting</div>
+    <div class="tab" onclick="showTab('tab-parties', event)">3 · Counterparties</div>
+    <div class="tab" onclick="showTab('tab-timeline', event)">4 · Timeline</div>
+    <div class="tab" onclick="showTab('tab-demo', event)">5 · What We Demo</div>
+    <div class="tab" onclick="showTab('tab-commercial', event)">6 · Commercial</div>
+    <div class="tab" onclick="showTab('tab-qa', event)">7 · Prepared Q&amp;A</div>
+    <div class="tab" onclick="showTab('tab-actions', event)">8 · Willie Actions</div>
+    <div class="tab" onclick="showTab('tab-risks', event)">9 · Risks</div>
+    <div class="tab" onclick="showTab('tab-docs', event)">10 · Docs</div>
+    <div class="tab" onclick="showTab('tab-contacts', event)">11 · Contacts</div>
+  </div>
+
+  <!-- 1 · SUMMARY -->
+  <div id="tab-summary" class="tab-content active">
+    <div class="card">
+      <h2>TL;DR — where we are, what happens next</h2>
+      <p><strong>This is the first live demo directly with Cipla.</strong> Every prior touchpoint (6 Feb intro, 31 Mar pilot discussion, April DD exchange) was brokered by Tshikululu. Today Cipla principals join in person: <strong>Rameez Johaar</strong> (oversees Cipla's Sha'p Left nursing-station programme — our operational buyer) and <strong>Dr P. Mamdoo</strong> (Cipla Medical Officer — clinical veto-holder).</p>
+
+      <p>The deal is in <span class="pill pill-amber">late-stage commercial negotiation</span>. Commercial model is priced and modelled (Dwayne, 15 Apr). Regulatory pack is drafted (Julia, V4, 9 Apr). Phased-demo approach is agreed (17 Apr). What Cipla wants today is (1) see Rose actually work, (2) see how it fits a nurse-led clinic workflow, and (3) begin a data/integration conversation.</p>
+
+      <h3>What's at stake</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">61</div><div class="label">Target Sha'p Left clinics by 2029</div><div class="note">11 today + 50 FirstRand-funded expansion</div></div>
+        <div class="kpi"><div class="value">R105M</div><div class="label">Monthly revenue at full scale</div><div class="note">R22M operating profit / month</div></div>
+        <div class="kpi"><div class="value">~135%</div><div class="label">Modelled IRR</div><div class="note">13-month payback · ROI 521% by Mo 15</div></div>
+        <div class="kpi"><div class="value">AUD $668K</div><div class="label">Indicative deal size</div><div class="note">R7.7M — Dwayne, SA Data Room</div></div>
+      </div>
+
+      <h3>What we are proposing</h3>
+      <ul>
+        <li><strong>Product scope:</strong> Rose AI Clinician as a <strong>Class A low-risk CDSS</strong> in Cipla's Sha'p Left nurse-led clinics, with the acute-care wedge that Brandmed (Cipla-owned, chronic-only) doesn't cover.</li>
+        <li><strong>Commercial structure:</strong> SaaS "Partnered Enterprise" — case-by-case pricing for this initiative, anchored on cost-per-outcome. ~USD $0.17 direct token cost / 30-min consult; future SLM migration ≥5× cost reduction.</li>
+        <li><strong>Licensing ambition:</strong> Tshikululu as licensed agent for Dr Sophia AI <strong>across Africa</strong> (territory + exclusivity TBD — this is the board-proposal conversation Leanne has signalled).</li>
+        <li><strong>Pilot shape:</strong> 2 pods → scale to 61. 3,000 scripts/month per pod. Consultation 19.4 → 1–9 min. Script processing 4.34 → 1 min.</li>
+      </ul>
+
+      <h3>What Willie specifically should know</h3>
+      <ul>
+        <li>The <em>only</em> open personal action owed by Willie is the <strong>Africa procurement/inventory/finance software + Consult→Prescription integration read</strong> (Dwayne asked 16 Apr, Willie delivered a 2-para reply 17 Apr 06:30 — but this has <strong>not yet been converted into a formal written note</strong>). Julia will almost certainly triangulate live today; talking points are ready in the Commercial tab.</li>
+        <li>Willie is sick today (heading to office from home on cold+flu meds). Julia + Dwayne + Michel are on-call to carry the commercial/regulatory load. <strong>Willie's role is technical/platform credibility</strong> — the demo will be run by Julia, Willie sits in for technical depth.</li>
+        <li>There is <strong>no personal commitment from Willie</strong> on WhatsApp/email that can be surfaced against him today. He is clean to run Julia/Dwayne's framing.</li>
+      </ul>
+
+      <h3>What needs a response from you (Willie)</h3>
+      <ol>
+        <li><span class="pill pill-red">Before today</span> Confirm the ACST meeting time with Julia (it is almost certainly <strong>16:30</strong>, not 09:00 as the memory note suggested).</li>
+        <li><span class="pill pill-amber">In prep call (10:30 ACST)</span> Share the 4-point data ask for Cipla: (a) ERP group + SA, (b) dispensing system at Sha'p Left pods, (c) is Brandmed the intended clinical front-end, (d) preferred middleware.</li>
+        <li><span class="pill pill-amber">In prep call</span> Agree demo flow + who speaks. Default: Julia opens, Willie runs the live clinical workflow (Rose DDx → SOAP → treatment), Dwayne carries commercial, Michel carries go-to-market.</li>
+        <li><span class="pill pill-grey">Optional — post-meeting</span> Convert Willie's 17 Apr stack hypothesis into a formal 1-pager for the Tshikululu/Cipla follow-up. Not blocking today.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 2 · MEETING -->
+  <div id="tab-meeting" class="tab-content">
+    <div class="card">
+      <h2>Meeting details</h2>
+
+      <h3>Time</h3>
+      <p><strong>Fri 24 Apr 2026 · 09:00–10:30 SAST</strong> = 16:30–18:00 ACST (Adelaide) = 17:00–18:30 AEST (Sydney) = 07:00–08:30 UTC.</p>
+
+      <h3>Channel</h3>
+      <p>Microsoft Teams. Organiser: <strong>Yogesh Ranchod</strong> (YRanchod@tshikululu.org.za) on behalf of Tshikululu Social Investments.</p>
+      <ul>
+        <li>Meeting ID: <strong>342 968 536 046 71</strong></li>
+        <li>Passcode: <strong>6LK66Vj7</strong></li>
+        <li>Invite subject: "Dr Sophia AI with Cipla"</li>
+      </ul>
+
+      <h3>Attendees — confirmed</h3>
+      <table>
+        <thead><tr><th>Side</th><th>Name</th><th>Role</th><th>Email</th></tr></thead>
+        <tbody>
+          <tr><td>Dr Sophia AI</td><td>Julia McCann</td><td>Deal lead · opens + coordinates</td><td>julia.schoeman@gmail.com (also CC'd at drsophia.ai)</td></tr>
+          <tr><td>Dr Sophia AI</td><td>Dwayne Boyes</td><td>Exec sponsor · commercial</td><td>dwayne@drsophia.ai</td></tr>
+          <tr><td>Dr Sophia AI</td><td>Michel Boutin</td><td>Marketing / GTM</td><td>michel@drsophia.ai</td></tr>
+          <tr><td>Dr Sophia AI</td><td>Willie Prosek</td><td>CTO · live demo + integration</td><td>willie@drsophia.ai</td></tr>
+          <tr><td>Tshikululu</td><td>Yogesh Ranchod</td><td>BD / DD lead · organiser · our primary</td><td>YRanchod@tshikululu.org.za</td></tr>
+          <tr><td>Tshikululu</td><td>Leanne Emery-Hunter</td><td>CEO · senior sponsor (Julia's friend)</td><td>Leh@tshikululu.org.za</td></tr>
+          <tr><td>Tshikululu</td><td>Yegan Naidoo</td><td>CFO</td><td>ynaidoo@tshikululu.org.za</td></tr>
+          <tr><td><strong>Cipla / Sha'p Left</strong></td><td><strong>Rameez Johaar</strong></td><td>Cipla Nursing Station programme ops lead — <em>first direct contact</em></td><td>rameez.johaar@shapleft.com</td></tr>
+          <tr><td><strong>Cipla / Sha'p Left</strong></td><td><strong>Dr P. Mamdoo</strong></td><td>Cipla Medical Officer — clinical gatekeeper</td><td>pmamdoo@gmail.com</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Agenda (from Yogesh, 22 Apr 10:11 UTC)</h3>
+      <table>
+        <thead><tr><th>Time (SAST)</th><th>Duration</th><th>Segment</th><th>Lead</th></tr></thead>
+        <tbody>
+          <tr><td class="date">09:00–09:10</td><td>10 min</td><td>Welcome &amp; Introductions</td><td>Yogesh</td></tr>
+          <tr><td class="date">09:10–09:20</td><td>10 min</td><td>Context &amp; Objectives — CIPLA Nursing Station Programme + Dr Sophia AI overview</td><td>Yogesh → Julia</td></tr>
+          <tr><td class="date">09:20–09:50</td><td><strong>30 min</strong></td><td><strong>Dr Sophia AI Demonstration — platform overview + live clinical workflow + nursing-station application</strong></td><td><strong>Willie (with Julia)</strong></td></tr>
+          <tr><td class="date">09:50–10:10</td><td>20 min</td><td>Operational Integration — fit within nursing workflows + high-level data flow + system considerations</td><td>Willie / Dwayne</td></tr>
+          <tr><td class="date">10:10–10:20</td><td>10 min</td><td>Q&amp;A</td><td>All</td></tr>
+          <tr><td class="date">10:20–10:30</td><td>10 min</td><td>Next Steps &amp; Close</td><td>Julia / Yogesh</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Internal prep — before the meeting</h3>
+      <p>Julia scheduled a rehearsal for <strong>01:00–02:00 UTC = 10:30–11:30 ACST today</strong>.</p>
+      <ul>
+        <li>Meeting ID: <strong>472 220 437 063 43</strong></li>
+        <li>Passcode: <strong>e7Tm3V4R</strong></li>
+        <li>Attendees: Julia, Dwayne, Willie, Michel</li>
+        <li>Prep pack: <strong>CIPLA_Tshikululu_prep_pack_v2.docx</strong> (49 KB, circulated 23 Apr 02:53 UTC)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3 · COUNTERPARTIES -->
+  <div id="tab-parties" class="tab-content">
+    <div class="card">
+      <h2>Tshikululu Social Investments — the broker</h2>
+      <p><strong>Role:</strong> SA-based Corporate Social Investment (CSI) fund manager. Broker between SA corporates (Anglo American, FirstRand, Cipla Foundation) and initiatives. <em>Not a clinical operator.</em> Use them to structure funding and governance — not as the direct software buyer.</p>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">1998</div><div class="label">Founded</div></div>
+        <div class="kpi"><div class="value">60</div><div class="label">Staff</div></div>
+        <div class="kpi"><div class="value">R696M</div><div class="label">Assets Under Management (2024)</div></div>
+        <div class="kpi"><div class="value">PBO</div><div class="label">Section 18A · B-BBEE compliant</div></div>
+      </div>
+
+      <h3>Leadership transitions (institutional-memory risk)</h3>
+      <ul>
+        <li>New CEO took over June 2025</li>
+        <li>New CFO took over September 2025</li>
+        <li>Leanne Emery-Hunter remains primary sponsor; the board is still getting to know this deal</li>
+      </ul>
+
+      <h3>Their proposed three-roles model (Leanne, 2 Mar 2026)</h3>
+      <ol>
+        <li><strong>Local implementation &amp; governance</strong> — licensing, SAHPRA, stakeholder mgmt</li>
+        <li><strong>Strategic licensing / expansion across Africa</strong> — regional agent</li>
+        <li><strong>Ethical stewardship</strong> — AI governance, human oversight, data sovereignty</li>
+      </ol>
+      <p>Leanne confirmed this requires Tshikululu <strong>board approval</strong>. Today's meeting needs to give Yogesh + Leanne enough substance to build the board proposal.</p>
+    </div>
+
+    <div class="card">
+      <h2>Cipla Limited — the end client</h2>
+      <p>Indian-headquartered pharma multinational (Mumbai, 1935). <strong>3rd largest in SA private pharma</strong>. Grew 8.9% vs market 0.2% in 2024–25. SA HQ: Building 2, Junxion Park, 10 Elephant Lane, Century City.</p>
+
+      <h3>Key product for us: Sha'p Left</h3>
+      <p>Cipla Foundation's nurse-led clinic network. Zulu for "just around the corner."</p>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">11 → 61</div><div class="label">Clinic expansion</div><div class="note">Today → 2029 target</div></div>
+        <div class="kpi"><div class="value">50</div><div class="label">Daplapmeds pick-up points</div><div class="note">Chronic dispensing satellites</div></div>
+        <div class="kpi"><div class="value">R350</div><div class="label">Per consultation inc. meds</div><div class="note">Up to Schedule 4</div></div>
+        <div class="kpi"><div class="value">3</div><div class="label">Provinces</div><div class="note">Gauteng · W Cape · KZN</div></div>
+      </div>
+
+      <p><strong>FirstRand Empowerment Foundation</strong> partnership (announced March 2026) funds the 50-clinic expansion. That's the capital wedge behind the 61-clinic target.</p>
+
+      <h3>Brandmed conflict — handle carefully</h3>
+      <p>Cipla Medpro owns <strong>30% of Brandmed</strong> since 2019. Brandmed is a chronic-disease connected-health platform (cardiometabolic focus). It does NOT cover <em>acute</em> CDSS. <strong>That is our wedge.</strong></p>
+      <p>In Yogesh's 16 Apr reply he explicitly said Cipla is "actively reviewing alternative tools (such as Brandmed), although these do not currently offer full AI functionality." Our positioning today: <em>complement</em> Brandmed (chronic) with Rose (acute CDSS), not replace it.</p>
+
+      <h3>Cipla leadership — critical gap</h3>
+      <p><strong>Paul Miller</strong> is CEO Cipla SA + Regional Head Africa (SAGA). 13-year tenure. MBA Wales. Ex-Mylan / AstraZeneca / Oncology UK. Commercial not clinical. <strong>We do not yet have a direct relationship with him.</strong> Today's two Cipla attendees (Rameez + Mamdoo) are operational/clinical, not decision-makers on deal size. They will report back up to Paul Miller.</p>
+    </div>
+
+    <div class="card">
+      <h2>Tshikululu ↔ Cipla relationship</h2>
+      <p>Per Yogesh's 27 Mar DD email: "we have held initial exploratory discussions with CIPLA, who have expressed interest in the Dr Sophia solution and are considering participation in a pilot within their nursing programme."</p>
+      <p>Tshikululu is the gate. Cipla is behind the gate. Today's meeting is the <strong>first time Cipla comes through that gate</strong> to meet us live. Important signal: if Yogesh had been able to block, he would have. Bringing Cipla principals in = he's endorsing us to them.</p>
+      <blockquote>Watch-out: Cipla could theoretically bypass Tshikululu and deal with us directly. Don't give them reason to. Reinforce Tshikululu's connector + in-country governance value throughout the meeting.</blockquote>
+    </div>
+  </div>
+
+  <!-- 4 · TIMELINE -->
+  <div id="tab-timeline" class="tab-content">
+    <div class="card">
+      <h2>Full engagement timeline</h2>
+      <p>Consolidated from email (4 Willie mailboxes), WhatsApp bridge, meeting brief v1 (31 Mar), fleet wiki, and local docs.</p>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-date">16 Dec 2025</div>
+          <div class="timeline-title">First internal mention of South Africa</div>
+          <div class="timeline-body">Julia mentions "South African option" internally to Dwayne. Leanne Emery-Hunter is a personal friend of Julia.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">7–8 Jan 2026</div>
+          <div class="timeline-title">First outreach + NDA</div>
+          <div class="timeline-body">Julia drafts outreach to Leanne. NDA sent to leh@tshikululu.org.za. Leanne responds 9 Jan: <em>"Perfect. Have a lovely weekend my friend."</em></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">13 Jan</div>
+          <div class="timeline-title">Full content pack sent</div>
+          <div class="timeline-body">Pitch deck (6.4 MB), Long Form Biz Plan V21 (755 KB — "normally not shared"), Syria Financial Model, Path-to-Market, Data Avatar, MedAgent.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">27 Jan (WhatsApp)</div>
+          <div class="timeline-title">Dwayne asks Willie to lead SA demo</div>
+          <div class="timeline-body">Dwayne in Botaniqal marketing WhatsApp: <em>"Tshikululu (SA entity) are also keen for a demo. Assume you can lead it. When suits?"</em></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">6 Feb — Meeting #1</div>
+          <div class="timeline-title">First Teams meeting — intro + demo</div>
+          <div class="timeline-body">Present: full Tshikululu team. Actions: live Sophia demo, finalise Syria pilot terms, <strong>explore Discovery partnership via Tshikululu</strong>. 99.3% accuracy + $0.14/consult cited. Syria pilot shown.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">26 Feb</div>
+          <div class="timeline-title">Michel lists Tshikululu as Special Project</div>
+          <div class="timeline-body">"Critical to onboard before June 2026."</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2 Mar</div>
+          <div class="timeline-title">Leanne's three-roles partnership proposal</div>
+          <div class="timeline-body">Opening line: <em>"your first African deployment, potentially in collaboration with Discovery."</em> Three roles for Tshikululu: local implementation &amp; governance, strategic licensing &amp; regional expansion, ethical stewardship. Requires Tshikululu board approval.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2 Mar 22:19</div>
+          <div class="timeline-title">Dwayne to EXCOM — "Maximum effort on Africa"</div>
+          <div class="timeline-body">To Tania, Ron, Mark; CC Julia, Willie, Ramona. Framing: <em>"Near-identical to Syria, less dangerous, closer cultural alignment… 12-month opportunity… full clinical trial. I want to give full credit to Julia who cultivated this lead."</em></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">5 Mar</div>
+          <div class="timeline-title">Dwayne hands deal lead to Julia</div>
+          <div class="timeline-body">Formal reply to Tshikululu. Attachments: SAHPRA compliance comparison, strategic blueprint, AI architecture/data-governance/EHR pack. Julia assumes deal lead from here.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">11 Mar</div>
+          <div class="timeline-title">Yogesh Ranchod assigned Tshikululu operational lead</div>
+          <div class="timeline-body">Leanne tasks Yogesh to run due diligence.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">18 Mar</div>
+          <div class="timeline-title">TGA Rose milestone shared · meeting proposed</div>
+          <div class="timeline-body">Dwayne updates Leanne on Rose TGA progress ("60% patient handling automated at $0.04/consult, 130 languages"). Leanne: <em>"Really impressive and inspiring!"</em> Jessica Moodey schedules 31 Mar session.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">27 Mar</div>
+          <div class="timeline-title">Yogesh's formal 6-area DD — Cipla interest disclosed</div>
+          <div class="timeline-body">Questions: commercial models (grant vs transactional), pricing sustainability, minimum volumes, <strong>SAHPRA SaMD precedent</strong>, liability/indemnity, insurer experience, breakeven. <em>"We have held initial exploratory discussions with CIPLA, who have expressed interest in the Dr Sophia solution and are considering participation in a pilot within their nursing programme."</em></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">30 Mar</div>
+          <div class="timeline-title">Julia sends signed Q&amp;A pack</div>
+          <div class="timeline-body">Q&amp;A PDF (191 KB, signed by Julia) + agenda (96 KB). Dwayne edited Q6 FDA language. Both PDFs on disk at <code>docs/tshikululu/</code>.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">31 Mar — Meeting #2</div>
+          <div class="timeline-title">Second formal meeting · pilot + licensing</div>
+          <div class="timeline-body">17:00 SAST = 08:00 AEST. Key minutes (Otter): <em>"deployment of Dr Sophia AI in South Africa, focusing on a pilot project with Cipla… customization 6–12 weeks… potential to save 90% of patient costs. Pilot aims to support 10,000 patients at a cost of $11.7 million. Cipla's 3,000 monthly scripts highlighted as a potential starting point."</em> Leanne signals she may brief a board member beforehand.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">1 Apr</div>
+          <div class="timeline-title">Julia circulates 9-item action list</div>
+          <div class="timeline-body">Our commitments to Tshikululu. Most now done (see Commercial tab for reconciliation).</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">9 Apr</div>
+          <div class="timeline-title">Julia sends formal action-item response + partner pack</div>
+          <div class="timeline-body">Three attachments: <strong>DrSophiaAI_Tshikululu_PartnerPack_9 April 2026 V3.pdf</strong> (489 KB — competitive landscape + liability), <strong>SA_Regulatory_Framework_Botaniqal_V4.pdf</strong> (4.2 MB — SAHPRA mapping), <strong>260409 - SA Pilot Cost.pdf</strong> + XLSX (indicative costing).</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">15 Apr 06:49</div>
+          <div class="timeline-title">Dwayne issues Commercial Model for CIPLA Pilot</div>
+          <div class="timeline-body">Subject: "Commercial Model for CIPLA Pilot Trial - DRAFT FOR DISCUSSION." Full economics (see Commercial tab). Headline: 13-mo payback, IRR ~135%, R105M monthly revenue / R22M profit at 61 pods.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">16 Apr</div>
+          <div class="timeline-title">Yogesh returns · phased-demo approach</div>
+          <div class="timeline-body">Cipla recommends phased approach: (1) system demo, (2) live case demo, (3) on-premise demo at nurse station parallel to routine duties. Flags Brandmed review. Proposes Wed 22 Apr 09:00 SAST.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">16 Apr 22:34</div>
+          <div class="timeline-title">Dwayne → Willie: PRIORITY REVIEW</div>
+          <div class="timeline-body"><em>"@Willie Prosek - please get the agents to assess the most likely Medical Procurement, Inventory and Finance [systems CIPLA runs]."</em> This is Willie's one personal open action into today.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">17 Apr 02:21</div>
+          <div class="timeline-title">Julia agrees phased-demo · requests CIPLA attendee list + stack</div>
+          <div class="timeline-body">Asks Thurs/Fri instead of Wed. Asks for CIPLA attendee list and which systems they run for Procurement/Inventory/Financials/PMS/EMR.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">17 Apr 06:30</div>
+          <div class="timeline-title">Willie delivers 2-paragraph stack hypothesis</div>
+          <div class="timeline-body">Conclusions: Cipla Limited parent = SAP ECC/S4HANA (MM/WM/EWM/FI-CO); Cipla Medpro SA = Sage Evolution (CQuential case study); nursing-station edge likely Unisolv (~65% SA private pharmacy share), Rx Solution, or Brandmed. Integration path: FHIR R4 → iPaaS (EventBridge/Lambda, MuleSoft, Boomi, SAP BTP) → fan-out to dispensing/procurement/supply-chain. Realistic pilot: REST webhook → iPaaS → target, 4–6 weeks per target.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">21 Apr 11:19</div>
+          <div class="timeline-title">Yogesh confirms Fri 24 Apr · Cipla attendees named</div>
+          <div class="timeline-body">Cipla confirms <strong>Rameez Johaar</strong> (Nursing Station) + <strong>Dr P. Mamdoo</strong> (Medical Officer). Yogesh typo'd "24 May" but all subsequent traffic confirms 24 April.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">22 Apr 10:11</div>
+          <div class="timeline-title">Final agenda + Teams link sent</div>
+          <div class="timeline-body">From YRanchod@tshikululu.org.za. Rameez + Mamdoo + Leh + YNaidoo on thread. Agenda in Meeting tab.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">23 Apr 02:53</div>
+          <div class="timeline-title">Julia circulates internal prep pack</div>
+          <div class="timeline-body"><strong>CIPLA_Tshikululu_prep_pack_v2.docx</strong> (49 KB). Schedules pre-session rehearsal post-CDSS.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">23 Apr 22:40 (WhatsApp)</div>
+          <div class="timeline-title">Michel gentle nudge · Willie sick note</div>
+          <div class="timeline-body">Julia to Michel: <em>"is 0900 just a reminder or are we meeting too?"</em> Michel: <em>"Just a very healthy nudge/reminder for you and Dwayne to book it…"</em> Willie: <em>"I'm sick… so going to pump the cold and flu then head in, in preparation for tonight."</em></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">24 Apr — TODAY</div>
+          <div class="timeline-title">Cipla's first live demo — 16:30 ACST</div>
+          <div class="timeline-body">10:30 ACST internal prep. 16:30 ACST main meeting. 30-min live clinical workflow is the centrepiece.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · WHAT WE DEMO -->
+  <div id="tab-demo" class="tab-content">
+    <div class="card">
+      <h2>Demonstration — 30 min centrepiece</h2>
+      <p>Yogesh's agenda gives us a 30-minute demonstration block: <em>platform overview · live clinical workflow demo · application within a nursing station environment</em>. This is the single most important segment of the meeting.</p>
+
+      <h3>Recommended demo flow (5 acts)</h3>
+      <table>
+        <thead><tr><th style="width:10%;">#</th><th style="width:22%;">Act</th><th style="width:10%;">Time</th><th style="width:10%;">Lead</th><th>What it shows</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Platform overview + architecture</td><td>5 min</td><td>Julia</td><td>Multi-tenant EKS · 42-agent Byzantine consensus · 4 AI providers (Anthropic / Google / OpenAI / Perplexity). 130 languages. Reference the new <a href="https://docs.drsophia.ai/benchmarks/">benchmarks page</a>: MedQA 99.3% · MMLU Medical 98.6% · MedAgentBench 99.0% · 100% life-threatening safety detection.</td></tr>
+          <tr><td>2</td><td><strong>Live Rose consultation — nurse workflow</strong></td><td>12 min</td><td>Willie</td><td>Walk a Sha'p Left nurse persona through a case (e.g. undiagnosed hypertension + chest pain). Show: Rose's differential diagnosis, reasoning, certainty rating, red-flag alerts, SOAP note generation, treatment plan with prescription boundary.</td></tr>
+          <tr><td>3</td><td>Clinician oversight + glass-box</td><td>4 min</td><td>Willie</td><td>100% clinician-in-the-loop. Show clinician approve/reject/modify flow. Show the reasoning trail. Anchor: <em>"AI informs, clinician decides, clinician accountable."</em></td></tr>
+          <tr><td>4</td><td>Language switch demo</td><td>3 min</td><td>Willie</td><td>Switch to isiZulu or Afrikaans mid-consultation. Show translation integrity + clinical-accuracy preservation.</td></tr>
+          <tr><td>5</td><td>Nursing-station fit</td><td>6 min</td><td>Julia / Michel</td><td>Workflow diagram: patient arrival → nurse triage → Rose-assisted consult → prescription → dispensing handoff. Fit with Sha'p Left's R350/visit unit economics.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Talking points to pre-load</h3>
+      <ul>
+        <li><strong>Acute wedge, not Brandmed replacement.</strong> "Brandmed handles the chronic journey beautifully. We layer on top for acute, undiagnosed, and triage. They complement."</li>
+        <li><strong>Australia-first validation path to SA.</strong> "We've built and proven this under TGA — a peer-accepted regulator. SAHPRA's MD08-2025/2026 is IMDRF-aligned, same family as FDA. Class A low-risk CDSS pathway is the near-term route."</li>
+        <li><strong>Clinician is already there.</strong> "A nurse's time is already in Sha'p Left's cost base. Rose augments that existing clinician — it doesn't add headcount."</li>
+        <li><strong>Data sovereignty is architecture, not policy.</strong> "Patient data stays where patients are. POPIA-aligned. AWS af-south-1 residency. Zero training on patient data without explicit consent."</li>
+        <li><strong>Anchor on cost-per-outcome, not cost-per-transaction.</strong> "Direct token cost per 30-min consult is ~USD $0.17. But the right number for Cipla is R350 consult → 19.4 minutes down to 1–9 minutes → 2× pod capacity inside the same infrastructure. That's the lever."</li>
+      </ul>
+
+      <h3>Operational integration segment (20 min after demo)</h3>
+      <p>This is where Willie's 17 Apr stack hypothesis gets aired. Julia will ask Rameez and Mamdoo to confirm:</p>
+      <ol>
+        <li><strong>ERP at group + SA level.</strong> Our hypothesis: SAP ECC/S4HANA at group, Sage Evolution at Cipla Medpro SA (per CQuential public case study).</li>
+        <li><strong>Dispensing system at the Sha'p Left pods.</strong> Likely candidates: Unisolv (≈65% SA private pharmacy share), Rx Solution, or Brandmed's own stack.</li>
+        <li><strong>Brandmed as intended clinical front-end?</strong> Direct question to Mamdoo. If yes, we position as a chained call behind Brandmed; if no, we're the front-end.</li>
+        <li><strong>Preferred middleware.</strong> MuleSoft, Boomi, SAP BTP, or custom. This drives our 4–6-week pilot timeline per target.</li>
+      </ol>
+      <p><strong>Integration path we're offering:</strong> FHIR R4 → iPaaS (EventBridge/Lambda or customer's MuleSoft/Boomi/SAP BTP) → fan-out to dispensing + procurement + supply-chain. REST webhook first, structured FHIR second. Realistic pilot: 4–6 weeks per target system.</p>
+    </div>
+
+    <div class="card">
+      <h2>Demo environment checklist</h2>
+      <div class="checkpanel">
+        <div class="check"><div class="check-box"></div><div><strong>DEV environment ready</strong> — dev.app.botaniqal.com.au. Log in as a test nurse persona. Pre-seed 1–2 realistic Sha'p Left style patient cases.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong>Language toggle tested</strong> — confirm isiZulu + Afrikaans both render and don't lose clinical reasoning.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong>Prescription boundary tested</strong> — confirm Rose stays behind the "AI informs, clinician decides" wall. No unsolicited branded-drug recommendations.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong>Backup path</strong> — if DEV misbehaves, have a recorded 4-min workflow capture ready to drop into screen share.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong>Benchmarks page bookmarked</strong> — <a href="https://docs.drsophia.ai/benchmarks/">docs.drsophia.ai/benchmarks/</a> · V4.2 white paper PDF ready to link in chat.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong>Screen share order</strong> — Rose app (primary) · architecture diagram (Julia) · this brief (private to our side only).</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · COMMERCIAL -->
+  <div id="tab-commercial" class="tab-content">
+    <div class="card">
+      <h2>Commercial Model — Dwayne, 15 April</h2>
+      <p>Source: Dwayne's email <em>"Commercial Model for CIPLA Pilot Trial - DRAFT FOR DISCUSSION"</em>, 15 Apr 06:49 UTC, to Tshikululu. Attachment: <strong>260409 - SA Pilot Cost.xlsx</strong>.</p>
+
+      <h3>Pilot structure</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">2 → 61</div><div class="label">Pod scale</div><div class="note">Start small, scale to full Sha'p Left network</div></div>
+        <div class="kpi"><div class="value">3,000</div><div class="label">Scripts / month / pod</div><div class="note">Matches Cipla's stated volume</div></div>
+        <div class="kpi"><div class="value">R350</div><div class="label">Per visit (fee-for-service)</div><div class="note">Includes meds up to Schedule 4</div></div>
+        <div class="kpi"><div class="value">ZAR monthly</div><div class="label">Billing currency + cadence</div><div class="note">Fortnightly per Julia's change (was monthly)</div></div>
+      </div>
+
+      <h3>Efficiency economics (the real pitch)</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Status quo</th><th>With Rose</th><th>Lever</th></tr></thead>
+        <tbody>
+          <tr><td>Consultation duration</td><td>~19.4 min</td><td><strong>1–9 min</strong></td><td>Pod capacity &gt; 2×</td></tr>
+          <tr><td>Script processing time</td><td>~4.34 min</td><td><strong>~1 min</strong></td><td>Dispensing throughput</td></tr>
+          <tr><td>Healthcare delivery capacity</td><td>Baseline</td><td><strong>+100%+</strong></td><td>Same infrastructure</td></tr>
+          <tr><td>Patient cost reduction (ME ref)</td><td>Baseline</td><td><strong>−90%</strong></td><td>Anchor for CSI narrative</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Return metrics</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">~13 mo</div><div class="label">Payback period</div></div>
+        <div class="kpi"><div class="value">~135%</div><div class="label">IRR</div></div>
+        <div class="kpi"><div class="value">~521%</div><div class="label">ROI by Month 15</div></div>
+        <div class="kpi"><div class="value">~20.9%</div><div class="label">Operating profit (steady state)</div></div>
+        <div class="kpi"><div class="value">R105M</div><div class="label">Monthly revenue @ 61 pods</div></div>
+        <div class="kpi"><div class="value">R22M</div><div class="label">Monthly operating profit @ 61 pods</div></div>
+      </div>
+
+      <h3>Dr Sophia's unit cost (what we eat)</h3>
+      <p><strong>USD $0.17 direct token cost per 30-min consult</strong> (2 round-trips through multi-provider consensus). Future SLM migration targets ≥5× cost reduction. Price-band ceiling in place so token-cost drift never exceeds programme sustainability.</p>
+
+      <h3>Deal-size anchor</h3>
+      <p>Dwayne's SA Data Room (70/08, 10 Apr): indicative <strong>AUD $668K / R7.7M</strong>. This is the working number for the board proposal Yogesh is building.</p>
+
+      <h3>Reconciliation of 1 Apr action list</h3>
+      <table>
+        <thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>One-page cost summary</td><td>Dwayne</td><td>9 Apr</td><td><span class="pill pill-green">Done</span> · replaced by fuller 15 Apr model</td></tr>
+          <tr><td>2</td><td>Materials pack (landscape, benchmarks, tech, SaMD liability)</td><td>Julia</td><td>9 Apr</td><td><span class="pill pill-green">Done</span> · Partner Pack V3 PDF</td></tr>
+          <tr><td>3</td><td>Research: CIPLA pods + Goodbye Malaria</td><td>Julia + Dwayne</td><td>rolling</td><td><span class="pill pill-amber">Partial</span> · CIPLA done, Mozambique open</td></tr>
+          <tr><td>4</td><td>Financial model, break-even, patient volumes</td><td>Dwayne</td><td>15 Apr</td><td><span class="pill pill-green">Done</span></td></tr>
+          <tr><td>5</td><td>SAHPRA/FDA regulatory map</td><td>Julia (Willie/Dwayne review)</td><td>9 Apr</td><td><span class="pill pill-green">Done</span> · Regulatory Framework V4</td></tr>
+          <tr><td>6</td><td>Goodbye Malaria (Mozambique) feasibility</td><td>Tshikululu (Yogesh)</td><td>—</td><td><span class="pill pill-grey">Open</span></td></tr>
+          <tr><td>7</td><td>Present pilot concept to Tshikululu board</td><td>Tshikululu (Leanne)</td><td>post-today</td><td><span class="pill pill-grey">Open</span> · today feeds this</td></tr>
+          <tr><td>8</td><td>Tshikululu co-lead social impact specialist</td><td>Tshikululu (Leanne)</td><td>—</td><td><span class="pill pill-grey">Open</span></td></tr>
+          <tr><td>9</td><td>Follow-up session + document exchange format</td><td>Julia</td><td>rolling</td><td><span class="pill pill-green">Done</span> · cadence established</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7 · Q&A -->
+  <div id="tab-qa" class="tab-content">
+    <div class="card">
+      <h2>Signed Q&amp;A — all 10 items (verbatim summaries)</h2>
+      <p>Source: <code>docs/tshikululu/260330 - Questions &amp; Prepared Answers - Tshikululu - Signed.pdf</code>, signed by Julia McCann 30 March 2026. Dwayne edited Q6 FDA language. Re-read before the meeting.</p>
+
+      <h3>Q1 · Commercial model</h3>
+      <blockquote>SaaS Partnered Enterprise framework: National Set Up → High-Volume Low-Cost per-transaction → Sovereign Capability → Regional Export. <strong>Case-by-case pricing for this initiative</strong> to maximise social impact + SA-led regional export.</blockquote>
+
+      <h3>Q2 · Pricing sustainability</h3>
+      <blockquote>Lowest CAPEX option — JV was cost-prohibitive. <strong>Fixed ceiling on token costs.</strong> AWS global scale; co-design infrastructure with partner nation. <em>"We will anchor cost to what the programme can sustain."</em></blockquote>
+
+      <h3>Q3 · SAHPRA pathway</h3>
+      <blockquote>100% clinician-in-the-loop; CDSS only. TGA SaMD Class I done in AU. <strong>SAHPRA MD08-2025/2026 is IMDRF-aligned</strong> (same regulatory family as FDA). <strong>Class A low-risk CDSS pathway likely.</strong></blockquote>
+
+      <h3>Q4 · In-country precedent</h3>
+      <blockquote>None in SA yet (would be first African deployment). AU precedent + Tshikululu's local governance = the route. SA precedent then enables regional export.</blockquote>
+
+      <h3>Q5 · Local legal / data-protection support</h3>
+      <blockquote>Documentation, regulatory mapping, technical evidence. Already did SAHPRA compliance analysis. Work with local legal partner. <strong>Architecture supports data residency;</strong> POPIA scoped into pilot; encryption + immutable audit logs.</blockquote>
+
+      <h3>Q6 · Liability (Dwayne-edited)</h3>
+      <blockquote>Two scenarios:
+      <br>(a) If SAHPRA follows FDA, the tool <em>can</em> recommend a single approved prescription.
+      <br>(b) If risk-averse, prescribing disabled — Glass-Box Class I CDSS showing differential + reasoning + certainty for clinician to act on.
+      <br><strong>"AI informs, clinician decides, clinician accountable. Liability follows clinical authority."</strong></blockquote>
+
+      <h3>Q7 · Indemnity</h3>
+      <blockquote>Dr Sophia AI liable for software output accuracy, availability, integrity. Operator liable for clinician review. <strong>"We do not indemnify clinical decisions."</strong> Product liability cover held. SA indemnity localised to HPCSA + SA law.</blockquote>
+
+      <h3>Q8 · Clinical oversight + its cost</h3>
+      <blockquote>100% human-in-loop. The practitioner is <strong>not an add-on cost</strong> — already present in every deployment. <em>"Existing clinician, significantly enhanced."</em></blockquote>
+
+      <h3>Q9 · Insurer / medical-scheme experience</h3>
+      <blockquote>None direct yet. Four value areas:
+      <br>(1) actuarial / claims,
+      <br>(2) clinical support for insurer-contracted providers,
+      <br>(3) prior-authorisation support,
+      <br>(4) wellness / managed care (diabetes, hypertension, HIV).</blockquote>
+
+      <h3>Q10 · Break-even / high-volume low-margin</h3>
+      <blockquote>Token-based. <strong>USD $0.17 per 30-min consult</strong>. Three levers: volume, value attribution, social impact. Anchor on cost-per-outcome not cost-per-transaction. Middle-East reference: 90% patient-cost reduction, Sophia off 10%, 51% operating profit by Year 5.</blockquote>
+
+      <h3>Data Privacy &amp; Sovereign Data — Position Statement</h3>
+      <blockquote>
+      <em>"Patient data stays where patients are."</em> In-country residency by default. Aligns POPIA + AU Privacy Act + GDPR + HIPAA — designed to meet most stringent standard. <strong>"We do not use patient data to train or improve our models without explicit, informed consent."</strong> Tshikululu (or clinical partner) = responsible party under POPIA; Dr Sophia AI = data operator.
+      <br><br>
+      <strong>"Just as clinical authority stays with the clinician, data sovereignty stays with the country. These are not policy positions — they are how Sophia is architected."</strong>
+      </blockquote>
+    </div>
+  </div>
+
+  <!-- 8 · WILLIE ACTIONS -->
+  <div id="tab-actions" class="tab-content">
+    <div class="card">
+      <h2>What needs a response from you (Willie)</h2>
+
+      <h3>Before today's meeting</h3>
+      <div class="checkpanel">
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner red">Willie</span> Confirm the 16:30 ACST time with Julia.</strong> Memory said 09:00 ACST — that's wrong. Meeting is 09:00 SAST = 16:30 ACST. Julia will be on the 10:30 ACST prep call.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner red">Willie</span> Join the internal prep (10:30 ACST).</strong> Meeting ID 472 220 437 063 43 · passcode e7Tm3V4R. Align demo flow + who speaks.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner amber">Willie</span> Walk through the demo flow once.</strong> 5-act structure in the "What We Demo" tab. Test DEV env, language toggle, prescription boundary, backup recording.</div></div>
+      </div>
+
+      <h3>During the meeting</h3>
+      <div class="checkpanel">
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">Willie</span> Run the live clinical workflow (12 min).</strong> Julia opens, Willie drives the screen share.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">Willie</span> Carry the operational-integration segment (20 min with Dwayne).</strong> The 4 data points to extract from Cipla live — see Demo tab.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">All</span> Don't mention the $11.7M figure unprompted.</strong> It's in the African Strategic Blueprint (internal). If asked, contextualise as long-term regional opportunity, not a cost or near-term commitment. The Initial Strategy Doc 1.9 MB <em>was</em> sent to them — confirm what they've seen before elaborating.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">All</span> Hold exclusivity scope.</strong> Don't commit to continent-wide exclusivity live. If pressed, pivot to "country-by-country with SA ROFR" or "exclusive for 24 months then performance-gated."</div></div>
+      </div>
+
+      <h3>Open personal action (Willie, since 16 Apr)</h3>
+      <p>Dwayne's 16 Apr 22:34 UTC ask: <em>"Please get the agents to assess the most likely Medical Procurement, Inventory and Finance [systems CIPLA runs]."</em></p>
+      <p><strong>Status:</strong> Willie sent a 2-para reply 17 Apr 06:30 UTC (to Dwayne, CC Julia) with the SAP / Sage / Unisolv / Brandmed stack hypothesis. <strong>Not yet written up as a formal note.</strong> If Cipla asks for a written follow-up today, Willie commits to a 1-pager within 3 working days. Don't volunteer it unasked.</p>
+
+      <h3>After the meeting (likely asks)</h3>
+      <div class="checkpanel">
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner amber">Willie</span> 1-page integration note</strong> — turn the 17 Apr stack hypothesis into a formal 1-pager for Tshikululu + Cipla follow-up. 3 working days.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">Julia</span> Board-proposal pack for Tshikululu</strong> — consolidate Partner Pack V3 + Regulatory Framework V4 + 15 Apr Commercial Model into the version Yogesh can put in front of Leanne + the Tshikululu board. Julia leads.</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">Dwayne</span> SAHPRA engagement plan</strong> — if Mamdoo presses on regulatory readiness, Dwayne commits to a SAHPRA pre-submission timeline (likely post-TGA CDSS exemption, which landed 23 Apr).</div></div>
+        <div class="check"><div class="check-box"></div><div><strong><span class="owner">Michel</span> Paul Miller introduction strategy</strong> — Michel to propose a route to reach Paul Miller (Cipla SA CEO). Today's meeting gets us within one degree; Michel owns closing the loop.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Casual commitments check — WhatsApp + email audit</h2>
+      <p>Audited four Willie mailboxes (drsophia / ltdlabs / botaniqal / adaptation) and the WhatsApp bridge DB. Findings:</p>
+      <ul>
+        <li><strong>No personal pricing, scope, or timeline commits from Willie</strong> on this deal. Safe to run Julia/Dwayne's framing.</li>
+        <li><strong>WhatsApp footprint:</strong> two Willie messages only (30 Mar "was the session moved?" + 23 Apr sick-note). Nothing to be held to.</li>
+        <li><strong>CSM hub:</strong> zero Cipla/Tshikululu traffic — deal is run over email + WhatsApp only.</li>
+        <li><strong>Dwayne, 21 Apr:</strong> FN Capital + AUSHEALTH are being copied in going forward — broader visibility. If Yogesh asks about parallel investor conversations, Willie can confirm without naming names.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9 · RISKS -->
+  <div id="tab-risks" class="tab-content">
+    <div class="card">
+      <h2>Risks &amp; watch-outs</h2>
+
+      <h3><span class="pill pill-red">High</span> Brandmed conflict</h3>
+      <p>Cipla Medpro owns 30% of Brandmed. Yogesh's 16 Apr email: Cipla is "actively reviewing alternative tools (such as Brandmed), although these do not currently offer full AI functionality."</p>
+      <p><strong>Play it:</strong> complement, don't replace. Brandmed does chronic; Rose does acute + triage. If Mamdoo asks "why not Brandmed?", answer <em>"Brandmed is excellent on the chronic journey — we layer on top for the acute and undiagnosed cases their platform doesn't target."</em> Don't disparage. Cipla owns the answer.</p>
+
+      <h3><span class="pill pill-red">High</span> SAHPRA readiness</h3>
+      <p>We do not yet have SAHPRA submission. TGA CDSS exemption response was filed 23 Apr 03:18 UTC (9.5 hrs before COB — submitted cleanly). Expect Mamdoo to press on regulatory readiness for SA.</p>
+      <p><strong>Play it:</strong> "TGA CDSS exemption submitted 23 April. SAHPRA MD08 is IMDRF-aligned — same regulatory family. We work with local legal + regulatory partners to run the Class A pathway in parallel with pilot. We are transparent about where we are on the timeline."</p>
+
+      <h3><span class="pill pill-amber">Medium</span> $11.7M exposure in the Strategic Blueprint</h3>
+      <p>The African Strategic Blueprint (16 MB) contains an $11.7M revenue/valuation figure. Julia flagged it couldn't be removed. The blueprint was kept internal; the "Initial Strategy Document" (1.9 MB) <em>was</em> sent. Verify what Tshikululu has seen.</p>
+      <p><strong>Play it:</strong> if asked, <em>"that's a long-term regional-market opportunity figure, not a near-term cost or commitment. The 15 April commercial model is what's on the table for this pilot."</em> Pivot straight back to the 13-month payback / IRR 135% economics.</p>
+
+      <h3><span class="pill pill-amber">Medium</span> Exclusivity scope</h3>
+      <p>Leanne's 2 March proposal puts Tshikululu as our Africa-wide licensed agent. Continent-wide exclusivity is a big concession to make live without financial terms in place.</p>
+      <p><strong>Play it:</strong> don't commit today. Fallback wording: <em>"we're aligned on Tshikululu as our African gateway — shape, territory, and exclusivity land in the heads of agreement conversation once Leanne's board has had sight of the full pack."</em></p>
+
+      <h3><span class="pill pill-amber">Medium</span> Paul Miller gap</h3>
+      <p>Rameez + Mamdoo are operational/clinical. They don't own commercial sign-off. Paul Miller (Cipla SA CEO) does, and we have no direct contact with him.</p>
+      <p><strong>Play it:</strong> use today to land clinical + operational credibility with Rameez + Mamdoo. Ask them late in the meeting: <em>"what's the best way for Paul to see this?"</em> Don't ambush them.</p>
+
+      <h3><span class="pill pill-amber">Medium</span> Cipla bypass risk</h3>
+      <p>Cipla could theoretically deal with us directly and cut Tshikululu out.</p>
+      <p><strong>Play it:</strong> reinforce Tshikululu's local governance + POPIA responsible-party role + Africa-wide broker value throughout. Make it clear the deal structure runs through them.</p>
+
+      <h3><span class="pill pill-grey">Low</span> Discovery Health reference</h3>
+      <p>Leanne's 2 Mar email name-dropped Discovery ("potentially in collaboration with Discovery"). Discovery is SA's largest private medical scheme. Not on today's invite but a latent stakeholder for the scale narrative.</p>
+      <p><strong>Play it:</strong> if Yogesh or Leanne mention Discovery, engage with curiosity — don't over-commit. <em>"We'd love to understand Tshikululu's Discovery relationship. Could be a strong scale partner — let's thread that in once the Cipla pilot is shaped."</em></p>
+
+      <h3><span class="pill pill-grey">Low</span> Goodbye Malaria / Mozambique</h3>
+      <p>Secondary pilot vector. Tshikululu owns feasibility. No update since 1 April.</p>
+      <p><strong>Play it:</strong> only raise if Julia/Dwayne want to. Not the priority today — keep focus on Cipla.</p>
+
+      <h3><span class="pill pill-grey">Low</span> Willie being sick</h3>
+      <p>Cold + flu meds, heading to the office, joining from the office phone. Reduced bandwidth for 2-way negotiation. Julia + Dwayne aware; lean on them if live commercial pressure comes up.</p>
+    </div>
+  </div>
+
+  <!-- 10 · DOCS -->
+  <div id="tab-docs" class="tab-content">
+    <div class="card">
+      <h2>Documents already exchanged with Tshikululu / Cipla</h2>
+      <p>On disk at <code>/mnt/c/data/github/botaniqal-medtech/botaniqal-medtech/docs/tshikululu/</code> unless noted otherwise. Cross-check these against the version Yogesh forwarded to Cipla — content parity matters.</p>
+
+      <table>
+        <thead><tr><th>Date</th><th>Document</th><th>Size</th><th>Sent to</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="date">13 Jan</td><td>Pitch deck PPT</td><td>6.4 MB</td><td>Tshikululu</td><td>Not in this repo — email only</td></tr>
+          <tr><td class="date">13 Jan</td><td>Long Form Business Plan V21</td><td>755 KB</td><td>Tshikululu</td><td>"Normally not shared in full"</td></tr>
+          <tr><td class="date">13 Jan</td><td>Syria Financial Model</td><td>64 KB</td><td>Tshikululu</td><td>Not on local disk</td></tr>
+          <tr><td class="date">5 Mar</td><td>Initial Strategy Document — Sophia AWS Nov25 build</td><td>1.9 MB</td><td>Tshikululu</td><td>On disk · <code>Initial Strategy Document - Based upon Sophia AWS Nov25 build.pdf</code></td></tr>
+          <tr><td class="date">5 Mar</td><td>South Africa — Example Data Query</td><td>150 KB</td><td>Tshikululu</td><td>SAHPRA compliance comparison · on disk</td></tr>
+          <tr><td class="date">5 Mar</td><td>Dr Sophia AI African Strategic Blueprint</td><td>16 MB</td><td><strong>Internal only</strong></td><td>Contains $11.7M figure · on disk · <strong>NOT sent externally</strong></td></tr>
+          <tr><td class="date">30 Mar</td><td>Questions &amp; Prepared Answers — Signed</td><td>191 KB</td><td>Tshikululu</td><td>On disk · signed by Julia</td></tr>
+          <tr><td class="date">30 Mar</td><td>Dr Sophia AI × Tshikululu — agenda</td><td>96 KB</td><td>Tshikululu</td><td>On disk</td></tr>
+          <tr><td class="date">9 Apr</td><td>DrSophiaAI Tshikululu Partner Pack V3</td><td>489 KB</td><td>Tshikululu</td><td>Competitive landscape + liability</td></tr>
+          <tr><td class="date">9 Apr</td><td>SA Regulatory Framework V4</td><td>4.2 MB</td><td>Tshikululu</td><td>SAHPRA mapping</td></tr>
+          <tr><td class="date">9 Apr</td><td>260409 - SA Pilot Cost</td><td>234 KB / 74 KB</td><td>Tshikululu</td><td>PDF + XLSX indicative costing</td></tr>
+          <tr><td class="date">9 Apr</td><td>Rose — AI CDSS Quick Reference Guide</td><td>194 KB</td><td>Tshikululu</td><td></td></tr>
+          <tr><td class="date">9 Apr</td><td>Tech Stack Extract — Data Compliance</td><td>243 KB</td><td>Tshikululu</td><td></td></tr>
+          <tr><td class="date">15 Apr</td><td>Commercial Model for CIPLA Pilot — DRAFT (XLSX)</td><td>74 KB</td><td>Tshikululu</td><td>The 13-mo payback / IRR 135% model</td></tr>
+          <tr><td class="date">23 Apr</td><td>CIPLA_Tshikululu_prep_pack v2</td><td>49 KB</td><td><strong>Internal only</strong></td><td>Julia's internal prep pack for today</td></tr>
+        </tbody>
+      </table>
+
+      <h3>New collateral now live (benchmarks)</h3>
+      <p>Published 23 April as part of the benchmark white paper push. Linkable in meeting chat:</p>
+      <ul>
+        <li><a href="https://docs.drsophia.ai/benchmarks/">docs.drsophia.ai/benchmarks/</a> — landing page · MedQA 99.3% · MMLU Medical 98.6% · MedAgentBench 99.0% · 100% life-threatening safety detection</li>
+        <li><a href="https://docs.drsophia.ai/benchmarks/rose-byzantine-consensus-whitepaper-v4.2-dec2025.pdf">rose-byzantine-consensus-whitepaper-v4.2-dec2025.pdf</a> — 19 pages · 340 KB · Nature Digital Medicine target</li>
+      </ul>
+
+      <h3>This brief</h3>
+      <p><a href="https://docs.drsophia.ai/tshikululu/cipla-2026-04-24/">docs.drsophia.ai/tshikululu/cipla-2026-04-24/</a> · password-protected · same password as the 31 March brief at <a href="https://docs.drsophia.ai/tshikululu/">/tshikululu/</a>.</p>
+
+      <h3>Source docs in this repo</h3>
+      <ul>
+        <li><code>/mnt/c/data/github/botaniqal-medtech/botaniqal-medtech/docs/tshikululu/meeting-brief.html</code> — previous 31 March brief (for comparison)</li>
+        <li><code>/mnt/c/data/github/team_willie/wiki/entities/companies/cipla.md</code> — Cipla dossier</li>
+        <li><code>/mnt/c/data/github/team_willie/wiki/entities/companies/tshikululu.md</code> — Tshikululu dossier</li>
+        <li><code>/mnt/c/data/github/team_willie/wiki/projects/drsophia-pipeline.md</code> — deal-state tracker</li>
+        <li><code>/mnt/c/data/github/team_willie/wiki/entities/people/dr-sophia-contacts.md</code> — contact list</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11 · CONTACTS -->
+  <div id="tab-contacts" class="tab-content">
+    <div class="card">
+      <h2>Contacts</h2>
+
+      <h3>Dr Sophia AI · internal</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Mobile</th></tr></thead>
+        <tbody>
+          <tr><td>Julia McCann</td><td>Deal lead</td><td>julia.schoeman@gmail.com</td><td>—</td></tr>
+          <tr><td>Dwayne Boyes</td><td>Exec sponsor · commercial</td><td>dwayne@drsophia.ai · dwayne@ltdlabs.com.au</td><td>—</td></tr>
+          <tr><td>Michel Boutin</td><td>Marketing / GTM</td><td>michel@drsophia.ai</td><td>—</td></tr>
+          <tr><td>Willie Prosek</td><td>CTO · technical demo</td><td>willie@drsophia.ai + 3 others</td><td>—</td></tr>
+          <tr><td>Ramona</td><td>Ops</td><td>ramona@botaniqal.com.au</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Tshikululu Social Investments</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th></tr></thead>
+        <tbody>
+          <tr><td>Yogesh Ranchod <span class="pill pill-blue">Primary</span></td><td>BD / DD lead · meeting organiser</td><td>YRanchod@tshikululu.org.za</td><td>—</td></tr>
+          <tr><td>Leanne Emery-Hunter</td><td>CEO · senior sponsor</td><td>Leh@tshikululu.org.za</td><td>+27 11 544 0350 · cell +27 82 302 9460</td></tr>
+          <tr><td>Yegan Naidoo</td><td>CFO</td><td>ynaidoo@tshikululu.org.za</td><td>—</td></tr>
+          <tr><td>Jessica Moodey</td><td>EA / scheduler</td><td>JMoodey@tshikululu.org.za</td><td>—</td></tr>
+          <tr><td>Shamiso Chideme</td><td>Sr Client Relationship Manager</td><td>schideme@tshikululu.org.za</td><td>—</td></tr>
+          <tr><td>Richard Pfaff</td><td>Head of Social Impact (Cape Town)</td><td>rpfaff@tshikululu.org.za</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Cipla SA / Sha'p Left</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Rameez Johaar</strong> <span class="pill pill-red">First contact today</span></td><td>Cipla Nursing Station programme ops lead</td><td>rameez.johaar@shapleft.com</td><td>Operational buyer</td></tr>
+          <tr><td><strong>Dr P. Mamdoo</strong> <span class="pill pill-red">First contact today</span></td><td>Cipla Medical Officer</td><td>pmamdoo@gmail.com</td><td>Clinical gatekeeper · expect SAHPRA questions</td></tr>
+          <tr><td>Paul Miller <span class="pill pill-amber">Gap</span></td><td>CEO Cipla SA + Regional Head Africa (SAGA)</td><td>—</td><td>13-yr tenure · MBA Wales · ex-Mylan/AstraZeneca. <strong>We need this contact.</strong></td></tr>
+          <tr><td>Cipla SA switchboard</td><td>—</td><td>—</td><td>+27 21 943 4200</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Latent / adjacent</h3>
+      <ul>
+        <li><strong>Discovery Health</strong> — name-dropped by Leanne 2 Mar. Not on today's invite. Potential scale partner.</li>
+        <li><strong>FirstRand Empowerment Foundation</strong> — funder of the 50-clinic Sha'p Left expansion (Mar 2026). Not on the invite.</li>
+        <li><strong>FN Capital + AUSHEALTH</strong> — Dwayne indicated they'll be CC'd on future SA-deal traffic (21 Apr).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <p><strong>Compiled:</strong> 24 April 2026 · <strong>By:</strong> team-botaniqal multi-agent research (3 agents × 8 min each, parallel) · <strong>Sources:</strong> 4 Willie mailboxes (drsophia.ai · ltdlabs.com.au · botaniqal.com.au · adaptation.io) · WhatsApp bridge DB (Botaniqal marketing check-in group) · Fleet wiki (cipla.md · tshikululu.md · drsophia-pipeline.md · dr-sophia-contacts.md) · Local docs (docs/tshikululu/ · docs/tga-correspondence/julia-submission/) · CSM hub (nil) · Memory files (project-correspondence-apr23.md · correspondence-status-apr10.md).</p>
+    <p><strong>Password:</strong> same as 31 March brief. <strong>URL:</strong> docs.drsophia.ai/tshikululu/cipla-2026-04-24/</p>
+    <p><strong>Reliability:</strong> high-confidence on timeline, documents, commercial model, Q&amp;A, risks. Medium-confidence on Cipla internals (Paul Miller direct, Mamdoo identity, Sha'p Left EMR). Low-confidence on Mozambique / Goodbye Malaria, Discovery Health involvement.</p>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /main-content -->
+
+<script>
+function checkPwd() {
+  const input = document.getElementById('pwd-input').value;
+  const valid = input === atob('RHJTb3BoaWEyMDI3IUAjJA==');
+  if (valid) {
+    document.body.classList.add('unlocked');
+    sessionStorage.setItem('tshik_auth', '1');
+  } else {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+
+if (sessionStorage.getItem('tshik_auth') === '1') {
+  document.body.classList.add('unlocked');
+}
+
+document.getElementById('pwd-input').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') checkPwd();
+});
+
+function showTab(tabId, ev) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if (ev && ev.target) ev.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
