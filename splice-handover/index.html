@@ -238,12 +238,18 @@
     <p>We are <strong>more built out</strong> than what Splice has delivered. The Splice work is a competent HubSpot Starter implementation — but we have a richer engine running on AWS (NurtureWorkflowEngine, SES, SNS, Mailchimp, Meta Conversions, HubSpot CRM bridge) that already covers everything Splice's setup does, plus <strong>booking-awareness</strong> Splice physically can't deliver on the Starter tier. We accept the handover, port the email copy + lead-source tags into our engine, decline Zapier, and keep HubSpot Starter as CRM. <strong>Net saving: Zapier subscription + ongoing Splice retainer.</strong></p>
   </div>
 
+  <div style="background: linear-gradient(135deg, rgba(255,217,107,0.18), rgba(255,217,107,0.05)); border: 2px solid #ffd96b; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
+    <h3 style="color:#ffd96b;font-size:1rem;margin-bottom:8px;">★ Updated 27 Apr — Trello archive complete</h3>
+    <p style="color:#d4d4d8;font-size:0.92rem;">Ramona's Trello extraction ran end-to-end with zero failures: <strong>70 cards, 198 comments, 132 attachments (2.1 GB), 7 months of activity</strong>. Mirrored to SharePoint at <code>ltdlabs.sharepoint.com/sites/Botaniqal/Documents/Trello/Botaniqal-Board-Archive-2026-04-27/</code>. <strong>Most of the assets I flagged as "missing" turned out to be on Trello already</strong> (trauma e-book PDF, all 4 vertical email sequences, alt therapy campaign brief, 6 Meta video assets). Only 4 things still genuinely need to come from Splice tomorrow — see <strong>Trello Archive</strong> tab. New finding: Splice's <strong>SMS Flow</strong> subscription (smsflow.com.au) is paid and live under <code>michel@drsophia.ai</code> — needs a cancel-or-transfer call.</p>
+  </div>
+
   <div class="tabs">
     <div class="tab active" onclick="showTab(this, 'summary')">Summary</div>
     <div class="tab" onclick="showTab(this, 'today')">Today's Email</div>
     <div class="tab" onclick="showTab(this, 'splice')">What Splice Built</div>
     <div class="tab" onclick="showTab(this, 'ours')">What We Built</div>
     <div class="tab" onclick="showTab(this, 'compare')">Side-by-Side</div>
+    <div class="tab" onclick="showTab(this, 'trello')">Trello Archive ★</div>
     <div class="tab" onclick="showTab(this, 'gohighlevel')">GoHighLevel</div>
     <div class="tab" onclick="showTab(this, 'recommend')">Recommendations</div>
     <div class="tab" onclick="showTab(this, 'decisions')">Decisions Needed</div>
@@ -617,6 +623,148 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
     </div>
   </div>
 
+  <!-- ============ TRELLO ARCHIVE ============ -->
+  <div class="tab-content" id="trello">
+    <div class="card">
+      <h2>Trello board archive — pulled today (27 Apr 2026)</h2>
+      <p>Ramona authorised a full extraction of the Splice-managed Botaniqal Trello board. 4-step pipeline (extract → download → render → upload) ran clean — zero failures. <strong>This changes 3 of the items in the rest of this brief — see the resolved/still-missing breakdown below.</strong></p>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">70</div><div class="label">Cards</div><div class="note">66 open + 4 closed, across 8 lists</div></div>
+        <div class="kpi"><div class="value">198</div><div class="label">Comments</div><div class="note">5x what M365 captured</div></div>
+        <div class="kpi"><div class="value">132</div><div class="label">Attachments</div><div class="note">2.1 GB total, 124 unique post-dedup</div></div>
+        <div class="kpi"><div class="value">1,037</div><div class="label">Activity records</div><div class="note">Every move, edit, attachment</div></div>
+        <div class="kpi"><div class="value">9</div><div class="label">Members</div><div class="note">5 Splice + 4 Botaniqal</div></div>
+        <div class="kpi"><div class="value">7 mo</div><div class="label">Activity span</div><div class="note">23 Sep 2025 → 20 Apr 2026</div></div>
+      </div>
+
+      <h3>Where it lives</h3>
+      <ul>
+        <li><strong>SharePoint (team-shareable):</strong> <a href="https://ltdlabs.sharepoint.com/sites/Botaniqal/Documents/Trello/Botaniqal-Board-Archive-2026-04-27/" target="_blank">ltdlabs.sharepoint.com/sites/Botaniqal/Documents/Trello/Botaniqal-Board-Archive-2026-04-27/</a> — 191 files, 1.8 GB</li>
+        <li><strong>Wiki index:</strong> <code>team_willie/wiki/projects/botaniqal-trello-archive-apr2026.md</code> (committed + pushed)</li>
+        <li><strong>Wiki summary:</strong> <code>team_willie/wiki/projects/botaniqal-trello-archive-apr2026-summary.md</code></li>
+        <li><strong>Local archive:</strong> <code>botaniqal-medtech/trello-archive/</code> (gitignored — raw + markdown + 1.5 GB attachments)</li>
+        <li><strong>Source scripts:</strong> <code>botaniqal-medtech/scripts/trello/</code> (4 Python scripts, committed — refresh anytime)</li>
+        <li><strong>Vault:</strong> <code>team_willie/wiki/org/vault-index.md</code> updated with new Trello key/token names</li>
+      </ul>
+
+      <h3>Member breakdown — Splice ↔ Botaniqal collaboration map</h3>
+      <table>
+        <thead><tr><th>Person</th><th>Side</th><th>Cards assigned</th><th>Comments</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Brooke Payne</strong></td><td><span class="pill pill-orange">Splice</span></td><td>41</td><td>28</td></tr>
+          <tr><td><strong>Jo Lacey</strong></td><td><span class="pill pill-orange">Splice</span></td><td>35</td><td>34</td></tr>
+          <tr><td>Splice (org account)</td><td><span class="pill pill-orange">Splice</span></td><td>8</td><td>7</td></tr>
+          <tr><td>Deanna Brewster</td><td><span class="pill pill-orange">Splice</span></td><td>1</td><td>0</td></tr>
+          <tr><td>Taylah Schussig</td><td><span class="pill pill-orange">Splice</span></td><td>1</td><td>0</td></tr>
+          <tr><td>Matt Anson <em>(no longer a board member but commented)</em></td><td><span class="pill pill-orange">Splice</span></td><td>—</td><td>~30+</td></tr>
+          <tr><td><strong>Ramona Prosek</strong></td><td><span class="pill pill-blue">Botaniqal</span></td><td>27</td><td>49</td></tr>
+          <tr><td><strong>Michel Boutin</strong></td><td><span class="pill pill-blue">Botaniqal</span></td><td>16</td><td>52</td></tr>
+          <tr><td>Julia McCann</td><td><span class="pill pill-blue">Botaniqal</span></td><td>25</td><td>5</td></tr>
+          <tr><td>Dwayne Boyes</td><td><span class="pill pill-blue">Botaniqal</span></td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Splice did the bulk of card creation</strong> (Brooke + Jo combined drove ~76 cards). Botaniqal side mostly reviewed (Michel 52 + Ramona 49 = ~100 comments). <em>Matt Anson</em> drove the early relationship from Sep–Dec 2025 — most onboarding cards were his — but is no longer a board member; his comments persist via the activity log.</p>
+
+      <h3>★ Cross-check vs the missing assets I flagged earlier</h3>
+
+      <div class="ok-banner" style="margin: 14px 0;">
+        <h3>✓ Resolved by Trello — these are NOT missing, they were on the Trello board the whole time</h3>
+        <ul style="color:#d4d4d8;font-size:0.92rem;">
+          <li><strong>Trauma-Informed E-Book — final designed PDF</strong> exists: <code>BNQ0003_2026_Trauma Informed Therapy_eBook_A4.pdf</code> (2.2 MB, uploaded by Brooke 20 Jan 2026). Plus the working DOCX and a published Webflow page at <a href="https://botaniqal.webflow.io/trauma-informed-therapy" target="_blank">botaniqal.webflow.io/trauma-informed-therapy</a>.</li>
+          <li><strong>Trauma-Informed nurture email sequence</strong> exists: <code>BNQ_2025_Nov_Email nurture sequence re trauma ebook_v1.docx</code> (210 KB, uploaded 5 Feb 2026). 3-email sequence draft. <em>Note: Ramona flagged a "$10 discount" line in this draft on 11 Feb that she didn't authorise — needs scrub before we port.</em></li>
+          <li><strong>Gut Health nurture email sequence</strong> exists: <code>BNQ_2026_Mar_Email nurture sequence re gut health ebook_v1.docx</code> (210 KB, uploaded 5 Mar 2026).</li>
+          <li><strong>Weight Loss nurture emails</strong> exist (2 versions): <code>BNQ_2025_Nov_Nurture emails after downloading weight loss ebook_v1.docx</code> (Splice draft) + <code>v2.docx</code> (2.3 MB, with Ramona's edits, uploaded 13 Nov 2025).</li>
+          <li><strong>Weight Loss EDM (Meta auto-response email)</strong> exists — sent via <strong>Mailchimp</strong> not HubSpot: live at <code>eepurl.com/juaMFM</code>. WL email edits DOCX + Christmas slide PNGs from Ramona's review.</li>
+          <li><strong>Alt Therapy Meta campaign brief</strong> exists: <code>Botaniqal Clinics - Alternative Therapy Leads Campaign - October 25.docx</code> (12.7 MB) — full creative + lead form spec from October 2025.</li>
+          <li><strong>Trauma-related blog content</strong> — 3 finalised posts (What is trauma-informed therapy / Managing the effects / Understanding the primary types) plus a Trauma Care PPC page draft, all in DOCX form.</li>
+          <li><strong>3-month March–June social calendar</strong> — also lives in this Build Campaign Strategy card on Trello, not just the Feb email.</li>
+          <li><strong>Meta video assets</strong> — 6 MP4 ads from March 2026 (BNQ_2026_March Meta Ads_1A_v2, _1C-4, _1C-5, _3A, _3B, _3C — total ~55 MB).</li>
+        </ul>
+      </div>
+
+      <div class="urgent" style="margin: 14px 0;">
+        <h2>⚠ Still missing — Splice must provide tomorrow</h2>
+        <ul style="color:#fff;font-size:0.95rem;">
+          <li><strong>Trauma-Informed Therapy HubSpot E-Book embed URL</strong> — content is in Trello, but the HubSpot form was either never built or never shared. Only WL + Gut Health embed URLs appear in the 27 Apr DOCX.</li>
+          <li><strong>Alt Therapy HubSpot form embed URL</strong> (if any) — Trello shows Alt Therapy ran as a Meta Lead Form only with Mailchimp auto-response. Confirm there's no HubSpot form for this vertical.</li>
+          <li><strong>Corrected "How to edit workflows in HubSpot" Loom URL</strong> — no Loom URL appears in any Trello card; the Loom URLs are exclusively in the 27 Apr DOCX, where one is a duplicate.</li>
+          <li><strong>Full HubSpot forms list by ID</strong> — the 6 in our memory file (<code>b931679a, a27f648e, 93f6b582</code> + 3 more) need to be verified against what's actually live in the HubSpot portal, plus any e-book download forms Splice published as part of the 30 Mar workflow update.</li>
+        </ul>
+      </div>
+
+      <div class="urgent" style="margin: 14px 0; background: linear-gradient(135deg, #ffd96b, #d6a52c);">
+        <h2 style="color:#1a1410;">⚡ NEW finding — SMS Flow account already exists</h2>
+        <p style="color:#1a1410;">Splice set up an account at <strong>smsflow.com.au</strong> in March under <code>michel@drsophia.ai</code>. Splice's Zapier was bridging it to HubSpot under their retainer license. <strong>Decision needed:</strong> cancel the SMS Flow subscription (we have AWS SNS + Mailchimp SMS), or transfer the SMS Flow account to ours and use it as a third channel. Recommendation: cancel — we have two SMS channels paid for already, no need for a third.</p>
+      </div>
+
+      <h3>Top 10 most-active cards (full list in summary.md)</h3>
+      <table>
+        <thead><tr><th>Card</th><th>List</th><th style="width:80px;">Actions</th><th style="width:80px;">Comments</th><th style="width:80px;">Attach.</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://trello.com/c/low7Ql5F" target="_blank">Build Campaign strategy [NEW] for Botaniqal</a></td><td>Published</td><td>44</td><td>11</td><td>14</td></tr>
+          <tr><td><a href="https://trello.com/c/G9cWcQdy" target="_blank">HUBSPOT</a></td><td>Published</td><td>35</td><td>16</td><td>2</td></tr>
+          <tr><td>Loomly — social media</td><td>Published</td><td>37</td><td>6</td><td>7</td></tr>
+          <tr><td>Meta Campaign: Weight Loss</td><td>Published</td><td>36</td><td>6</td><td>12</td></tr>
+          <tr><td><a href="https://trello.com/c/NMt4Jb9n" target="_blank">February/March eBook: Trauma Informed Therapy</a></td><td>Published</td><td>32</td><td>7</td><td>2</td></tr>
+          <tr><td>Dec/Jan Blog Post: What is trauma-informed therapy?</td><td>Published</td><td>32</td><td>5</td><td>2</td></tr>
+          <tr><td><a href="https://trello.com/c/EHS9V43q" target="_blank">Dec/Jan: eBook Email Sequence for Trauma-informed care</a></td><td>Published</td><td>22</td><td>9</td><td>1</td></tr>
+          <tr><td><a href="https://trello.com/c/hpAj2MkR" target="_blank">EDM: Automated response to Meta form — Weight Loss</a></td><td>Published</td><td>23</td><td>7</td><td>8</td></tr>
+          <tr><td><a href="https://trello.com/c/aALL59dn" target="_blank">SMS platform</a></td><td>Published</td><td>—</td><td>5</td><td>0</td></tr>
+          <tr><td><a href="https://trello.com/c/9ewHNILK" target="_blank">Meta SMS — Zapier</a></td><td><span class="pill pill-amber">For Review</span></td><td>—</td><td>2</td><td>1</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Key disputes captured (worth Julia's review for the closeout)</h3>
+
+      <h4>1. Apr 13 — HubSpot expectation gap (Jo's clarification)</h4>
+      <blockquote>
+        <strong>Michel:</strong> "I thought we would also have a workflow from Hubspot that captures lead forms from META/Google Ads, registering that the user proceeded to book appointment with calendly (after qualifying), [which gets a confirmation sms and email workflow] or bounce before getting to calendly and then triggering sms, email follow ups 2-4-8 etc days?"<br><br>
+        <strong>Jo Lacey:</strong> "There appears to be a disconnect in your expectations. We agreed as a goodwill gesture to transfer and rebuild the E-book sequences in hubspot for all services... I did highlight you would need to create lead sequences yourself, but I didn't receive any from you so again I went ahead and created them for you for no charge. <strong>This was not included in the revised retainer and was a bonus I happily provided to support your teams administrative burden.</strong>"
+      </blockquote>
+      <p>This is a contractual position — Splice is saying the Meta-form-→-Calendly-→-nurture workflow Michel was expecting was never in scope, and the e-book sequences they did build were goodwill. Worth Julia clocking in case Splice tries to upsell or charge during the closeout.</p>
+
+      <h4>2. Apr 13 — Zapier/SMS subscription history</h4>
+      <blockquote>
+        <strong>Jo Lacey (in the Meta SMS — Zapier card):</strong> "Originally, hubspot was deemed too expensive by the Botaniqal team, so we pivoted to Mailchimp. When you joined, you wanted to move to Hubspot (great!) but you chose a lesser subscription tier than we recommended. We completely understand this is a significant expense, and so have continually found ways to work within your selected subscription allowances... Your current hubspot subscription does not have sms capability so we found a free service to trial — SMS flow — however to make this work we needed to create a zap to integrate. <strong>We cover this license for our clients</strong>, but now that you are closing your retainer, we are happy to update the workflow with your own account. Zapier is free for 100 tasks per month."
+      </blockquote>
+      <p>Two things here: <strong>(a)</strong> Splice's Zapier license drops away when the retainer ends, so SMS via this path stops working unless we sign up. <strong>(b)</strong> Zapier free tier (100 tasks/mo) might be enough for current lead volume but it's another moving part we don't need — our AWS SNS path bypasses the whole chain.</p>
+
+      <h4>3. Mar 10 — HubSpot license downgrade</h4>
+      <blockquote>
+        <strong>Michel Boutin (HUBSPOT card):</strong> "@jolacey8 license updated to Starter with three seats. We need to condense flow into 10 as per your staff comments"
+      </blockquote>
+      <p>This is the moment the architecture became "forms-as-workflows". Starter doesn't include workflow API, and we condensed to 10 actions to fit. Fixing this on Splice's terms = upgrade to Pro ($800+/mo). Fixing it on our terms = NurtureWorkflowEngine (already running).</p>
+
+      <h3>Splice's digital channel access map (revoke list)</h3>
+      <p>Per the <strong>Provide Splice Access to your Digital Channels</strong> card (ADMIN list, Sep 2025), Splice has access to all of these via Leadsie at <code>app.leadsie.com/connect/splicemarketing/manage</code>:</p>
+      <table>
+        <thead><tr><th>Channel</th><th>Access state</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Google Business</td><td><span class="pill pill-orange">Active</span></td><td>Revoke via Google Business Profile → Users (Ramona)</td></tr>
+          <tr><td>Google Tag Manager <code>GTM-TWSHBPXQ</code></td><td><span class="pill pill-orange">Active</span></td><td>Revoke via GTM → Admin → User Management (Vlad owns container — coordinate)</td></tr>
+          <tr><td>Google Analytics (GA4 461069027)</td><td><span class="pill pill-orange">Active</span></td><td>Revoke via GA4 → Admin → Account Access (Vlad owns)</td></tr>
+          <tr><td>Google Ads <code>6861614307</code></td><td><span class="pill pill-orange">Active</span></td><td>Revoke via Google Ads MCC → Settings → Access &amp; security (you have admin)</td></tr>
+          <tr><td>Facebook Business Page</td><td><span class="pill pill-orange">Active</span></td><td>Remove Ellie Bakker (the asset assignee) from Meta Business Manager (Ramona owner)</td></tr>
+          <tr><td>Meta Pixel <code>645352571281200</code></td><td><span class="pill pill-orange">Active</span></td><td>Revoke Splice asset assignment in Business Manager</td></tr>
+          <tr><td>Instagram</td><td><span class="pill pill-orange">Active</span></td><td>Revoke via Instagram → Professional dashboard → Account access</td></tr>
+          <tr><td>Webflow site admin</td><td><span class="pill pill-green">Already revoked</span></td><td>Vlad confirmed in Apr 22 email — staff-level access removed</td></tr>
+          <tr><td>HubSpot portal</td><td><span class="pill pill-orange">Active</span></td><td>Remove <code>welcome@splicemarketing.com.au</code> as user (Ramona)</td></tr>
+          <tr><td>Mailchimp</td><td><span class="pill pill-orange">Active</span></td><td>Remove Matt Anson + Jo Lacey users (Ramona)</td></tr>
+          <tr><td>Trello board <code>kOupi2vA</code></td><td><span class="pill pill-amber">Splice owns it</span></td><td>Workspace ownership is Splice's. Archive is preserved on SharePoint — when retainer ends, Splice may revoke our access. Power-Up token is on Ramona-owned workspace and survives.</td></tr>
+          <tr><td>SMS Flow account</td><td><span class="pill pill-orange">Active</span></td><td>Cancel via smsflow.com.au or transfer to us — Michel has the login</td></tr>
+          <tr><td>Loomly social planner</td><td><span class="pill pill-orange">Likely Splice's</span></td><td>Confirm via Loomly card — likely on Splice's subscription, not ours</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Splice T&amp;Cs reference</h3>
+      <p>Per the ADMIN card "Splice Marketing's Terms and Conditions": <code>https://info.splicemarketing.com.au/terms-and-conditions</code> — Section 7 is content approvals (2 revisions per content piece). Worth Julia reviewing for any closeout obligations.</p>
+
+      <h3>Splice's training/education portal</h3>
+      <p><code>education.splicemarketing.com.au</code> — Ramona has access. Stays available regardless of contract status (it's their public knowledge centre).</p>
+    </div>
+  </div>
+
   <!-- ============ GOHIGHLEVEL ============ -->
   <div class="tab-content" id="gohighlevel">
     <div class="card">
@@ -695,10 +843,14 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
 
       <h3>Tier 1 — Accept the handover (do this week)</h3>
       <div class="check"><div class="check-box"></div><div class="check-content"><strong>Audit the HubSpot account before Splice closes out</strong> — log in (info@cannatreat.com.au / BmC2025!@#$!), download backup of all 5 workflows + all 6 forms + all 15 emails as JSON via Private App API. Save to <code>docs/handovers/splice-hubspot-2026-04-27.zip</code>. <small>Owner: Willie · Today.</small></div></div>
-      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Request the missing assets from Splice tomorrow</strong> — Trauma-Informed Therapy E-book embed URL + Alt Therapy form embed URLs (if any) + the corrected "edit workflows" Loom URL (current one is duplicate). <small>Owner: Michel to ask, in tomorrow's meeting.</small></div></div>
-      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Save all 15 Splice email drafts as text</strong> — bring them into our repo at <code>backend/src/services/email/splice-copy/</code> for porting into the NurtureEngine templates. <small>Owner: Willie · This week.</small></div></div>
-      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's HubSpot access</strong> — remove Matt Anson + Jo Lacey from the HubSpot portal users list once handover meeting is done. <small>Owner: Ramona, Fri 1 May.</small></div></div>
-      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's Webflow access</strong> — Vlad's already confirmed Splice no longer has access (Apr 22 email); double-check on Mon 4 May. <small>Owner: Ramona.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Trello archive — already done ✓</strong> 70 cards / 198 comments / 132 attachments / 2.1 GB on SharePoint. Source scripts in repo for refresh. <small>Owner: done by Willie + Ramona.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Request the 4 still-missing assets from Splice tomorrow</strong> — (1) Trauma-Informed HubSpot embed URL, (2) Alt Therapy HubSpot form URL if any, (3) corrected "edit workflows" Loom URL, (4) full HubSpot forms list by ID. (Trauma + Alt Therapy CONTENT is now confirmed in Trello — only the HubSpot embed URLs are absent.) <small>Owner: Michel to ask, in tomorrow's meeting.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Port email copy from BOTH the 27 Apr DOCX AND the Trello archive</strong> into <code>backend/src/services/email/splice-copy/</code>. Trello has 4 sequences (Trauma, Gut Health, WL nurture v1+v2, WL EDM Mailchimp version) with more revision history than the DOCX. Strip the unauthorised "$10 discount" line from the trauma sequence (Ramona flagged this 11 Feb). <small>Owner: Willie · This week.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's HubSpot access</strong> — remove <code>welcome@splicemarketing.com.au</code> as user once handover meeting is done. <small>Owner: Ramona, Fri 1 May.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's Mailchimp access</strong> — remove Matt Anson + Jo Lacey users. <small>Owner: Ramona, Fri 1 May.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Revoke Splice's Leadsie-bridged digital channel access</strong> — Google Business / Tag Manager / Analytics / Ads, Meta Business Manager (incl. Pixel + Ellie Bakker assignment), Instagram. Full revoke list in the <strong>Trello Archive</strong> tab. Webflow is already done (Vlad confirmed Apr 22). <small>Owner: Ramona + Vlad split, Fri 1 May.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>★ Cancel the SMS Flow subscription</strong> (smsflow.com.au, login <code>michel@drsophia.ai</code>) — Splice set this up as the bridge for HubSpot SMS via their Zapier license. Their Zapier drops away when retainer ends, so it stops working anyway. We have AWS SNS + Mailchimp SMS already paid for. <small>Owner: Michel to cancel · This week.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Confirm Loomly subscription ownership</strong> — if it's on Splice's account, we lose the social media planner when retainer ends. Decide: keep (sign up directly) or replace (Mailchimp + scheduled Webflow blog posts). <small>Owner: Ramona · This week.</small></div></div>
 
       <h3>Tier 2 — Decline the proposed upgrades</h3>
       <div class="check"><div class="check-box"></div><div class="check-content"><strong>Don't subscribe to Zapier</strong>. SMS already runs through AWS SNS via NurtureWorkflowEngine. The only thing Zapier would do is bridge HubSpot form submissions to a SMS provider — and we can do that with a single HubSpot webhook → our backend, no third party needed. <small>Owner: Willie.</small></div></div>
@@ -733,18 +885,21 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
         <li><strong>Decline Zapier subscription</strong> — confirm we'll wire HubSpot webhook → our backend instead</li>
         <li><strong>Decline HubSpot Pro upgrade</strong> — keep Starter as CRM only</li>
         <li><strong>Decline GoHighLevel licence</strong> — borrow specific ideas instead</li>
-        <li><strong>Approve porting Splice's 15 emails</strong> into our template library</li>
+        <li><strong>Approve porting Trello + DOCX email copy</strong> into our template library (Trello has trauma + gut health + alt therapy + WL — more than the 27 Apr DOCX)</li>
         <li><strong>Approve building HubSpot-form → NurtureEngine bridge</strong></li>
         <li><strong>Approve admin UI build for Ramona</strong> (~3 days)</li>
+        <li><strong>★ Approve cancelling SMS Flow subscription</strong> (newly discovered — smsflow.com.au)</li>
       </ul>
 
       <h3>Michel — actions before tomorrow's Splice meeting</h3>
       <ul>
-        <li>Ask Splice for the <strong>Trauma-Informed Therapy E-book embed URL</strong> — missing from the workflow map doc</li>
-        <li>Ask Splice for the <strong>Alt Therapy form URLs</strong> if any (the doc only mentions Meta Lead Form for this vertical)</li>
-        <li>Ask Splice for the <strong>corrected "How to edit workflows in HubSpot" Loom URL</strong> — current one is a duplicate of the previous video</li>
+        <li>Ask Splice for the <strong>Trauma-Informed Therapy HubSpot E-Book embed URL</strong> — content is on Trello but the form URL was never delivered</li>
+        <li>Ask Splice if there is an <strong>Alt Therapy HubSpot form</strong> at all — Trello shows Alt Therapy ran as Meta Lead Form + Mailchimp auto-response only (no HubSpot form)</li>
+        <li>Ask Splice for the <strong>corrected "How to edit workflows in HubSpot" Loom URL</strong> — current one is a duplicate of the previous video; no Loom URL in any Trello card</li>
+        <li>Ask Splice for the <strong>full list of all live HubSpot forms by ID</strong></li>
         <li>Ask Splice to <strong>fix the "Emotional Hook" no-URL ad</strong> + UTM typo before they sign off</li>
-        <li>Ask Splice for the <strong>full list of all live HubSpot forms</strong> by ID</li>
+        <li><strong>★ Cancel the SMS Flow subscription</strong> (smsflow.com.au, login <code>michel@drsophia.ai</code> / <code>iFwWxXLcxhEMC3D</code>) — was the bridge for HubSpot SMS under Splice's Zapier license, drops away when retainer ends regardless</li>
+        <li><strong>Confirm Splice's position on the Apr 13 expectation gap</strong> — Jo's reply ("This was not included in the revised retainer and was a bonus") needs acknowledging in writing so it doesn't become a billing dispute later</li>
       </ul>
 
       <h3>Ramona — actions this week</h3>
@@ -752,14 +907,18 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
         <li><strong>Activate the Mailchimp Welcome SMS</strong> drafted Nov 28 — 749 subscribers, A$50/mo unused credit</li>
         <li><strong>Email all 237 Mailchimp "Leads" segment</strong> with a CTA back to <code>/weight-loss/eligibility</code></li>
         <li><strong>Watch the 5 Loom videos</strong> Splice provided — these stay live on Loom regardless of Splice's contract status</li>
-        <li><strong>Review the 15 Splice email drafts</strong> for tone/accuracy on Botaniqal voice (Michel said "safe-vanilla, happy to amend")</li>
-        <li><strong>Remove Splice users from HubSpot + Mailchimp + Webflow</strong> on Fri 1 May</li>
+        <li><strong>Review the 4 Trello-sourced Splice email drafts</strong> for tone/accuracy on Botaniqal voice — including the unauthorised "$10 discount" line in the trauma sequence she flagged 11 Feb</li>
+        <li><strong>★ Confirm Loomly subscription ownership</strong> — if Splice's, decide whether to take it over or drop it</li>
+        <li><strong>Remove Splice users from HubSpot + Mailchimp</strong> on Fri 1 May (Webflow already done)</li>
+        <li><strong>★ Revoke Splice's digital channel access via Leadsie/manually</strong> — Google Business, Instagram, Meta Business Manager (incl. Ellie Bakker assignment), Google Ads (full list in Trello tab)</li>
       </ul>
 
       <h3>Julia — review item</h3>
       <ul>
         <li><strong>Confirm the booking-awareness gap is acceptable</strong> for the next 2-3 weeks while we bridge HubSpot → NurtureEngine. A patient who books on day 1 may still get HubSpot's "ready to book?" email on day 3 until the bridge is live. Low risk, but worth confirming.</li>
-        <li><strong>Spam Act / Privacy Act check</strong> on the 15 Splice email drafts — quick sweep for any compliance gaps before we port them to our domain</li>
+        <li><strong>Spam Act / Privacy Act check</strong> on the email drafts — quick sweep for any compliance gaps before we port them to our domain</li>
+        <li><strong>★ Review Splice T&amp;Cs Section 7 (content approvals)</strong> — <code>info.splicemarketing.com.au/terms-and-conditions</code> — confirm there are no closeout obligations, in particular the 2-revision content approval clause</li>
+        <li><strong>★ Review the Apr 13 HubSpot/Zapier expectation-gap exchange</strong> — Jo positioned the e-book sequences as "goodwill bonus, not in revised retainer". Worth Julia clocking in case Splice tries to invoice for it</li>
       </ul>
 
       <h3>Dwayne — sign-off only</h3>
@@ -775,40 +934,110 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
       <h2>Suggested formal reply to Michel</h2>
       <p>Plain text, Outlook-native, builds on Willie's 12:23 PM message. Save to <code>docs/handoffs/2026-04-27-splice-handover-reply.md</code> first, then send when you're happy.</p>
 
-      <pre style="white-space: pre-wrap; line-height: 1.6;">Hi Michel
+      <p>Two drafts here. Use whichever fits — the <strong>short interim version</strong> is what we drafted earlier today as a holding-pattern note. The <strong>full hybrid plan</strong> below is the consolidated reply once Trello is in (it now is).</p>
 
-Thanks for resending the pack. I've been through both docs end to end, plus a quick audit of what we already have running on AWS. Here's where I land — confirms the short note I sent you at lunchtime.
+      <h3>Short interim version (sent earlier today via the wiki)</h3>
+      <pre style="white-space: pre-wrap; line-height: 1.6; opacity: 0.85;">Hi team
 
-Hybrid plan, no new subscriptions
+Quick update on top of my note earlier — wanted to share where I've landed
+so far, more detail to come.
 
-We don't need Zapier and we don't need to upgrade HubSpot. The reason: we already have a nurture engine running on AWS (NurtureWorkflowEngine + SES + SNS) that does what Splice's HubSpot setup does, plus booking-awareness which Starter physically can't deliver. SMS is already wired natively through AWS SNS — no Zapier middleman needed.
+I've gone through both Splice docs end to end and audited them against what
+we already have running on AWS. Initial read confirms what I said at lunchtime:
+we don't need Zapier and we don't need a HubSpot upgrade. The nurture engine,
+SMS sender, Meta Conversions API and SES email pipeline are already live in
+the backend — they just need to be bridged to the HubSpot forms Splice has
+shipped, which is a small build, not a subscription.
 
-Keep HubSpot Starter as the CRM and form host. Splice's pre-built forms and 5 nurture workflows stay live (their Loom videos give Ramona the keys to maintain them). We layer our engine on top via a HubSpot webhook → our backend bridge — patients get HubSpot's 3-email sequence AND our funnel-stage emails, so a patient who books on day 1 stops getting the "ready to book?" nudge on day 3.
+I've put a full review (with side-by-side, GoHighLevel verdict, recommendations,
+and the email/attachments archive) here for the team:
+https://docs.drsophia.ai/splice-handover/
+Password is the standard one.
 
-Splice assets we're keeping
- - 5 HubSpot workflows (Alt Therapy, WL Meta, WL E-Book, Gut Health E-Book, Trauma-Informed)
- - 15 email drafts (we'll port the copy into our SES templates so they send from botaniqal.com.au with proper deliverability)
+Ramona is pulling the Trello board for me — I want to cross-check that against
+what's in the handover pack before we finalise the list of items for Splice
+to close out tomorrow. There are a few likely gaps already (Trauma-Informed
+E-Book embed URL, the Alt Therapy form URLs, one Loom URL that looks like
+a duplicate) but I want the Trello sweep done before I send a formal request.
+
+Will come back later today / first thing tomorrow with the consolidated list
+and the hybrid plan write-up.
+
+Cheers
+Willie</pre>
+
+      <h3>Full hybrid-plan version (recommended for tonight or tomorrow morning)</h3>
+      <pre style="white-space: pre-wrap; line-height: 1.6;">Hi Michel, Ramona, Julia, Dwayne
+
+Update on the Splice closeout — Trello extraction is done, full review wiki
+is updated, and here's the consolidated plan for tomorrow's meeting.
+
+The wiki: https://docs.drsophia.ai/splice-handover/  (standard password)
+The Trello archive (via SharePoint, team-shareable):
+https://ltdlabs.sharepoint.com/sites/Botaniqal/Documents/Trello/Botaniqal-Board-Archive-2026-04-27/
+
+Hybrid plan — no new subscriptions, no upgrades
+
+We're more built out than what Splice's HubSpot Starter setup delivers. Our
+NurtureWorkflowEngine + AWS SES + AWS SNS + Mailchimp + Meta Conversions
+already covers everything Splice's forms-as-workflows pattern does, plus
+booking-awareness that Starter physically can't deliver. So:
+
+ - Decline Zapier subscription. SMS already runs through AWS SNS.
+ - Decline HubSpot Pro upgrade. Keep Starter as CRM + form host only.
+ - Decline GoHighLevel licence. Data residency is US-only — wrong for our
+   TGA/AHPRA posture. Borrow specific GoHighLevel ideas at low cost
+   (Microsoft Clarity free heatmaps, a small Claude-powered ad-copy tool).
+ - Cancel the SMS Flow subscription Splice set up at smsflow.com.au under
+   michel@drsophia.ai. It only worked through Splice's own Zapier license,
+   which drops away when the retainer ends.
+
+What we keep from Splice
+ - 5 HubSpot workflows (Alt Therapy, WL Meta, WL E-Book, Gut Health E-Book,
+   Trauma-Informed) — they stay live as fallback senders
+ - The full email copy library — Trello and the 27 Apr DOCX combined give us
+   4 vertical sequences plus the Mailchimp WL EDM. We port this into our SES
+   templates so it sends from botaniqal.com.au with proper deliverability
  - Lead Source Type taxonomy
- - 5 Loom training videos (these stay on Loom regardless of contract status)
+ - 5 Loom training videos for Ramona
  - March–June social calendar
+ - All Trello content assets — 132 files, 2.1 GB, mirrored to SharePoint
 
-What I need you to ask Splice tomorrow before they close out
- 1. Trauma-Informed Therapy E-Book embed URL — missing from the workflow map doc
- 2. Alt Therapy form embed URLs (if any beyond the Meta Lead Form)
- 3. The corrected "How to edit workflows in HubSpot" Loom URL — the one you sent is a duplicate of the previous video
- 4. Fix the "Emotional Hook" Meta ad — still has no destination URL, burning spend
- 5. Fix utm_m_campaign → utm_campaign typo on 3+ ads
- 6. Full list of all live HubSpot forms by ID
- 7. Confirm Splice users are removed from HubSpot, Mailchimp, Webflow on Fri 1 May
+What I need you to ask Splice tomorrow before they close out (4 items)
+ 1. Trauma-Informed HubSpot E-Book embed URL. The content is on Trello but
+    the form URL was never delivered.
+ 2. Alt Therapy HubSpot form URL (if any). Trello shows it ran as Meta Lead
+    Form + Mailchimp auto-response only — confirm there's no HubSpot form.
+ 3. Corrected "How to edit workflows in HubSpot" Loom URL. The one in the
+    handover doc is a duplicate of the previous video.
+ 4. Full list of all live HubSpot forms by ID, plus the e-book download forms
+    Splice published as part of the 30 March workflow update.
 
-GoHighLevel
-Looked through it carefully. Genuinely impressive feature bundle, but for us it's the wrong call: data residency is US-only (we need ap-southeast-2 for TGA/AHPRA posture), and we'd be paying for CRM + landing-page + nurture-engine + analytics that we already own. The good ideas worth borrowing — heatmaps, AI ad-copy, single-pane analytics — we can add at low cost: Microsoft Clarity (free), a small Claude-powered ad-copy tool for Ramona, and extending the funnel report. Park GHL.
+Plus the 3 Apr 13 fix-its: the "Emotional Hook" no-URL ad, the
+utm_m_campaign typo, the Meta-form thank-you redirect to /weight-loss/eligibility.
 
-Quick wins for Ramona this week
- - Activate the Mailchimp Welcome SMS she drafted in Nov — 749 subscribers, ~A$50/mo unused credit
- - Email the 237 Mailchimp "Leads" segment with a CTA to /weight-loss/eligibility — likely the single highest-ROI action available right now
+Access revoke list (Friday 1 May)
+Splice has bridged access to a long list of channels through Leadsie. Ramona
+will work through these with Vlad's help: Google Business, GTM, GA4, Google
+Ads, Meta Business Manager (incl. Pixel + Ellie Bakker assignment), Instagram,
+HubSpot, Mailchimp. Webflow is already done. Trello workspace is Splice-owned
+but the archive is preserved on SharePoint.
 
-I'm doing the HubSpot account audit and download of all forms/emails/workflows as a backup today, before the closeout meeting tomorrow.
+Ramona's quick wins this week
+ - Activate the Mailchimp Welcome SMS she drafted Nov 28 — 749 subs, ~A$50/mo
+   of unused credit
+ - Email the 237 Mailchimp Leads with a CTA to /weight-loss/eligibility
+ - Confirm Loomly subscription ownership (likely Splice's — decide keep or drop)
+
+Julia — two review items
+ - The Apr 13 expectation-gap exchange in the HubSpot Trello card. Jo positioned
+   the e-book sequences as "goodwill bonus, not in revised retainer". Worth
+   acknowledging in writing so it doesn't become a billing dispute later.
+ - Splice T&Cs Section 7 (content approvals) — info.splicemarketing.com.au/terms-and-conditions
+   — confirm no closeout obligations on us.
+
+Happy to walk anyone through the wiki on a quick call before tomorrow's Splice
+meeting if useful.
 
 Cheers
 Willie</pre>
@@ -884,6 +1113,11 @@ Willie</pre>
           <div class="timeline-date">22 Apr 2026</div>
           <div class="timeline-title">Splice April blog goes live; webflow access tightened</div>
           <div class="timeline-body">Vlad publishes Splice's April blog post: <em>botaniqal.com.au/blog/a-biologically-informed-approach-to-metabolic-well-being</em>. Vlad confirms Splice's Webflow access is now removed at staff level too — full lockdown ready.</div>
+        </div>
+        <div class="timeline-item win">
+          <div class="timeline-date">27 Apr 2026 ~13:30 — TODAY</div>
+          <div class="timeline-title">Trello board archived — 7 months of Splice history extracted</div>
+          <div class="timeline-body">Ramona authorised a Power-Up under her workspace. 4-step pipeline (extract → download → render → upload) ran end-to-end with zero failures. <strong>70 cards, 198 comments, 132 attachments (2.1 GB), 1037 actions, Sep 2025 → Apr 2026.</strong> Full archive on SharePoint at <code>ltdlabs.sharepoint.com/sites/Botaniqal/Documents/Trello/Botaniqal-Board-Archive-2026-04-27/</code>. Confirms 3 of the 4 "missing" assets are actually in Trello (trauma e-book PDF, all 4 nurture sequences, alt therapy campaign brief). New finding: SMS Flow subscription is paid + live under <code>michel@drsophia.ai</code>.</div>
         </div>
         <div class="timeline-item now">
           <div class="timeline-date">27 Apr 2026 11:15 — TODAY</div>
