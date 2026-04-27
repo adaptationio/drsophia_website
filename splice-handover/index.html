@@ -1294,6 +1294,106 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
         <li>Migrating Mailchimp to anything else (the Standard plan + AU SMS sender + 5,062 patient audience is irreplaceable in the short term)</li>
         <li>Replacing HubSpot as CRM (Starter at A$502/yr is fine for our deal pipeline read-model)</li>
       </ul>
+
+      <hr style="border:none; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+
+      <h2 style="color:#4ecdc4;">Splice copy — fully extracted &amp; ported (13 templates staged)</h2>
+      <p>All 7 Splice DOCX files extracted, mapped to vertical sequences, and ported into the codebase as SES email templates. Live at:</p>
+      <ul>
+        <li><strong>Templates:</strong> <code>backend/src/services/email/templates/splice-port/</code> — 13 HTML files + README</li>
+        <li><strong>Plain-text extracts:</strong> Local at <code>/tmp/splice-handover/extracted_copy/</code></li>
+        <li><strong>Full plan with copy embedded:</strong> <code>docs/handoffs/2026-04-27-messaging-flow-plan.md</code> (committed to repo)</li>
+      </ul>
+
+      <h3>Splice voice — design playbook (extracted patterns)</h3>
+      <p>Patterns to preserve when porting + writing new copy:</p>
+
+      <h4>Salutation + opening pattern</h4>
+      <ul>
+        <li><strong>Always:</strong> <code>Hi {firstName},</code> — friendly first-name basis</li>
+        <li><strong>E1 opening:</strong> "Thank you for downloading [Guide title]. We hope you find it [adjective], [adjective] and supportive..."</li>
+        <li><strong>E2 opening:</strong> "How are you getting on with Botaniqal's [Guide title]? We hope it has helped to bring some clarity..." + 3-4 bullet points</li>
+        <li><strong>E3 opening (re-engagement):</strong> "We wanted to check in as you finish reading your [topic] guide. Taking the time to understand [topic] is an important step. [Soft observation about courage]"</li>
+      </ul>
+
+      <h4>Body voice rules</h4>
+      <ul>
+        <li>Evidence-based, non-pushy</li>
+        <li>"We encourage you to read the guide slowly, reflecting on the aspects that resonate"</li>
+        <li>"When you feel ready, please book an appointment"</li>
+        <li>"Take your time."</li>
+        <li>"Healing is not about [hard sell] but about [soft permission]"</li>
+      </ul>
+
+      <h4>Closing + signoff</h4>
+      <ul>
+        <li>Always: single "Book an appointment" button-style CTA</li>
+        <li>Sign-off: "Warm regards, The Botaniqal Team" or "We're here for you. The Botaniqal Team"</li>
+        <li>Mandatory disclaimer: "All information is general and not intended as a substitute for professional advice."</li>
+      </ul>
+
+      <h4>Subject-line patterns</h4>
+      <ul>
+        <li>E1: "Your [topic] guide is ready to explore"</li>
+        <li>E2: "Understanding [topic] – what your guide highlighted"</li>
+        <li>E3 (re-engage): "Checking in – here if you'd like support"</li>
+        <li>E3 (action-focused): "From knowledge to action: A 3-minute first step"</li>
+      </ul>
+
+      <h4>Things to NOT do (Splice's mistakes we're correcting)</h4>
+      <ul>
+        <li>❌ Unauthorised offers (the $10 discount in trauma E3 — Ramona never approved it; <strong>stripped in our port</strong>)</li>
+        <li>❌ Personal attribute claims (per Meta's policy — "you have weight issues" implies personal attribute)</li>
+        <li>❌ Fixed 2-day delays without booking-awareness</li>
+        <li>❌ Generic compliance footer pasted at bottom (looks like Splice, not Botaniqal — replaced when porting)</li>
+      </ul>
+
+      <h3>Sample of ported copy — Trauma E-Book Email #1</h3>
+      <div style="background: rgba(78,205,196,0.05); border-left: 3px solid #4ecdc4; padding: 16px 22px; border-radius: 0 8px 8px 0; font-size:0.92rem; line-height:1.7; color:#e0e0e0;">
+        <p><strong>Subject:</strong> Your trauma guide is ready to explore</p>
+        <p>Hi {firstName},</p>
+        <p>Thank you for downloading <strong>Your guide to managing trauma</strong>. We hope you find it reassuring, informative and supportive as you continue making sense of your experiences.</p>
+        <p>Trauma can influence how you think, feel and respond in everyday life, and gaining clarity about those patterns is an important step towards feeling more grounded.</p>
+        <p>We encourage you to read the guide slowly, reflecting on those aspects that resonate with you. <em>Take your time.</em></p>
+        <p>You may also be interested in our recent blog on understanding trauma. If you are considering support, please reach out. Our team provides trauma-informed care, holding space for you as you work through your experiences and their impacts on your life.</p>
+        <p>When you feel ready, please book an appointment. We're here for you.</p>
+        <p style="text-align:center;"><span style="display:inline-block;padding:8px 24px;background:#00633C;color:#fff;border-radius:20px;font-size:0.85rem;">Book an appointment</span></p>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Warm regards,<br>The Botaniqal Team</p>
+      </div>
+      <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:8px;">Full text of all 13 templates in <code>docs/handoffs/2026-04-27-messaging-flow-plan.md</code>.</p>
+
+      <h3>Lead Source taxonomy (snake_case for profiles.lead_source)</h3>
+      <table>
+        <thead><tr><th>Value</th><th>Splice DOCX label</th><th>Trigger</th></tr></thead>
+        <tbody>
+          <tr><td><code>wl_meta</code></td><td>Weight Loss - Meta Leads</td><td>Meta Lead Form (WL campaigns)</td></tr>
+          <tr><td><code>wl_ebook_website</code></td><td>Weight Loss eBook - Website</td><td>HubSpot form 93f6b582</td></tr>
+          <tr><td><code>wl_ebook_meta</code></td><td>Weight Loss eBook - Meta</td><td>HubSpot form (Meta PPC variant — not yet built)</td></tr>
+          <tr><td><code>alt_therapy_meta</code></td><td>Alternative Therapy - Meta Leads</td><td>Meta Lead Form (Alt Therapy campaign)</td></tr>
+          <tr><td><code>gut_health_ebook</code></td><td>Gut Health eBook - Website</td><td>HubSpot form b931679a</td></tr>
+          <tr><td><code>trauma_ebook</code></td><td>Trauma Informed Therapy eBook - Website</td><td>HubSpot form a27f648e</td></tr>
+          <tr><td><code>direct</code> / <code>organic</code></td><td>—</td><td>Fallback for non-attributed leads</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Build sequence — critical-path before Friday</h3>
+      <table>
+        <thead><tr><th>#</th><th>Step</th><th>Effort</th><th>Path</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Bridge: HubSpot form → backend webhook</strong></td><td>~1 day</td><td><code>backend/src/routes/hubspotWebhook.js</code></td></tr>
+          <tr><td>2</td><td><strong>Bridge: Meta Lead Form → backend webhook</strong></td><td>~1 day</td><td><code>backend/src/routes/metaWebhook.js</code></td></tr>
+          <tr><td>3</td><td><strong>Port email copy</strong> (13 templates already staged)</td><td>~½ day to wire</td><td><code>backend/src/services/email/templates/splice-port/</code> ✅ done</td></tr>
+          <tr><td>4</td><td><strong>Add lead_source to profiles table</strong></td><td>~½ day</td><td><code>supabase/migrations/{ts}_add_lead_source.sql</code></td></tr>
+          <tr><td>5</td><td><strong>Update NurtureWorkflowEngine</strong> with 12 new vertical workflows</td><td>~½ day</td><td><code>backend/src/services/email/NurtureWorkflowEngine.js</code></td></tr>
+          <tr><td>6</td><td>Mailchimp tag sync via webhook</td><td>~½ day</td><td>—</td></tr>
+          <tr><td>7</td><td><strong>Activate Welcome SMS</strong> (Mailchimp Nov 28 draft)</td><td>~30 mins (Ramona)</td><td>Mailchimp UI</td></tr>
+          <tr><td>8</td><td>Trauma form share URL — get from Jo or set public</td><td>~15 mins</td><td>HubSpot UI</td></tr>
+          <tr><td>9</td><td>Alt Therapy 3-email sequence — Ramona/Julia review WIP drafts</td><td>~½ day review</td><td>Templates already drafted, marked WIP</td></tr>
+          <tr><td>10</td><td>Admin UI for Ramona at <code>/admin/nurture</code></td><td>~3 days</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <p style="background:rgba(78,205,196,0.1);border-left:3px solid #4ecdc4;padding:12px 18px;border-radius:0 8px 8px 0;margin-top:18px;"><strong>Total dev effort to ship critical path: ~3 dev-days + Ramona content review.</strong> All staged in repo. Sequence steps 1-5 must ship before Splice's Zapier license expires Friday so leads keep getting nurtured.</p>
     </div>
   </div>
 
