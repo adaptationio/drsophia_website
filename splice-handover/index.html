@@ -239,18 +239,25 @@
   </div>
 
   <div style="background: linear-gradient(135deg, rgba(255,217,107,0.18), rgba(255,217,107,0.05)); border: 2px solid #ffd96b; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
-    <h3 style="color:#ffd96b;font-size:1rem;margin-bottom:8px;">★ Updated 27 Apr — Trello archive + live platform sweep complete</h3>
-    <p style="color:#d4d4d8;font-size:0.92rem;">Ramona's Trello extraction ran end-to-end with zero failures: <strong>70 cards, 198 comments, 132 attachments (2.1 GB), 7 months of activity</strong>. Mirrored to SharePoint at <a href="https://ltdlabs.sharepoint.com/sites/Botaniqal/Shared%20Documents/Trello/Botaniqal-Board-Archive-2026-04-27/" target="_blank" style="color:#4ecdc4;">ltdlabs.sharepoint.com/.../Trello/Botaniqal-Board-Archive-2026-04-27</a>.</p>
-    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:8px;"><strong>Live API sweep (HubSpot + Meta + Mailchimp + email search) just completed</strong>:</p>
+    <h3 style="color:#ffd96b;font-size:1rem;margin-bottom:8px;">★ Final scrub complete — 4 questions for Splice tomorrow, no more</h3>
+    <p style="color:#d4d4d8;font-size:0.92rem;">Live API sweep across HubSpot + Meta + Mailchimp + email search (800 emails) confirmed nothing else needs to come from Splice. Down to 4 narrow questions:</p>
+    <ol style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
+      <li>The corrected "Edit workflows in HubSpot" Loom URL (duplicate in handover doc)</li>
+      <li>What changed in the 30 March HubSpot workflow update? (Starter API can't inspect)</li>
+      <li>Loomly subscription ownership — theirs or ours?</li>
+      <li>Splice Reporting Dashboard at metrics.watch/8299/... returns 404 — was it ever real?</li>
+    </ol>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:10px;"><strong>What we already have or fixed ourselves (no need to ask):</strong></p>
     <ul style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
-      <li>✅ <strong>Trauma-Informed HubSpot form actually exists</strong> — id <code>a27f648e</code>, just no submissions yet</li>
-      <li>✅ <strong>3 of 4 Apr 13 fix-its are already done</strong> — Emotional Hook ad URL fixed, UTMs all clean, no broken ads</li>
-      <li>✅ <strong>HubSpot Weight Loss Patients pipeline already exists with all 10 stages</strong> matching our funnel</li>
-      <li>⚠ <strong>We have ZERO Zapier account</strong> anywhere — confirmed across all 4 mailboxes</li>
-      <li>⚠ <strong>SMSFlow subscription is paid + live</strong> under <code>michel@drsophia.ai</code> — Splice's Zapier was the bridge, dies Friday regardless</li>
-      <li>⚠ <strong>4 HubSpot vertical lists are empty</strong> — segmentation rules not firing</li>
+      <li>✅ <strong>3 of 4 Apr 13 fix-its are already done</strong> — Emotional Hook URL fixed, UTMs all clean</li>
+      <li>✅ <strong>Trauma-Informed form exists</strong> (id <code>a27f648e</code>) — and standard HubSpot JS embed works for any form, no share URL needed</li>
+      <li>✅ <strong>4 HubSpot forms confirmed by API</strong> — no "Meta variants" exist, no Alt Therapy form by design</li>
+      <li>✅ <strong>HubSpot Weight Loss pipeline exists with all 10 stages</strong> matching our funnel</li>
+      <li>✅ <strong>SMSFlow login captured</strong> (Trello SMS platform card) — just cancel</li>
+      <li>✅ <strong>Lead Source taxonomy decoded</strong> — it's the <code>enquiry_type</code> custom property (10 values configured)</li>
     </ul>
-    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:8px;">See the new <strong>Live Platform Sweep ★</strong>, <strong>Access Matrix</strong>, and <strong>Messaging Plan</strong> tabs. Down from 4 still-missing items to 2.</p>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:10px;"><strong>⚠ One real gap surfaced (we'll fix on our side):</strong></p>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-left:8px;">Out of 4,819 HubSpot contacts, <strong>zero have <code>enquiry_type</code> set</strong>. The forms only collect firstname/lastname/email/phone — they never write the Lead Source. As a result the 4 vertical dynamic lists (Trauma, WL, Alt Therapy, Gut Health) are empty (size = 0). Splice's whole segmentation has never fired. Our HubSpot webhook bridge will set <code>enquiry_type</code> based on form ID — fixing it on our side.</p>
   </div>
 
   <div class="tabs">
@@ -1039,12 +1046,31 @@ GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
         </tbody>
       </table>
 
-      <h3>Updated still-missing list (down from 4 to 2)</h3>
+      <h3>★ Final scrub — what to actually ask Splice tomorrow (4 narrow questions)</h3>
+      <p>After hunting in HubSpot API, Meta API, Mailchimp API, Trello card library, Splice's education portal, and 800 emails, the ask list is down to:</p>
       <ol>
-        <li><strong>Trauma-Informed share URL</strong> — form exists at <code>a27f648e</code>, but the public share URL Splice gave for WL/Gut Health uses unique slugs we don't see in the API. Need Jo to either supply the URL or set the form's sharing config public.</li>
-        <li><strong>Corrected "How to edit workflows in HubSpot" Loom URL</strong> — still a duplicate of the previous video.</li>
+        <li><strong>Corrected "How to edit workflows in HubSpot" Loom URL</strong> — duplicate of previous video in handover doc, no other source.</li>
+        <li><strong>What changed in the 30 March HubSpot workflow update?</strong> (HUBSPOT Trello card, "update to current hubspot workflow") — Starter API can't inspect workflows so we can't see what's there.</li>
+        <li><strong>Loomly subscription ownership</strong> — theirs or ours?</li>
+        <li><strong>Splice Reporting Dashboard URL</strong> at <code>app.metrics.watch/report/8299/...</code> currently returns 404. Was it ever real or did it expire? <em>(Not blocking, our funnel report supersedes anyway.)</em></li>
       </ol>
-      <p>The other items (Alt Therapy form, full forms list) are <strong>resolved by this sweep</strong>: no Alt Therapy form exists by design (Meta Lead Form only), and the full live forms list is the 4 above.</p>
+
+      <div class="ok-banner" style="margin: 14px 0;">
+        <h3>✓ Removed from ask list — already have or can find ourselves</h3>
+        <ul style="color:#d4d4d8;font-size:0.92rem;">
+          <li><strong>Trauma share URL</strong> — form exists at <code>a27f648e</code>. The standard HubSpot JS embed code (<code>js.hsforms.net/forms/v2.js</code> + portal id + form id) works for any form. No share URL needed for Webflow embedding.</li>
+          <li><strong>Alt Therapy HubSpot form URL</strong> — confirmed via API: no such form exists by design. Alt Therapy ran as Meta Lead Form + Mailchimp auto-response.</li>
+          <li><strong>Full HubSpot forms list by ID</strong> — we have it (4 forms via API).</li>
+          <li><strong>Emotional Hook fix + UTM typo fix</strong> — verified done via Meta Graph API audit of all 9 active ads.</li>
+          <li><strong>Lead Source Type wiring</strong> — decoded from list rules: it's the <code>enquiry_type</code> enum custom property with 10 values configured. The 4 vertical dynamic lists filter on it. <em>(See the gap below — but we don't need to ask Splice anything more about this.)</em></li>
+        </ul>
+      </div>
+
+      <div class="urgent" style="margin: 14px 0;">
+        <h2>⚠ One real gap discovered during the sweep</h2>
+        <p><strong>Of 4,819 HubSpot contacts, zero have <code>enquiry_type</code> set.</strong> The 4 forms collect only firstname/lastname/email/phone — they don't write the Lead Source taxonomy. The 4 vertical dynamic lists (Trauma 16, WL 17, Alt Therapy 18, Gut Health 19) all filter on <code>enquiry_type</code> values like "eBook - Weight Loss", but no contact has the property populated, so all four lists are size = 0. Splice's segmentation system was never wired through.</p>
+        <p>We fix this on our side: the HubSpot webhook bridge sets <code>enquiry_type</code> based on which form GUID submitted. ~30 mins to add to the bridge work. Worth flagging at tomorrow's meeting so Splice has the gap on file but no action required from them — the fix is ours to make.</p>
+      </div>
     </div>
   </div>
 
