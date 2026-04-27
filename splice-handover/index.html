@@ -238,26 +238,77 @@
     <p>We are <strong>more built out</strong> than what Splice has delivered. The Splice work is a competent HubSpot Starter implementation — but we have a richer engine running on AWS (NurtureWorkflowEngine, SES, SNS, Mailchimp, Meta Conversions, HubSpot CRM bridge) that already covers everything Splice's setup does, plus <strong>booking-awareness</strong> Splice physically can't deliver on the Starter tier. We accept the handover, port the email copy + lead-source tags into our engine, decline Zapier, and keep HubSpot Starter as CRM. <strong>Net saving: Zapier subscription + ongoing Splice retainer.</strong></p>
   </div>
 
-  <div style="background: linear-gradient(135deg, rgba(255,217,107,0.18), rgba(255,217,107,0.05)); border: 2px solid #ffd96b; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
-    <h3 style="color:#ffd96b;font-size:1rem;margin-bottom:8px;">★ Final scrub complete — 4 questions for Splice tomorrow, no more</h3>
-    <p style="color:#d4d4d8;font-size:0.92rem;">Live API sweep across HubSpot + Meta + Mailchimp + email search (800 emails) confirmed nothing else needs to come from Splice. Down to 4 narrow questions:</p>
-    <ol style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
-      <li>The corrected "Edit workflows in HubSpot" Loom URL (duplicate in handover doc)</li>
-      <li>What changed in the 30 March HubSpot workflow update? (Starter API can't inspect)</li>
-      <li>Loomly subscription ownership — theirs or ours?</li>
-      <li>Splice Reporting Dashboard at metrics.watch/8299/... returns 404 — was it ever real?</li>
-    </ol>
-    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:10px;"><strong>What we already have or fixed ourselves (no need to ask):</strong></p>
+  <div style="background: linear-gradient(135deg, rgba(255,120,71,0.18), rgba(255,120,71,0.05)); border: 2px solid #ff7847; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;">
+    <h3 style="color:#ff7847;font-size:1.05rem;margin-bottom:8px;">⚠ The actual cliff is Thursday 30 April, not Friday 1 May</h3>
+    <p style="color:#d4d4d8;font-size:0.92rem;">Michel formally served Splice 30-day termination notice on <strong>31 March 2026</strong>. Final day: <strong>Thursday 30 April 2026</strong>. After that, Jo's commitment letter says: <em>"we will leave the campaigns live for your management unless notified of an alternate arrangement."</em></p>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:8px;"><strong>The real cliff isn't broken automation</strong> (nothing is automation-bridged via Splice's Zapier — verified). It's <strong>~A$93/day Meta spend continuing without an optimisation hand</strong> from 1 May onwards. 3 active campaigns:</p>
     <ul style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
-      <li>✅ <strong>3 of 4 Apr 13 fix-its are already done</strong> — Emotional Hook URL fixed, UTMs all clean</li>
-      <li>✅ <strong>Trauma-Informed form exists</strong> (id <code>a27f648e</code>) — and standard HubSpot JS embed works for any form, no share URL needed</li>
-      <li>✅ <strong>4 HubSpot forms confirmed by API</strong> — no "Meta variants" exist, no Alt Therapy form by design</li>
-      <li>✅ <strong>HubSpot Weight Loss pipeline exists with all 10 stages</strong> matching our funnel</li>
-      <li>✅ <strong>SMSFlow login captured</strong> (Trello SMS platform card) — just cancel</li>
-      <li>✅ <strong>Lead Source taxonomy decoded</strong> — it's the <code>enquiry_type</code> custom property (10 values configured)</li>
+      <li>WL Lead Form Campaign — A$53.30/day</li>
+      <li>WL Awareness Campaign — A$20.00/day</li>
+      <li>Alt Therapy Lead Form Campaign — A$19.72/day</li>
+      <li><strong>= ~A$2,800/month, ~A$34K/year if left running unsupervised</strong></li>
     </ul>
-    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:10px;"><strong>⚠ One real gap surfaced (we'll fix on our side):</strong></p>
-    <p style="color:#d4d4d8;font-size:0.92rem;margin-left:8px;">Out of 4,819 HubSpot contacts, <strong>zero have <code>enquiry_type</code> set</strong>. The forms only collect firstname/lastname/email/phone — they never write the Lead Source. As a result the 4 vertical dynamic lists (Trauma, WL, Alt Therapy, Gut Health) are empty (size = 0). Splice's whole segmentation has never fired. Our HubSpot webhook bridge will set <code>enquiry_type</code> based on form ID — fixing it on our side.</p>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:8px;"><strong>Decision needed before Thu 30 April:</strong> (a) pause all 3 campaigns Fri 1 May, (b) take over optimisation in-house (Michel/Ramona), (c) bring in a replacement agency. Tomorrow's Splice meeting (Tue 28 Apr 10:00 ACST) is the right time to finalise this.</p>
+  </div>
+
+  <div style="background: linear-gradient(135deg, rgba(94,214,128,0.15), rgba(94,214,128,0.05)); border: 2px solid #5ed680; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
+    <h3 style="color:#5ed680;font-size:1.05rem;margin-bottom:8px;">★ MAJOR FINDING — the nurture engine is in MAILCHIMP, not HubSpot</h3>
+    <p style="color:#d4d4d8;font-size:0.92rem;"><strong>17 Mailchimp Customer Journeys configured, 11 actively sending, ~661 contacts have flowed through.</strong> Splice claimed they'd built nurture in HubSpot — they didn't, because HubSpot Workflows is paywalled on Starter. The actual nurture is alive and running in Mailchimp.</p>
+    <table style="width:100%;font-size:0.85rem;color:#d4d4d8;margin-top:8px;">
+      <thead><tr><th style="text-align:left;padding:4px;background:rgba(94,214,128,0.15);color:#5ed680;">Journey</th><th style="padding:4px;background:rgba(94,214,128,0.15);color:#5ed680;">Audience</th><th style="padding:4px;background:rgba(94,214,128,0.15);color:#5ed680;">Status</th><th style="padding:4px;background:rgba(94,214,128,0.15);color:#5ed680;">Started</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:4px;">Patients EOI Auto-Reply</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>294</td></tr>
+        <tr><td style="padding:4px;">Meta Leads — Alternative Therapy</td><td style="padding:4px;">Leads</td><td><span class="pill pill-green">sending</span></td><td>133</td></tr>
+        <tr><td style="padding:4px;">Welcome new contacts</td><td style="padding:4px;">Patients</td><td><span class="pill pill-amber">paused</span></td><td>102 (37 in progress)</td></tr>
+        <tr><td style="padding:4px;">Meta Leads — Weight Loss</td><td style="padding:4px;">Leads</td><td><span class="pill pill-green">sending</span></td><td>68</td></tr>
+        <tr><td style="padding:4px;">Consent Form — Auto Email With Services</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>67</td></tr>
+        <tr><td style="padding:4px;">Blog Newsletter Welcome Auto-Reply</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>63</td></tr>
+        <tr><td style="padding:4px;">WL Auto Reply (back-up)</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>10</td></tr>
+        <tr><td style="padding:4px;">WL Auto Reply Email</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>9</td></tr>
+        <tr><td style="padding:4px;">Gut Health Assessment Auto-Reply</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>4</td></tr>
+        <tr><td style="padding:4px;">Auto-tag new services sign up</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>4</td></tr>
+        <tr><td style="padding:4px;">eBook: Trauma Informed Therapy</td><td style="padding:4px;">Leads</td><td><span class="pill pill-green">sending</span></td><td>3</td></tr>
+        <tr><td style="padding:4px;">Gut Booster Auto-Reply</td><td style="padding:4px;">Patients</td><td><span class="pill pill-green">sending</span></td><td>3</td></tr>
+        <tr><td style="padding:4px;">Doctors EOI Auto-Reply</td><td style="padding:4px;">Doctors/Clinics</td><td><span class="pill pill-amber">paused</span></td><td>3</td></tr>
+        <tr><td style="padding:4px;">eBook: Weight Loss</td><td style="padding:4px;">Leads</td><td><span class="pill pill-green">sending</span></td><td>1</td></tr>
+        <tr><td style="padding:4px;">Calendly event invitee created</td><td style="padding:4px;">Calendly</td><td><span class="pill pill-green">sending</span></td><td>0</td></tr>
+        <tr><td style="padding:4px;">Abandoned Pre Screening</td><td style="padding:4px;">Calendly</td><td><span class="pill pill-amber">paused</span></td><td>0</td></tr>
+        <tr><td style="padding:4px;">Patients EOI to HubSpot</td><td style="padding:4px;">Patients</td><td><span class="pill pill-grey">draft</span></td><td>0</td></tr>
+      </tbody>
+    </table>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:8px;"><strong>Implications:</strong></p>
+    <ul style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
+      <li>Meta Lead Form → Mailchimp Leads audience flows via Mailchimp's <strong>native Meta integration</strong>, not Zapier. Splice's Zapier was only for the never-activated SMS bridge.</li>
+      <li>The HubSpot <code>enquiry_type</code> enum values <strong>mirror</strong> these Mailchimp Journey names — but no contact has the property set, because the segmentation actually lives via Mailchimp Journey membership.</li>
+      <li>Splice's exit doesn't break the nurture — these Journeys keep running under our Mailchimp account.</li>
+      <li>Re-activate "Welcome new contacts" Journey (102 contacts started, 37 in progress, currently paused).</li>
+    </ul>
+  </div>
+
+  <div style="background: linear-gradient(135deg, rgba(255,217,107,0.18), rgba(255,217,107,0.05)); border: 2px solid #ffd96b; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
+    <h3 style="color:#ffd96b;font-size:1rem;margin-bottom:8px;">★ Tomorrow's ask list — final 5 items</h3>
+    <p style="color:#d4d4d8;font-size:0.92rem;">After 800 emails + Trello + HubSpot/Meta/Mailchimp API sweeps + Playwright login to SMSFlow + Michel mailbox + calendar inspection:</p>
+    <ol style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
+      <li><strong>Optimisation handover for the 3 active Meta campaigns post-30 April</strong> — pause, transfer or replace? (the actual cliff)</li>
+      <li><strong>Corrected "Edit workflows in HubSpot" Loom URL</strong> (duplicate of previous video in handover doc)</li>
+      <li><strong>Loomly subscription ownership</strong> — theirs or ours? (April social already scheduled, May+ unconfirmed)</li>
+      <li><strong>INV 5213 final invoice</strong> — confirm amount, payment terms (Jo flagged 31 Mar)</li>
+      <li><strong>Cancel May 5 + 12 + 19 + 26 zombie weekly check-ins</strong> still in Michel's calendar</li>
+    </ol>
+    <p style="color:#d4d4d8;font-size:0.92rem;margin-top:10px;"><strong>What we already have or verified ourselves (no need to ask):</strong></p>
+    <ul style="color:#d4d4d8;font-size:0.92rem;margin-left:20px;">
+      <li>✅ All 3 of the Apr 13 fix-its are already done — Emotional Hook URL set, UTMs clean across all 9 active ads</li>
+      <li>✅ Trauma-Informed form exists at id <code>a27f648e</code> — standard HubSpot JS embed works without a share URL</li>
+      <li>✅ 4 HubSpot forms confirmed (WL/Trauma/Gut Health E-Book + Patient EOI) — no "Meta variants", no Alt Therapy form by design</li>
+      <li>✅ HubSpot Weight Loss Patients pipeline exists with all 10 stages</li>
+      <li>✅ <strong>17 Mailchimp Customer Journeys</strong> are the real nurture engine (11 sending, 661+ contacts processed)</li>
+      <li>✅ Meta Lead Form → Mailchimp via <strong>native integration</strong>, not Zapier — Splice's Zapier was never load-bearing</li>
+      <li>✅ SMSFlow account fully verified via Playwright — 50 free credits, no card on file, zero SMS sent, 1 empty campaign, Splice's Zap never activated</li>
+      <li>✅ HubSpot Workflows / Form Automation is paywalled on Starter — Splice's "30 March workflow update" can't have landed in HubSpot</li>
+      <li>✅ Lead Source taxonomy decoded — <code>enquiry_type</code> enum mirrors the Mailchimp Journey names</li>
+      <li>✅ All 4 HubSpot forms have <code>postSubmitAction: thank_you</code> only — no automated emails fire from forms (the actual sending is Mailchimp)</li>
+      <li>✅ 3 of 4 e-book forms have ZERO submissions ever (only Patient EOI is used)</li>
+    </ul>
   </div>
 
   <div class="tabs">
