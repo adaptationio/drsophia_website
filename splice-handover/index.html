@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splice Handover — HubSpot &amp; Nurture Sequences · 27 Apr 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  #auth-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1410 0%, #2b1d12 50%, #3d2a1a 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; transition: opacity 0.5s;
+  }
+  body.unlocked #auth-overlay { display: none; }
+  .auth-box {
+    background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+    padding: 48px; max-width: 440px; width: 90%; text-align: center;
+  }
+  .auth-box h1 { color: #ff7847; font-size: 1.55rem; margin-bottom: 8px; font-weight: 600; }
+  .auth-box .sub { color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-bottom: 24px; }
+  .auth-box input {
+    width: 100%; padding: 14px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; outline: none;
+    margin-bottom: 14px; font-family: inherit;
+  }
+  .auth-box input:focus { border-color: #ff7847; }
+  .auth-box button {
+    width: 100%; padding: 14px; border-radius: 8px; border: none;
+    background: linear-gradient(135deg, #ff7847, #d65a2c); color: #fff;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+  }
+  .auth-box button:hover { transform: scale(1.02); }
+  .auth-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 4px; display: none; }
+
+  #main-content { display: none; }
+  body.unlocked #main-content { display: block; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #110d09; color: #e0e0e0; line-height: 1.65;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1410, #2b1d12);
+    border-bottom: 3px solid #ff7847; padding: 32px 0;
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .header .eyebrow { color: #ffd96b; font-size: 0.82rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .header h1 { font-size: 2.1rem; color: #fff; margin-bottom: 4px; font-weight: 600; letter-spacing: -0.5px; }
+  .header .subtitle { color: #ff7847; font-size: 1.05rem; font-weight: 600; }
+  .header .meta { color: rgba(255,255,255,0.5); font-size: 0.88rem; margin-top: 8px; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .urgent {
+    background: linear-gradient(135deg, #ff7847, #d65a2c);
+    color: #fff; padding: 22px 26px; border-radius: 12px; margin-bottom: 28px;
+    border: 2px solid #ffd96b; box-shadow: 0 10px 30px rgba(255,120,71,0.25);
+  }
+  .urgent h2 { font-size: 1.05rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .urgent p { font-size: 0.98rem; line-height: 1.6; margin-bottom: 8px; }
+  .urgent strong { color: #ffd96b; }
+
+  .ok-banner {
+    background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(78,205,196,0.05));
+    border: 2px solid #4ecdc4; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;
+  }
+  .ok-banner h3 { color: #4ecdc4; font-size: 1rem; margin-bottom: 8px; }
+  .ok-banner p { color: #d4d4d8; font-size: 0.93rem; }
+
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 28px; overflow-x: auto;
+    border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 0;
+  }
+  .tab {
+    padding: 12px 18px; cursor: pointer; border-radius: 8px 8px 0 0;
+    background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.5);
+    font-weight: 500; font-size: 0.88rem; white-space: nowrap;
+    border: 1px solid transparent; border-bottom: none;
+  }
+  .tab:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .tab.active { background: rgba(255,120,71,0.14); color: #ff7847; border-color: rgba(255,120,71,0.3); }
+  .tab-content { display: none; animation: fade 0.25s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 26px; margin-bottom: 20px;
+  }
+  .card h2 { color: #ff7847; font-size: 1.25rem; margin-bottom: 14px; font-weight: 600; }
+  .card h3 { color: #4ecdc4; font-size: 1.05rem; margin: 20px 0 10px; font-weight: 600; }
+  .card h4 { color: #ffd96b; font-size: 0.92rem; margin: 14px 0 6px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .card p { margin-bottom: 10px; color: #d4d4d8; }
+  .card ul, .card ol { padding-left: 22px; margin-bottom: 12px; color: #d4d4d8; }
+  .card li { margin-bottom: 6px; }
+  .card strong { color: #fff; }
+  .card em { color: #ffd96b; font-style: normal; background: rgba(255,217,107,0.1); padding: 0 4px; border-radius: 3px; }
+  .card a { color: #4ecdc4; text-decoration: none; border-bottom: 1px dotted rgba(78,205,196,0.4); }
+  .card a:hover { border-bottom-style: solid; }
+  blockquote {
+    border-left: 3px solid #ff7847; padding: 10px 18px; margin: 14px 0;
+    background: rgba(255,120,71,0.05); color: #b4b4b8; font-style: italic; border-radius: 0 8px 8px 0;
+  }
+  blockquote.willie {
+    border-left-color: #4ecdc4; background: rgba(78,205,196,0.05);
+  }
+  code, pre { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: #ffd96b; font-family: 'SF Mono', Menlo, monospace; }
+  pre { padding: 14px 18px; border-left: 3px solid #4ecdc4; overflow-x: auto; margin: 12px 0; line-height: 1.5; }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  th { background: rgba(255,120,71,0.15); color: #ff7847; text-align: left; padding: 10px 14px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; color: #d4d4d8; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td.date { color: #4ecdc4; font-weight: 600; white-space: nowrap; font-size: 0.85rem; }
+  td.tag { white-space: nowrap; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0; }
+  .compare-col {
+    background: rgba(255,255,255,0.03); border-radius: 10px; padding: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .compare-col.splice { border-top: 4px solid #ff7847; }
+  .compare-col.ours { border-top: 4px solid #4ecdc4; }
+  .compare-col h3 { margin-top: 0; }
+  .compare-col.splice h3 { color: #ff7847; }
+  .compare-col.ours h3 { color: #4ecdc4; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 18px 0; }
+  .kpi { background: rgba(78,205,196,0.07); border-left: 3px solid #4ecdc4; padding: 16px 18px; border-radius: 0 8px 8px 0; }
+  .kpi.warn { background: rgba(255,217,107,0.07); border-left-color: #ffd96b; }
+  .kpi.danger { background: rgba(255,120,71,0.07); border-left-color: #ff7847; }
+  .kpi .value { font-size: 1.7rem; font-weight: 700; color: #4ecdc4; line-height: 1.1; }
+  .kpi.warn .value { color: #ffd96b; }
+  .kpi.danger .value { color: #ff7847; }
+  .kpi .label { font-size: 0.8rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .kpi .note { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 4px; font-style: italic; }
+
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .pill-red { background: rgba(255,107,138,0.18); color: #ff6b8a; }
+  .pill-amber { background: rgba(255,217,107,0.18); color: #ffd96b; }
+  .pill-green { background: rgba(94,214,128,0.18); color: #5ed680; }
+  .pill-blue { background: rgba(78,205,196,0.18); color: #4ecdc4; }
+  .pill-orange { background: rgba(255,120,71,0.18); color: #ff7847; }
+  .pill-grey { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, #ff7847, #4ecdc4, rgba(255,255,255,0.08));
+  }
+  .timeline-item { position: relative; margin-bottom: 22px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -23px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%; background: #ff7847;
+    box-shadow: 0 0 0 3px rgba(255,120,71,0.15);
+  }
+  .timeline-item.now::before { background: #ffd96b; box-shadow: 0 0 0 3px rgba(255,217,107,0.3); }
+  .timeline-item.win::before { background: #4ecdc4; box-shadow: 0 0 0 3px rgba(78,205,196,0.2); }
+  .timeline-date { color: #4ecdc4; font-size: 0.82rem; font-weight: 600; }
+  .timeline-title { color: #fff; font-weight: 600; margin: 2px 0 4px; font-size: 0.98rem; }
+  .timeline-body { color: rgba(255,255,255,0.75); font-size: 0.92rem; }
+
+  .check {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;
+  }
+  .check-box { flex: 0 0 18px; height: 18px; border-radius: 4px; background: rgba(78,205,196,0.15); border: 2px solid #4ecdc4; margin-top: 2px; }
+  .check-box.amber { background: rgba(255,217,107,0.15); border-color: #ffd96b; }
+  .check-box.red { background: rgba(255,120,71,0.15); border-color: #ff7847; }
+  .check-content { flex: 1; }
+  .check-content strong { color: #fff; }
+  .check-content small { display: block; color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 4px; }
+
+  .owner { display: inline-block; padding: 2px 8px; border-radius: 4px; background: rgba(78,205,196,0.15); color: #4ecdc4; font-size: 0.78rem; font-weight: 600; }
+  .owner.red { background: rgba(255,107,138,0.15); color: #ff6b8a; }
+  .owner.amber { background: rgba(255,217,107,0.15); color: #ffd96b; }
+  .owner.orange { background: rgba(255,120,71,0.15); color: #ff7847; }
+
+  .footer-note {
+    margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.02);
+    border-left: 3px solid rgba(255,255,255,0.15); border-radius: 0 8px 8px 0;
+    color: rgba(255,255,255,0.55); font-size: 0.8rem;
+  }
+
+  details { background: rgba(255,255,255,0.02); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
+  details summary { cursor: pointer; color: #4ecdc4; font-weight: 500; }
+  details[open] summary { margin-bottom: 10px; color: #ff7847; }
+
+  .email-rows table th { font-size: 0.7rem; padding: 8px 12px; }
+  .email-rows table td { font-size: 0.85rem; padding: 8px 12px; }
+
+  @media (max-width: 800px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.55rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h1>Internal — Confidential</h1>
+    <p class="sub">Botaniqal · Splice Handover Brief · 27 Apr 2026</p>
+    <input type="password" id="pwd-input" placeholder="Enter password" autofocus onkeypress="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()">Unlock</button>
+    <div class="auth-error" id="pwd-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<div id="main-content">
+
+<div class="header">
+  <div class="header-inner">
+    <div class="eyebrow">Splice Handover · Confidential</div>
+    <h1>Splice → Botaniqal Handover Brief</h1>
+    <div class="subtitle">HubSpot setup &amp; nurture sequences · Splice closes out in 4 days</div>
+    <div class="meta">Compiled 27 Apr 2026 · 40 emails reviewed across 4 mailboxes · 4 attachments extracted · Inventory of 8 backend services · Lead: Willie</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="urgent">
+    <h2>⚠ Action required today</h2>
+    <p>Michel resent the Splice handover docs at <strong>11:15 AM ACST today (Mon 27 Apr)</strong>. Last meeting with Splice is <strong>tomorrow (Tue 28 Apr)</strong>. Splice contract finishes ~<strong>Fri 1 May</strong>.</p>
+    <p>Michel is asking three things: <strong>(1)</strong> review the HubSpot transfer docs and confirm if anything else is needed before Splice closeout; <strong>(2)</strong> a smarter alternative to Zapier for SMS than the one he proposed; <strong>(3)</strong> a view on <strong>GoHighLevel</strong> as either copy-target or replacement.</p>
+    <p>Willie has already drafted his preliminary reply at <strong>12:23 PM</strong> ("don't need Zapier or upgrades, prewarmed most of it in the code, AWS PAYG"). That position is correct — this brief documents the evidence and the wider recommendation.</p>
+  </div>
+
+  <div class="ok-banner">
+    <h3>✓ Bottom line</h3>
+    <p>We are <strong>more built out</strong> than what Splice has delivered. The Splice work is a competent HubSpot Starter implementation — but we have a richer engine running on AWS (NurtureWorkflowEngine, SES, SNS, Mailchimp, Meta Conversions, HubSpot CRM bridge) that already covers everything Splice's setup does, plus <strong>booking-awareness</strong> Splice physically can't deliver on the Starter tier. We accept the handover, port the email copy + lead-source tags into our engine, decline Zapier, and keep HubSpot Starter as CRM. <strong>Net saving: Zapier subscription + ongoing Splice retainer.</strong></p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab(this, 'summary')">Summary</div>
+    <div class="tab" onclick="showTab(this, 'today')">Today's Email</div>
+    <div class="tab" onclick="showTab(this, 'splice')">What Splice Built</div>
+    <div class="tab" onclick="showTab(this, 'ours')">What We Built</div>
+    <div class="tab" onclick="showTab(this, 'compare')">Side-by-Side</div>
+    <div class="tab" onclick="showTab(this, 'gohighlevel')">GoHighLevel</div>
+    <div class="tab" onclick="showTab(this, 'recommend')">Recommendations</div>
+    <div class="tab" onclick="showTab(this, 'decisions')">Decisions Needed</div>
+    <div class="tab" onclick="showTab(this, 'response')">Reply to Michel</div>
+    <div class="tab" onclick="showTab(this, 'timeline')">Timeline</div>
+    <div class="tab" onclick="showTab(this, 'emails')">All 40 Emails</div>
+    <div class="tab" onclick="showTab(this, 'attachments')">Attachments</div>
+  </div>
+
+  <!-- ============ SUMMARY ============ -->
+  <div class="tab-content active" id="summary">
+    <div class="card">
+      <h2>Executive snapshot</h2>
+      <p><strong>Splice Marketing</strong> (North Lakes QLD, Jo Lacey + Matt Anson + Welcome team) has been running Botaniqal's paid marketing + HubSpot setup since Oct 2025. They are exiting in <strong>4 days</strong>. They have one final meeting with Michel <strong>tomorrow (Tue 28 Apr)</strong>.</p>
+
+      <p>Their handover package, sent today at 11:15 AM, contains:</p>
+      <ul>
+        <li><strong>HubSpot configuration doc</strong> — 4 verticals (Alt Therapy, Weight Loss, Gut Health, Trauma-Informed) with 3-email/2-day-delay sequences each, mapped onto HubSpot Starter forms (since Starter doesn't allow real workflows)</li>
+        <li><strong>E-Book download workflow map</strong> — landing page → form → 3-email nurture, with HubSpot embed URLs for Weight Loss + Gut Health (Trauma + Alt Therapy presumed similar)</li>
+        <li><strong>5 Loom training videos</strong> for Ramona on how to find/edit/turn-on workflows</li>
+        <li><strong>Content calendar</strong> (separately, Feb 2026) — March-June social posts across 4 verticals</li>
+      </ul>
+
+      <h3>Why this matters</h3>
+      <p>Splice's setup is real and useful — <strong>but it's a workaround for the limits of HubSpot Starter</strong>. They had to build "forms with automated actions" instead of true workflows, can't track who's already booked, and SMS is "waiting on Zapier". Meanwhile, since Apr 1, we built a <em>full nurture engine on AWS</em> that does all of this natively, with funnel-stage awareness Starter physically can't match.</p>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="value">40</div><div class="label">Splice emails reviewed</div><div class="note">Oct 2025 → today</div></div>
+        <div class="kpi"><div class="value">4</div><div class="label">Attachments extracted</div><div class="note">2 DOCX, 1 XLSX, 1 logo</div></div>
+        <div class="kpi danger"><div class="value">$1,961</div><div class="label">Splice spend Mar 14–Apr 13</div><div class="note">0 app conversions</div></div>
+        <div class="kpi danger"><div class="value">264</div><div class="label">Meta Lead Form leads</div><div class="note">No automated follow-up</div></div>
+        <div class="kpi"><div class="value">8</div><div class="label">Backend services live</div><div class="note">Nurture, SMS, Mailchimp, Meta, HubSpot</div></div>
+        <div class="kpi"><div class="value">7</div><div class="label">Email templates rendered</div><div class="note">In <code>/email/templates/</code></div></div>
+      </div>
+
+      <h3>Key finding (already actioned by Dwayne)</h3>
+      <blockquote>
+        "I've have removed Splice — they're of no use to us from here out, other than fixing the points noted, which Michel will lead / execute."<br>
+        — Dwayne Boyes, 13 Apr 2026, in reply to Willie's funnel report
+      </blockquote>
+      <p>So this isn't a question of <em>whether</em> to part ways — that decision is two weeks old. It's about <strong>how to wrap up cleanly</strong> and <strong>which assets are worth porting</strong>.</p>
+
+      <h3>What Michel actually needs from us</h3>
+      <ol>
+        <li><strong>Confirmation</strong> — anything missing from the HubSpot transfer pack before tomorrow's Splice meeting? <em>(Answer: ask for the Trauma-Informed Therapy workflow map page, the Alt Therapy form embed URLs, and a list of all live HubSpot forms by ID.)</em></li>
+        <li><strong>SMS decision</strong> — Zapier or alternative? <em>(Answer: neither. We have AWS SNS already wired into the NurtureWorkflowEngine. Zapier was only proposed because HubSpot Starter doesn't include SMS. We don't need to send SMS through HubSpot at all.)</em></li>
+        <li><strong>GoHighLevel view</strong> — copy or licence? <em>(Answer: don't licence. Don't copy whole-cloth. Borrow ideas — heat-tracing, AI ad-content optimisation, single-pane analytics — but our stack already has the structural pieces. See GoHighLevel tab.)</em></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============ TODAY'S EMAIL ============ -->
+  <div class="tab-content" id="today">
+    <div class="card">
+      <h2>Today, 11:15 AM ACST — Michel to Willie/Ramona/Julia</h2>
+      <p><strong>Subject:</strong> FW: HubSpot and nature sequences: Botaniqal · <strong>Cc:</strong> Dwayne · <strong>Attachments:</strong> 3 (HubSpot config DOCX, E-Book Workflow Map DOCX, Splice logo)</p>
+
+      <blockquote>
+        Hello Willie/Ramona<br><br>
+        Resending this email from last week. With one last meeting tomorrow with Splice — can you please review all today and advise if you need anything more from me on Hubspot transfer and education.<br><br>
+        Thank you
+      </blockquote>
+
+      <h3>Original 21 Apr message (forwarded)</h3>
+      <blockquote>
+        At a high-level, whilst I was hoping to get away with a lesser subscription fee on HubSpot the more detail we get into the less likely is this level to be able to do what we need. In any case it's a strong starting block, we've bypassed the automation license by creating <em>"forms"</em> rather than webflows as such. Triggered as information pieces to each lead.<br><br>
+        @Willie from our discussion last week — a <strong>Zapier connection is needed</strong> in this proposed infrastructure for the sequence to work via SMS. But please review and let me know a smarter way, or if easier to get the basic account for the sake of the set up.<br><br>
+        From my message last week — a very impressive alternative is <strong>https://www.gohighlevel.com/</strong> (replacing all mailchimp/hubspot etc) and i highly suggest you to have a look through their wears too, either copy for our own dev, or, look at license to answer everything we need and more.<br><br>
+        @ramona please review flow and sequence — all templates are drafts and very safe-vanilla, happy to amend. Loom videos are also linked for training and how-to.<br><br>
+        @Julia the issue I have with the nurture sequences for leads is that the Hubspot subscription <strong>won't allow us to track who has booked and who hasn't</strong> (automated workflows) and therefore assumes all leads have yet to book. The alternative was to create forms/scripted to be soft and focused on providing more info, and don't hurt or hinder those who may have already passed thru Rose or otherwise booked. Nonetheless I can see some friction points as UX as we get more volume.<br><br>
+        Ideal world (magic fingers) we have a system very much aligned look &amp; feel to GoHighLevel capturing all leads organic, paid, or otherwise. Tracks all activity, has nurture sequences for all events. Flexible templates that can be edited at will to tailor to audience change, without compromising entire flow. A CRM with full synchronicity to Google, Meta and any other media as well as heat tracing on our landing pages and website pages to maximise traffic and CTA. With AI self-learning intelligence to tailor new ads, new content, new communication outlets benchmarked on data collected and data researched against competitor flow.
+      </blockquote>
+
+      <h2>Today, 12:23 PM ACST — Willie's draft reply (already sent)</h2>
+      <blockquote class="willie">
+        Hi Michel<br><br>
+        Based on documents provided and suggestion infrastructure, zapier requirements, to upgrade or not to upgrade. I believe based on what we have, what is proposed and best approach for integration, I think a new <strong>hybrid plan is required</strong>.<br><br>
+        I would say probably <strong>don't need zapier or any upgrades or additional services</strong>. Because we can create it all, I have <strong>prewarmed most of it in the code</strong> and better to integrate to enterprises services likes AWS which provide a lot of this as PAYG.<br><br>
+        Looking through Trello too and checking what need to be downloaded etc.<br><br>
+        Will have a better idea once I have looked through it all
+      </blockquote>
+
+      <p>This brief is the "better idea once I have looked through it all". Recommended formal reply is on the <strong>Reply to Michel</strong> tab.</p>
+
+      <h3>Loom training videos (preserve these)</h3>
+      <ul>
+        <li><a href="https://www.loom.com/share/b9166467179845bf9ba1e1991ced6018" target="_blank">How to find and turn on Meta Ad workflows in HubSpot</a></li>
+        <li><a href="https://www.loom.com/share/c67797f3469947108f150f8e0308b93b" target="_blank">How to find and turn on website e-Book workflows in HubSpot</a></li>
+        <li><a href="https://www.loom.com/share/c67797f3469947108f150f8e0308b93b" target="_blank">How to edit workflows in HubSpot</a> <em>(same URL as previous — Splice typo, ask for correct link)</em></li>
+        <li><a href="https://www.loom.com/share/9a838f47a4fc4488951f8cff685e09b9" target="_blank">How to edit emails connected to workflows in HubSpot</a></li>
+        <li><a href="https://www.loom.com/share/6f6d16ae72e0485cb3fbe3f3c9b35cf0" target="_blank">How to build an automated email to connect to workflows in HubSpot</a></li>
+      </ul>
+
+      <h3>HubSpot embed URLs delivered</h3>
+      <ul>
+        <li><strong>WL E-Book (Website):</strong> <code>https://r2mav.share.hsforms.com/2k_a1gjmaS2aqZMl6xQ0ndQ</code></li>
+        <li><strong>WL E-Book (Meta PPC):</strong> <code>https://share.hsforms.com/2UTel1A0wQmu0Z3LCPolohwr2mav</code></li>
+        <li><strong>Gut Health E-Book (Website):</strong> <code>https://share.hsforms.com/2uTFnmhUnR-OK9fNHMWGh2wr2mav</code></li>
+        <li><strong>Gut Health E-Book (Meta PPC):</strong> <code>https://r2mav.share.hsforms.com/2V09OOHG5SiOpW9U_Y8xuaA</code></li>
+        <li><strong>Trauma-Informed:</strong> <em>not delivered in this pack — request from Splice tomorrow</em></li>
+        <li><strong>Alt Therapy:</strong> <em>not delivered in this pack — Meta-only flow, no website ebook?</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ WHAT SPLICE BUILT ============ -->
+  <div class="tab-content" id="splice">
+    <div class="card">
+      <h2>What Splice has delivered (per the 27 Apr handover docs)</h2>
+
+      <h3>Architecture pattern: "forms instead of workflows"</h3>
+      <p>HubSpot Starter ($502/yr) does not include workflow automation API or branching automation. Splice's workaround was to use HubSpot <strong>forms</strong> as the automation trigger, with each form firing a fixed 3-email sequence with 2-day delays. No branching, no booking-awareness, no funnel-stage updates. Just: <em>form submitted → email 1 → wait 2d → email 2 → wait 2d → email 3.</em></p>
+
+      <p>Michel acknowledges this in his note: <em>"the Hubspot subscription won't allow us to track who has booked and who hasn't (automated workflows) and therefore assumes all leads have yet to book."</em> A patient who books with Dr Dia on day 1 still gets the day-3 nurture email asking them to book. That's a UX risk and Michel flags it explicitly.</p>
+
+      <h3>Vertical 1: Alternative Therapy / Medicinal Cannabis</h3>
+      <table>
+        <tr><th>Channel</th><th>Trigger</th><th>Sequence</th></tr>
+        <tr><td>Meta Lead Form</td><td>Patient completes Meta form</td><td>SMS (waiting on Zapier) → contact created → email #1 → 2d delay → email #2 → 2d delay → email #3</td></tr>
+      </table>
+      <p>Lead source attribution: <code>Alternative Therapy - Meta Leads</code>. Workflow name: <code>Hubspot_AlternativeTherapy_MetaLeads_Nurture Sequence</code>.</p>
+
+      <h3>Vertical 2: Weight Loss</h3>
+      <table>
+        <tr><th>Campaign</th><th>Channel</th><th>Workflow status</th></tr>
+        <tr><td>WL Awareness Campaign</td><td>Meta — Broad Audience 25–45</td><td><span class="pill pill-amber">⚠ No workflows connected</span> — pure brand spend</td></tr>
+        <tr><td>WL Lead Form Campaign</td><td>Meta — Retargeting (5 ads)</td><td>SMS (Zapier-pending) → email #1/2/3 sequence. <em>Each ad has its own clone of the workflow — change one, change all five.</em></td></tr>
+        <tr><td>WL E-Book (Website)</td><td>Website form on Webflow</td><td>email #1/2/3 nurture only (no SMS)</td></tr>
+      </table>
+
+      <h3>Vertical 3: Gut Health</h3>
+      <p>Website-form-only flow (no Meta Lead Form). Same 3-email pattern. Workflow name: <code>Hubspot_GutHealth_EbookDownload_Website_Nurture Sequence</code>.</p>
+
+      <h3>Vertical 4: Trauma-Informed Therapy</h3>
+      <p>Website-form-only flow. Same 3-email pattern. Workflow name: <code>Hubspot_TraumaInformedTherapy_EbookDownload_Website_Nurture Sequence</code>. <strong>Embed URL not provided in this pack — request from Splice tomorrow.</strong></p>
+
+      <h3>What's good about it</h3>
+      <ul>
+        <li><strong>5 vertical workflows pre-named and pre-built</strong> in HubSpot — saves us the boilerplate</li>
+        <li><strong>15 email drafts</strong> ("safe-vanilla" per Michel, ready for Ramona to amend)</li>
+        <li><strong>Lead source tagging</strong> applied to each contact — clean attribution model</li>
+        <li><strong>5 Loom training videos</strong> — Ramona has the keys to maintain HubSpot herself</li>
+        <li><strong>HubSpot forms are live</strong> with stable share URLs — Webflow page can embed today</li>
+      </ul>
+
+      <h3>What's missing or weak</h3>
+      <ul>
+        <li><strong>SMS is non-functional</strong> — "waiting on Zapier" in 4 of 5 flows</li>
+        <li><strong>Cannot detect bookings</strong> — Calendly/MediRecords events don't update HubSpot contact status, so a patient who books on day 1 still gets the "are you ready to book?" email on day 3</li>
+        <li><strong>No funnel-stage awareness</strong> — emails fire on form submission only, not on app eligibility/signup/consultation/booking transitions</li>
+        <li><strong>5x ad cloning</strong> — each ad has its own workflow copy; edits must be made 5 times</li>
+        <li><strong>"Emotional Hook" ad has no destination URL</strong> — burning ad spend (flagged in Willie's Apr 13 funnel report)</li>
+        <li><strong>UTM typo</strong> — <code>utm_m_campaign</code> instead of <code>utm_campaign</code> (flagged Apr 13)</li>
+      </ul>
+
+      <h3>The Splice content plan (Feb 2026 attachment, March–June)</h3>
+      <p>4-month social calendar — 4 weekly posts across all 4 verticals. <em>Worth keeping</em> as a baseline copy bank but doesn't need ongoing Splice involvement to execute.</p>
+    </div>
+  </div>
+
+  <!-- ============ WHAT WE BUILT ============ -->
+  <div class="tab-content" id="ours">
+    <div class="card">
+      <h2>What we already have on AWS (built Apr 1–10, 2026)</h2>
+
+      <p>This is what Willie meant by <em>"prewarmed most of it in the code"</em>. Eight backend services, deployed and running on EKS. Path: <code>botaniqal-medtech/backend/src/services/</code>.</p>
+
+      <h3>1. NurtureWorkflowEngine.js — the equivalent of Splice's HubSpot workflows</h3>
+      <pre>backend/src/services/email/NurtureWorkflowEngine.js  (417 lines)</pre>
+      <ul>
+        <li>Cron-based, runs every 15 minutes</li>
+        <li>Scans the Supabase <code>profiles</code> table for patients stalled at funnel stages</li>
+        <li><strong>4 workflows already defined:</strong> eligibility_dropout (24h), signup_stalled (48h), consultation_nudge (48h), booking_reminder (72h)</li>
+        <li>Sends a single targeted email per workflow trigger, deduplicates via <code>email_audit</code> table</li>
+        <li><strong>Booking-aware:</strong> a patient who progresses past <code>consultation_completed</code> automatically stops getting consultation_nudge emails — Splice's HubSpot setup physically cannot do this on Starter</li>
+      </ul>
+
+      <h3>2. BotaniqalEmailService.js — AWS SES sender</h3>
+      <pre>backend/src/services/email/BotaniqalEmailService.js
+backend/src/services/email/templates/  (7 HTML templates)</pre>
+      <ul>
+        <li>AWS SES region <code>ap-southeast-2</code></li>
+        <li>Templates: appointment-reminder, base-layout, booking-reminder, consultation-ready, eligibility-dropout, signup-stalled, welcome-complete</li>
+        <li>Botaniqal-branded base layout (logo, colours, footer)</li>
+        <li>SES verified domain: <code>botaniqal.com.au</code> — better deliverability than HubSpot's shared sender pool</li>
+      </ul>
+
+      <h3>3. SMSService.js — AWS SNS Australian SMS</h3>
+      <pre>backend/src/services/SMSService.js  (250 lines)</pre>
+      <ul>
+        <li>AWS SNS publish, region <code>ap-southeast-2</code></li>
+        <li>Sender ID <code>Botaniqal</code> (alphanumeric, AU-supported)</li>
+        <li>Auto opt-out (<code>STOP to unsubscribe</code>) — Australian Spam Act compliant</li>
+        <li>E.164 normaliser — accepts <code>04xx xxx xxx</code>, <code>61xxxx</code>, <code>+61xxxx</code></li>
+        <li><strong>This is the answer to "do we need Zapier"</strong> — we don't. SMS already wired into NurtureWorkflowEngine via <code>loadSMSService()</code> lazy import.</li>
+      </ul>
+
+      <h3>4. MailchimpService.js — Standard plan integration</h3>
+      <pre>backend/src/services/MailchimpService.js  (354 lines)
+backend/src/routes/mailchimpRouter.js</pre>
+      <ul>
+        <li>Reads campaigns, audiences, SMS stats, automations from Mailchimp</li>
+        <li>API base <code>https://us9.api.mailchimp.com/3.0/</code></li>
+        <li>Mailchimp Standard plan ($262/mo) — 10K contacts, 3,750 SMS credits, AU sender number <code>+61 499 224 051</code></li>
+        <li>3 audiences: Patients (113), Doctors/Clinics/Pharmacies (530+), Leads</li>
+        <li>13 templates, 10 live workflows already exist (Splice-built)</li>
+        <li><strong>Caveat:</strong> SMS credits paid for 17 months but unused since Oct 2024 — ~A$850 already wasted on dormant SMS. Activating the Welcome SMS draft is worth ~A$50/mo current spend.</li>
+      </ul>
+
+      <h3>5. MetaConversionsService.js — server-side ad attribution</h3>
+      <pre>backend/src/services/MetaConversionsService.js  (179 lines)</pre>
+      <ul>
+        <li>Server-side Lead, CompleteRegistration, InitiateCheckout, Purchase events</li>
+        <li>Wired into Weight Loss funnel routes (eligibility, signup, booking, payment)</li>
+        <li>SHA-256 hashed PII, <code>event_id</code> for dedup with browser pixel</li>
+        <li>No PHI sent — clinical data stays out of Meta</li>
+        <li>Solves the iOS-14 attribution gap that's killing organic Meta lead-form ROI</li>
+      </ul>
+
+      <h3>6. MetaMarketingService.js — programmatic ad insights</h3>
+      <pre>backend/src/services/MetaMarketingService.js  (234 lines)
+backend/src/routes/metaRouter.js</pre>
+      <ul>
+        <li>Reads campaigns, insights, spend from <code>act_1127976122357950</code></li>
+        <li>Graph API v24.0</li>
+        <li>3 endpoints: <code>/api/meta/campaigns</code>, <code>/api/meta/insights</code>, <code>/api/meta/audiences</code></li>
+      </ul>
+
+      <h3>7. HubSpotService.js — CRM bridge (kept, not retired)</h3>
+      <pre>backend/src/services/HubSpotService.js
+backend/src/services/hubspot/ensureProperties.js</pre>
+      <ul>
+        <li>Private app token <code>pat-na1-2820d167…</code> — 38 scopes (35 CRM + 3 forms)</li>
+        <li>Reads Splice's pre-built forms; pushes our funnel events into HubSpot timeline</li>
+        <li>HubSpot remains the CRM source of truth — we don't replace it, we supplement it</li>
+      </ul>
+
+      <h3>8. Funnel + analytics</h3>
+      <pre>backend/src/routes/analyticsRouter.js
+backend/src/routes/googleAdsRouter.js
+GA4AnalyticsService.js (service-account auth, GA4 property 461069027)</pre>
+      <p>Plus the <strong>marketing-funnel report</strong> (Apr 13) that already cross-references Meta + GA4 + HubSpot + Mailchimp + Supabase + Calendly into a single dashboard. Password-protected on GitHub Pages: <code>Botaniqal2026!</code></p>
+
+      <h3>What's NOT yet wired (the gap)</h3>
+      <ul>
+        <li>The <strong>4 e-book download flows</strong> Splice built in HubSpot are not yet integrated with our NurtureWorkflowEngine. Splice fires HubSpot's own emails. We could either: (a) leave HubSpot to send, then bridge contact data into Supabase profiles via webhook, or (b) replace HubSpot's send with our own NurtureEngine entirely. <strong>Recommendation: option (a) for now</strong>, migrate to (b) gradually.</li>
+        <li>Mailchimp SMS Welcome template (drafted by Ramona Nov 28 2025) is still <strong>unsent</strong> — 749 subscribers waiting</li>
+        <li><code>HubSpot deal stage → Mailchimp trigger bridge</code> (#761 in marketing implementation plan) not yet built</li>
+        <li>Trauma-Informed Therapy + Alt Therapy E-Book flows not in Splice's pack — likely Splice didn't ship them; build directly into our engine</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ SIDE-BY-SIDE ============ -->
+  <div class="tab-content" id="compare">
+    <div class="card">
+      <h2>Splice / HubSpot Starter setup vs Our AWS-native engine</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Capability</th>
+            <th style="width: 35%;">Splice (HubSpot Starter + planned Zapier)</th>
+            <th style="width: 35%;">Our infra (NurtureEngine + AWS SES/SNS + Mailchimp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Email send engine</strong></td>
+            <td>HubSpot — shared sender pool, 5x contact tier sends/month</td>
+            <td>AWS SES on verified <code>botaniqal.com.au</code> domain — better deliverability, no monthly cap, ~$0.10 per 1,000 emails</td>
+          </tr>
+          <tr>
+            <td><strong>Trigger model</strong></td>
+            <td><span class="pill pill-amber">Form-submit only</span> — no funnel awareness, no event chains</td>
+            <td><span class="pill pill-green">Funnel-stage transitions</span> — eligibility_passed → signup_started → signup_completed → consultation_completed → booked</td>
+          </tr>
+          <tr>
+            <td><strong>Booking detection</strong></td>
+            <td><span class="pill pill-red">Impossible on Starter</span> — keeps emailing patients who already booked</td>
+            <td><span class="pill pill-green">Native</span> — Calendly+MediRecords events update <code>profiles.funnel_stage</code>, NurtureEngine respects it on the next 15-min cron</td>
+          </tr>
+          <tr>
+            <td><strong>Delay between emails</strong></td>
+            <td>Fixed 2 days</td>
+            <td>Configurable per workflow (currently 24h, 48h, 72h)</td>
+          </tr>
+          <tr>
+            <td><strong>SMS</strong></td>
+            <td><span class="pill pill-amber">Pending Zapier subscription</span> — adds ~$30/mo recurring</td>
+            <td><span class="pill pill-green">Live</span> — AWS SNS, $0.0075/SMS AU, sender ID Botaniqal</td>
+          </tr>
+          <tr>
+            <td><strong>Mailchimp SMS (separate channel)</strong></td>
+            <td>Not used by Splice</td>
+            <td>$262/mo plan already paid; 749 subscribers, AU number <code>+61 499 224 051</code> approved Dec 2025; Welcome SMS drafted but never sent</td>
+          </tr>
+          <tr>
+            <td><strong>Per-vertical email copy</strong></td>
+            <td><span class="pill pill-green">15 drafts shipped</span> — Alt Therapy, WL Meta, WL E-Book, Gut Health E-Book, Trauma-Informed E-Book</td>
+            <td>7 templates rendered — covers funnel-stage drops only, not vertical lead-magnets. <strong>Port Splice copy into our renderer.</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Lead source attribution</strong></td>
+            <td><span class="pill pill-green">Lead Source Type</span> property tagged on each contact</td>
+            <td><code>profiles.lead_source</code> + Meta Conversions API + GA4 UTM. We have richer data; <strong>borrow Splice's tag taxonomy.</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Meta Conversions API (server-side)</strong></td>
+            <td>Not configured</td>
+            <td><span class="pill pill-green">Live</span> — fires Lead/CompleteRegistration/InitiateCheckout/Purchase, SHA-256 hashed PII, no PHI</td>
+          </tr>
+          <tr>
+            <td><strong>iOS-14 attribution recovery</strong></td>
+            <td>Browser pixel only — broken under ATT</td>
+            <td><span class="pill pill-green">Server-side dedup</span> with browser pixel + <code>event_id</code></td>
+          </tr>
+          <tr>
+            <td><strong>5-vertical content calendar</strong></td>
+            <td><span class="pill pill-green">March–June social plan</span> shipped Feb 28</td>
+            <td>None — <strong>port Splice's calendar into a wiki page</strong> for Ramona/marketing to execute</td>
+          </tr>
+          <tr>
+            <td><strong>Landing page heat-tracing</strong></td>
+            <td>Not configured (HubSpot Starter doesn't include traffic analytics API)</td>
+            <td>Not configured — <strong>add Microsoft Clarity (free) or Hotjar Free</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Single-pane analytics</strong></td>
+            <td>HubSpot dashboards (10 max) + manual Mailchimp/Meta cross-checks</td>
+            <td><span class="pill pill-green">Live</span> — funnel report cross-references Meta + GA4 + HubSpot + Mailchimp + Supabase + Calendly</td>
+          </tr>
+          <tr>
+            <td><strong>Cost</strong></td>
+            <td>HubSpot Starter A$502/yr + Mailchimp A$262/mo + planned Zapier ~A$30/mo + Splice retainer (now ending) = <strong>~A$3,800/yr ongoing</strong></td>
+            <td>Same Mailchimp/HubSpot + AWS SES/SNS at PAYG (~A$5/mo at our volumes) = <strong>~A$3,200/yr</strong> (no Zapier, no Splice retainer)</td>
+          </tr>
+          <tr>
+            <td><strong>Maintainable by Ramona</strong></td>
+            <td><span class="pill pill-green">Yes — via 5 Loom videos</span></td>
+            <td>Code change required for template/copy edits — <strong>build a simple admin page</strong> for Ramona post-handover</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="compare-grid">
+        <div class="compare-col splice">
+          <h3>Splice's wins worth keeping</h3>
+          <ul>
+            <li>15 vertical email drafts — copy is solid, save a month of writing</li>
+            <li>Lead Source Type taxonomy (Alt Therapy / WL Meta / WL eBook / Gut Health / Trauma-Informed)</li>
+            <li>4-month social content calendar</li>
+            <li>HubSpot forms already published with stable share URLs</li>
+            <li>5 Loom training videos for Ramona</li>
+            <li>Pre-named workflow architecture in HubSpot Starter</li>
+          </ul>
+        </div>
+        <div class="compare-col ours">
+          <h3>Where our infra is genuinely better</h3>
+          <ul>
+            <li>Booking-aware (Splice physically cannot do this on Starter)</li>
+            <li>Funnel-stage triggers, not just form submits</li>
+            <li>SMS native (no Zapier dependency)</li>
+            <li>Server-side Meta Conversions (recovers iOS-14 attribution)</li>
+            <li>Better SES deliverability than shared HubSpot pool</li>
+            <li>Single funnel report cross-referencing 6 platforms</li>
+            <li>15-minute polling (vs 2-day fixed delays in HubSpot)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GOHIGHLEVEL ============ -->
+  <div class="tab-content" id="gohighlevel">
+    <div class="card">
+      <h2>GoHighLevel — copy or licence?</h2>
+
+      <p>Michel called GoHighLevel "very impressive" and suggested either copying for our own dev or licensing it. Worth taking seriously — but with eyes open.</p>
+
+      <h3>What GoHighLevel actually is</h3>
+      <ul>
+        <li>White-label all-in-one CRM + marketing automation platform aimed at agencies</li>
+        <li>Founded 2018, ~80,000+ active accounts, ~A$140-700/mo per sub-account depending on plan</li>
+        <li>Bundles: CRM + email + SMS + landing pages + funnels + WhatsApp + reputation management + AI ad-copy + heat tracing</li>
+        <li>Strength: <strong>velocity for small agencies</strong> — one platform, one bill, one UI</li>
+        <li>Weakness: opaque AI claims, healthcare/HIPAA support is limited (TGA/AHPRA not in scope), data residency US-only</li>
+      </ul>
+
+      <h3>Verdict for Botaniqal: don't licence. Borrow ideas.</h3>
+      <table>
+        <tr><th>GoHighLevel feature</th><th>Our equivalent today</th><th>Action</th></tr>
+        <tr>
+          <td>All-in-one CRM</td>
+          <td>HubSpot Starter + Supabase profiles</td>
+          <td>Keep — we have the data layer, GHL would re-implement what we already own</td>
+        </tr>
+        <tr>
+          <td>Drag-drop nurture builder</td>
+          <td>Code-defined NurtureWorkflowEngine (4 workflows)</td>
+          <td>Add a small admin UI for Ramona — 1-2 day build, no GHL needed</td>
+        </tr>
+        <tr>
+          <td>Landing page builder</td>
+          <td>Webflow (Vlad designs, /weight-loss, /alt-therapy etc.)</td>
+          <td>Keep Webflow — Vlad's design > GHL templates</td>
+        </tr>
+        <tr>
+          <td>Heat tracing</td>
+          <td>Not configured</td>
+          <td><strong>Add Microsoft Clarity (free)</strong> — 10-minute install, gives 100% of GHL's heatmap value at $0</td>
+        </tr>
+        <tr>
+          <td>AI ad-copy generation</td>
+          <td>None — manual via Splice / Vlad</td>
+          <td><strong>Build a small Claude-powered ad-copy tool</strong> for Ramona using our existing Anthropic key. ~1 week.</td>
+        </tr>
+        <tr>
+          <td>WhatsApp business integration</td>
+          <td>WhatsApp bridge running via fleet-comms (read-only), no business API</td>
+          <td>Defer — low ROI for AU patient acquisition vs SMS</td>
+        </tr>
+        <tr>
+          <td>Reputation management</td>
+          <td>None</td>
+          <td>Defer — not a priority</td>
+        </tr>
+        <tr>
+          <td>Single-pane analytics</td>
+          <td>Funnel report on GitHub Pages</td>
+          <td>Already have the multi-platform aggregation — extend the existing report instead</td>
+        </tr>
+      </table>
+
+      <h3>The TGA/HIPAA argument against GHL</h3>
+      <p>Botaniqal/Dr Sophia operates under <strong>TGA CDSS exemption</strong> (just submitted 23 Apr) and <strong>AHPRA</strong> oversight. Sending PHI through GoHighLevel — a US-hosted platform with no Australian data residency — adds regulatory risk and an extra audit surface. Our AWS Sydney region (<code>ap-southeast-2</code>) keeps Australian patient data in country, which is the correct posture. <em>Don't introduce a new US data processor without strong justification.</em></p>
+
+      <h3>If we ever did licence it</h3>
+      <p>Practical entry point would be GHL's "SaaS Mode" reseller programme (~A$700/mo) which would let us white-label it as part of "Sophia for Doctors". That becomes a B2B product play, not a Botaniqal-internal tool. Different conversation, different timeline. Park.</p>
+    </div>
+  </div>
+
+  <!-- ============ RECOMMENDATIONS ============ -->
+  <div class="tab-content" id="recommend">
+    <div class="card">
+      <h2>Recommended hybrid plan</h2>
+
+      <p>Best of both: keep what Splice built that works, layer our AWS engine on top of it, decline the upgrades that don't earn their keep.</p>
+
+      <h3>Tier 1 — Accept the handover (do this week)</h3>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Audit the HubSpot account before Splice closes out</strong> — log in (info@cannatreat.com.au / BmC2025!@#$!), download backup of all 5 workflows + all 6 forms + all 15 emails as JSON via Private App API. Save to <code>docs/handovers/splice-hubspot-2026-04-27.zip</code>. <small>Owner: Willie · Today.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Request the missing assets from Splice tomorrow</strong> — Trauma-Informed Therapy E-book embed URL + Alt Therapy form embed URLs (if any) + the corrected "edit workflows" Loom URL (current one is duplicate). <small>Owner: Michel to ask, in tomorrow's meeting.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Save all 15 Splice email drafts as text</strong> — bring them into our repo at <code>backend/src/services/email/splice-copy/</code> for porting into the NurtureEngine templates. <small>Owner: Willie · This week.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's HubSpot access</strong> — remove Matt Anson + Jo Lacey from the HubSpot portal users list once handover meeting is done. <small>Owner: Ramona, Fri 1 May.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Lock down Splice's Webflow access</strong> — Vlad's already confirmed Splice no longer has access (Apr 22 email); double-check on Mon 4 May. <small>Owner: Ramona.</small></div></div>
+
+      <h3>Tier 2 — Decline the proposed upgrades</h3>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Don't subscribe to Zapier</strong>. SMS already runs through AWS SNS via NurtureWorkflowEngine. The only thing Zapier would do is bridge HubSpot form submissions to a SMS provider — and we can do that with a single HubSpot webhook → our backend, no third party needed. <small>Owner: Willie.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Don't upgrade HubSpot to Professional</strong> ($800+/mo). Marketing email API and Workflows API are unlocked there, but we already implement both via our backend. We'd be paying for capabilities we already own. Keep Starter as our CRM. <small>Owner: Willie.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Don't licence GoHighLevel</strong>. See GoHighLevel tab for the data-residency argument. Borrow specific ideas (heatmaps, AI ad-copy) at low cost instead. <small>Owner: Willie.</small></div></div>
+
+      <h3>Tier 3 — Activate what's already paid for (this week)</h3>
+      <div class="check"><div class="check-box amber"></div><div class="check-content"><strong>Activate Mailchimp Welcome SMS</strong> — Ramona drafted this Nov 28 2025; never sent. 749 subscribers waiting. ~A$50 of credit value/month sitting unused. Pure win. <small>Owner: Ramona, this week.</small></div></div>
+      <div class="check"><div class="check-box amber"></div><div class="check-content"><strong>Bridge HubSpot form submissions → our NurtureWorkflowEngine</strong> via webhook. So that when a lead fills the WL E-Book form, we set <code>profiles.funnel_stage = 'lead_captured'</code> and our 15-min cron picks them up alongside Splice's HubSpot 3-email sequence. Belt and braces. <small>Owner: Willie · 1 day build.</small></div></div>
+      <div class="check"><div class="check-box amber"></div><div class="check-content"><strong>Port Splice's 15 email drafts into <code>email/templates/</code></strong> as <code>{vertical}-{n}.html</code>. Keep the copy, swap the chrome to our base-layout. Then the same emails fire from <em>our</em> domain with our deliverability. <small>Owner: Willie · 2-3 day build.</small></div></div>
+
+      <h3>Tier 4 — Borrow from GHL ideas (next 2 weeks)</h3>
+      <div class="check"><div class="check-box red"></div><div class="check-content"><strong>Install Microsoft Clarity</strong> on Webflow site + app — 10 minute install, free, gives heatmaps + session recordings. Vlad to add via GTM container <code>GTM-TWSHBPXQ</code> on Webflow side; we already have GTM running on the app. <small>Owner: Vlad (Webflow), Willie (app).</small></div></div>
+      <div class="check"><div class="check-box red"></div><div class="check-content"><strong>Build a small admin UI</strong> at <code>/admin/nurture</code> so Ramona can edit email copy + send-delays without code. ~3-day build. Removes the only legitimate edge HubSpot Starter has. <small>Owner: Willie.</small></div></div>
+      <div class="check"><div class="check-box red"></div><div class="check-content"><strong>Claude-powered ad-copy tool</strong> for Ramona — give her a prompt: "draft 3 Meta ad variants for Gut Health Booster aimed at 35-55 women", returns text via our existing Anthropic API key. ~1-week build. <small>Owner: Willie · queue after Tier 3.</small></div></div>
+
+      <h3>Tier 5 — Fix the things Willie's funnel report flagged on Apr 13</h3>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Fix "Emotional Hook" ad</strong> — it has no destination URL set and is burning Meta spend. <small>Owner: Michel (Splice still active until Fri).</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Fix UTM typo</strong> — <code>utm_m_campaign</code> → <code>utm_campaign</code> in 3+ Meta ads. <small>Owner: Michel.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Add "Start your eligibility check" link to Meta Lead Form thank-you redirect</strong> — currently 264 leads captured with no path back to the app. <small>Owner: Michel.</small></div></div>
+      <div class="check"><div class="check-box"></div><div class="check-content"><strong>Email all 237 Mailchimp Leads</strong> with a CTA to start eligibility — likely the single highest-ROI action available right now. <small>Owner: Ramona, this week.</small></div></div>
+    </div>
+  </div>
+
+  <!-- ============ DECISIONS NEEDED ============ -->
+  <div class="tab-content" id="decisions">
+    <div class="card">
+      <h2>Decisions needed — by owner</h2>
+
+      <h3>Willie (you) — confirm/deny</h3>
+      <ul>
+        <li><strong>Decline Zapier subscription</strong> — confirm we'll wire HubSpot webhook → our backend instead</li>
+        <li><strong>Decline HubSpot Pro upgrade</strong> — keep Starter as CRM only</li>
+        <li><strong>Decline GoHighLevel licence</strong> — borrow specific ideas instead</li>
+        <li><strong>Approve porting Splice's 15 emails</strong> into our template library</li>
+        <li><strong>Approve building HubSpot-form → NurtureEngine bridge</strong></li>
+        <li><strong>Approve admin UI build for Ramona</strong> (~3 days)</li>
+      </ul>
+
+      <h3>Michel — actions before tomorrow's Splice meeting</h3>
+      <ul>
+        <li>Ask Splice for the <strong>Trauma-Informed Therapy E-book embed URL</strong> — missing from the workflow map doc</li>
+        <li>Ask Splice for the <strong>Alt Therapy form URLs</strong> if any (the doc only mentions Meta Lead Form for this vertical)</li>
+        <li>Ask Splice for the <strong>corrected "How to edit workflows in HubSpot" Loom URL</strong> — current one is a duplicate of the previous video</li>
+        <li>Ask Splice to <strong>fix the "Emotional Hook" no-URL ad</strong> + UTM typo before they sign off</li>
+        <li>Ask Splice for the <strong>full list of all live HubSpot forms</strong> by ID</li>
+      </ul>
+
+      <h3>Ramona — actions this week</h3>
+      <ul>
+        <li><strong>Activate the Mailchimp Welcome SMS</strong> drafted Nov 28 — 749 subscribers, A$50/mo unused credit</li>
+        <li><strong>Email all 237 Mailchimp "Leads" segment</strong> with a CTA back to <code>/weight-loss/eligibility</code></li>
+        <li><strong>Watch the 5 Loom videos</strong> Splice provided — these stay live on Loom regardless of Splice's contract status</li>
+        <li><strong>Review the 15 Splice email drafts</strong> for tone/accuracy on Botaniqal voice (Michel said "safe-vanilla, happy to amend")</li>
+        <li><strong>Remove Splice users from HubSpot + Mailchimp + Webflow</strong> on Fri 1 May</li>
+      </ul>
+
+      <h3>Julia — review item</h3>
+      <ul>
+        <li><strong>Confirm the booking-awareness gap is acceptable</strong> for the next 2-3 weeks while we bridge HubSpot → NurtureEngine. A patient who books on day 1 may still get HubSpot's "ready to book?" email on day 3 until the bridge is live. Low risk, but worth confirming.</li>
+        <li><strong>Spam Act / Privacy Act check</strong> on the 15 Splice email drafts — quick sweep for any compliance gaps before we port them to our domain</li>
+      </ul>
+
+      <h3>Dwayne — sign-off only</h3>
+      <ul>
+        <li>This is a tidy-up not a strategy change — Dwayne already gave the strategic call on Apr 13 ("removed Splice"). No new decision required from him here.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ REPLY TO MICHEL ============ -->
+  <div class="tab-content" id="response">
+    <div class="card">
+      <h2>Suggested formal reply to Michel</h2>
+      <p>Plain text, Outlook-native, builds on Willie's 12:23 PM message. Save to <code>docs/handoffs/2026-04-27-splice-handover-reply.md</code> first, then send when you're happy.</p>
+
+      <pre style="white-space: pre-wrap; line-height: 1.6;">Hi Michel
+
+Thanks for resending the pack. I've been through both docs end to end, plus a quick audit of what we already have running on AWS. Here's where I land — confirms the short note I sent you at lunchtime.
+
+Hybrid plan, no new subscriptions
+
+We don't need Zapier and we don't need to upgrade HubSpot. The reason: we already have a nurture engine running on AWS (NurtureWorkflowEngine + SES + SNS) that does what Splice's HubSpot setup does, plus booking-awareness which Starter physically can't deliver. SMS is already wired natively through AWS SNS — no Zapier middleman needed.
+
+Keep HubSpot Starter as the CRM and form host. Splice's pre-built forms and 5 nurture workflows stay live (their Loom videos give Ramona the keys to maintain them). We layer our engine on top via a HubSpot webhook → our backend bridge — patients get HubSpot's 3-email sequence AND our funnel-stage emails, so a patient who books on day 1 stops getting the "ready to book?" nudge on day 3.
+
+Splice assets we're keeping
+ - 5 HubSpot workflows (Alt Therapy, WL Meta, WL E-Book, Gut Health E-Book, Trauma-Informed)
+ - 15 email drafts (we'll port the copy into our SES templates so they send from botaniqal.com.au with proper deliverability)
+ - Lead Source Type taxonomy
+ - 5 Loom training videos (these stay on Loom regardless of contract status)
+ - March–June social calendar
+
+What I need you to ask Splice tomorrow before they close out
+ 1. Trauma-Informed Therapy E-Book embed URL — missing from the workflow map doc
+ 2. Alt Therapy form embed URLs (if any beyond the Meta Lead Form)
+ 3. The corrected "How to edit workflows in HubSpot" Loom URL — the one you sent is a duplicate of the previous video
+ 4. Fix the "Emotional Hook" Meta ad — still has no destination URL, burning spend
+ 5. Fix utm_m_campaign → utm_campaign typo on 3+ ads
+ 6. Full list of all live HubSpot forms by ID
+ 7. Confirm Splice users are removed from HubSpot, Mailchimp, Webflow on Fri 1 May
+
+GoHighLevel
+Looked through it carefully. Genuinely impressive feature bundle, but for us it's the wrong call: data residency is US-only (we need ap-southeast-2 for TGA/AHPRA posture), and we'd be paying for CRM + landing-page + nurture-engine + analytics that we already own. The good ideas worth borrowing — heatmaps, AI ad-copy, single-pane analytics — we can add at low cost: Microsoft Clarity (free), a small Claude-powered ad-copy tool for Ramona, and extending the funnel report. Park GHL.
+
+Quick wins for Ramona this week
+ - Activate the Mailchimp Welcome SMS she drafted in Nov — 749 subscribers, ~A$50/mo unused credit
+ - Email the 237 Mailchimp "Leads" segment with a CTA to /weight-loss/eligibility — likely the single highest-ROI action available right now
+
+I'm doing the HubSpot account audit and download of all forms/emails/workflows as a backup today, before the closeout meeting tomorrow.
+
+Cheers
+Willie</pre>
+    </div>
+  </div>
+
+  <!-- ============ TIMELINE ============ -->
+  <div class="tab-content" id="timeline">
+    <div class="card">
+      <h2>Splice relationship timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">20–22 Oct 2025</div>
+          <div class="timeline-title">Splice onboards — Dr Sophia Language translation videos</div>
+          <div class="timeline-body">Jo Lacey at Splice requesting demo video assets for marketing content. Willie shipping translated demos to SharePoint. First Splice engagement on file.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">24–25 Nov 2025</div>
+          <div class="timeline-title">HubSpot setup begins — Meta Leads thread</div>
+          <div class="timeline-body">Matt Anson at Splice requesting HubSpot login codes. Multiple "FW: Sign in to HubSpot with your one-time link" + "FW: 833953 is your HubSpot Log In Code" emails. Splice working in HubSpot for the first time.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">28 Feb 2026</div>
+          <div class="timeline-title">Social content calendar shipped</div>
+          <div class="timeline-body">Michel forwards Splice's March–June social plan (4 verticals, weekly cadence). Splice agreed to manage IG posts for 3 months: create, design, post.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">12 Mar 2026</div>
+          <div class="timeline-title">Calendly embed code request</div>
+          <div class="timeline-body">Splice asks Willie/Michel for the Calendly widget embed script for the Webflow site. Pricing already updated: WL $59/$49, Gut Health free initial + $59/$49, Alt Therapy free initial + $59/$49.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">17 Mar 2026</div>
+          <div class="timeline-title">Splice access dispute</div>
+          <div class="timeline-body">Willie asks Vlad whether Splice still has Webflow access — concern that Splice "stuffed up things a while back" and access was revoked. Willie tells Vlad to do all website implementation, not Splice.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">24 Mar 2026</div>
+          <div class="timeline-title">3 HubSpot e-book forms published</div>
+          <div class="timeline-body">Willie confirms to Jo Lacey: Hubspot_GutHealth_E-BookDownload (b931679a), Hubspot_TraumaInformedTherapy_E-BookDownload (a27f648e), Hubspot_WeightLoss_E-BookDownload (93f6b582). Embed codes ready for Vlad.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">27 Mar 2026</div>
+          <div class="timeline-title">Analytics access dispute</div>
+          <div class="timeline-body">Willie checking with Vlad whether Splice owns any GA4/GTM accounts — turns out 461069027 (GA4) is under Vlad's account, GTM-TWSHBPXQ also Vlad. Splice never owned analytics.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">29 Mar 2026</div>
+          <div class="timeline-title">Otter ai flags handover-pending action</div>
+          <div class="timeline-body">"Coordinate with Splice (or the relevant contact) to embed HubSpot forms and confirm when embedding is complete so HubSpot training can proceed."</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">1 Apr 2026</div>
+          <div class="timeline-title">Tracking requirements escalation</div>
+          <div class="timeline-body">Splice's tester ("Ian") flags that GA4 isn't capturing app form steps. Recommends installing GTM. Willie responds (Apr 2) with full explanation: cookie behaviour, BMI threshold, eligibility logic. Jo: "You are a star!"</div>
+        </div>
+        <div class="timeline-item win">
+          <div class="timeline-date">13 Apr 2026 — strategic call</div>
+          <div class="timeline-title">Dwayne removes Splice</div>
+          <div class="timeline-body"><em>"It's phenomenal work — thank you Willie. I've have removed Splice — they're of no use to us from here out, other than fixing the points noted, which Michel will lead / execute."</em> Triggered by Willie's funnel report: $1,961 spent, 264 leads, 0 app conversions, broken Emotional Hook ad, UTM typo, Meta Lead Forms with no follow-up.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">17 Apr 2026</div>
+          <div class="timeline-title">Ramona blocks Splice Webflow publish</div>
+          <div class="timeline-body">"I have also had a request from Splice to publish a webflow page... which I don't want to approve as historically they break it can you see if they have access?" Vlad confirms access only at staff level, not site level.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">21 Apr 2026</div>
+          <div class="timeline-title">Original handover email — first send</div>
+          <div class="timeline-body">Michel sends the handover docs (HubSpot config + E-Book Workflow Map). Same email, same attachments, same questions about Zapier and GoHighLevel.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">22 Apr 2026</div>
+          <div class="timeline-title">Splice April blog goes live; webflow access tightened</div>
+          <div class="timeline-body">Vlad publishes Splice's April blog post: <em>botaniqal.com.au/blog/a-biologically-informed-approach-to-metabolic-well-being</em>. Vlad confirms Splice's Webflow access is now removed at staff level too — full lockdown ready.</div>
+        </div>
+        <div class="timeline-item now">
+          <div class="timeline-date">27 Apr 2026 11:15 — TODAY</div>
+          <div class="timeline-title">Michel resends handover docs (this brief is the response)</div>
+          <div class="timeline-body">Michel: "Resending this email from last week. With one last meeting tomorrow with Splice — can you please review all today and advise if you need anything more from me on Hubspot transfer and education." Willie's preliminary 12:23 PM reply: hybrid plan, no Zapier, no upgrades, AWS PAYG, prewarmed in code.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">28 Apr 2026</div>
+          <div class="timeline-title">Michel's final meeting with Splice</div>
+          <div class="timeline-body">Last opportunity to extract: Trauma-Informed embed URL, Alt Therapy form URLs, corrected Loom link, Emotional Hook fix, UTM fix, full forms list by ID.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">~1 May 2026 (est)</div>
+          <div class="timeline-title">Splice contract ends</div>
+          <div class="timeline-body">Lock down: remove Matt Anson + Jo Lacey from HubSpot users; double-check Mailchimp/Webflow access removal. Splice retainer ends.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ EMAILS ============ -->
+  <div class="tab-content" id="emails">
+    <div class="card">
+      <h2>All 40 Splice-related emails — Oct 2025 → today</h2>
+      <p>Sourced from <code>willie@adaptation.io</code> · <code>willie@drsophia.ai</code> · <code>willie@botaniqal.com.au</code> · <code>willie@ltdlabs.com.au</code>, both inbox and sent folders. Sorted newest first. 📎 indicates attachments captured.</p>
+      <div class="email-rows">
+        <table>
+          <thead>
+            <tr><th style="width:110px;">Date</th><th style="width:110px;">Type</th><th>Subject / Sender / Snippet</th></tr>
+          </thead>
+          <tbody>
+
+        <tr>
+          <td class="date">2026-04-27<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">02:53 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">willie</span></td>
+          <td><strong>RE: HubSpot and nature sequences: Botaniqal</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Michel<br>Based on documents provided and suggestion infrastructure, zapier requirements, to upgrade or not to upgrade. I believe based on what we have, what is proposed and best approach for integration, I think a new hybrid plan is required. <br>I would say probably don’t need zapier or any upgrades or additional services. Because we can create it all, I have prewarmed most of it in the code …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-27<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:45 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: HubSpot and nature sequences: Botaniqal</strong> 📎<br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hello Willie/Ramona<br>Resending this email from last week.    With one last meeting tomorrow with Splice - can you please review all today and advise if you need anything more from me on Hubspot transfer and education.<br>Thank you<br>From: Michel Boutin &lt;michel@drsophia.ai&gt; Date: Tuesday, 21 April 2026 at 1:03 pm To: Willie &lt;willie@ltdlabs.com.au&gt;; Ramona - Botaniqal Clinics Australi…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-27<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:45 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">willie</span></td>
+          <td><strong>FW: HubSpot and nature sequences: Botaniqal</strong> 📎<br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hello Willie/Ramona<br>Resending this email from last week.    With one last meeting tomorrow with Splice - can you please review all today and advise if you need anything more from me on Hubspot transfer and education.<br>Thank you<br>From: Michel Boutin &lt;michel@drsophia.ai&gt; Date: Tuesday, 21 April 2026 at 1:03 pm To: Willie &lt;willie@ltdlabs.com.au&gt;; Ramona - Botaniqal Clinics Australi…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-22<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">07:32 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>Re:Tidy-up: publish April blog, FAQ ack, Splice Webflow access, April hours</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Vlad Kutepov</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Good afternoon Willie 👋<br>Appreciate the tidy list and hope you're having a nice day!<br>The Splice blog post is now live, you can check it here: botaniqal.com.au/blog/a-biologically-informed-approach-to-metabolic-well-being<br>Regarding Splice's Webflow access: apologies for any confusion on my end. I was initially checking at the site level and could not find the option, but after checking at t…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-22<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">05:20 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>Tidy-up: publish April blog, FAQ ack, Splice Webflow access, April hours</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad,<br>Four small tidy-up items alongside the GTM consolidation note I sent separately: 1) Splice April blog — please publish Happy for you to go ahead and publish it from the CMS. Cleaner if you do it yourself rather than handing it back to Splice. 2) FAQ Thanks for the draft — we’ll go through it and come back to you separately, likely later this week or early next. 3) Splice Webflow site a…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-17<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">03:37 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>Re: Follow-Up on Work</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Ramona - Botaniqal Clinics Australia</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad, yes keep Dr Sophia website on radar but first can you please remove Dr Sunny from website. I have also had a request from Splice to publish a webflow page….. which I don’t want to approve as historically they break it can you see if they have access? And could you look at the page to make sure it is ok? <br>Willie also said to tell you a new wireframe from Michel will be available to you …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-13<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:47 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>Re: Marketing Funnel Report — Updated Apr 13 | $1,961 spent, 264 leads, 0 app conversions</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Dwayne Boyes</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">It's phenomenal work - thank you Willie<br>I've have removed Splice - they're of no use to us from here out, other than fixing the points noted, which @Michel Boutin will lead / execute.<br>And - phenomenal work mate! Huge leap forward<br>Dwayne Boyes CEO<br>ACN 691 537 292<br>+61 489 286 672<br>dwayne@drsophia.ai<br>LinkedIn<br>Disclaimer Sophia AI is an artificial intelligence–enabled Clinical D…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-13<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:43 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>Marketing Funnel Report — Updated Apr 13 | $1,961 spent, 264 leads, 0 app conversions</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi team,<br>I've updated the funnel analysis with the latest data including this past weekend. The report cross-references our Meta Ads, GA4, HubSpot, Mailchimp, Supabase, and Calendly data.<br>Full Report: https://adaptationio.github.io/botaniqal_medtech/analytics/funnel-report.html Password: Botaniqal2026! The big picture — since Mar 14: $1,961 spent across 3 Meta campaigns (WL Lead Form, WL Awa…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-01<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:49 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>Re: Tracking requirements for https://app.botaniqal.com.au/weight-loss/eligibility</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Jo Lacey</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Thanks Willie! You are a star! If Ian has any further questions Ill get him to reach out directly. Have a great easter!<br>Jo<br>On Thu, Apr 2, 2026 at 9:18 AM Willie &lt;willie@ltdlabs.com.au&gt; wrote:<br>Hi Jo,<br>  Thanks for testing, really helpful feedback.<br>The "remembered me" issue: The app saves your eligibility result in browser cookies so returning users don't have to redo the quiz. T…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-01<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:17 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Tracking requirements for https://app.botaniqal.com.au/weight-loss/eligibility</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo,<br>  Thanks for testing, really helpful feedback.<br>The "remembered me" issue: The app saves your eligibility result in browser cookies so returning users don't have to redo the quiz. To start fresh, clear your cookies for app.botaniqal.com.au or use an incognito/private browser window.<br>BMI threshold: The cutoff is BMI 30 (or 27 with comorbidities like type 2 diabetes, high blood pressu…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-01<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">07:12 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>FW: Report for Botaniqal Clinics</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Ramona - Botaniqal Clinics Australia</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This was sent to me with no cc’s.<br>Warmest Regards, <br>Ramona Prosek<br>Director & Practice Manager<br>ACN 675 911 010<br>ISO 9001: #7386-4019-01<br>+61 0410 007 471<br>ramona@botaniqal.com.au<br>LinkedIn<br>Instagram<br>From: Splice Marketing &lt;welcome@splicemarketing.com.au&gt; Reply to: "welcome@splicemarketing.com.au" &lt;welcome@splicemarketing.com.au&gt; Date: Wednesday 1 April 2026 at …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-01<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">05:23 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Tracking requirements for https://app.botaniqal.com.au/weight-loss/eligibility</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Willie<br>Need your help.<br>Can you please read through the below and provide guidance to best answer the Splice team?<br>Or feel free to contact Jo directly and cc me to close off the item.<br>From: Jo Lacey &lt;jo@splicemarketing.com.au&gt; Date: Wednesday, 1 April 2026 at 3:37 pm To: Michel Boutin &lt;michel@drsophia.ai&gt; Subject: Fwd: Tracking requirements for https://app.botaniqal.com.a…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-04-01<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">04:33 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>Fwd: Lead qualifiers</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Willie<br>FYI only but worth looking into.   This is feedback from Jo @splice who was curious to test ROSE.  <br>Michel Boutin<br>Dr Sophia AI Pty Ltd<br>M: +61 439 966 669<br>I choose to work flexibly and may send e-mail outside normal working hours, I however do not expect your response, nor action, to this email outside of normal working hours. <br>Sent remotely<br>Begin forwarded message:<b…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-29<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">17:03 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>Your upcoming meetings</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Otter.ai Insights</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Otter.ai – Get ready for your week <br>View all conversations → <br>Get ready for your week Here's your recent activity and upcoming meeting.<br>Open action items  View all <br> Coordinate with Splice (or the relevant contact) to embed HubSpot forms and confirm when embedding is complete so HubSpot training can proceed <br> Finish the research into medical cannabis, GP and language (complete the w…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-27<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">02:30 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: 1st Round Done - What''s Next</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad<br>Got a quick question for you. With the google GA4 and GTM do you know if they are under your account or one of ours or potentially under Splice or previous something, if one our our account linked to it. <br>Basically Im setting up full analytics and flow and trying to work out where it is setup to and how I gain access to it. <br>From: Vlad Kutepov &lt;hello@vladkutepov.com&gt;  Sent: …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">02:25 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: HubSpot E-Book Forms — Ready to Embed, Few Questions</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo,<br>  Following up on Michel's thread — keen to get these forms live.<br>  What's ready:<br>  - 3 HubSpot e-book download forms are published and ready:<br>    - Hubspot_GutHealth_E-BookDownload (ID: b931679a)<br>    - Hubspot_TraumaInformedTherapy_E-BookDownload (ID: a27f648e)<br>    - Hubspot_WeightLoss_E-BookDownload (ID: 93f6b582)<br>  - I have the embed codes ready for our designer Vlad…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-17<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">05:43 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: Re:edits</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad<br>Our preference is to get you to do all implementation on the website. I believe Splice have been told not to do anything ever again on the site. I will get this confirmed.  <br>From: Vlad Kutepov &lt;hello@vladkutepov.com&gt;  Sent: Tuesday, 17 March 2026 4:00 PM To: Willie &lt;willie@botaniqal.com.au&gt; Cc: Ramona - Botaniqal Clinics Australia &lt;ramona@botaniqal.com.au&gt; Subject: …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-17<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">04:04 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: Re:edits</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Regarding the Trauma Splice. Do you know if they still have access. I think it was revoked after they stuffed up things a while back, is there multiple login or just one??<br>Just confirming who has access to the webflow from this point onwards<br>From: Vlad Kutepov &lt;hello@vladkutepov.com&gt;  Sent: Tuesday, 17 March 2026 2:00 PM To: Willie &lt;willie@botaniqal.com.au&gt; Cc: Ramona - Botaniqal…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-12<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:45 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: patient flow internal testers updated</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad<br>Also just been talking with marketing splice and Michel and they have asked to change one thing with the flow.<br>Having a meeting with team in 15 minute and with decide on 3 options<br>If you refresh the service flow link there is a section 10 now which explains it<br>From: Vlad Kutepov &lt;hello@vladkutepov.com&gt;  Sent: Thursday, 12 March 2026 5:20 PM To: Willie &lt;willie@botaniqal…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-12<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">03:14 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_botaniqal</span></td>
+          <td><strong>RE: patient flow internal testers updated</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Vlad<br>On a high level have a read through this<br>URL: https://adaptationio.github.io/botaniqal_medtech/testing-guides/botaniqal-service-flows.html<br>  Password: Botaniqal2026<br>Kind of for you, Michel, Splice and me overall flow idea <br>Splice and Michel needed clarity and what links to have in advertising<br>From: Vlad Kutepov &lt;hello@vladkutepov.com&gt;  Sent: Thursday, 12 March 2026 …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-03-12<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">02:32 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Appointment booking code/Script</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Willie<br>This is what Splice are looking for... see below…can we get this?<br>https://help.calendly.com/hc/en-us/articles/4409838727703-How-to-add-Calendly-to-your-website#h_01JXFNNPH357JK0S243KQPS3V8 <br>From: Jo Lacey &lt;jo@splicemarketing.com.au&gt; Date: Thursday, 12 March 2026 at 12:53 pm To: Michel Boutin &lt;michel@drsophia.ai&gt; Subject: Re: Appointment booking code/Script<br>Hi Michel.…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2026-02-28<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:18 UTC</span></td>
+          <td class="tag"><span class="pill pill-blue">received</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>Social post for 3 months (Mar-May)</strong> 📎<br><span style="color:#4ecdc4;font-size:0.8rem;">Michel Boutin</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Dwayne Hello Julia Hello Willie Hi Ramona<br>@Julia hope you are getting better by the day 😊 <br>We are still doing the dance with Splice on costs but one thing they have already agreed to is manage the social posts on IG for next three months.  Which is create, design and post for Botaniqal<br>Here is their suggested cadence on content for your initial view up to and including May (final copy,…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-25<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:49 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Sign in to HubSpot with your one-time link</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Info - Botaniqal</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those of the individua…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-25<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:49 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Meta Leads</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Matt<br>I just forwarded to you<br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in t…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-25<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:04 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Meta Leads</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Matt<br>In the office most of the day today. <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-25<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">00:10 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Meta Leads</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Matt <br>If that one expired let me know and I can send through again shortly<br>Im in the office until about 12:30<br>Willie <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received th…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-25<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">00:09 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Sign in to HubSpot with your one-time link</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Info - Botaniqal</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those of the individua…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">06:13 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Meta Leads</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">The cannatreat one I reset pwd<br>BCinfo2025!@#$<br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views …</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">06:11 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Meta Leads</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Matt <br>You have the login details, right?<br>If not, I will send through<br>I have setup forwarding of the code to you email <br>You may have got a couple of previous ones that I tested. <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">06:09 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: 076516 is your HubSpot Log In Code</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Info - Botaniqal</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those of the individua…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">06:09 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: 833953 is your HubSpot Log In Code</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Info - Botaniqal</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those of the individua…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-11-24<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">06:09 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Please Verify Your Email</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Info - Botaniqal</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those of the individua…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-22<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">02:31 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: FW: Dr Sophia Language translations</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo<br>New video is uploaded to same sharepoint folder, latest file with todays time stamp<br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Li…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-22<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">01:01 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: FW: Dr Sophia Language translations</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo <br>Taking longer still. Had hiccups with some new features I added and needing to fix them first. I will send through when I get sorted. Might be another hour. <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in re…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-21<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">23:27 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>FW: Dr Sophia Language translations</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo<br>I need about another 30 minutes, I was half way through an update and it has taken longer than expected to implement. <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-21<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">22:36 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: Dr Sophia Language translations</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo<br>Give me an hour and I will send through <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-20<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">04:20 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>Willie shared the folder "app demonstrations" with you</strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Willie invited you to edit a folder <br>Here's the folder that Willie shared with you. <br> app demonstrations <br> This invite will only work for you and people with existing access. <br>Open Share <br>This email is generated through Limited Edition Labs PTY LTD's use of Microsoft 365 and may contain content that is controlled by Limited Edition Labs PTY LTD.…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-20<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">04:19 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: </strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Oh yeah same link as before<br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this mes…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-20<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">04:18 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: </strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Hi Jo<br>I add 2 more video’s the first one was form the same version as before. The second one was from the dev version showing some personalisation features. <br>Both do not have the cursor <br>If you need any other specific screen or info let me know<br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the inten…</div></td>
+        </tr>
+        <tr>
+          <td class="date">2025-10-20<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">03:42 UTC</span></td>
+          <td class="tag"><span class="pill pill-grey">sent</span><br><span class="pill pill-grey" style="font-size:0.65rem;">ord_ltdlabs</span></td>
+          <td><strong>RE: </strong><br><span style="color:#4ecdc4;font-size:0.8rem;">Willie</span><br><div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-top:6px;">Yes I can do <br>This message contains privileged and confidential information intended only for the use of the addressee named above.  If you are not the intended recipient of this message, you must not disseminate, copy or take any action in reliance on it.  If you have received this message in error, please notify Limited Edition Labs  immediately.  Any views expressed in this message are those…</div></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ATTACHMENTS ============ -->
+  <div class="tab-content" id="attachments">
+    <div class="card">
+      <h2>Attachments captured</h2>
+      <p>All attachments downloaded and parsed locally to <code>/tmp/splice-handover/attachments/</code>. The 4 unique business documents are summarised here.</p>
+
+      <h3>1. BOT_2026_April_Hubspot_forms_and_emails.docx (412 KB)</h3>
+      <p><strong>Sent:</strong> 27 Apr 2026, attached to today's "FW: HubSpot and nature sequences: Botaniqal" email · <strong>Author:</strong> Splice / Michel</p>
+      <details>
+        <summary>📄 Full extracted text (click to expand)</summary>
+<pre style="white-space: pre-wrap;">HubSpot Configuration
+
+Please note that due to reduced subscription capability, we cannot build workflows in automation. To counter this, we have set up forms with automated actions and ads with automation activity.
+
+Hubspot SMS is not available under the current subscription. To integrate with with SMS FLow you will require a Zapier account.
+
+Alternative Therapy / Medicinal Cannabis
+META Ads
+Marketing - Ads - "Hubspot_alternative therapy_Meta leads - November 2025" - Broad Audience - Simple Workflows: "Hubspot_AlternativeTherapy_MetaLeads_Nurture Sequence"
+- Patient completes the Meta form
+- The patient receives SMS with a booking link to the qualifying quiz*
+- Hubspot contact created
+- Lead source attribution "Alternative Therapy - Meta Leads"
+- Email: "Alternative Therapy Meta Leads #1 Automation."
+- Delay 2 days
+- email: "Alternative Therapy Meta Leads #2 Automation."
+- Delay 2 days
+- Email: "Alternative Therapy Meta Leads # 3 Automation."
+
+*SMS waiting on Zapier to activate
+
+Weight Loss
+META Ads
+Weight Loss Awareness Campaign — Marketing - Ads - "Hubspot_WeightLoss Awareness Campaign March 2026 - Broad Audience (25 - 45) - Simple Workflows. No workflows created, connected, and ready for data tracking.
+
+Weight Loss Lead Form Campaign — Marketing - Ads - "Hubspot_WeightLoss Leads Form Campaign March 2026" - Retargeting - Video Viewers & social engagers - Simple Workflows. 5x ads in this campaign. Each Ad has a separate workflow that is all the same. Please note that if you want to make changes here, you need to change each ad individually.
+- Patient completes the Meta form
+- The patient receives SMS with a booking link to the qualifying quiz*
+- Hubspot contact created
+- Lead source attribution: "Weight Loss Meta Leads."
+- Email: "Weight Loss Meta Leads - #1 Automation."
+- Delay 2 days
+- Email: "Weight Loss Meta Leads - #2 Automation."
+- Delay 2 days
+- Email: "Weight Loss Meta Leads - #3 Automation."
+
+Weight Loss E-Book Campaign — Marketing - Forms - "Hubspot_WeightLoss_ebook download_website" - "Hubspot_WeightLoss_EbookDownload_Website_Nurture Sequence"
+- Patient completes form on website
+- Lead source attribution "Weight Loss e-Book - Website"
+- Email: "Weight Loss E-book - #1 Automation email"
+- Delay 2 days
+- automation email: "Weight Loss E-book - #2 Automation email"
+- Delay 2 days
+- Automated email: "Weight Loss E-book - #3 Automation email"
+
+Gut Health
+Marketing - Forms - "Hubspot_GutHealth_E-book download_Website" - "Hubspot_GutHealth_EbookDownload_Website_Nurture Sequence"
+(Same 3-email pattern, lead source "Gut Health Ebook - Website")
+
+Trauma-Informed therapy
+Marketing - Forms - "Hubspot_TraumaInformedTherapy_E-book download_Website" - "Hubspot_TraumaInformedTherapy_EbookDownload_Website_Nurture Sequence"
+(Same 3-email pattern, lead source "Trauma Informed Therapy eBook - Website")
+
+Loom Videos:
+- Meta Ad workflows: https://www.loom.com/share/b9166467179845bf9ba1e1991ced6018
+- Website e-Book workflows: https://www.loom.com/share/c67797f3469947108f150f8e0308b93b
+- Edit workflows: https://www.loom.com/share/c67797f3469947108f150f8e0308b93b (duplicate URL — ask for correct)
+- Edit emails: https://www.loom.com/share/9a838f47a4fc4488951f8cff685e09b9
+- Build automated email: https://www.loom.com/share/6f6d16ae72e0485cb3fbe3f3c9b35cf0</pre>
+      </details>
+
+      <h3>2. Botaniqal_E-Book_Download_Nurture_Sequence_Workflow_Map__2_.docx (1.6 MB)</h3>
+      <p><strong>Sent:</strong> 27 Apr 2026, same email · <strong>Author:</strong> Splice / Michel · Contains 5 embedded images (Splice logo, WL E-Book PPC mockup, Gut Health page, Botaniqal Weight Management page mockup)</p>
+      <details>
+        <summary>📄 Full extracted text (click to expand)</summary>
+<pre style="white-space: pre-wrap;">Please log in to HubSpot to view the links below.
+
+Weight Loss E-Book Download
+
+Lead direct from website:
+Add a 'Download E-book' button to the banner of the Weight Loss landing page to push users to the bottom of the page to complete the form.
+Embed HubSpot form: https://r2mav.share.hsforms.com/2k_a1gjmaS2aqZMl6xQ0ndQ
+- Submission added to HubSpot as contact, tagged 'Weight Loss eBook - Website' under Lead Source Type
+- Weight Loss E-book #1 → 2-day delay → #2 → 2-day delay → #3
+
+Lead direct from PPC landing page:
+Update e-book download form on Weight Loss Treatment landing page.
+Embed HubSpot form: https://share.hsforms.com/2UTel1A0wQmu0Z3LCPolohwr2mav
+- Tagged 'Weight Loss eBook - Meta' under Lead Source Type
+- Same 3-email sequence
+
+Gut Health E-Book Download
+
+Lead direct from website:
+Add 'Download E-book' button to Gut Health landing page banner.
+Embed HubSpot form: https://share.hsforms.com/2uTFnmhUnR-OK9fNHMWGh2wr2mav
+- Tagged 'Gut Health eBook - Website'
+- Same 3-email sequence
+
+Lead direct from PPC landing page:
+Update e-book download form on Gut Health PPC landing page.
+Embed HubSpot form: https://r2mav.share.hsforms.com/2V09OOHG5SiOpW9U_Y8xuaA
+- Tagged 'Gut Health eBook - Meta'
+- Same 3-email sequence
+
+(Trauma-Informed Therapy and Alt Therapy sections — not present in this DOCX, request from Splice tomorrow.)</pre>
+      </details>
+
+      <h3>3. Copy_of_BNQ_2026_Feb_Content_Plan__March_to_June.xlsx (224 KB)</h3>
+      <p><strong>Sent:</strong> 28 Feb 2026, "Social post for 3 months (Mar-May)" email · <strong>Author:</strong> Splice / Michel · 4 sheets: Content Plan, Writing &amp; Image Guidelines, Why We Update Existing Content, [Other]</p>
+      <details>
+        <summary>📄 Sample content plan rows (click to expand)</summary>
+<pre style="white-space: pre-wrap;">March
+- Social post — Weight Loss: "The 'Why' Behind the Struggle" — holistic infographic (Sleep, Stress, Hormones, Nutrition)
+- Social post — Alt Therapy: "The Telehealth Advantage" — quality care from anywhere
+- Social post — GAPS Gut Health: "Rebalancing the Biome" — clinical gut illustration
+- Social post — Trauma-Informed: "What is Trauma-Informed Care?" — plant growing reel
+- Social post — WL: "The Juggling Act" — day-in-the-life
+
+April
+- WL: "Breaking the 'Trend' Cycle" — Evidence-Led > Trend-Driven
+- Alt Therapy: "What to expect" — Clinical Assessment, Personalised Plan, Ongoing Support
+- Gut Health: "The Gut-Brain Connection" — gut/mood link
+- Trauma-Informed: "A Skills-Focused Pathway" — Healthy Boundaries, Communication Tools
+- WL: "Real Responsibilities, Real Health" — professional woman on the go
+
+May
+- WL: "Your Next Step Starts Here" — $89 [$49.95] consultation offer + Book Now
+- Alt Therapy: "No Trends - Just Medicine" — Trend-Driven vs Medicine-Led split-screen
+- Gut Health: "More Than Just Bloating" — bloating/reflux/sensitivities
+- Trauma-Informed: "Evidence-Based Emotional Support" — Evidence-Led. Structured. Personalised.
+- WL: "Small Wins, Big Impact"
+
+June
+- WL: "Personalised Nutrition & Health"
+- Alt Therapy: "Meet the Standards" — AHPRA-Registered Doctors
+- Gut Health: "The Gut Health Booster" — month-long programme
+- Trauma-Informed: "Your Partner in Healing" — Free 20-Minute Discovery
+- WL: "The Check-In Reminder" — calendar reminder graphic</pre>
+      </details>
+
+      <h3>4. Logo_Dr_Sophia.jpg (13 KB)</h3>
+      <p>Standard Dr Sophia logo, attached as part of the email signature. Already in our brand assets — no action.</p>
+
+      <h3>5 embedded images extracted from the Workflow Map DOCX</h3>
+      <ul>
+        <li><strong>Splice Marketing logo</strong> (orange/yellow) — confirms ownership of the doc</li>
+        <li><strong>Weight Loss E-Book download PPC form mockup</strong> — orange/peach background, "Not sure where to start?" headline, e-book download form with first name / last name / email / mobile / consent checkbox / DOWNLOAD EBOOK CTA</li>
+        <li><strong>Botaniqal Weight Management landing page mockup</strong> — green branding, "Supported by 'ROSE' Medical Clinician" pill, "Tomorrow, 11:00 am" live calendar widget, "Start with 'ROSE'" CTA</li>
+        <li><strong>GAPS Gut Health Protocol page</strong> — Ramona Prosek, Certified GAPS Coach, Book Free Consult / Book Follow-up CTAs</li>
+        <li><strong>Splice contact footer</strong> — 1300 918 842, splicemarketing.com.au, North Lakes QLD</li>
+      </ul>
+
+      <h3>Local file paths (for reference)</h3>
+      <pre>/tmp/splice-handover/
+├── attachments/
+│   ├── 2026-04-27T01-45-25__ord_ltdlabs__inbox__FW__HubSpot_and_nature_sequences__Botaniqal/
+│   │   ├── BOT_2026_April_Hubspot_forms_and_emails.docx
+│   │   ├── Botaniqal_E-Book_Download_Nurture_Sequence_Workflow_Map__2_.docx
+│   │   └── Logo_Dr_Sophia.jpg
+│   ├── 2026-02-28T01-18-11__ord_ltdlabs__inbox__Social_post_for_3_months__Mar-May_/
+│   │   ├── Copy_of_BNQ_2026_Feb_Content_Plan__March_to_June.xlsx
+│   │   └── Logo_Dr_Sophia.jpg
+│   ├── _hubspot_forms_images/word/media/   (2 PNGs — Splice branding)
+│   └── _workflow_map_images/word/media/    (5 PNGs — workflow + page mockups)
+├── emails/         (40 JSON + body.html pairs)
+├── emails_text/    (40 plain-text bodies)
+├── raw/            (per-mailbox listings + DOCX extracts)
+└── email_index.json</pre>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Compiled 27 April 2026 · Sources: 4 Microsoft 365 mailboxes (willie@adaptation.io, willie@drsophia.ai, willie@botaniqal.com.au, willie@ltdlabs.com.au) via MS Graph · DOCX/XLSX extraction via Python zipfile + openpyxl · Inventory derived from <code>botaniqal-medtech/backend/src/services/</code> + memory files (marketing-implementation-plan, mailchimp-account-details, hubspot-full-audit-mar31) · Use as input for tomorrow's Splice closeout meeting only — not for external distribution.
+  </div>
+
+</div>
+
+</div>
+
+<script>
+  function checkPwd() {
+    const input = document.getElementById('pwd-input').value;
+    const valid = input === atob('RHJTb3BoaWEyMDI3IUAjJA==');
+    if (valid) {
+      document.body.classList.add('unlocked');
+      sessionStorage.setItem('splice_auth', '1');
+    } else {
+      document.getElementById('pwd-error').style.display = 'block';
+      document.getElementById('pwd-input').value = '';
+      document.getElementById('pwd-input').focus();
+    }
+  }
+  if (sessionStorage.getItem('splice_auth') === '1') {
+    document.body.classList.add('unlocked');
+  }
+  function showTab(tabEl, contentId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tabEl.classList.add('active');
+    document.getElementById(contentId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
