@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing — Thu 30 Apr 2026 · AusHealth + CIPLA / Sha'p Left State</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif; background: #0b0d12; color: #e8eaed; line-height: 1.55; }
+  body:not(.unlocked) > main, body:not(.unlocked) > header, body:not(.unlocked) > nav { display: none; }
+
+  /* Auth overlay */
+  #auth-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; transition: opacity 0.5s;
+  }
+  body.unlocked #auth-overlay { opacity: 0; pointer-events: none; }
+  .auth-box { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 48px; max-width: 420px; width: 90%; text-align: center; }
+  .auth-box h1 { color: #e94560; font-size: 1.5rem; margin-bottom: 8px; }
+  .auth-box p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 24px; }
+  .auth-box input { width: 100%; padding: 14px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; outline: none; margin-bottom: 16px; }
+  .auth-box input:focus { border-color: #e94560; }
+  .auth-box button { width: 100%; padding: 14px; border-radius: 8px; border: none; background: #e94560; color: #fff; font-weight: 600; cursor: pointer; font-size: 1rem; }
+  .auth-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
+
+  /* Layout */
+  header { background: linear-gradient(180deg, #11141b 0%, #0b0d12 100%); border-bottom: 1px solid #1f2530; padding: 36px 0 28px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); background-color: rgba(11,13,18,0.92); }
+  header .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  header .crumb { font-size: 0.78rem; color: #6c7689; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+  header h1 { font-size: 1.85rem; color: #fff; font-weight: 700; line-height: 1.25; margin-bottom: 6px; }
+  header .meta { color: #9aa3b3; font-size: 0.95rem; }
+  header .meta strong { color: #e94560; }
+
+  nav { background: #11141b; border-bottom: 1px solid #1f2530; }
+  nav .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; display: flex; gap: 4px; overflow-x: auto; }
+  nav a { color: #9aa3b3; padding: 14px 16px; text-decoration: none; font-size: 0.86rem; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  nav a:hover { color: #fff; }
+  nav a.active { color: #e94560; border-bottom-color: #e94560; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 32px 80px; }
+  section { margin-bottom: 56px; scroll-margin-top: 100px; }
+  section h2 { font-size: 1.4rem; color: #fff; font-weight: 700; margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1px solid #1f2530; }
+  section .lede { color: #9aa3b3; font-size: 0.95rem; margin-bottom: 24px; margin-top: 6px; }
+  section h3 { font-size: 1.08rem; color: #fff; margin-top: 28px; margin-bottom: 12px; }
+  section h4 { font-size: 0.95rem; color: #b8c2d4; font-weight: 600; margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+  section p { color: #c8cfdc; margin-bottom: 14px; }
+  section ul, section ol { color: #c8cfdc; margin-left: 20px; margin-bottom: 14px; }
+  section li { margin-bottom: 6px; }
+  section li > strong { color: #e8eaed; }
+  section a { color: #6cb6ff; text-decoration: none; }
+  section a:hover { text-decoration: underline; }
+  code, pre { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86em; }
+  code { background: #1a2030; padding: 2px 6px; border-radius: 4px; color: #ffd57a; }
+  pre { background: #11141b; border: 1px solid #1f2530; border-radius: 8px; padding: 14px 18px; overflow-x: auto; margin-bottom: 14px; }
+
+  .hero-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 12px; margin-bottom: 28px; }
+  .card { background: #11141b; border: 1px solid #1f2530; border-radius: 8px; padding: 16px 18px; }
+  .card .label { font-size: 0.74rem; color: #6c7689; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+  .card .value { font-size: 1.18rem; color: #fff; font-weight: 600; line-height: 1.3; }
+  .card .value.ok { color: #4ade80; }
+  .card .value.warn { color: #fbbf24; }
+  .card .value.alert { color: #e94560; }
+  .card .sub { font-size: 0.85rem; color: #9aa3b3; margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 16px; }
+  th { background: #1a2030; color: #b8c2d4; text-align: left; padding: 10px 14px; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #2a3242; }
+  td { padding: 10px 14px; color: #c8cfdc; border-bottom: 1px solid #1f2530; vertical-align: top; }
+  tr:hover td { background: #11141b; }
+  td.date { color: #9aa3b3; white-space: nowrap; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.84em; }
+  td.who { color: #6cb6ff; white-space: nowrap; font-weight: 500; }
+
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; }
+  .pill.ok { background: rgba(74,222,128,0.12); color: #4ade80; }
+  .pill.warn { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .pill.alert { background: rgba(233,69,96,0.12); color: #e94560; }
+  .pill.info { background: rgba(108,182,255,0.12); color: #6cb6ff; }
+  .pill.muted { background: rgba(154,163,179,0.10); color: #9aa3b3; }
+
+  .quote { background: #11141b; border-left: 3px solid #e94560; padding: 14px 18px; margin: 14px 0; font-style: italic; color: #c8cfdc; }
+  .quote .src { display: block; font-style: normal; color: #9aa3b3; font-size: 0.82rem; margin-top: 8px; }
+
+  .timeline-item { position: relative; padding-left: 22px; margin-bottom: 18px; border-left: 2px solid #1f2530; padding-bottom: 4px; }
+  .timeline-item::before { content: ''; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #e94560; }
+  .timeline-item.muted::before { background: #6c7689; }
+  .timeline-item.ok::before { background: #4ade80; }
+  .timeline-item .when { font-size: 0.78rem; color: #9aa3b3; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 4px; font-family: 'SF Mono', Menlo, Consolas, monospace; }
+  .timeline-item .what { color: #e8eaed; font-weight: 500; margin-bottom: 4px; }
+  .timeline-item .body { color: #9aa3b3; font-size: 0.9rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 16px; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .checklist { list-style: none; margin-left: 0; }
+  .checklist li { padding: 10px 0 10px 32px; border-bottom: 1px solid #1f2530; position: relative; }
+  .checklist li::before { content: '☐'; position: absolute; left: 4px; top: 8px; color: #6c7689; font-size: 1.3em; line-height: 1; }
+  .checklist li.done::before { content: '✓'; color: #4ade80; }
+
+  .footer { color: #6c7689; font-size: 0.82rem; padding: 24px 0 0; border-top: 1px solid #1f2530; margin-top: 56px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h1>Confidential Briefing</h1>
+    <p>Dr Sophia AI — Thursday 30 April 2026 internal pack.</p>
+    <input type="password" id="pwd-input" placeholder="Enter password" autofocus>
+    <button onclick="checkPwd()">Unlock</button>
+    <div class="auth-error" id="pwd-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="crumb">Internal Briefing · Confidential</div>
+    <h1>Thu 30 Apr 2026 · 09:00 ACST · AusHealth + Sha'p Left state</h1>
+    <div class="meta">Compiled <strong>Wed 29 Apr 2026</strong> from full email + WhatsApp + MoU correspondence sweep · Apr 24–29 window across 4 mailboxes.</div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#tldr">TL;DR</a>
+    <a href="#meeting">Tomorrow's Meeting</a>
+    <a href="#stefan">Stefan Enderling</a>
+    <a href="#aushealth">AusHealth Diagnostics</a>
+    <a href="#bring">What to Bring</a>
+    <a href="#sa">South Africa State</a>
+    <a href="#mou">CIPLA MoU V1.2</a>
+    <a href="#funding">Funding Parallel Tracks</a>
+    <a href="#timeline">Timeline 24–29 Apr</a>
+    <a href="#docs">Documents Sent</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="tldr">
+  <h2>TL;DR</h2>
+  <p class="lede">The two parallel tracks — CIPLA Foundation (commercial) and AusHealth (strategic / diagnostic + Ventures) — are converging this week. Tomorrow morning's AusHealth meeting is the technical/operational diligence pass before any cheque or integration. Stefan Enderling is the new face in the room: PhD electrical engineer, ex-ASX-CEO at Anteo, co-founder of Akkadian Health (a rural-and-regional telehealth psychiatry / ADHD platform). He thinks like a regulator and an operator, not a banker.</p>
+
+  <div class="hero-cards">
+    <div class="card">
+      <div class="label">Meeting</div>
+      <div class="value">Thu 30 Apr · 09:00 ACST</div>
+      <div class="sub">Teams invite already accepted. AusHealth Underdale (Adelaide).</div>
+    </div>
+    <div class="card">
+      <div class="label">CIPLA MoU status</div>
+      <div class="value warn">V1.2 — Article 9 incorporated</div>
+      <div class="sub">Julia recut to 4-tier scope + 30-day Structured Clinical Governance Pilot. Michel signed off. Awaiting send to Cipla Foundation.</div>
+    </div>
+    <div class="card">
+      <div class="label">Capital stack</div>
+      <div class="value ok">$11.5M — $4.5M de-risked</div>
+      <div class="sub">RH R&amp;D Financing AIP for $4.5M Venture Debt against RDTI + PPSR. VC ask drops to $7M (FN Capital open).</div>
+    </div>
+    <div class="card">
+      <div class="label">Per-consult cost</div>
+      <div class="value ok">~$0.05</div>
+      <div class="sub">New SDK integration cuts tokens ~75%. Currently in AT&amp;E. 50% chance pushed to PROD before Thursday.</div>
+    </div>
+  </div>
+
+  <h3>What Stefan will probably ask (the 6 questions you should know cold)</h3>
+  <ol>
+    <li><strong>Sensitivity / specificity / PPV / NPV</strong> on Rose's clinical recommendations — not "accuracy %". He's a PhD engineer, will know the difference.</li>
+    <li><strong>TGA SaMD classification logic</strong> — what triggers a Class IIa upgrade, conformity-assessment cost scoped? He lived this at Akkadian Health.</li>
+    <li><strong>Hallucination / drift monitoring</strong> — closed-loop safety surveillance + post-market clinical follow-up plan. How do you detect a model giving worse advice after a prompt change?</li>
+    <li><strong>FHIR DiagnosticReport ingestion</strong> — can Rose ingest AusHealth's 70k-tests-per-year diagnostic stream as patient context? (This is the load-bearing diagnostic-arm hook.)</li>
+    <li><strong>Liability stack</strong> — when Rose suggests treatment and the doctor follows it and harms a patient, who carries the indemnity?</li>
+    <li><strong>"Why AusHealth specifically?"</strong> — Strategic (operational integration) or financial (Ventures cheque)? Don't say "all of the above" — pick.</li>
+  </ol>
+</section>
+
+<section id="meeting">
+  <h2>Tomorrow's meeting — what we know</h2>
+  <p class="lede">Belinda Wade sent the Teams invite Tue 28 Apr 15:36 ACST after Dwayne confirmed AOK for 9am. Invite went to Dwayne + Willie only — Dwayne to forward as needed. Belinda's tone: <em>"at the pace you are working at, no doubt more positive updates on progress"</em>. Coffee is implied.</p>
+
+  <h3>In the room</h3>
+  <table>
+    <thead><tr><th>Name</th><th>Role</th><th>Side</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Belinda Wade</td><td>Divisional Manager — Ventures</td><td>AusHealth</td><td>Already met (22 Apr demo). Sponsor of the relationship; commercial framing.</td></tr>
+      <tr><td>Justin Coombs</td><td>CEO</td><td>AusHealth</td><td>Already met (22 Apr demo). Sign-off authority.</td></tr>
+      <tr><td>Stefan Enderling</td><td>Divisional Manager — Diagnostics <span class="pill warn">NEW</span></td><td>AusHealth</td><td>First time. PhD EE. Engineer-operator. Co-founder Akkadian Health. See profile below.</td></tr>
+      <tr><td>Dwayne Boyes</td><td>CEO</td><td>Dr Sophia AI</td><td>Lead.</td></tr>
+      <tr><td>Willie Prosek</td><td>CTO</td><td>Dr Sophia AI</td><td>Architecture + technical DD respondent.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Backstory — what AusHealth heard 22 Apr → updates 24–28 Apr</h3>
+  <ul>
+    <li><strong>22 Apr</strong>: Live Rose demo at AusHealth Underdale (Belinda + Justin). CDA executed and returned 23 Apr.</li>
+    <li><strong>24 Apr 19:17 ACST</strong>: Dwayne sent informal "Email 2 of 2" to Belinda, Justin + new addressee Stefan Enderling: heads-up on mid-stage Tshikululu / CIPLA negotiations + ZAR 7.8M (AUD $660K) pilot proposal + reference pack (TSI_CIPLA Pilot Trial.zip — 5 PDFs, 568KB).</li>
+    <li><strong>24 Apr 16:39 ACST</strong>: Belinda's reply — "Good luck for tonight's Zulu AI health consult demo, we will eagerly await the outcome" + invited Dwayne back for next round once the team can debrief.</li>
+    <li><strong>28 Apr 15:26 ACST</strong>: Dwayne confirmed AOK Thu 30th + asked for Teams invite + dropped two updates: <em>"We've just secured Agreement in Principle from RH R&amp;D Financing for non-dilutive funding &gt;$4.5M, secured against our RDTI Tax Rebate and PPSR"</em> and <em>"new SDK ... reduced token count ~75%, dropped per-consult cost to ~$0.05"</em>. Stefan addressed.</li>
+    <li><strong>28 Apr 15:36 ACST</strong>: Belinda confirmed Teams invite sent (Dwayne + Willie).</li>
+  </ul>
+
+  <h3>What's at stake</h3>
+  <p>Stefan's thumbs-up de-risks Belinda's Ventures decision and Justin's CEO sign-off. The diagnostics arm = AusHealth's revenue engine (41% of FY24/25 group revenue, 70k tests/year, 130 collectors). If Stefan can see <strong>operational adjacency between Rose CDSS and the diagnostics flow</strong>, this becomes strategic, not just venture.</p>
+
+  <p>FY25/26 stated AusHealth Diagnostics priorities — directly from their Annual Report:</p>
+  <ol>
+    <li>Develop integrated booking, scheduling, invoicing and reporting platform <span class="pill info">software / UX</span></li>
+    <li>Expand strategic partnerships with health/wellbeing service providers — <strong>bundled service solutions</strong></li>
+    <li>Evaluate predictive analytics tools for operational planning, client targeting, service forecasting</li>
+    <li>Expand testing portfolio — innovative safety, compliance and wellbeing solutions</li>
+    <li>Leverage research-driven expertise to design scalable offerings <strong>complementing core D&amp;A testing</strong></li>
+  </ol>
+  <p>Justin's own words from the FY24/25 Annual Report: <em>"Looking to deploy some brand-new technology that will change how we run our testing services. We're also looking at introducing some new wellness diagnostic technologies, testing for things like stress and fatigue in the workplace."</em></p>
+  <p>That's the wedge. AusHealth Diagnostics is actively shopping for a digital/AI complement to a 70k-test physical-collection business.</p>
+</section>
+
+<section id="stefan">
+  <h2>Stefan Enderling — the deep dive</h2>
+  <p class="lede">PhD electrical engineer who has built physical sensors, run an ASX-listed biotech, sat on the AUSMEDTECH National Advisory Committee, and co-founded a regional-Australia telehealth psychiatry platform. Adelaide ecosystem deep-veteran. He'll dislike marketing language, respect technical rigour, and recognise Akkadian-style mission framing instantly.</p>
+
+  <div class="grid-2">
+    <div>
+      <h4>Identity</h4>
+      <ul>
+        <li><strong>LinkedIn</strong>: <a href="https://au.linkedin.com/in/stefan-enderling-5b50717">au.linkedin.com/in/stefan-enderling-5b50717</a> (500+ connections, primary)</li>
+        <li><strong>Email</strong>: <code>stenderling@aushealth.com.au</code> (confirmed via Belinda thread). Akkadian: <code>s.enderling@akkadianhealth.com.au</code>.</li>
+        <li><strong>Location</strong>: Adelaide, SA</li>
+        <li><strong>Credentials</strong>: M.Eng + <strong>PhD Electrical &amp; Electronics Engineering, University of Edinburgh (2002–2006)</strong> · <strong>GAICD (2014)</strong> — board-qualified, governance-literate</li>
+      </ul>
+    </div>
+    <div>
+      <h4>What this tells us</h4>
+      <ul>
+        <li>Engineer-operator, not finance VC — thinks in measurement validity, signal integrity, sensitivity / specificity / false-positive rates.</li>
+        <li>ASX-CEO scars — knows regulatory missteps and overpromising blow up valuations. Will sniff for over-claims.</li>
+        <li>Akkadian co-founder — co-founded a TGA-touchpoint telehealth business (SaMD-adjacent, AHPRA-regulated tele-psychiatry, ADHD assessments at scale). <strong>Knows our regulatory turf intimately.</strong></li>
+        <li>"Rural and regional Australia" is his stated mission at Akkadian. Our WACHS / Sha'p Left / 130-language angle should resonate strongly — this is his emotional north star.</li>
+        <li>GAICD-trained → expect formal, evidence-driven, governance-aware. PhD engineer → respects technical rigour, dislikes hand-wave AI claims.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Career arc</h3>
+  <ul>
+    <li><strong>2002–2006</strong>: PhD Electrical &amp; Electronics Engineering, University of Edinburgh</li>
+    <li><strong>2007–2009</strong>: Product Engineer / MEMS Process Transfer, <strong>Infineon Technologies</strong> — semiconductor / sensor manufacturing background</li>
+    <li><strong>2010–2011</strong>: Project Manager, ATRAD Pty Ltd — Adelaide atmospheric radar / sensor company</li>
+    <li><strong>2011–2016</strong>: Business Development Manager, <strong>TechInSA</strong> — SA Govt's tech commercialisation arm — this is where he learned the Adelaide ecosystem (Justin Coombs, Belinda Wade, the Accelerator residents, SA Health/CALHN apparatus).</li>
+    <li><strong>2013–2017</strong>: National Advisory Committee, AUSMEDTECH (peak medtech industry body)</li>
+    <li><strong>2015–2017</strong>: GM, Jackson Care Technologies + BD, Anteo Energy</li>
+    <li><strong>Jan–Apr 2018</strong>: <strong>CEO, AnteoTech (ASX:ADO)</strong> — short tenure, departed citing "family reasons"; was leading the Anteo Diagnostics → battery-tech pivot. Key biotech-CEO reference point. <a href="https://biotechdispatch.com.au/news/new-ceo-for-anteo-technologies">Source — Biotech Dispatch</a>.</li>
+    <li><strong>2016–2021</strong>: Principal Owner, InnovationKraft (own consultancy)</li>
+    <li><strong>2020–present</strong>: <strong>Co-founder + Managing Director, Akkadian Health</strong> — telehealth psychiatry / ADHD diagnostics platform, "high-quality healthcare for rural and regional Australia". <a href="https://www.akkadianhealth.com.au/our-team/">Source — Akkadian team page</a>.</li>
+    <li><strong>2026 (likely new)</strong>: AusHealth Diagnostics Divisional Manager <span class="pill warn">[unverified publicly]</span> — public record (FY24/25 Annual Report Nov 2025) names Sarah Scammell as Acting Divisional Manager. RocketReach tag suggests recent dual / transitional role. Treat the meeting context as authoritative; he may be a fresh post-Nov 2025 hire.</li>
+  </ul>
+
+  <h3>Communication-style cues to match</h3>
+  <ul>
+    <li>Match Akkadian's own register: <strong>"high-quality care, rural and regional reach, evidence-based, regulatory-clean."</strong></li>
+    <li>Drop the "world-first" / "revolutionary" register entirely — he punishes that.</li>
+    <li>Bring the technical / clinical decks, not the corporate slides — he's the engineer-operator in the room.</li>
+    <li>Cite sources for clinical claims. RACGP / eTG / NICE / MIMS provenance per response.</li>
+  </ul>
+</section>
+
+<section id="aushealth">
+  <h2>AusHealth Diagnostics — strategic profile</h2>
+  <p class="lede">AusHealth Diagnostics = Australia's largest workplace drug &amp; alcohol testing provider. 41% of consolidated AusHealth FY24/25 revenue. 183 employees, 130+ trained collectors across all 7 states, 70,000 tests/year. Self-funded medical research charity, CALHN shareholder (Royal Adelaide Hospital, QEH, SA Pathology).</p>
+
+  <div class="grid-2">
+    <div>
+      <h4>Core product</h4>
+      <ul>
+        <li>Workplace drug &amp; alcohol testing — on-site, 24/7, breath/saliva/urine/hair</li>
+        <li>1,000+ public + private clients in mining, transport, rail, aviation, govt, protective services</li>
+        <li>In-house toxicology team led by Dr John Edwards (Senior Toxicologist)</li>
+      </ul>
+      <h4>Adjacent</h4>
+      <ul>
+        <li>Respiratory fit testing</li>
+        <li>COVID rapid antigen</li>
+        <li>Hair analysis</li>
+        <li>Suspicious-material analysis</li>
+        <li>Fatigue management ("world-first biometric tool")</li>
+        <li>Workplace vaccinations</li>
+        <li>Policy authoring</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ventures arm — recent diagnostics-relevant deals</h4>
+      <ul>
+        <li><strong>Kynetyka DVTect</strong> — point-of-care DVT screener, $500k AusHealth funding + HeartAI software. <strong>Direct adjacency to our CDSS layer.</strong></li>
+        <li><strong>CBG septic-shock project</strong> — $1.4M from Health Services Charitable Gifts Board. Clinical decision adjacency.</li>
+        <li><strong>HeartAI</strong> — in-house clinical AI partner (hospital telemetry, vital trajectory). Different surface area to Rose.</li>
+        <li><strong>CODEXA</strong> — going live with AusHealth coders in 2026. AI-first identity already there. <strong>Coding-side (post-care, revenue-cycle) — explicitly complementary to Rose's pre/intra-care CDSS.</strong></li>
+        <li>15 active research projects in FY26 pipeline; $4.5M into research FY25 (up from $2.8M).</li>
+        <li>Wellspring Consortium co-funding (AusHealth + SA DSD + Artesian VC).</li>
+      </ul>
+      <h4>Conflict check</h4>
+      <p style="color:#9aa3b3; font-size:0.9rem;">No public competing CDSS bet (Annalise.ai / Harrison.ai / GPThealth not in portfolio). HeartAI = different surface. CODEXA = downstream of us. <strong>Clean.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="bring">
+  <h2>What to bring to the room</h2>
+  <p class="lede">Match the tone — engineer-respectful, evidence-led. Don't pitch the CIPLA commercial deal as the headline; they don't share that upside. The load-bearing slide is "Rose for AusHealth Diagnostics" — workplace health.</p>
+
+  <h3>Tangibles</h3>
+  <ol>
+    <li><strong>One-pager: TGA Class I Exempt SaMD registration certificate</strong> + the 23 Apr CDSS exemption response submission confirmation (Dwayne sent → <code>Digital.Devices@tga.gov.au</code>). Stefan recognises both documents instantly.</li>
+    <li><strong>Architecture slide</strong> showing Rose ↔ MediRecords FHIR, with a <strong>placeholder for FHIR DiagnosticReport ingestion</strong> marked "open for AusHealth pathology / D&amp;A data". This is the diagnostics-adjacency hook. Tie it to AusHealth's stated <em>"integrated booking, scheduling, invoicing and reporting platform"</em> priority — "we can be the AI clinical layer on top of yours."</li>
+    <li><strong>Validation table</strong>: Rose's measured sensitivity / specificity / PPV from the v5 benchmark sweep; honest, with caveats, with the failure-mode taxonomy from Goal C.</li>
+    <li><strong>Sha'p Left / CIPLA SA story</strong> — frame as "Akkadian's mission, executed in South Africa with CIPLA scale." This is Stefan's emotional north star. <strong>Do not</strong> position the CIPLA deal as a competitor for AusHealth's attention — position it as proof of regional/rural delivery.</li>
+    <li><strong>"Rose for Fitness-for-Work" concept slide</strong> (15 min to draft tonight): post-D&amp;A-test patient interview, fatigue-risk stratification, return-to-work clinical sign-off support. Speaks directly to AusHealth Diagnostics' FY26 stated priorities. <strong>This is our differentiated answer to "what would you do with us specifically?"</strong></li>
+    <li><strong>130-language module</strong> framed soberly — "validated translation with terminology-anchored medical lexicon" not "we speak 130 languages".</li>
+    <li><strong>Capital-stack one-pager</strong>: $7M VC ask + $4.5M Venture Debt secured (RH R&amp;D Financing AIP, RDTI-collateralised) = $11.5M, with use-of-funds split.</li>
+  </ol>
+
+  <h3>The ask</h3>
+  <p><strong>Pick one path</strong> — don't ask for both:</p>
+  <ul>
+    <li><strong>Path A — Wellspring Consortium / Ventures cheque</strong> ($50k–$500k) for an AusHealth-Diagnostics-co-designed pilot — "Rose for Workplace Health"</li>
+    <li><strong>Path B — Commercial integration</strong> with revenue-share around lab / D&amp;A result interpretation</li>
+  </ul>
+
+  <h3>Time allocation (45 min suggested)</h3>
+  <ol>
+    <li>5 min — Rose live demo refresh (Stefan's new to it)</li>
+    <li>15 min — Architecture + regulatory + validation</li>
+    <li>15 min — "Rose for AusHealth Diagnostics" workplace-health concept <span class="pill warn">load-bearing</span></li>
+    <li>10 min — Q&amp;A + the ask</li>
+  </ol>
+
+  <h3>What NOT to do</h3>
+  <ul>
+    <li>Don't lead with CIPLA / Tshikululu commercial deal — they don't share the upside, makes us sound distracted.</li>
+    <li>Don't pitch UAE / US veterans angle — outside Stefan's remit, signals we don't know what AusHealth is for.</li>
+    <li>Don't promise FDA / EU CE-mark timelines without scoping — Stefan will quietly note any over-claim.</li>
+    <li>Don't bring corporate slides — bring the technical / clinical decks.</li>
+  </ul>
+</section>
+
+<section id="sa">
+  <h2>South Africa — Sha'p Left / CIPLA Foundation state</h2>
+  <p class="lede">Friday 24 Apr live demo to CIPLA Foundation went 10/10 per Dwayne. CIPLA-side requested in-country pilot trial + sent nurse-pod clinical workflow + asked us to build Demo CDSS configured to that workflow. Pilot value ZAR 7.8M (AUD $660K) for 2 nurse pods — CIPLA-indicated acceptable. MoU drafted Sun–Mon 26–27 Apr; iterated through Dwayne edits + Michel brand pass; Article 9.5 expansion (citation-grounded) drafted by Willie Tue 28 Apr 04:40 UTC and incorporated by Julia at 07:04 UTC into V1.2.</p>
+
+  <h3>The four parties — clear about who is who</h3>
+  <table>
+    <thead><tr><th>Party</th><th>Role</th><th>MoU position</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Dr Sophia AI Pty Ltd</strong></td><td>Platform owner</td><td>First Party · POPIA "operator"</td></tr>
+      <tr><td><strong>The Cipla Foundation NPC</strong> <span class="pill info">SA non-profit, NOT Cipla Ltd listed pharma</span></td><td>Sha'p Left programme operator</td><td>Second Party · POPIA "responsible party"</td></tr>
+      <tr><td><strong>Tshikululu Social Investments NPC</strong></td><td>Facilitator only</td><td>Non-party under clause 5.5–5.6 · <strong>no signature, no liability</strong> · day-to-day coordination via Yogesh Ranchod</td></tr>
+      <tr><td>Sha'p Left clinic operators</td><td>Female-led owner-operators</td><td>Not party to MoU — separate engagement at pilot stage</td></tr>
+    </tbody>
+  </table>
+
+  <h3>CIPLA Foundation — who was in the 24 Apr demo</h3>
+  <ul>
+    <li><strong>Rameez Johaar</strong> — CIPLA Foundation primary-healthcare focus + nurse-project lead; outlined 50-clinic-in-5-years target with potential to 300; low network fees model.</li>
+    <li><strong>Dr Punithasvaree</strong> — emphasised need for customisable clinical protocols and strong data management.</li>
+    <li><strong>P Mamdoo</strong> — meeting host, owner of the Otter recording.</li>
+  </ul>
+
+  <h3>Demo outcome (verbatim from Dwayne's strategic update)</h3>
+  <ul>
+    <li>CIPLA requested Pilot Trial in country</li>
+    <li>CIPLA sending their clinical workflow for nursing pods (Stage 1 input under MoU clause 3.1.1)</li>
+    <li>CIPLA asked us to build a Demo CDSS configured to that workflow</li>
+    <li>Joint agreement to draft MoU + signing ceremony + License Terms + Press Event — details to be confirmed within 1 month from both sides</li>
+    <li>Pilot pricing <strong>ZAR 7.8M (AUD $660K) for 2 nurse pods</strong> — CIPLA-indicated acceptable if demo requirements met</li>
+  </ul>
+
+  <div class="quote">"This is an avenue to generate Patient Data for Class III trial back here in AU."<span class="src">— Dwayne, 24 Apr Strategic Update to FN Capital</span></div>
+
+  <h3>Sha'p Left context (already verified)</h3>
+  <ul>
+    <li>11 nurse surgeries today, 50 chronic-medication pickup points ("Daplapmeds"), expanding to 61 surgeries by 2029 (and CIPLA target at 24 Apr meeting was 50 in 5yrs / 300 longer-term)</li>
+    <li>300–350 patients/month per surgery (12–18/day), ~10-min consults, R350 = consult + meds (Schedule 4 and below)</li>
+    <li>Female-led owner-operator clinics (CIPLA infrastructure / systems / support)</li>
+    <li>Geography: Gauteng / Western Cape / KwaZulu-Natal — community hubs, taxi ranks</li>
+    <li>Languages: nurses chart in English; patient conversations isiZulu-dominant Gauteng/KZN, isiXhosa+Afrikaans WC</li>
+    <li>No published EMR — paper folders + dispensing-licence software + Brandmed (chronic only)</li>
+    <li>Legal scope: Section 56(6) Nursing Act 2005 + Section 22A(15) Medicines Act → prescribe + dispense up to Schedule 4 independently</li>
+  </ul>
+</section>
+
+<section id="mou">
+  <h2>CIPLA Foundation MoU — V1.2 changes (28 Apr) </h2>
+  <p class="lede">Julia's 28 Apr 07:04 UTC update recut the scope to be more manageable + delivery-de-risked. Michel signed off at 10:45 UTC. <strong>Awaiting Willie's review on scope before Julia sends to CIPLA.</strong></p>
+
+  <h3>What changed V1.1 → V1.2</h3>
+  <table>
+    <thead><tr><th>Article</th><th>V1.1</th><th>V1.2</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Recital A</strong> (Platform description)</td>
+        <td>"AI-enabled clinical decision support and clinical-documentation platform"</td>
+        <td>"<strong>structured clinical intelligence infrastructure</strong> providing automated clinical decision support and clinical documentation" <span class="pill info">Michel's preferred language</span></td>
+      </tr>
+      <tr>
+        <td><strong>Article 2 — Scope</strong></td>
+        <td>3 tiers</td>
+        <td><strong>4 tiers</strong> — Tier 2 split into "Multilingual Agentic Triage" + Tier 4 "Supervising Prescribing Authority" (was Tier 2). Tier 3 unchanged.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 3 Stage 4</strong></td>
+        <td>"Phase 1 Pilot — Tier 1 functionality"</td>
+        <td>"<strong>30-day Structured Clinical Governance Pilot</strong>" with KPIs: documentation quality, triage alignment, operational efficiency</td>
+      </tr>
+      <tr>
+        <td><strong>Article 3 Stage 5</strong></td>
+        <td>"progressive activation of Tier 2 and Tier 3"</td>
+        <td>Sequential rollout: (i) Tier 2 ahead of broader network rollout, (ii) Tier 3 hub-and-spoke, (iii) Tier 4 under Section 56(6)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 8 IP</strong></td>
+        <td>Background + Foreground IP retained by us</td>
+        <td>Same + explicit avoidance-of-doubt clause: "all Platform intellectual property is retained by Dr Sophia AI, and nothing in this Memorandum effects or contemplates any transfer, assignment or licence of such intellectual property to the Second Party"</td>
+      </tr>
+      <tr>
+        <td><strong>Article 9.5</strong></td>
+        <td>One-sentence stub + <code>[Willie Prosek to expand - citations required.]</code></td>
+        <td><strong>Willie's full citation-grounded expansion incorporated verbatim</strong> — POPIA s.19 + 2018 Regs · APP 11 · ISO/IEC 27001:2022, 27018:2019, 27701:2019 · NIST SP 800-53 r5 · FIPS 197 · TLS 1.3 (RFC 8446) · ASD ISM (controls 1467, 1698) · POPIA s.22 + NDB scheme. Ten-control schedule (encryption, RBAC, tenant isolation, audit logging, network segmentation, secrets vault, vuln management, incident response, personnel controls, evidence-on-request).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Julia's framing of V1.2 (verbatim)</h3>
+  <div class="quote">"The big change I've made is recutting the delivery scope to make it 1) more manageable and reduce delivery risks, 2) and to deliver a sufficient 'taste test' for them to make the decision without giving it all away. I don't want to do too much at our cost, without a commitment for use. I've also updated article 9 with Willie feedback. Please all review this to ensure we are comfortable with scope. Willie Prosek would value your eyes here too — anything makes you unsure about the scope or nervous for delivery?"<span class="src">— Julia, 28 Apr 07:04 UTC</span></div>
+  <div class="quote">"Enjoyed the new version - aok from me!"<span class="src">— Michel, 28 Apr 10:45 UTC</span></div>
+
+  <h3>Key MoU mechanics that matter for tomorrow</h3>
+  <ul>
+    <li><strong>MoU is principally non-binding</strong> (clause 15.1) — only Articles 7 (Confidentiality), 8 (IP), 9 (Data Protection), 11 (Exclusivity), 12 (Costs), 13 (Notices), 14 (Disputes), 15 + 16 (Governing Law) are binding.</li>
+    <li><strong>Term</strong>: 12 months from signature — auto-terminate if no definitive agreement signed within Term.</li>
+    <li><strong>Governing law</strong>: Republic of South Africa.</li>
+    <li><strong>Disputes</strong>: AFSA (Arbitration Foundation of Southern Africa) mediation → arbitration in Johannesburg, single arbitrator, English language.</li>
+    <li><strong>Mutual exclusivity</strong> during Term (clause 11): CIPLA can't engage competitor CDSS for Sha'p Left without our consent; we can't engage another SA social-franchise nurse-clinic operator for equivalent staged deployment without theirs.</li>
+    <li><strong>SA-residency-by-default for live PHI</strong> per clause 9.4 — eventually need AWS af-south-1 (Cape Town) migration. Demo / pre-prod on synthetic data + AU AWS still passes 9.4 if we phase the carve-out.</li>
+  </ul>
+
+  <h3>Open items blocking signature</h3>
+  <ol>
+    <li><strong>Willie scope review</strong> on V1.2 4-tier recut <span class="pill warn">action — tonight</span></li>
+    <li><strong>First Party signature page</strong> — ACN field on signature page still <code>[•]</code> despite ACN 691 537 292 on letterhead — Julia / Dwayne to populate</li>
+    <li><strong>Second Party fields</strong> — CIPLA Foundation NPC registered office, registration number, authorised signatory + title — all <code>[•]</code> — to be populated by CIPLA</li>
+    <li><strong>Open letter addressee</strong> — front-page <code>Name / Address / Email / Tele</code> still placeholder</li>
+  </ol>
+</section>
+
+<section id="funding">
+  <h2>Funding parallel tracks (this week)</h2>
+  <p class="lede">Three things landed in the same 24-hour window: Venture Debt agreement-in-principle for $4.5M, FN Capital follow-up sent, and the new SDK that drops per-consult cost to ~$0.05.</p>
+
+  <h3>1 · Venture Debt — RH R&amp;D Financing</h3>
+  <ul>
+    <li><strong>Status</strong>: Agreement in Principle <span class="pill ok">secured 28 Apr</span></li>
+    <li><strong>Amount</strong>: &gt;$4.5M non-dilutive</li>
+    <li><strong>Collateral</strong>: RDTI Tax Rebate + PPSR (lender = 80% of expected RDTI refund up to $10M/year)</li>
+    <li><strong>Lender</strong>: RH R&amp;D Financing</li>
+    <li><strong>Effect</strong>: VC ask drops from $11.5M to <strong>$7M</strong></li>
+    <li><strong>Dwayne's framing on WhatsApp 28 Apr 11:21 ACST</strong>: "Imma use this arm wrestle FN Capital and AUShealth"</li>
+  </ul>
+
+  <h3>2 · FN Capital (Future Now Capital, VC) — Update + Checking In</h3>
+  <p>Dwayne sent <code>Update + Checking In</code> to Mark Samson + Dev Gitay at 28 Apr 15:35 ACST (CC Julia, Willie, Michel). Three updates surfaced:</p>
+  <ul>
+    <li>Venture Debt AIP $4.5M (above)</li>
+    <li><strong>Willie accepted to Claude Certified Architect course</strong> — invite-only, highest Anthropic certification, "1st in the world" framing. <span class="pill alert">Commercial in confidence until final exam next month</span> — do not surface externally.</li>
+    <li>New SDK integration — token count ~75% reduction, latency reduced, per-consult cost ~$0.05 (in AT&amp;E)</li>
+  </ul>
+  <p>Dwayne closed: <em>"3 months is not a long time, and we have a lot of tech data, compliance, benchmarks, and strategy info on hand — so, if there is anything we can share, please don't hesitate to reach out."</em> — VC DD channel left open.</p>
+
+  <h3>3 · SDK migration — Anthropic primary path</h3>
+  <p>Per memory file <code>architecture-rose-on-messenger-apr27.md</code>: Rose migrated from Agent-SDK-primary to <code>anthropic.messages.create()</code> direct (commits <code>b54d6f26</code> + <code>c61d0917</code>). Gated by <code>WL_USE_MESSAGES_API</code> flag in DEV configmap (true on DEV, false on PROD until soak). Rollback: <code>kubectl set env ... WL_USE_MESSAGES_API=false</code>. SDK path preserved behind the gate for safety.</p>
+  <ul>
+    <li><strong>Token count</strong>: ~75% reduction</li>
+    <li><strong>Per-consult cost</strong>: ~$0.05 (target — to confirm post-AT&amp;E)</li>
+    <li><strong>Status</strong>: AT&amp;E in progress, 50% chance pushed to PROD before Thursday</li>
+  </ul>
+</section>
+
+<section id="timeline">
+  <h2>Timeline — 24 to 29 Apr</h2>
+
+  <h3>Friday 24 Apr</h3>
+  <div class="timeline-item">
+    <div class="when">24 Apr · 09:00–10:00 ACST</div>
+    <div class="what">CIPLA Foundation live demo · Otter recording (P Mamdoo) + Read.ai report</div>
+    <div class="body">Attendees: Rameez Johaar, Dr Punithasvaree, P Mamdoo. Rose CDSS demo: patient record management, prescription assistance, remote/offline-capable, multilingual. Outcome: pilot trial requested + workflow being sent + Demo CDSS asked for + MoU + signing ceremony + License Terms + Press Event within 1 month. ZAR 7.8M (AUD $660K) for 2 nurse pods — CIPLA-acceptable.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">24 Apr · 16:39 ACST</div>
+    <div class="what">Belinda Wade (AusHealth) returned executed CDA · invited Dwayne back for next round</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">24 Apr · 18:47 ACST</div>
+    <div class="what">Dwayne → AusHealth (Belinda + Justin + Stefan first-addressed) · Email 2 of 2</div>
+    <div class="body">Informal CIPLA outcome briefing + reference pack <code>TSI_CIPLA Pilot Trial.zip</code> (5 PDFs, 568KB).</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">24 Apr · 19:00 ACST</div>
+    <div class="what">Dwayne → FN Capital (Mark Samson + Dev Gitay) · "Dr Sophia AI - Strategic Update"</div>
+    <div class="body">Same reference pack. ZAR 7.8M pilot proposal. SA pilot positioned as "avenue to generate Patient Data for Class III trial back here in AU".</div>
+  </div>
+
+  <h3>Sunday 26 Apr</h3>
+  <div class="timeline-item muted">
+    <div class="when">26 Apr · evening</div>
+    <div class="what">Julia drafted MoU V1.0</div>
+    <div class="body">17 articles, 3-tier scope, ZAR 7.8M / 2-pod pilot framing.</div>
+  </div>
+
+  <h3>Monday 27 Apr</h3>
+  <div class="timeline-item">
+    <div class="when">27 Apr · 14:03 ACST</div>
+    <div class="what">Julia → team · CIPLA MoU V1.0 for review · "further break up the scope (article 2)?"</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">27 Apr · 14:29 ACST</div>
+    <div class="what">Dwayne · "10/10. Drop ARTG mention (we're Class I, chasing Class II registration). Minor space formatting."</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">27 Apr · 14:59 ACST</div>
+    <div class="what">Michel · Brand pass — Platform Description language change, IP retention strengthened, 30-day Structured Clinical Governance Pilot framing</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">27 Apr · 16:11 ACST</div>
+    <div class="what">Michel · V1.1 + Open letter cover · Livvic 10pt, addressee placeholder flagged</div>
+  </div>
+
+  <h3>Tuesday 28 Apr</h3>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 13:05 ACST</div>
+    <div class="what">Julia → Willie · "Input on data security - Quick help pls" · Article 9 inline with <code>[Willie Prosek to expand - citations required.]</code></div>
+  </div>
+  <div class="timeline-item ok">
+    <div class="when">28 Apr · 14:10 ACST</div>
+    <div class="what">Willie → Julia (Cc Dwayne) · Article 9.5 expansion drafted</div>
+    <div class="body">Citation set: POPIA s.19 + 2018 Regs · APP 11 · ISO/IEC 27001:2022 + 27018:2019 + 27701:2019 · NIST SP 800-53 r5 · FIPS 197 · RFC 8446 · ASD ISM 1467/1698 · POPIA s.22 NDB. Ten-control schedule (a)–(j).</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 15:26 ACST</div>
+    <div class="what">Dwayne → AusHealth (Belinda + Justin + Stefan + Willie, CC Julia + Michel)</div>
+    <div class="body">Confirmed Thu 30 Apr 0900 + asked for Teams invite + dropped two updates: Venture Debt AIP $4.5M secured (RH R&amp;D Financing, RDTI + PPSR collateralised) + new SDK reducing token count ~75% / per-consult cost ~$0.05 (in AT&amp;E, 50% chance pushed to PROD before Thu).</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 15:35 ACST</div>
+    <div class="what">Dwayne → FN Capital (Mark + Dev) · "Update + Checking In"</div>
+    <div class="body">Same Venture Debt + SDK news. Plus: <strong>Willie accepted to Claude Certified Architect course</strong> [confidential until exam next month]. Asked FN Capital "is there any information we can provide?" — DD channel open.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 15:36 ACST</div>
+    <div class="what">Belinda → Dwayne · Teams invite sent (Dwayne + Willie)</div>
+    <div class="body">"at the pace you are working at, no doubt more positive updates on progress"</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 16:34 ACST</div>
+    <div class="what">Julia → team · MoU V1.2 with recut scope · Michel signed off 10:45 UTC</div>
+    <div class="body">4-tier (added Multilingual Agentic Triage as Tier 2). Stage 4 = 30-day Structured Clinical Governance Pilot with KPIs. Stage 5 = sequential Tier 2 → 3 → 4 rollout. Article 8 IP strengthened. Article 9.5 = Willie's expansion verbatim.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="when">28 Apr · 20:21 ACST · WhatsApp marketing group</div>
+    <div class="what">Dwayne · "Imma use this arm wrestle FN Capital and AUShealth"</div>
+  </div>
+
+  <h3>Tuesday 28 / Wednesday 29 Apr</h3>
+  <div class="timeline-item">
+    <div class="when">28 Apr · WhatsApp</div>
+    <div class="what">Dwayne · "@Willie Thu with AUSHealth"</div>
+  </div>
+</section>
+
+<section id="docs">
+  <h2>Documents Dwayne has sent</h2>
+  <p class="lede">Both AusHealth and FN Capital have the same reference pack. Stefan was added to the AusHealth-side distribution from 24 Apr 18:47 ACST onwards.</p>
+
+  <h3>To AusHealth (Belinda + Justin + Stefan)</h3>
+  <table>
+    <thead><tr><th>When</th><th>Doc</th><th>Size</th><th>Sender</th></tr></thead>
+    <tbody>
+      <tr><td class="date">24 Apr</td><td><strong>TSI_CIPLA Pilot Trial.zip</strong> — 5 PDFs (see below)</td><td>568 KB</td><td>Dwayne</td></tr>
+      <tr><td class="date">24 Apr</td><td>Email 2 of 2 — informal CIPLA outcome briefing</td><td>—</td><td>Dwayne</td></tr>
+      <tr><td class="date">28 Apr</td><td>Update message — Venture Debt + SDK improvements</td><td>—</td><td>Dwayne</td></tr>
+      <tr><td class="date">23 Apr</td><td>CDA (executed, returned by Belinda)</td><td>—</td><td>Belinda → Dwayne</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Reference pack contents (5 PDFs in TSI_CIPLA Pilot Trial.zip)</h3>
+  <ol>
+    <li><strong>00 SA Agentic Training</strong> (88KB) — clinical guidelines/protocols required for SA adaptation: STG, EML, NICD, isiZulu/isiXhosa/Sesotho coverage, Schedule 0–8 medication scheduling, traditional medicine awareness, district health system referral pathways</li>
+    <li><strong>01 Integration with Sha'p Left Clinics</strong> (97KB) — Role 1 (CDSS for nurse practitioner) + Role 2 (AI doctor / virtual GP under Section 56(6) framing)</li>
+    <li><strong>02 Revenue Considerations</strong> (108KB) — continental Africa addressable: 1.7M nurses + CHWs · $4.4Bn annual community health funding gap · 6.1M HCW shortage by 2030 · 3-tier revenue model</li>
+    <li><strong>03 Pan-African AI Clinical Platform — Phased Rollout Strategy</strong> (134KB) — Phase 1 (Year 1): 11 Sha'p Left clinics, 5,000+ patients/month, isiZulu + English launch, KZN focus; phased to 54 countries</li>
+    <li><strong>04 Integration Architecture &amp; Capabilities</strong> (138KB) — REST + GraphQL + FHIR + HL7 v2, OAuth 2.0, Africa's Talking + Twilio for SMS, USSD menus (60% of African mobile users on feature phones), Kenya HealthIT / SA NHI / Rwanda HIE FHIR alignment</li>
+  </ol>
+
+  <h3>To CIPLA Foundation (via Tshikululu)</h3>
+  <p style="color:#9aa3b3; font-size:0.9rem;">MoU V1.2 + Open letter cover not yet sent — pending Willie scope review.</p>
+
+  <h3>To FN Capital</h3>
+  <table>
+    <thead><tr><th>When</th><th>Doc</th><th>Sender</th></tr></thead>
+    <tbody>
+      <tr><td class="date">24 Apr</td><td>"Dr Sophia AI - Strategic Update" + TSI_CIPLA Pilot Trial.zip (same 5 PDFs)</td><td>Dwayne</td></tr>
+      <tr><td class="date">28 Apr</td><td>"Update + Checking In" — Venture Debt AIP + Claude Certified Architect + new SDK</td><td>Dwayne</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Bottom line</h2>
+  <ul>
+    <li><strong>SA</strong>: 4-tier MoU V1.2 with Article 9.5 expansion incorporated — Michel signed off — needs Willie scope sanity check tonight before Julia sends to CIPLA. Phase 1 demo / Stage 3 in-country demonstration is the next gating event.</li>
+    <li><strong>AusHealth</strong>: Stefan Enderling is the new technical / operational diligence pass. Engineer-PhD, Akkadian co-founder, regulatory-literate. Bring the FHIR DiagnosticReport hook + Rose-for-Workplace-Health concept — that's the differentiated answer to "why us".</li>
+    <li><strong>Funding</strong>: $4.5M Venture Debt AIP secured; VC ask drops to $7M; FN Capital DD channel open. SDK migration cuts per-consult cost to ~$0.05 — the unit economics story.</li>
+    <li><strong>One thing tonight</strong>: 15 min on the "Rose for Workplace Health" concept slide. That's the load-bearing slide tomorrow. Everything else, you already have.</li>
+  </ul>
+</section>
+
+<div class="footer">
+  Compiled 29 Apr 2026 from full email + WhatsApp + MoU correspondence sweep across willie@drsophia.ai, willie@ltdlabs.com.au, willie@botaniqal.com.au, willie@adaptation.io. Source documents in <code>botaniqal-medtech/docs/handoffs/2026-04-28-*</code> and <code>team_willie/wiki/concepts/cipla-mou-apr2026.md</code>.
+</div>
+
+</main>
+
+<script>
+function checkPwd() {
+  const input = document.getElementById('pwd-input').value;
+  const valid = input === atob('RHJTb3BoaWEyMDI3IUAjJA==');
+  if (valid) {
+    document.body.classList.add('unlocked');
+    sessionStorage.setItem('brief_auth_2026_04_30', '1');
+  } else {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+if (sessionStorage.getItem('brief_auth_2026_04_30') === '1') {
+  document.body.classList.add('unlocked');
+}
+document.getElementById('pwd-input').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') checkPwd();
+});
+
+// Active section highlighting
+const navLinks = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 120;
+  sections.forEach(s => {
+    if (scrollY >= s.offsetTop && scrollY < s.offsetTop + s.offsetHeight) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + s.id));
+    }
+  });
+});
+</script>
+
+</body>
+</html>
