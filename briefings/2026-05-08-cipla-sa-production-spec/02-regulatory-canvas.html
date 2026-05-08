@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 02 — Regulatory Canvas · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 02 · Production Spec · 2026-05-08</div>
+    <h1 class="title">Regulatory Canvas</h1>
+    <p class="subtitle">The 11 documents in Puni Mamdoo&#x27;s regulatory bundle plus 8 adjacent SA statutes. SAHPRA SaMD framework (MD08-2025/2026), POPIA full requirements, cross-border §72 routes.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Source: <code style="background:rgba(255,255,255,0.18);color:white;">wiki/concepts</code></span>
+      <span class="pill warn"><span class="dot"></span>Cipla MoU V1.3 + Tshikululu MoU v2.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+<h1 id="cipla-foundation-sa-regulatory-bundle-may-2026">Cipla Foundation SA Regulatory Bundle (May 2026)</h1>
+
+<h2 id="apex-law-tree">D2 · From apex law to clinic stack</h2>
+<p>How the Constitutional and statutory layers cascade through the regulators (HPCSA, SANC, SAHPRA, Information Regulator) and the NDOH frameworks (STG/EML, NCS, Ideal Clinic, ICSM, IPC) down to the Sha&#x27;p Left clinic where ROSE actually runs.</p>
+<div class="mermaid">
+flowchart TD
+    Constitution["Constitution + NHA 61/2003"]:::apex
+    POPIA["POPIA 4/2013"]:::statute
+    HPA["Health Professions Act 56/1974"]:::statute
+    NursingAct["Nursing Act 33/2005"]:::statute
+    MedAct["Medicines Act 101/1965"]:::statute
+    IR["Information Regulator"]:::body
+    HPCSA["HPCSA — Booklets 9, 10, 20"]:::body
+    SANC["SANC — Code + PCNS Competencies"]:::body
+    SAHPRA["SAHPRA — MD08-2025/2026 SaMD"]:::body
+    NDOH["NDOH — STG/EML, NCS, Ideal Clinic, ICSM, IPC"]:::framework
+    OHSC["OHSC — Norms &amp; Standards enforcement"]:::framework
+    Clinic["Sha'p Left clinic — PCNS-led PHC where ROSE runs"]:::clinic
+
+    Constitution --> POPIA
+    Constitution --> HPA
+    Constitution --> NursingAct
+    Constitution --> MedAct
+    POPIA --> IR
+    HPA --> HPCSA
+    NursingAct --> SANC
+    MedAct --> SAHPRA
+    HPCSA --> NDOH
+    SANC --> NDOH
+    SAHPRA --> NDOH
+    NDOH --> OHSC
+    OHSC --> Clinic
+
+    classDef apex fill:#fde2e2,stroke:#8a1a1a,color:#8a1a1a
+    classDef statute fill:#fff0d4,stroke:#d49500,color:#8a5a00
+    classDef body fill:#d4e8df,stroke:#00633c,color:#00422a
+    classDef framework fill:#dde9f7,stroke:#1c4f8e,color:#1c4f8e
+    classDef clinic fill:#f7f3ec,stroke:#1a1d1c,color:#1a1d1c
+</div>
+
+<h2 id="popia-sequence">D3 · POPIA §72 cross-border data flow</h2>
+<p>Every PHI byte from the clinic-room to the data-warehouse traces through this sequence. Phase 0–1 (demo + SCGP) lands de-identified aggregates in <code>ap-southeast-2</code>; Phase 2+ moves identified PHI to <code>af-south-1</code> under POPIA §72(a) binding-agreement framing.</p>
+<div class="mermaid">
+sequenceDiagram
+    participant Patient
+    participant Clinic as Sha'p Left clinic
+    participant Botaniqal as Botaniqal SA
+    participant AFS as af-south-1 (Cape Town)
+    participant ApSE as ap-southeast-2 (Sydney) [Phase 0-1]
+    participant Cipla as Cipla Foundation NPC
+    Patient->>Clinic: Verbal + ambient consent
+    Clinic->>Botaniqal: PHI capture under DPA
+    Botaniqal->>AFS: PHI write — POPIA §72(a) binding agreement
+    Note over Botaniqal,AFS: Phase 2+ production residency
+    Botaniqal->>ApSE: De-identified aggregate (Phase 0-1 only)
+    Botaniqal-->>Cipla: DPA + audit trail
+    Cipla-->>Patient: §23 DSAR within 30 days
+</div>
+
+<h2 id="why-this-bundle-exists">Why this bundle exists</h2>
+<p>Dr Punithasvaree ("Puni") Mamdoo (Cipla Foundation clinical lead, <code>pmamdoo@gmail.com</code>) sent <strong>Rameez Johaar (Head Sha'p Left, Cipla / <code>rameez.johaar@shapleft.com</code>)</strong> a regulatory pack on <strong>Wed 6 May 2026 at 17:38 SAST</strong>, copying Julia (drsophia.ai), Dwayne (drsophia.ai), Leanne Emery-Hunter and Yogesh Ranchod (Tshikululu). Rameez had just told Julia (07:54 SAST same morning) that he was <em>"waiting for the response from Cipla legal"</em> on the V1.3 MoU and asked Puni to <em>"share the SA DOH plus other relevant input docs to the DrSophia team in the meantime"</em>.</p>
+<p>Julia forwarded the bundle to Willie (<code>willie@drsophia.ai</code>) at <strong>23:38 UTC on Wed 6 May 2026</strong> with a one-line note: <em>"Pls see Cipla material below. Pls shout if you have any issues and when we can regroup to discuss timelines?"</em> Willie replied at <strong>02:00 UTC on Thu 7 May</strong>: <em>"Thanks for the forward — got it. I'll work through Puni's regulatory material today …"</em> Dwayne in the same thread (23:35 UTC, 6 May) signposted <em>"in about a week's time <span class="citation" data-cites="Willie">@Willie</span> Prosek and I should have update on timeframes to next demo"</em> — i.e. a 24 May SAST demo timeline is implicit.</p>
+<p>Puni's cover note in plain prose (full email at <code>/home/adaptation/cipla-regs/email-fw-julia-2026-05-06.txt</code>):</p>
+<blockquote>
+<p>Good day all. Please see some important regulatory docs as discussed — nursing scope of work, PHC clinic norms and standards, Health professions guidance on telemedicine etc. I am including the link for the NDOH repository, where you can source clinical guidelines and other docs/circulars. <a href="https://knowledgehub.health.gov.za/e-library" class="uri">https://knowledgehub.health.gov.za/e-library</a></p>
+</blockquote>
+<p>This is not a regulatory submission, an audit, or a legal opinion. It is <strong>Puni curating the SA regulatory canvas</strong> so the Botaniqal/Sha'p Left build (Tier 1 CDSS first; ambient-nurse MVP behind it) is grounded in the actual rules nurses, clinics, and the Cipla Foundation operate under. Pair this page with <code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> (which already captures POPIA/SAHPRA/RICA/HPCSA Booklet 20 framing for the demo) and <code>concepts/cipla-mou-apr2026.md</code> (which captures Articles 9/10 — data protection + regulatory compliance — that this bundle needs to be reflected against).</p>
+<h2 id="the-12-documents-at-a-glance">The 12 documents at a glance</h2>
+<p>The forwarded email lists 12 attachments (one is duplicated by Puni — "HPCSA patient recordkeeping 2 of 2.docx" + "Record keeping HPCSA.docx" both refer to HPCSA Booklet 9 <em>Keeping of Patient Records</em>; we treat them as a single source). Original Drive links resolve to <strong>auth-gated</strong> files (login required as Cipla / Tshikululu / Sha'p Left invitee). Public versions of every document exist on official sources (NDOH knowledgehub, HPCSA, SANC, Government Gazette, Bhekisisa, PMG); we re-fetched 9 of 11 in full from those, and have header-level information on the remainder.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Title (as in Puni's email)</th>
+<th>Issuer</th>
+<th>Year</th>
+<th>Status</th>
+<th>Public source obtained</th>
+<th>Local copy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Code-of-Ethics-for-Nursing-in-South-Africa.pdf</td>
+<td>South African Nursing Council (SANC)</td>
+<td>2013, current</td>
+<td><strong>Binding professional code</strong> (under Nursing Act 33/2005)</td>
+<td>✓ full text</td>
+<td><code>/home/adaptation/cipla-regs/extract-batch1.json</code> (see also Tavily extract from sanc.co.za 2021/04 PDF)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>DOH reg on Health facilities .pdf</td>
+<td>Minister of Health (Government Gazette R.185, 2 March 2012)</td>
+<td>2012</td>
+<td><strong>Binding regulation</strong> (under National Health Act 61/2003 §35)</td>
+<td>✓ full text</td>
+<td><code>/home/adaptation/cipla-regs/DOH-Reg-Categories-Hospitals.txt</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>HPCSA patient recordkeeping 2 of 2 .docx</td>
+<td>HPCSA — Booklet 9 <em>Guidelines on the Keeping of Patient Records</em></td>
+<td>2016 (current; Nov 2022 revision in circulation)</td>
+<td><strong>Professional ethical guidelines</strong> (binding via Health Professions Act 56/1974 ethical rules)</td>
+<td>✓ full text</td>
+<td><code>/home/adaptation/cipla-regs/HPCSA-Booklet-9-PatientRecords.txt</code></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>HPCSA telehealth .docx</td>
+<td>HPCSA — Booklet 10 <em>Ethical Guidelines for Good Practice in Telehealth</em></td>
+<td>December 2021 (revised)</td>
+<td><strong>Professional ethical guidelines</strong> (binding via HPA 56/1974)</td>
+<td>✓ full text</td>
+<td><code>/home/adaptation/cipla-regs/HPCSA-Booklet-10-Telehealth.txt</code></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>ICSM .pdf</td>
+<td>NDOH — <em>Integrated Clinical Services Management Manual</em> (likely the "Setting the scene" volume)</td>
+<td>2015–2023 (multiple updates; most recent NDOH Knowledge Hub PDF 2023-04)</td>
+<td><strong>Policy / implementation framework</strong> (binding on public PHC under NHI re-engineering)</td>
+<td>✓ full text (full ICSM Manual, 5th June FINAL, ~207 KB extracted)</td>
+<td><code>/home/adaptation/cipla-regs/ICSM-Manual.txt</code></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Ideal Clinic &amp; Community Health Centre Facility Profile.pdf</td>
+<td>NDOH — Ideal Clinic Programme</td>
+<td>2016, used annually</td>
+<td><strong>Mandatory facility profile</strong>: every clinic + CHC in SA must capture this on the OHSC system by 31 March each year (per OHSC Procedural Regulations 2016, NHA §79(2)(b))</td>
+<td>✓ full text</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-CHC-Facility-Profile.txt</code></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Ideal Clinic Framework - Version 19_Updated May 2021.pdf</td>
+<td>NDOH — Ideal Clinic Programme</td>
+<td>V19, updated April 2022 (Puni cites May 2021 — closest public is April 2022 update)</td>
+<td><strong>Quality framework</strong> for PHC facilities; tied to OHSC Norms &amp; Standards Regulations</td>
+<td>✓ full text (147 KB)</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-Framework-V19.txt</code></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Integrated Clinical Services Management Manual.pdf</td>
+<td>NDOH</td>
+<td>2015–2023</td>
+<td>Same as #5 (this is the longer/companion manual; ICSM has multiple bound volumes — "Setting the scene", "Steps", and the implementation manual)</td>
+<td>✓ full ICSM Manual (5th June FINAL)</td>
+<td>same as #5</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>National core standards .pdf</td>
+<td>NDOH — <em>National Core Standards for Health Establishments in South Africa: Towards Quality Care for Patients</em></td>
+<td>2011 (still operative; the 2015 "Norms &amp; Standards Regulations" GG R.1036 are the binding regulations derived from these)</td>
+<td><strong>Quality framework</strong> that anchors the Norms and Standards Regulations enforced by the OHSC</td>
+<td>✓ full text (87 KB)</td>
+<td><code>/home/adaptation/cipla-regs/National-Core-Standards.txt</code></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>National Infection Prevention and Control Practical Manual (Web version).pdf</td>
+<td>NDOH</td>
+<td>March 2020</td>
+<td><strong>Implementation manual</strong> that operationalises the National IPC Strategic Framework 2020; aligned with WHO Core Components</td>
+<td>✓ full text (372 KB)</td>
+<td><code>/home/adaptation/cipla-regs/IPC-Practical-Manual.txt</code></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Record keeping HPCSA .docx</td>
+<td>Same as #3 (HPCSA Booklet 9)</td>
+<td>—</td>
+<td>—</td>
+<td>✓ same as #3</td>
+<td>same as #3</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>SANC-Competencies-Primary-Care-Nurse-Specialist.pdf</td>
+<td>SANC — <em>Competencies for the Primary Care Nurse Specialist</em></td>
+<td>2014 (current)</td>
+<td><strong>SANC scope/competency framework</strong> for the post-NIMART PHC nurse specialisation (a category-specific extension of the Nursing Act 33/2005 scope of practice regulations)</td>
+<td>✗ <strong>public copy gated by Cloudflare on sanc.co.za + Tavily/Exa fetches blocked</strong>. Header + scope captured from search snippets; full text not yet ingested. <strong>Cipla Drive link is the canonical copy until SANC unblock.</strong></td>
+<td>not yet local</td>
+</tr>
+</tbody>
+</table>
+<p>(11 documents resolve to 11 official SA regulatory artefacts after de-duplication; #3 = #11.)</p>
+<h2 id="document-deep-dives">Document deep-dives</h2>
+<p>For each document the four sub-questions are: <strong>what is it</strong>, <strong>does it bind us</strong>, <strong>what does it require of a CDSS / ambient scribe</strong>, and <strong>what do we already do vs. what do we need to add</strong>.</p>
+<h3 id="sanc-code-of-ethics-for-nursing-practitioners-in-south-africa-2013-current">1. SANC Code of Ethics for Nursing Practitioners in South Africa (2013, current)</h3>
+<p><strong>What it is.</strong> A 9-page binding code under the Nursing Act 33/2005, published and enforced by the South African Nursing Council. Verbatim from §1 Preamble: <em>"The Code of Ethics does not only provide guidance to nurses in the process of their ethical decision-making, but is a binding document the content of which must be complied with."</em> §5.3 explicitly: <em>"Failure to adhere to the provisions of the Code or violations thereof, attracts the same sanctions as those of non-adherence to the regulations/rules regarding acts and omissions and may bring the Nursing Practitioner's fitness to practice into question and endanger his/her registration to practice."</em></p>
+<p><strong>Does it bind us?</strong> Indirectly — it binds <strong>the nurses using ROSE/Sophia at the Sha'p Left clinics</strong>, not Botaniqal as a vendor. But it sets the floor for what the system must support: confidentiality, informed consent, documentation, advocacy, non-maleficence, accountability for omissions.</p>
+<p><strong>Key requirements relevant to a CDSS:</strong>
+- <em>Veracity + Fidelity</em> — nurses are required to provide accurate, truthful information to the patient and to keep balanced, factual, confidential records. Implication: Sophia must never fabricate or paraphrase findings; quote-grounding (already a Sophia property) is load-bearing.
+- <em>Autonomy</em> — <em>"Respect for the autonomy of eligible persons (healthcare users) to make their own decisions and choices."</em> Implication: ROSE recommendations must be advisory and overridable by the nurse; consent must be an explicit gate, not a checkbox; there must be a way for the patient to refuse without the system blocking the consult.
+- <em>Confidentiality + privacy</em> (§4 Value Statement) — informs §5.1.2 (Healthcare Users) + §5.1.3 (Colleagues). Implication: per-clinic and per-nurse access scoping; no cross-clinic readability without explicit consent; no analytics that re-identify.
+- <em>Accountability</em> (§3 last clause): <em>"As professionals, Nursing Practitioners will be personally accountable for all actions and omissions while carrying out their responsibilities in their profession and must always be able to justify all decisions taken and carried out."</em> Implication: every CDSS-suggested action that the nurse accepts must be <strong>attributable to the nurse, not to the system</strong>, in the audit log; every override must be capturable with a free-text reason.</p>
+<p><strong>What we already do vs. need to add.</strong> Sophia's existing audit log + scope-aware suppression covers attribution. Override-with-reason is implemented for prescribing in the AU build but not in the SA Tier 1 design — needs to be in the Sha'p Left MVP from day one.</p>
+<h3 id="national-health-act-regulations-categories-of-hospitals-gg-r.185-2-march-2012">2. National Health Act Regulations: Categories of Hospitals (GG R.185, 2 March 2012)</h3>
+<p><strong>What it is.</strong> A 30-page Government Gazette regulation under §35 + §90 of the National Health Act 61/2003, defining the five categories of public hospital (district / regional / tertiary / central / specialised) and their bed-band, service-mix, and referral relationships. Includes a complete annex-list of every public hospital in the country grouped by category, district and bed count.</p>
+<p><strong>Does it bind us?</strong> Sha'p Left is <strong>not a hospital</strong>; Sha'p Left units are nurse-led PHC clinics (sitting below district-hospital level in the referral pyramid). The regulation defines the <strong>upward referral pathway</strong> that ROSE has to know about: a Sha'p Left nurse referring a patient escalates to the district hospital that serves the relevant health district + sub-district. Verbatim §3(2)(c): a district hospital must <em>"have general practitioners and clinical nurse practitioners primary health services"</em> — the same regulation that recognises clinical nurse practitioners (CNPs / PCNS) at the district hospital recognises them as the cohort Sha'p Left employs.</p>
+<p><strong>Key requirements relevant to a CDSS:</strong>
+- ROSE's referral logic must select the <strong>correct district hospital for the patient's geography</strong> from the public-hospitals annex (32 KB list, structured by province → district → sub-district → facility name → bed count → category). For demo: hard-code 11 referral destinations matching the 11 current Sha'p Left clinics. For production: load the gazette annex into reference data.
+- Specialist services available at district level are <strong>only</strong> paediatrics, OB-Gyn, internal medicine, general surgery, family physician (§3(4)). ROSE must not suggest a referral to e.g. cardiology unless escalating directly to a regional hospital. This is a "scope of referral" guard.
+- The regulation does not address private hospitals beyond categorising them as "for profit" or "not for profit" (§9). Private specialists in the patient's geography are out of scope for the public-pyramid path but might be available to insured patients — a Tier 4 expansion question.</p>
+<p><strong>What we already do vs. need to add.</strong> No SA referral logic exists in Sophia today (AU-only). Tier 1 needs a minimum: free-text "refer to district hospital" with the patient's home district auto-populated from clinic geography. Full annex ingestion is a Tier 2 task.</p>
+<h3 id="hpcsa-booklet-9-guidelines-on-the-keeping-of-patient-records-2016-nov-2022-revision">3. HPCSA Booklet 9: Guidelines on the Keeping of Patient Records (2016, Nov 2022 revision)</h3>
+<p><strong>What it is.</strong> The HPCSA's binding ethical-rule booklet covering clinical record content, signing, alteration, retention, ownership, access. Title-page note: <em>"applicable to health care practitioners in private practice (including managed health care organisations), as well as to those in the employ of the public service."</em></p>
+<p><strong>Does it bind us?</strong> Indirectly via the practitioners using ROSE — but the rules cascade hard onto any vendor whose system holds clinical records.</p>
+<p><strong>Key verbatim requirements (verbatim where load-bearing):</strong>
+- §4.1 — <em>"Health care practitioners should enter and maintain at least the following information for each patient consulted: 4.1.1 Personal (identifying) particulars of the patient; 4.1.2 The bio-psychosocial history of the patient, including allergies and idiosyncrasies; 4.1.3 The time, date and place of every consultation; 4.1.4 The assessment of the patient's condition; 4.1.5 The proposed clinical management of the patient; 4.1.6 The medication and dosage prescribed; 4.1.7 Details of referrals to specialists, if any; 4.1.8 The patient's reaction to treatment or medication, including adverse effects; 4.1.9 Test results; 4.1.10 Imaging investigation results; 4.1.11 Information on the times that the patient was booked off from work and the relevant reasons; 4.1.12 Written proof of informed consent, where applicable."</em>
+- §4.2 — <em>"Records should be kept in non-erasable ink and erasure fluid should not be used."</em> The digital equivalent is <strong>immutable record + visible audit trail of alterations</strong> (compare §8: <em>"No information or entry may be removed from a health record. An error or incorrect entry discovered in the record may be corrected by placing a line through it with ink and correcting it. The date of change must be entered and the correction must be signed in full."</em>).
+- §9 — Retention: <strong>6 years</strong> for adults from "dormant" date; <strong>until 21st birthday</strong> for minors; <strong>lifetime</strong> for mentally incompetent patients; <strong>20 years</strong> for occupational health records (OHSA 85/1993); <strong>at least 25 years</strong> recommended for conditions that may have long latency (e.g. asbestosis); <strong>destruction in provincial hospitals only on Deputy DG authorisation</strong>.
+- §10 — Ownership rules in private practice; on practice closure or practitioner death, records must be transferred to a successor or kept in safe-keeping by an identified custodian for ≥12 months.
+- §11 — Access: 12+ year-olds may directly access their own records; under 16s require written authorisation by the patient before parent/guardian access; termination-of-pregnancy records cannot be disclosed to anyone but the patient regardless of age (Choice on Termination of Pregnancy Act 92/1996); third-party disclosure only with written authorisation, court order, or serious public-health threat (NHA §61(2003)).
+- §12 — CD-ROM / digital storage allowed if: write-once media, encrypted, password-protected, <strong>off-site backup copy</strong>, "effective safeguards against unauthorised use or retransmission".
+- §13 Checklist — <em>"Records should be complete, but concise. Records should be consistent. Self-serving or disapproving comments should be avoided. … A standardised format should be used (e.g. notes should contain in order the history, physical findings, investigations, diagnosis, treatment and outcome.)."</em></p>
+<p><strong>Implications for a CDSS / ambient scribe:</strong>
+- <strong>Mandatory record schema</strong> — every consult must capture all 12 fields in §4.1 by the time the encounter is closed. Sophia's existing SOAPIE/SOAP schema covers most; <strong>bio-psychosocial history</strong> needs to be a first-class first-encounter object that persists across visits.
+- <strong>Immutable + auditable corrections</strong> — digital equivalent of the "line through with date and signature". Sophia's existing audit log already supports this; we need to surface the audit log on the patient record view at the SA Tier 1.
+- <strong>Retention engine</strong> — 6/21/lifetime/20/25-year rules need to be encoded in the data lifecycle policy. AWS S3 with object-lock and Glacier transitions can cover this; out of scope for the demo, in scope for production.
+- <strong>Encryption + 2-site backup is mandatory</strong>, not optional. Sophia already meets this on AWS <code>ap-southeast-2</code>; for SA the destination would be <code>af-south-1</code> (Cape Town) once the data-residency migration is on the roadmap.</p>
+<h3 id="hpcsa-booklet-10-ethical-guidelines-for-good-practice-in-telehealth-december-2021-revised">4. HPCSA Booklet 10: Ethical Guidelines for Good Practice in Telehealth (December 2021, revised)</h3>
+<p><strong>What it is.</strong> The HPCSA's binding ethical-rule booklet on telehealth (formerly "telemedicine"). Renamed in 2021 to be "more inclusive" — covers all HPCSA-registered professions (doctors, dentists, psychologists, dieticians, etc.). Replaces the COVID-era 2020 amendments; restores most of the pre-COVID restrictions but loosens some.</p>
+<p><strong>Does it bind us?</strong> Yes, materially. Sha'p Left consults are <strong>face-to-face</strong> (nurse + patient in clinic), so the bulk of telehealth rules don't apply directly to the consult. <strong>But</strong> any time ROSE escalates to a remote doctor (Tier 4 supervising prescribing authority — see Cipla MoU Article 2 scope tier), and any time a nurse uses Sophia/ROSE remotely (e.g. reviewing records from outside the clinic), telehealth rules apply.</p>
+<p><strong>Key verbatim requirements:</strong>
+- §3.7 — <em>"Telehealth is intended to be utilised to replicate physical consultations as far as possible, but not as a substitute. It is desirable that the practitioner shall have established professional relationship with their patient before Telehealth services can be considered, although, this is not a compulsory requirement, depending on existing conditions."</em>
+- §3.8 — <em>"No practitioner may exclusively render professional services through Telehealth."</em> This is the crucial bright line: a fully-remote practitioner is non-compliant. Sha'p Left is fine because the nurse is on-site; a Tier 4 doctor escalation supplements but does not replace the in-person nurse.
+- §5.1 — Competence, registration &amp; authorisation: <em>"Only practitioners who have been deemed competent and are registered in their respective professions are authorised to participate in Telehealth practice in South Africa, either as consulting healthcare practitioners or servicing healthcare practitioners. … In the case of Telehealth across country's borders, practitioner serving South African patients should be registered with the regulating bodies in their original states as well as with the HPCSA."</em> <strong>Implication: any Tier 4 doctor in our solution must be HPCSA-registered. AU-registered doctors providing AU-Australia oversight to SA Sha'p Left clinics is non-compliant unless they also hold HPCSA registration.</strong>
+- §5.5 (b) — <em>"Treatment, including issuing a prescription, based solely on an online questionnaire, does not constitute an acceptable standard of care."</em> This rules out the LLM-only prescribe-without-clinical-judgment failure mode.
+- §5.7 — Informed consent for telehealth must include: identities + practice numbers, types of transmissions consented to, <strong>details of the security measures (encryption, password protection)</strong>, <strong>material risks to confidentiality</strong>, secure storage, encryption of stored information, express consent to transmission of medical info to the practitioner or appropriate third parties.
+- §5.8 — Confidentiality: <em>"Electronic transmissions, (e.g., email, prescriptions and laboratory results) must be secure within existing technology (e.g., password protected, encrypted electronic prescriptions or other reliable authentication techniques)."</em>
+- §5.9.3 Security: <em>"To protect the identity of the patient when information is transmitted between sites, it is essential that personal identification should be removed, and the transmitted information is encrypted."</em>
+- §5.9.4 Safety: must comply with ECT Act 25/2002 + <strong>POPIA Act 4/2013</strong> for data messages.
+- §6 — POPIA: <em>"Practitioners are advised to ensure that they manage patients' information in accordance with requirements of POPIA."</em></p>
+<p><strong>Implications for a CDSS / ambient scribe:</strong>
+- The Tier 4 doctor-supervision pattern (Cipla MoU Article 2 scope) <strong>must be HPCSA-credential-verified at the practitioner level</strong>. Tshikululu MoU Article 18 implementation will need a "credential verification gate" in the on-call doctor sign-up path.
+- Telehealth informed-consent payload is <strong>richer than the AU equivalent</strong>: must include encryption details + material risks. Sophia's consent form needs an SA variant that names the encryption mechanism in plain language and lists the third-party processors (sub-processors per POPIA §20 + Tshikululu MoU Article 18.2).
+- "No exclusive telehealth practice" + "established practitioner-patient relationship preferred" = our Tier 4 escalation must be <strong>hand-off to a doctor who has prior knowledge of the patient OR escalated for the first time only with explicit consent</strong>. This is a workflow rule, not a tech rule; encode it as a banner + checkbox.
+- POPIA cross-border (§72): aligning with Tshikululu MoU Article 18.4 (SA-residency-by-default) and Article 18.8 (24-hour breach notification). Already on the roadmap.</p>
+<h3 id="ndoh-integrated-clinical-services-management-icsm-manual">5+8. NDOH Integrated Clinical Services Management (ICSM) Manual</h3>
+<p><strong>What it is.</strong> The NDOH's flagship implementation manual for re-engineering PHC around an integrated patient-centred chronic + acute model. Published 2015 (the "Setting the scene" booklet) with a longer Manual updated through 2023 ("5th June FINAL", current public PDF on knowledgehub.health.gov.za 2023-04). 207 KB of plain text; covers facility-level patient flow, appointment scheduling, record integration, pre-dispensed medications, clinical algorithms (the PACK guide), chronic patient record, district clinical specialist team (DCST) supervision, ward-based outreach (WBPHCOT), school health team, point-of-care testing, high-risk screening, population health promotion, support groups.</p>
+<p><strong>Does it bind us?</strong> Operationally — every Sha'p Left clinic operates inside the ICSM model. The clinical algorithms used by SA PHC nurses are the <strong>PACK (Practical Approach to Care Kit)</strong> guides; the prescription patterns and chronic-disease management protocols ROSE recommends must trace back to PACK + PHC STG/EML 8th edition (2024). This was already flagged in <code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> ("THE clinical reference: PHC STG/EML 8th edition (2024)"); ICSM is the <strong>system-level wrapper</strong> around STG/EML that defines how the encounter happens.</p>
+<p><strong>Key implications for the build:</strong>
+- <strong>Patient flow archetypes.</strong> ICSM defines four streams at every PHC facility: <strong>acute and minor ailments / MCWH preventive-promotive / chronic disease management / unplanned vs planned appointments</strong>. ROSE conversation flows must align to this taxonomy: the opening triage at a Sha'p Left clinic is "which of the 4 streams is this consult?" — same model used by Brandmed.
+- <strong>Headcount tooling</strong> — the ICSM Facility Data Tool tracks total headcount, &lt;5y, &gt;5y, then per-condition counts (Hypertension, Diabetes, Epilepsy, Asthma/COPD, Mental Health, ANC 1st booking, Well-baby Immunisation, Family Planning, Male Medical Circumcision, MOU Deliveries, etc.). For Tier 3 (population health surveillance) + the Cipla MoU Article 2.4 scope, this is <strong>the canonical reporting schema</strong> ROSE needs to roll up into.
+- <strong>Pre-dispensed medications + CCMDD pipeline</strong> — ICSM's chronic-stable-patient stream goes through the Central Chronic Medicine Dispensing &amp; Distribution programme (= "Daplapmeds" in Sha'p Left's case). ROSE prescribing must support the "stable, divert to CCMDD/Daplapmeds" decision as a first-class workflow.
+- <strong>DCST supervision + WBPHCOT linkage</strong> — the ICSM model presumes a district clinical specialist team supervises facility-level care + ward-based outreach teams handle community follow-up. ROSE escalation logic should target the DCST for clinically complex cases, not just escalate to a remote doctor in Australia.</p>
+<h3 id="ndoh-ideal-clinic-community-health-centre-facility-profile">6. NDOH Ideal Clinic &amp; Community Health Centre Facility Profile</h3>
+<p><strong>What it is.</strong> A 13 KB structured form that every clinic and CHC in SA must capture annually on <code>idealhealthfacility.org.za</code> by the end of the first quarter of every financial year and update during the year as changes occur. Mandated by the <strong>OHSC Procedural Regulations (2016)</strong> under NHA §79(2)(b).</p>
+<p><strong>What it captures:</strong>
+- Facility identity (name, province, district, sub-district, ward, rural/urban, type) — auto-populated from DHIS facility data.
+- Contact details (manager, designation, address, postal, geo-coordinates, telephone, email, after-hours).
+- Health district + sub-district + ward + nearest reference point.
+- Operating days/hours, services offered (per category — chronic NCD, MCWH, HCT, family planning, etc.), bed/equipment counts.
+- Personnel breakdown by SANC category (PCNS / Professional Nurse / Enrolled Nurse / Enrolled Auxiliary).</p>
+<p><strong>Does it bind us?</strong> Sha'p Left clinics are <strong>private nurse-led PHC clinics</strong> — whether they are required to capture this profile is <strong>uncertain</strong>; the OHSC regulations primarily target public clinics + CHCs. <em>Open question for Cipla</em> (see §6 below).</p>
+<p><strong>Implications:</strong>
+- If Sha'p Left clinics are required to file the Facility Profile, ROSE/Sophia could <strong>auto-generate it from the platform's operational data</strong> — facility metadata + monthly headcount + service-mix. That's an immediate "value-add" for Cipla independently of CDSS.
+- Even if not legally required, the format <strong>defines the reporting schema</strong> that Cipla / DOH / Tshikululu will expect rollup into. Tier 3 (Population Health Surveillance) per the Cipla MoU should follow this schema.</p>
+<h3 id="ideal-clinic-framework-version-19-april-2022-update-puni-cites-may-2021">7. Ideal Clinic Framework Version 19 (April 2022 update; Puni cites May 2021)</h3>
+<p><strong>What it is.</strong> A 147 KB definitions + components + checklists framework for the Ideal Clinic Programme. Defines an "ideal clinic" as <em>"a clinic with good infrastructure, adequate staff, adequate medicine and supplies, good administrative processes and sufficient bulk supplies, that uses applicable clinical policies, protocols, guidelines as well as partner and stakeholder support, to ensure the provision of quality health services to the community."</em> 10 components × 33 sub-components. Components include: <strong>Administration / Integrated Clinical Services Management / Medicines, Supplies and Laboratory Services / Human Resources for Health / Support Services / Infrastructure / Health Information Management / Communication / District Health System Support / Implementing Partners and Stakeholders.</strong></p>
+<p><strong>Does it bind us?</strong> Indirectly — it is the <strong>norms framework that the OHSC enforces</strong> via the Norms and Standards Regulations applicable to different categories of health establishments. Ideal Clinic status itself is voluntary, but the regulated norms are not. Text coloured green in the framework PDF marks the elements that are regulated under the Norms and Standards.</p>
+<p><strong>Implications:</strong>
+- Component 7 (<strong>Health Information Management</strong>) directly maps to ROSE / Sophia. Sophia must support facility-level Health Information Management in a way that meets the Ideal Clinic checklist criteria. The exact element list is in the Framework PDF (147 KB extracted to <code>/home/adaptation/cipla-regs/Ideal-Clinic-Framework-V19.txt</code>). Worth a dedicated read by the engineer building Tier 3.
+- Component 2 (Integrated Clinical Services Management) is the same as docs #5/#8 above — ROSE conversation flow alignment.
+- Component 3 (<strong>Medicines, Supplies and Laboratory Services</strong>) — the standardised facility-stationery list, EML stock visibility, NHLS lab integration — is informative for the prescribing-and-orders surface in Tier 1.</p>
+<h3 id="national-core-standards-for-health-establishments-in-south-africa-2011">9. National Core Standards for Health Establishments in South Africa (2011)</h3>
+<p><strong>What it is.</strong> The 87 KB foundational quality framework published by NDOH in 2011. Subtitle: <em>"Towards Quality Care for Patients."</em> The basis for the binding <strong>Norms and Standards Regulations applicable to different categories of health establishments (GG 1036 of 2018 + amendments)</strong> which the OHSC enforces. Seven Domains:</p>
+<ol type="1">
+<li><strong>Patient Rights</strong> — respect/dignity, access to information, physical access, continuity of care, reducing delays, emergency care, package of services, complaints management.</li>
+<li><strong>Patient Safety, Clinical Governance and Clinical Care</strong> — covered next page after Domain 1 but truncated in our extract; covers IPC linkage, adverse event reporting, clinical guidelines compliance, prescribing safety, surgical safety etc.</li>
+<li><strong>Clinical Support Services</strong> — pharmacy, lab, radiology, blood transfusion.</li>
+<li><strong>Public Health</strong> — population health surveillance, communicable disease reporting, health promotion.</li>
+<li><strong>Leadership and Governance</strong> — facility committee, M&amp;E, financial governance, risk management.</li>
+<li><strong>Operational Management</strong> — HR, finance, supply chain, transport.</li>
+<li><strong>Facilities and Infrastructure</strong> — physical condition, security, waste management, equipment maintenance.</li>
+</ol>
+<p><strong>Does it bind us?</strong> Yes — every health establishment is measured against the seven domains. Cipla Foundation as the licence-holder for the SA medical-device establishment route (Cipla MoU Article 10) sits <em>behind</em> this; ROSE is a "clinical support service" that contributes to several of these domains.</p>
+<p><strong>Key verbatim</strong> (Domain 1 most directly affects Tier 1 design):
+- §1.1.1.2 — <em>"Care provided maximises patient privacy."</em> CDSS implication: ROSE must not display patient information on a screen visible to other patients; the nurse's screen needs orientation/privacy filter consideration.
+- §1.2.1.2 — <em>"Procedures are followed to get informed consent."</em>
+- §1.2.1.3 — <em>"All patients receive a discharge report (as required by the National Health Act 61 of 2003)."</em> CDSS implication: every Sha'p Left consult should produce a printable patient handout summarising assessment, plan, medications and follow-up — this is <strong>not just a UX nice-to-have but a regulatory requirement</strong>.
+- §1.4.1.1 — <em>"An effective district health care referral policy and system is available, covering continuity of care, emergency care management, infrastructure and resources required."</em>
+- §1.4.1.3 — <em>"Patients are given information about referrals and specialist bookings."</em>
+- §1.5.1.5 — <em>"An efficient filing system is in place for patients' records."</em>
+- §1.7.1.1 — <em>"Services at the health establishment meet national guidelines or licensing specifications."</em></p>
+<p><strong>Implications for a CDSS:</strong> the patient handout / discharge note is mandatory output for every consult. Add this to Tier 1 MVP.</p>
+<h3 id="ndoh-national-infection-prevention-and-control-practical-manual-march-2020">10. NDOH National Infection Prevention and Control Practical Manual (March 2020)</h3>
+<p><strong>What it is.</strong> A 372 KB practical manual operationalising the National IPC Strategic Framework 2020. Aligned with WHO Core Components. Nine parts: A. Standard precautions / B. Transmission-based precautions / C. Built environment + infrastructure for IPC / D. Surveillance of HAIs / E. Antimicrobial stewardship / F. Outbreak response / G. Reporting of notifiable medical conditions / H. Education + training of staff and IPC staff / I. Monitoring + evaluation.</p>
+<p><strong>Does it bind us?</strong> Operationally for the clinic; not directly for the digital system. But there are touchpoints:</p>
+<ul>
+<li><strong>Part E (Antimicrobial Stewardship)</strong> — ROSE prescribing must flag inappropriate antibiotic use against the SA Framework for the Prevention and Containment of AMR (2018). The PHC STG/EML antibiotic algorithms encode this; Sophia must enforce them in prescribing suggestions.</li>
+<li><strong>Part G (Reporting of Notifiable Medical Conditions)</strong> — SA has a list of notifiable conditions (TB, measles, food-borne illness, certain STIs etc.) that the nurse must report to the National Institute for Communicable Diseases (NICD) when diagnosed. ROSE's CDSS should auto-flag a notifiable diagnosis and prompt the nurse to file the NICD report; auto-pre-fill where possible.</li>
+<li><strong>Part D (HAI Surveillance)</strong> — at PHC level less acute than at hospital level, but if a patient presents with possible HAI, it must be flagged.</li>
+</ul>
+<p><strong>Implications:</strong> Tier 1 should include a "notifiable conditions" check and a "antimicrobial stewardship" guard. Both are well-defined rule sets that map to existing PHC STG/EML logic.</p>
+<h3 id="sanc-competencies-for-the-primary-care-nurse-specialist-2014">12. SANC Competencies for the Primary Care Nurse Specialist (2014)</h3>
+<p><strong>What it is.</strong> SANC's competency framework for the Primary Care Nurse Specialist (PCNS) — the post-graduate / advanced PHC nurse who carries out independent PHC consultations + prescribes + dispenses up to Schedule 4 under the §56(6) Nursing Act 2005 + §22A(15) Medicines Act permit issued by the medical practitioner-in-charge. This is the cohort Sha'p Left employs.</p>
+<p><strong>Note: full text not yet locally ingested</strong> because sanc.co.za serves the PDF behind a Cloudflare challenge that Tavily and Exa both fail on. Search snippets confirm: <em>"This nurse specialist conducts physical assessment, diagnoses illnesses, prescribes treatment, provides direct care to health care consumers and refers …"</em> Cipla's Drive copy is the canonical until SANC unblock.</p>
+<p><strong>What we know from the existing wiki + this bundle:</strong>
+- The PCNS is <strong>an independent practitioner</strong> — diagnoses, prescribes, dispenses, refers — within the Schedule 4 prescribing limit + the §56(6) permit + the geographic + condition scope of the issuing permit.
+- <strong>NIMART</strong> (Nurse-Initiated Management of Antiretroviral Therapy) is a Sha'p Left entry requirement — confirmed in <code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code>.
+- The PCNS competency overlaps with Family Nursing, Adult Nursing, Child Nursing.</p>
+<p><strong>Implications for the CDSS:</strong>
+- Sophia's <strong>scope-aware suppression</strong> (already implemented for AU nurse practitioners) needs to be tuned to the PCNS scope. The Schedule 4 boundary is sharp; the §56(6) permit is per-clinic — encoded as a per-clinic config flag.
+- The CDSS must escalate any condition or medication outside the permit (Schedule 5+, surgical conditions, non-permitted specialist scope) to the supervising medical practitioner who issued the permit. Cipla MoU Article 2.4 (Tier 4 Supervising Prescribing Authority) is the commercial wrapper for this clinical pattern.
+- <strong>Open data point:</strong> the exact list of conditions / medications inside vs outside the typical §56(6) permit at Sha'p Left is in the SANC PCNS doc (gated). Need to ingest the full text to encode this list precisely. Until then, fall back to PHC STG/EML 8th edition (2024) as the source of truth.</p>
+<h2 id="synthesis-regulatory-map">Synthesis: regulatory map</h2>
+<pre><code>                   ┌─────────────────────────┐
+                   │ CONSTITUTION + NHA 61/2003 │  Apex law
+                   └────────────┬───────────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            │                   │                   │
+   ┌────────▼─────────┐ ┌────────▼─────────┐ ┌──────▼──────────┐
+   │   POPIA 4/2013   │ │  Health Profs    │ │  Nursing Act    │
+   │  (Privacy/data)  │ │   Act 56/1974    │ │    33/2005      │
+   └────────┬─────────┘ └────────┬─────────┘ └──────┬──────────┘
+            │                    │                  │
+            │                    │                  │
+   ┌────────▼─────────┐ ┌────────▼─────────┐ ┌──────▼──────────┐
+   │    Information   │ │    HPCSA         │ │      SANC       │
+   │     Regulator    │ │ (Booklets 9, 10, │ │ (Code of Ethics │
+   │                  │ │  20, 4, 5, 1)    │ │  + PCNS comps)  │
+   └──────────────────┘ └──────────────────┘ └─────────────────┘
+                                │                  │
+                                │                  │
+                          ┌──────▼──────────────────▼──────┐
+                          │   NDOH (national policy +       │
+                          │   binding regulations)         │
+                          ├─────────────────────────────────┤
+                          │ • Categories of Hospitals 2012  │
+                          │ • National Core Standards 2011  │
+                          │ • Norms &amp; Standards Regs 2018   │
+                          │ • Ideal Clinic Programme V19    │
+                          │ • ICSM Manual (PHC re-eng)      │
+                          │ • IPC Practical Manual 2020     │
+                          │ • PHC STG/EML 8th ed (2024)     │
+                          │ • Notifiable Conditions list    │
+                          └────────┬────────────────────────┘
+                                    │
+                          ┌─────────▼──────────┐
+                          │    OHSC            │  Office of Health
+                          │  (enforces Norms   │  Standards Compliance
+                          │   &amp; Standards)     │
+                          └────────────────────┘
+                                    │
+                          ┌─────────▼──────────┐
+                          │  Sha&#39;p Left clinic │  Where ROSE runs
+                          │  (PCNS-led PHC)    │
+                          └────────────────────┘</code></pre>
+<p><strong>Bodies that matter for the build:</strong>
+- <strong>SANC</strong> — regulates the nurse + the consult.
+- <strong>HPCSA</strong> — regulates any doctor in the loop (Tier 4 supervising prescribing authority) + telehealth + records.
+- <strong>NDOH</strong> — sets clinical guidelines (PACK, STG/EML), facility quality framework (Ideal Clinic / NCS), reporting expectations (DHIS, NICD).
+- <strong>OHSC</strong> — audits clinics for Norms &amp; Standards compliance; whether private nurse-led clinics fall under OHSC is the key open question (see §6).
+- <strong>SAHPRA</strong> — <strong>not in this bundle</strong> but relevant for the device side: the SAHPRA MD08-2025/2026 SaMD framework determines whether ROSE registers as an AI/ML medical device. The Sha'p Left MVP page already maps the demo to "outside SAHPRA + outside POPIA §26".
+- <strong>Information Regulator</strong> — oversight of POPIA compliance + breach reporting.</p>
+<p><strong>Binding vs guidance:</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Document</th>
+<th>Type</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NHA Categories of Hospitals (R.185/2012)</td>
+<td><strong>Binding regulation</strong></td>
+<td>Promulgation + Magistrate's Court / Civil suit</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklets 9 + 10</td>
+<td><strong>Binding ethical guidelines</strong> (under HPA)</td>
+<td>HPCSA disciplinary committee</td>
+</tr>
+<tr class="odd">
+<td>SANC Code of Ethics</td>
+<td><strong>Binding professional code</strong> (under Nursing Act)</td>
+<td>SANC Professional Conduct Committee</td>
+</tr>
+<tr class="even">
+<td>SANC PCNS Competencies</td>
+<td><strong>Scope of practice</strong> (binding via Nursing Act regulations)</td>
+<td>SANC + SAHPRA (medicine schedules)</td>
+</tr>
+<tr class="odd">
+<td>National Core Standards 2011</td>
+<td>Quality framework (basis for binding regs)</td>
+<td>OHSC (via Norms &amp; Standards Regs 2018)</td>
+</tr>
+<tr class="even">
+<td>Ideal Clinic Framework V19</td>
+<td>NDOH norms framework</td>
+<td>OHSC for the regulated sub-set</td>
+</tr>
+<tr class="odd">
+<td>ICSM Manual</td>
+<td>Policy / implementation framework</td>
+<td>NDOH operational; binding on public PHC</td>
+</tr>
+<tr class="even">
+<td>Ideal Clinic Facility Profile</td>
+<td>Annual reporting form</td>
+<td>OHSC Procedural Regs 2016 (mandatory for clinics + CHCs)</td>
+</tr>
+<tr class="odd">
+<td>IPC Practical Manual</td>
+<td>Operational manual</td>
+<td>NDOH operational; references binding AMR Framework + ECT Act + POPIA</td>
+</tr>
+</tbody>
+</table>
+<h2 id="implementation-impact-matrix">Implementation impact matrix</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Requirement</th>
+<th>Tier 1 CDSS</th>
+<th>Tier 2 Multilingual Triage</th>
+<th>Tier 3 Pop Health Surveillance</th>
+<th>Tier 4 Supervising Prescribing</th>
+<th>Already implemented?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HPCSA Booklet 9 §4.1 — full record schema (12 fields)</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Partial.</strong> AU build covers most; SA needs bio-psychosocial as first-class first-encounter object + structured allergies/idiosyncrasies.</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklet 9 §4.2/§8 — immutable records + audit trail of corrections</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Yes</strong> (Sophia audit log). Need to surface on patient view.</td>
+</tr>
+<tr class="odd">
+<td>HPCSA Booklet 9 §9 — retention rules (6/21/lifetime/20/25)</td>
+<td><strong>Required for production</strong>, not demo</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>No. Production only.</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklet 9 §10 — practitioner-death / closure custody</td>
+<td>Required for production</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>No. Document control for SA Cipla deployment.</td>
+</tr>
+<tr class="odd">
+<td>HPCSA Booklet 9 §12 — encryption + 2-site backup</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>Required</td>
+<td>Required</td>
+<td><strong>Yes</strong> (<code>ap-southeast-2</code> + <code>af-south-1</code> via Tshikululu MoU 18.4 roadmap).</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklet 10 §3.7/§3.8 — no exclusive telehealth; established relationship preferred</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Required</strong> (Tier 4 escalation pattern)</td>
+<td>New work — workflow rule + banner.</td>
+</tr>
+<tr class="odd">
+<td>HPCSA Booklet 10 §5.1 — HPCSA registration check on practitioners</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Required</strong></td>
+<td>New work — credential verification gate.</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklet 10 §5.7 — telehealth-specific informed consent (encryption + sub-processors disclosed)</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Required</strong></td>
+<td>New work — SA variant of consent form.</td>
+</tr>
+<tr class="odd">
+<td>HPCSA Booklet 10 §5.5(b) — no prescribing on questionnaire alone</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>—</td>
+<td><strong>Required</strong></td>
+<td><strong>Yes</strong> (clinical-judgement-required rules already present).</td>
+</tr>
+<tr class="even">
+<td>HPCSA Booklet 10 §6 (POPIA compliance)</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>Required</td>
+<td>Required</td>
+<td><strong>Yes via Tshikululu MoU Article 18</strong>. Already encoded.</td>
+</tr>
+<tr class="odd">
+<td>SANC Code §3 (accountability for actions + omissions)</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>Required</td>
+<td>Required</td>
+<td><strong>Yes</strong> (override-with-reason for AU; needed for SA Tier 1 from day one).</td>
+</tr>
+<tr class="even">
+<td>SANC Code §4 (confidentiality) — per-clinic, per-nurse access scoping</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>Required</td>
+<td>Required</td>
+<td><strong>Partial</strong> — needs per-clinic boundary in Sha'p Left context.</td>
+</tr>
+<tr class="odd">
+<td>SANC PCNS scope — Schedule 4 ceiling + §56(6) permit per-clinic</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td><strong>Required</strong> (escalation trigger)</td>
+<td>New work — encode permit list + escalation. Full PCNS doc needs ingestion.</td>
+</tr>
+<tr class="even">
+<td>Categories of Hospitals R.185/2012 — referral pathway by district</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td>Required</td>
+<td>New work — load district hospital annex.</td>
+</tr>
+<tr class="odd">
+<td>NCS Domain 1 §1.2.1.3 — discharge report for every patient</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Partial</strong> — implement printable patient handout per consult.</td>
+</tr>
+<tr class="even">
+<td>NCS Domain 1 §1.2.1.2 — informed consent procedures</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>—</td>
+<td>Required</td>
+<td><strong>Yes</strong> (already in AU build; SA variant needed).</td>
+</tr>
+<tr class="odd">
+<td>ICSM Manual — patient flow taxonomy (4 streams)</td>
+<td><strong>Required</strong></td>
+<td>Required</td>
+<td>—</td>
+<td>—</td>
+<td>New work — opening triage in ROSE conversation.</td>
+</tr>
+<tr class="even">
+<td>ICSM Manual — DCST escalation channel</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>Required</td>
+<td>New work — Tier 4 escalation can target DCST as well as Tier 4 doctor.</td>
+</tr>
+<tr class="odd">
+<td>Ideal Clinic Profile — annual facility profile capture</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>New work — auto-generate from operational data (Tier 3).</td>
+</tr>
+<tr class="even">
+<td>IPC Practical Manual Part E — antimicrobial stewardship</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Yes</strong> (PHC STG/EML 8th ed (2024) embeds this).</td>
+</tr>
+<tr class="odd">
+<td>IPC Practical Manual Part G — notifiable conditions reporting</td>
+<td><strong>Required</strong></td>
+<td>—</td>
+<td>Required</td>
+<td>—</td>
+<td>New work — auto-flag + pre-fill NICD report.</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>single biggest "this affects how we build" insight</strong> from the bundle: <strong>the Tier 4 supervising-prescribing-authority pattern (Cipla MoU Article 2.4) is gated by HPCSA registration of the supervising doctor.</strong> AU-registered doctors providing remote oversight to a SA Sha'p Left nurse are non-compliant under HPCSA Booklet 10 §5.1 unless they also hold HPCSA registration. This means the Tier 4 commercial offering needs a <strong>doctor recruitment + credentialing pipeline that issues HPCSA-registered seats first, before any AU seats</strong>. We've been assuming the AU/SA cross-border is a tech problem. It's a <strong>regulatory / HR / credentialing problem.</strong></p>
+<p>The second-biggest: <strong>every Sha'p Left consult must produce a discharge note for the patient (NCS §1.2.1.3, NHA §61 NHA itself).</strong> This is a hard regulatory requirement, not a UX nice-to-have. The Sha'p Left ambient-nurse MVP must include a printable patient handout from day one.</p>
+<h2 id="open-questions-clarifications-needed-from-cipla">Open questions / clarifications needed from Cipla</h2>
+<ol type="1">
+<li><strong>OHSC applicability to private nurse-led PHC clinics.</strong> Sha'p Left clinics are private. The OHSC's primary mandate is public health establishments + private hospitals, but the Norms and Standards Regulations theoretically apply to all (NHA §47 read with §90). What is Cipla's existing interpretation? Are the 11 current Sha'p Left clinics audited by OHSC?</li>
+<li><strong>Ideal Clinic Programme participation.</strong> Is any Sha'p Left clinic registered for Ideal Clinic certification? If yes, which? (Auto-generation of the Facility Profile becomes a value-add; if no, the framework still defines our reporting schema but isn't enforceable.)</li>
+<li><strong>§56(6) permit scope at the existing 11 clinics.</strong> What conditions / medication classes are inside vs outside the permit at the typical Sha'p Left clinic? (We need this to encode the escalation threshold precisely.) The SANC PCNS competencies doc is the source-of-truth; we still need to ingest it (gated on sanc.co.za).</li>
+<li><strong>DCST relationship.</strong> Which District Clinical Specialist Team supervises the typical Sha'p Left clinic? Who's the named contact for clinical escalation? (For Tier 4 escalation routing.)</li>
+<li><strong>NICD reporting cadence.</strong> Do Sha'p Left clinics already file notifiable-conditions reports to NICD via DHIS or paper? (Determines whether ROSE's auto-fill goes into an existing pipe or generates a new one.)</li>
+<li><strong>Data residency timeline.</strong> Tshikululu MoU Article 18.4 commits to SA-residency-by-default; what is Cipla's tolerance for <code>ap-southeast-2</code> until <code>af-south-1</code> migration? Their existing 11 clinics already operate on private-sector EMR / PMS / Brandmed — what is the existing data-residency footprint?</li>
+<li><strong>HPCSA registration for Tier 4 doctors.</strong> Does Cipla / Sha'p Left have an existing roster of HPCSA-registered doctors who supervise the nurse permits at the 11 current clinics? Could the same roster be enrolled as Tier 4 supervisors via Sophia? (Avoids us recruiting a SA doctor pool from scratch.)</li>
+<li><strong>Patient discharge note format.</strong> Is there a standard Sha'p Left patient handout layout we should match? (NCS §1.2.1.3 mandates the existence; format is operational.)</li>
+</ol>
+<p>These would be appropriate Cipla-side asks to send via Julia (drsophia.ai) once Willie is back from leave. Format follows email-rules — draft only, send with explicit approval.</p>
+<h2 id="cross-references">Cross-references</h2>
+<ul>
+<li><code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> — the MVP spec this regulatory canvas informs. Existing mapping of POPIA/SAHPRA/RICA/HPCSA Booklet 20 holds; this page extends to HPCSA Booklets 9+10 (records + telehealth), SANC Code, NCS, Ideal Clinic, ICSM, IPC, PCNS. Add a "Regulatory canvas" cross-reference there.</li>
+<li><code>concepts/cipla-mou-apr2026.md</code> — Article 2 (scope), Article 9 (data protection), Article 10 (regulatory compliance) + Article 9.5 (Willie's citation expansion). This bundle is the regulatory substrate Article 10 references when it says <em>"joint regulatory pathway determination obligation"</em>. Article 10's phrasing should be re-read with this canvas in mind. Add bundle reference under Document Locations.</li>
+<li><code>concepts/tshikululu-master-agency-mou-may2026.md</code> — Article 18 (Data Protection — POPIA + 24-hour breach + AES-256 + TLS 1.3) + Article 19 (Reg compliance, multi-jurisdictional). The bundle confirms POPIA + HPCSA Booklet 10's encryption requirements align with Article 18.5(a)+(b). Article 18's framing is consistent with the SA bundle.</li>
+<li><code>concepts/cipla-opportunity-stack-may2026.md</code> — add bundle to "Documents — where everything lives" section.</li>
+<li><code>concepts/tga-cdss-exemption-response-apr2026.md</code> — precedent. The TGA Rule 2.15 exemption argument used the CDSS Three Criteria (recommendation only, transparency, advisory not directive). The SAHPRA equivalent is MD08-2025/2026; the SA bundle does not contain SAHPRA materials directly, but the HPCSA Booklet 10 §5.5(b) "no prescribing on questionnaire alone" + the SANC PCNS scope-aware-suppression align with the same "advisory not directive" line.</li>
+</ul>
+<h2 id="document-locations">Document Locations</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Filename (Puni)</th>
+<th>Drive ID (gated)</th>
+<th>Public source (re-fetched)</th>
+<th>Local copy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Code-of-Ethics-for-Nursing-in-South-Africa.pdf</td>
+<td><code>1T16-OR0x5z4mN7jHQJm2GyYTsY3XCsfI</code></td>
+<td>sanc.co.za/wp-content/uploads/2021/04/Code-of-Ethics-for-Nursing-in-South-Africa.pdf</td>
+<td><code>/home/adaptation/cipla-regs/extract-batch1.json</code> (full text in Tavily search snippet, 9 pages)</td>
+</tr>
+<tr class="even">
+<td>DOH reg on Health facilities .pdf</td>
+<td><code>1Q-L3Jn2DeXuNfbI0IFOslIANwT-nHSJ2</code></td>
+<td>gov.za/sites/default/files/gcis_document/201409/35101rg9701gon185a.pdf</td>
+<td><code>/home/adaptation/cipla-regs/DOH-Reg-Categories-Hospitals.txt</code> (32 KB)</td>
+</tr>
+<tr class="odd">
+<td>HPCSA patient recordkeeping 2 of 2 .docx</td>
+<td><code>12G-t8Br11yZq3HjThW-hT2eWgJEA0OpQ</code></td>
+<td>hpcsa-blogs.co.za/wp-content/uploads/2022/08/Booklet-9-Guidelines-on-Patient-Records.pdf</td>
+<td><code>/home/adaptation/cipla-regs/HPCSA-Booklet-9-PatientRecords.txt</code> (21 KB)</td>
+</tr>
+<tr class="even">
+<td>HPCSA telehealth .docx</td>
+<td><code>1X-MCXz0DUzZxAhI3Y7aSogfzUvuqlw97</code></td>
+<td>hpcsa-blogs.co.za/wp-content/uploads/2022/08/Booklet-10_Telehealth_<em>Dec_2021</em>.pdf</td>
+<td><code>/home/adaptation/cipla-regs/HPCSA-Booklet-10-Telehealth.txt</code> (32 KB)</td>
+</tr>
+<tr class="odd">
+<td>ICSM .pdf</td>
+<td><code>1rWsTbAVT7c1A2Nrdg7FbYN07230kftzq</code></td>
+<td>knowledgehub.health.gov.za 2023-04 ICSM Manual</td>
+<td><code>/home/adaptation/cipla-regs/ICSM-Manual.txt</code> (207 KB)</td>
+</tr>
+<tr class="even">
+<td>Ideal Clinic &amp; Community Health Centre Facility Profile.pdf</td>
+<td><code>15zJJGmRXvneDrnEkCbix08lGy9kxdp6M</code></td>
+<td>bhekisisa.org/wp-content/uploads/2022/08/Ideal-Clinic-Community-Health-Centre-Facility-Profile-1.pdf</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-CHC-Facility-Profile.txt</code> (13 KB)</td>
+</tr>
+<tr class="odd">
+<td>Ideal Clinic Framework - Version 19_Updated May 2021.pdf</td>
+<td><code>12wFjZksFQjfadNIKsS3HFYHBBzhH0OVK</code></td>
+<td>knowledgehub.health.gov.za 2023-04 (Apr 2022 update — closest public to "May 2021")</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-Framework-V19.txt</code> (147 KB)</td>
+</tr>
+<tr class="even">
+<td>Integrated Clinical Services Management Manual.pdf</td>
+<td><code>1ukg_9Udz9K1bulDfMTFKdgVx1sv2ZQyl</code></td>
+<td>same as ICSM .pdf above (knowledgehub.health.gov.za 5th June FINAL)</td>
+<td>same as <code>/home/adaptation/cipla-regs/ICSM-Manual.txt</code></td>
+</tr>
+<tr class="odd">
+<td>National core standards .pdf</td>
+<td><code>11pSaW52BN1ybKzxH8f2Ebg3L9X4fOKzU</code></td>
+<td>static.pmg.org.za/docs/120215health_0.pdf</td>
+<td><code>/home/adaptation/cipla-regs/National-Core-Standards.txt</code> (87 KB)</td>
+</tr>
+<tr class="even">
+<td>National Infection Prevention and Control Practical Manual (Web version).pdf</td>
+<td><code>1OljW2JaLGQV7PAuuOCW1gdQP3gNdxIF0</code></td>
+<td>health.gov.za/wp-content/uploads/2020/11/practical-manual-for-implementation-of-the-national-ipc-strategic-framework-march-2020.pdf</td>
+<td><code>/home/adaptation/cipla-regs/IPC-Practical-Manual.txt</code> (372 KB)</td>
+</tr>
+<tr class="odd">
+<td>Record keeping HPCSA .docx</td>
+<td><code>1RGkqCGa8ld610y7TKgoF_pBUgCfQLVKB</code></td>
+<td>same as HPCSA Booklet 9 above</td>
+<td>same as Booklet 9 above</td>
+</tr>
+<tr class="even">
+<td>SANC-Competencies-Primary-Care-Nurse-Specialist.pdf</td>
+<td><code>1wstD6hxK-J-iRungRGynbQsfKTtEwz10</code></td>
+<td>sanc.co.za/wp-content/uploads/2020/06/SANC-Competencies-Primary-Care-Nurse-Specialist.pdf — <strong>Cloudflare-blocked, Tavily/Exa fail</strong></td>
+<td><strong>NOT YET INGESTED</strong> — pending Cipla Drive read access OR SANC unblock OR Cloudflare bypass via authenticated browser</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Email artefacts</strong> (full HTML + plain text in <code>/home/adaptation/cipla-regs/</code>):
+- <code>email-fw-julia-2026-05-06.html</code> / <code>.txt</code> — Julia → Willie (with Puni → Rameez nested below)
+- <code>email-re-dwayne-2026-05-06.html</code> / <code>.txt</code> — Dwayne's reply on the thread (containing the "next demo" timing line)
+- <code>email-REPLY-willie-2026-05-07.html</code> / <code>.txt</code> — Willie's "got it" reply</p>
+<p><strong>Reference repository (Puni's link):</strong> <code>https://knowledgehub.health.gov.za/e-library</code> — NDOH's full library of clinical guidelines, circulars, programme documents. Worth a separate ingest pass for PHC STG/EML 8th edition (2024), the AMR Framework 2018, and supporting protocols.</p>
+<h2 id="change-log">Change Log</h2>
+<ul>
+<li><strong>2026-05-08</strong> — Initial creation. Email forward from Julia (2026-05-06 23:38 UTC) ingested; 12 documents identified; 11 unique sources after de-duplication; 10 obtained from public sources, 1 (SANC PCNS) gated. Wiki page authored capturing regulatory landscape + Sha'p Left implementation impact. Cross-referenced into <code>cipla-mou-apr2026.md</code>, <code>tshikululu-master-agency-mou-may2026.md</code>, <code>cipla-opportunity-stack-may2026.md</code>, <code>shap-left-ambient-nurse-mvp-apr2026.md</code>. Implementation impact matrix identifies HPCSA registration of Tier 4 doctors + per-consult discharge note as the two biggest "this affects how we build" insights.</li>
+</ul>
+
+
+<hr />
+
+<h1 id="sa-regulatory-canvas-extended-may-2026">SA Regulatory Canvas — Extended (May 2026)</h1>
+<h2 id="why-this-page-exists">1. Why this page exists</h2>
+<p><code>concepts/cipla-sa-regulatory-bundle-may2026.md</code> covers the 12 documents Dr Punithasvaree Mamdoo (Cipla Foundation) sent on 6 May 2026 — the operational clinician picture. It is necessary but not sufficient for a CDSS / ambient-scribe production deployment. Three gaps remain:</p>
+<ol type="1">
+<li><strong>One gated document</strong> — <em>SANC Competencies for Primary Care Nurse Specialist (2014)</em> — not retrievable as a public PDF. Reconstructed here from adjacent SANC frameworks + Nursing Act §56(6) + Medicines Act §22A(15) + Regulations R.2418 / R.2598.</li>
+<li><strong>Cross-cutting non-health statutes</strong> binding a digital-health vendor regardless of clinical setting — POPIA, ECTA, RICA, PAIA, Children's Act, MHCA, CTOP.</li>
+<li><strong>SAHPRA Software-as-Medical-Device (SaMD) regime</strong> — what classifies ROSE / Sophia as a regulated SA product (vs. the HPCSA/SANC scope rules, which bind the <em>clinician</em>).</li>
+</ol>
+<p>Cached primary sources at <code>/home/adaptation/cipla-regs/extended-research/</code>. Pair with the Cipla bundle page; together they cover the SA-side canvas for the <strong>Cipla Foundation NPC pilot under the Tshikululu Master Regional Agency MoU</strong>.</p>
+<hr />
+<h2 id="sanc-pcns-section-566-deep-dive">2. SANC PCNS — Section 56(6) deep dive</h2>
+<h3 id="what-the-pcns-qualification-is">2.1 What the PCNS qualification is</h3>
+<p>The Primary Care Nurse Specialist (PCNS) is a SANC post-basic specialisation introduced in 2014 alongside the <em>Generic Competency Framework for Advanced Nurse Practitioners</em>, for the nurses who run PHC clinics — the cohort Sha'p Left employs. SANC's framing: "beyond a general nurse/midwife practitioner, there is need for the Advanced Practice Nurse within two levels, with the nurse specialist level requiring in-depth knowledge and expertise in a specific practice area and requiring a post-graduate diploma (PGD)". PCNS is the PHC-specific instance.</p>
+<p>The 2014 PCNS competencies PDF is <strong>gated on sanc.co.za</strong> behind Cloudflare. The Cipla Drive copy (Puni's bundle attachment 12) remains canonical. What follows is built from R.2598 (scope), R.2418 (medicine schedules), the SANC Generic ANP framework, Crowley et al. 2024 (<code>hsag.co.za/index.php/hsag/article/view/2582</code>) and the Genoa 2025 explainer.</p>
+<h3 id="the-two-legal-pathways-for-nurse-prescribing">2.2 The two legal pathways for nurse prescribing</h3>
+<p>There are <strong>two distinct legal pathways</strong> under which a SA nurse can prescribe medicine, and both are load-bearing for ROSE:</p>
+<p><strong>Pathway A — Nursing Act §56(6) permit</strong> (state sector concession, the core PCNS pathway):</p>
+<blockquote>
+<p>"Any nurse working in the state sector, or a designated organisation may be issued a permit allowing physical assessment, diagnosis of a 'physical defect, illness or deficiency', keeping, supplying, administering, and prescribing medicines." — Crowley et al. (2024) summarising §56(6) of the Nursing Act 33/2005</p>
+</blockquote>
+<p>Critically the section explicitly notes that "such acts are intended to be performed by nurses only if the services of a medical practitioner or pharmacist are not available" and operates <em>despite</em> the Medicines Act 101/1965, the Pharmacy Act 53/1974 and the Health Professions Act 56/1974 — i.e., it is a parallel authorisation, not a delegation from a doctor.</p>
+<p><strong>Pathway B — Medicines Act §22A(15) permit</strong> (organisational permit for stocking/dispensing):</p>
+<blockquote>
+<p>"the Director-General may, after consultation with the South African Pharmacy Council ... issue a permit to any person or organisation performing a health service, authorising such person or organisation to acquire, possess, use or supply any specified Schedule 1, Schedule 2, Schedule 3, Schedule 4 or Schedule 5 substance"</p>
+</blockquote>
+<p><strong>A nurse holding a §22A(15) permit is <em>not</em> an "authorised prescriber" and cannot issue prescriptions for dispensing at pharmacies.</strong> It lets nurses or organisations <em>stock and supply</em> — typical use is vaccines, contraception, family planning, home-based care. PCNS prescribing therefore comes from §56(6) plus R.2418 (below), not from §22A(15).</p>
+<h3 id="what-schedules-of-medicines-a-pcns-can-prescribe">2.3 What schedules of medicines a PCNS can prescribe</h3>
+<p>The operative regulation is <strong>R.2418 of 1984</strong> under the (then) Medicines Control Act, still in force: an authorised nurse may "keep, supply, administer or prescribe medicines containing substances listed in Schedule 0, Schedule 1, Schedule 2, Schedule 3 or Schedule 4." <strong>Schedules 5 and 6 are excluded</strong> — covers most antibiotics, antihypertensives, oral hypoglycaemics, contraceptives, ARVs (NIMART), TB regimens, antimalarials, basic analgesics, antenatal medicines; excludes opioid analgesia, strong psychotropics, controlled substances. Crowley et al. flag this as "a stumbling block for the psychiatric nurse and the nurse in palliative care". <strong>Operational rule for ROSE: PHC STG/EML 8th edition (2024) is the <em>de facto</em> nurse formulary</strong> — anything outside it must not appear in PCNS recommendations.</p>
+<h3 id="conditions-a-pcns-may-diagnose-and-manage-independently">2.4 Conditions a PCNS may diagnose and manage independently</h3>
+<p>No statutory list exists. §56(6) permits "physical assessment, diagnosis of a 'physical defect, illness or deficiency'" — Crowley et al. note this excludes mental-health diagnosis. Operational lists come from PHC STG/EML 2024 + Adult Primary Care (APC) + IMCI. PCNS-independent conditions: hypertension (init/titrate within target; escalate ≥180/110, end-organ damage, pregnancy), T2DM (metformin + SU; <strong>insulin → GP</strong>), asthma/COPD (salbutamol + ICS; severe → escalate), HIV under NIMART (TLD first-line; 2nd-line + paediatric init → GP), DS-TB, STI syndromic, antenatal BANC+, family planning + EC, common acute presentations (URTI, gastroenteritis, soft-tissue, headache, wounds).</p>
+<h3 id="mandatory-escalation-triggers-production-rule-set">2.5 Mandatory escalation triggers (production rule set)</h3>
+<p>PCNS must escalate when: (1) condition outside PHC STG/APC algorithms; (2) recommended medicine is Schedule 5 or 6; (3) investigation not performable at clinic (CT, advanced ECG, advanced bloods); (4) IMCI/APC red flag fires (severe paediatric pneumonia, eclampsia, sepsis, suspected MI/stroke); (5) minor under 12 without parent/guardian (Children's Act §129); (6) mental-health diagnosis (excluded from §56(6) "physical" wording). These belong in the ROSE rules engine as a hard gate.</p>
+<h3 id="the-sanc-authorisation-gap">2.6 The SANC authorisation gap</h3>
+<p>§22A(14) requires SANC to formally authorise nurses as prescribers. Crowley et al.: "currently, there is a notable absence of SANC guidelines or regulations overseeing the authorisation process for nurses to diagnose and prescribe". Prescribing happens daily in PHC clinics under §56(6) + R.2418 + PHC STG, but the SANC competency-register architecture is incomplete. ROSE should rely on <strong>employer-issued §56(6) permit + clinic-level §22A(15) permit + PHC-STG-bounded recommendations</strong> — not per-nurse SANC lookups.</p>
+<hr />
+<h2 id="popia-requirements-relevant-to-a-cdss">3. POPIA — requirements relevant to a CDSS</h2>
+<p>POPIA = Protection of Personal Information Act 4 of 2013, in force from 1 July 2021. Health information is <strong>special personal information</strong> under §26 — banned from processing unless a §27 exception applies (clinical-care ones do).</p>
+<p><strong>§19 Security safeguards</strong> — "A responsible party must secure the integrity and confidentiality of personal information ... by taking appropriate, reasonable technical and organisational measures to prevent (a) loss of, damage to or unauthorised destruction of personal information; and (b) unlawful access to or processing of personal information." §19(2): identify foreseeable risks, maintain + verify safeguards, update against new risks. <strong>For ROSE</strong>: encryption at rest + in transit, RBAC, audit logging, periodic pen-testing, documented ISMS. ISO 27001 not legally required but is the industry baseline; Tshikululu MoU v2.2 Article 18.5 references AES-256 + FIPS-grade KMS.</p>
+<p><strong>§21 Operator obligations</strong> — operator (cloud / sub-processor / AI vendor) must process only with responsible party's authority, treat data as confidential, maintain §19-equivalent security, be bound by written contract, and notify "immediately" on suspected breach. <strong>Botaniqal = operator for Cipla Foundation NPC (responsible party); Tshikululu = sub-processor under MoU Art 18.2.</strong></p>
+<p><strong>§22 Breach notification</strong> — "Where there are reasonable grounds to believe that the personal information of a data subject has been accessed or acquired by any unauthorised person, the responsible party must notify (a) the Regulator; and (b) ... the data subject." Statutory deadline: "as soon as reasonably possible". <strong>Tshikululu MoU Art 18.8 contractually shortens to 24 hours</strong> — operational deadline.</p>
+<p><strong>§26-27 Special personal information (health)</strong> — banned unless exception applies. Relevant: §27(1)(a) data-subject consent; §32(1) processing by registered health professional/institution for treatment + care. Both available at Sha'p Left; consent remains primary basis.</p>
+<p><strong>§71 Automated decision-making</strong> — prohibits decisions taken "solely on the basis of the automated processing of personal information intended to provide a profile" with legal effect, <strong>unless</strong> appropriate measures including right to make representations. <strong>ROSE recommendations must always be advisory</strong>: clinician-in-the-loop non-negotiable. PCNS, not ROSE, is decision-maker on the record.</p>
+<p><strong>§72 Trans-border data flow (AU ↔︎ SA)</strong> — export permitted only if: (a) recipient subject to law/BCRs/binding agreement giving "an adequate level of protection" with principles "substantially similar" to POPIA, (b) specific voluntary informed consent, (c) contract performance with data subject, (d) third-party contract in data subject's interest, or (e) data-subject benefit + impractical consent. <strong>Production target = (a)</strong>: AU Privacy Act 1988 + APPs accepted as substantially similar; binding agreement between AU parent + SA operator. Tshikululu MoU Art 18.4 default = SA-residency-by-default (eventual af-south-1 migration), at which point §72 stops biting.</p>
+<p><strong>§99 Administrative fines</strong> — up to <strong>ZAR 10,000,000</strong> per offence (or imprisonment up to 10 years for §107 offences). This is the penalty Article 18 of the Tshikululu MoU is sized against.</p>
+<hr />
+<h2 id="nha-mca-nursing-act-ecta-rica-paia-childrens-ctop-mhca">4. NHA / MCA / Nursing Act / ECTA / RICA / PAIA / Children's / CTOP / MHCA</h2>
+<p><strong>National Health Act 61/2003.</strong> §13 (confidentiality): "All information concerning a user, including information relating to his or her health status, treatment or stay in a health establishment, is confidential." Disclosure unlawful unless (a) written user consent, (b) court order / law, (c) non-disclosure = serious public-health threat. §14 (user responsibilities — accurate info, discharge/refusal sign-off). §15 (access by health workers — disclosure permitted within treating-circle "for any legitimate purpose within the ordinary course and scope of their duties where such access or disclosure is in the interests of the user"; §13 still applies outside that circle). §17 (head of facility duty to prevent unauthorised access — mirrors POPIA §19). §35-39 (facility tiers — drives ROSE referral logic, see Cipla bundle doc #2). §61 (discharge report — informs ROSE end-of-encounter summary).</p>
+<p><strong>Medicines and Related Substances Act 101/1965 — §22A.</strong> Schedules: 0 (general sales), 1-2 (pharmacist-supplied), 3-4 (prescription), 5 (benzodiazepines, weak opioids), 6 (morphine + strong controlled), 7-8 (research/restricted). PCNS scope under R.2418 = <strong>Schedules 0-4</strong>. §22A(15) = organisational stocking permit. §22C = SAHPRA establishment licence for SaMD manufacturers/importers (relevant to Botaniqal — see §5).</p>
+<p><strong>Nursing Act 33/2005.</strong> Covered above. §30 defines scope (further specified by R.2598/1984); §58-59 grant ministerial regulation-making power. PCNS sits at SANC's "Advanced Practice Nurse — Specialist" tier.</p>
+<p><strong>ECT Act 25/2002 — electronic transactions + signatures.</strong> §13: where "the signature of a person is required by law and such law does not specify the type of signature, that requirement in relation to a data message is met only if an advanced electronic signature is used." If NHA §13 requires written consent, ECTA §13 forces an <em>advanced</em> electronic signature (AES) created by an accredited authentication-service-provider under §37. §14-15: data messages = writing. <strong>Rule</strong>: support AES on consent + prescription artefacts, otherwise wet signature on paper. §43 consumer-protection: not load-bearing for the Cipla pilot.</p>
+<p><strong>RICA Act 70/2002 — interception + ambient recording.</strong> Exceptions relevant to ROSE ambient capture: §4 (party-to-communication — clinician is a party), §5 (prior written consent of any one party), §6 (course of business — brittle). <strong>Rule</strong>: ambient-scribe consent must be (a) written (paper or AES), (b) specific (names ROSE/Sophia, recording, retention), (c) voluntary (refusable without service denial), (d) informed (data flows, AU hosting, retention). One consent text satisfies POPIA §11, NHA §13, RICA §5 simultaneously.</p>
+<p><strong>PAIA Act 2/2000 — patient access requests.</strong> Constitutional §32 right; procedural mechanism = PAIA Form 2 (private body) / Form A (public). Botaniqal must (i) publish a PAIA Manual, (ii) designate an Information Officer (POPIA §55 dual role), (iii) route patient requests via Cipla / Sha'p Left clinic to Botaniqal as operator.</p>
+<p><strong>Children's Act 38/2005 §129.</strong> "A child may consent to his or her own medical treatment ... provided that the child is — (a) over the age of 12 years; and (b) of sufficient maturity and has the mental capacity to understand the benefits, risks, social and other implications of the treatment." Surgical procedures: 12+, mature, <em>and</em> parent/guardian-assisted. "Sufficient maturity" undefined — clinician judgement. <strong>Rule for ROSE</strong>: &lt; 12 → surface parent/guardian consent block; 12-17 → surface §129 maturity-assessment and require PCNS to record positive determination. §130 HIV testing: age 12, no surgical/maturity overlay — relevant to HCT flow.</p>
+<p><strong>CTOP Act 92/1996.</strong> "No consent other than that of the pregnant woman shall be required for the termination of a pregnancy." Practitioner / registered midwife must <em>advise</em> a pregnant minor to consult parent / guardian / family / friend — but cannot withhold termination if she declines. Confidentiality reinforced by Constitution + NHA §13. Tension with Criminal Law (Sexual Offences) Amendment Act mandatory-reporting where minor: ROSE must surface the conflict, not auto-disclose — clinician judgement.</p>
+<p><strong>Mental Health Care Act 17/2002.</strong> Governs confidentiality + involuntary admission (Forms MHCA 04, 05, 22 under §17-23). §56(6) Nursing Act explicitly excludes mental-health diagnosis; PCNS must escalate any positive PHQ-9 / suspected psychosis / acute risk to a medical practitioner. <strong>ROSE must never produce a final mental-health diagnosis as a PCNS-facing recommendation</strong> — flag screening positives + recommend referral only.</p>
+<hr />
+<h2 id="sahpra-samd-framework-likely-classification-of-rose">5. SAHPRA SaMD framework (likely classification of ROSE)</h2>
+<h3 id="the-framework-documents">5.1 The framework documents</h3>
+<ol type="1">
+<li><strong>SAHPGL-MD-04 v5</strong> (27 Feb 2025) — <em>Guideline for Classification of Medical Devices and IVDs</em>. Four-class system (A/B/C/D) + Rules 1-16 + IVD rules.</li>
+<li><strong>MD08-2025/2026</strong> (26 Sept 2025) — <em>Regulatory Requirements of AI/ML Enabled Medical Devices</em>. First formal SAHPRA position on AI/ML SaMD.</li>
+<li><strong>Regulation 1515 / GG 40480</strong> (9 Dec 2016) — General regulations for medical devices including IVDs (parent regulation).</li>
+</ol>
+<h3 id="the-classification-system">5.2 The classification system</h3>
+<p>Verbatim from SAHPGL-MD-04 v5: "Class A — Low risk / Class B — Low–moderate risk / Class C — Moderate–high risk / Class D — High risk — where risk relates to the patient or to public health". IMDRF-aligned: ~95 % portability if classified for FDA / EU MDR / TGA. Rules that matter for ROSE: Rule 10 (active diagnostic), Rule 12 (active general), IMDRF SaMD framework (called up by MD08).</p>
+<h3 id="where-rose-sophia-lands">5.3 Where ROSE / Sophia lands</h3>
+<p>MD08 is unambiguous about CDSS:</p>
+<blockquote>
+<p>"This includes but is not limited to AI/ML applications in: ... Clinical decision support systems (e.g., AI-driven diagnostic aids or treatment recommendation systems for healthcare professionals) ..."</p>
+</blockquote>
+<blockquote>
+<p>"In general, an AI software that is intended to drive or influence clinical decisions directly (and where such decisions could result in significant patient harm if incorrect) will likely fall into Class C or D (higher risk)."</p>
+</blockquote>
+<p><strong>ROSE Tier 1 CDSS at Sha'p Left = Class C SaMD minimum, possibly Class D.</strong> Influences PCNS decisions on R.2418-schedule prescribing + escalation; incorrect output could cause patient harm (wrong dose, missed escalation, missed red flag). Tier 4 Supervising Prescribing Authority (Cipla MoU 4-tier scope) = almost certainly Class D.</p>
+<h3 id="what-regulated-means-today-and-the-timing">5.4 What "regulated" means today — and the timing</h3>
+<blockquote>
+<p>"While SAHPRA has not commenced with product registration of medical devices and IVDs as per regulation 8 of the general regulations for medical devices including IVDs (Regulation No. 1515 ... 9 December 2016), the rapid advancement and adoption of such technologies necessitate proactive engagement ..."</p>
+</blockquote>
+<blockquote>
+<p>"any person or company intending to import, manufacture and market such a product in South Africa shall apply to the Authority for a medical device establishment licence issued under Section 22C of the Medicines and Related Substances Act 101 of 1965 ..."</p>
+</blockquote>
+<p><strong>Takeaway</strong>: SAHPRA has not yet "called up" device registration — ROSE doesn't need full SAHPRA registration today. But Botaniqal <strong>does need a §22C establishment licence</strong> + must list ROSE on it. When SAHPRA calls up the class (expected within 2025-2030 strategic plan), full registration becomes required: IMDRF-aligned technical file, QMS to ISO 13485, software lifecycle to IEC 62304, risk to ISO 14971.</p>
+<h3 id="the-five-md08-guiding-principles-active-today-regardless-of-registration-status">5.5 The five MD08 guiding principles (active today regardless of registration status)</h3>
+<ol type="1">
+<li><strong>Patient safety + risk management</strong> — software-engineering rigour, failure-mode analysis, human-in-the-loop fallback. (2) <strong>Transparency + explainability</strong> — document how AI decides, intended use, limits, uncertainty; users get rationale for recommendations (Sophia's quote-grounding maps cleanly). (3) <strong>Cybersecurity + data integrity + privacy</strong> — POPIA compliance, pseudonymisation, informed consent. (4) <strong>Performance monitoring + adaptability</strong> — drift detection, controls on continuous learning, safety-preserving updates. (5) <strong>Clinical evaluation + performance</strong> — independent test datasets, subgroup analyses (sex/age/ethnicity), real-world metrics.</li>
+</ol>
+<p>ROSE's benchmark testing process (Goal A 4-Claude Byzantine consensus + Goal B citation-disciplined errata + Goal C category-iterating fixes) answers (1), (2), (4), (5). Cybersecurity (3) needs explicit SOC 2 / ISO 27001 trajectory (mirrors Tshikululu MoU 18.5).</p>
+<hr />
+<h2 id="phc-stg-eml-8th-edition-2024-tier-1-scope">6. PHC STG / EML 8th edition (2024) — Tier 1 scope</h2>
+<p>Source: NDOH PHC STG/EML 8th edition (2024), updated Dec 2025. Aligned with 2024 Adult Hospital Level + 2023 Paediatric Hospital Level STGs and NDOH Programmatic Guidelines. Chapters that govern ROSE Tier 1 + in/out-of-scope mapping for §56(6):</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>PHC STG chapter</th>
+<th>Condition</th>
+<th>In-PCNS-scope (R.2418 §0-4)?</th>
+<th>Notes for ROSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>Hypertension</td>
+<td>Yes — HCTZ, ACEi/ARB, CCB, β-blocker step-up</td>
+<td>Stage 3 / urgency / pregnancy → escalate</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Type 2 diabetes</td>
+<td>Yes for metformin + SU; <strong>insulin needs GP</strong></td>
+<td>HbA1c-driven titration in scope; DKA out</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>HIV (NIMART)</td>
+<td>Yes — TLD first-line, viral-load monitoring</td>
+<td>2nd-line + paediatric init → GP</td>
+</tr>
+<tr class="even">
+<td>TB programme</td>
+<td>DS-TB</td>
+<td>Yes — initiation + continuation phase</td>
+<td>MDR/XDR → specialist</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>STI syndromic</td>
+<td>Yes — ceftriaxone IM + doxycycline + metronidazole</td>
+<td>Refractory → GP</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>Asthma / COPD</td>
+<td>Yes — salbutamol + ICS step-up</td>
+<td>Severe acute → emergency referral</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>URTI / acute resp</td>
+<td>Yes — symptomatic + amoxicillin where indicated</td>
+<td>CAP severity → escalate</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Gastroenteritis</td>
+<td>Yes — ORS + zinc; antibiotics only if dysentery</td>
+<td>Severe dehydration → escalate</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>Headache</td>
+<td>Yes — paracetamol, ibuprofen; sumatriptan <strong>Schedule 4 — at PCNS limit</strong></td>
+<td>Red flags → CT / GP</td>
+</tr>
+<tr class="even">
+<td>Antenatal (BANC+)</td>
+<td>Routine pregnancy</td>
+<td>Yes — iron, folate, calcium, anti-D</td>
+<td>Obstetric red flags → escalate</td>
+</tr>
+<tr class="odd">
+<td>Family planning</td>
+<td>Contraception</td>
+<td>Yes — COC, POP, DMPA, IUCD per R.2418</td>
+<td>Sterilisation → GP / specialist</td>
+</tr>
+<tr class="even">
+<td>Paediatric IMCI</td>
+<td>Acute child</td>
+<td>Yes — IMCI algorithm</td>
+<td>Severe pneumonia / dehydration → escalate</td>
+</tr>
+<tr class="odd">
+<td>Mental health screen</td>
+<td>PHQ-9 / GAD-7</td>
+<td><strong>No</strong> — §56(6) excludes mental diagnosis</td>
+<td>Screen + refer</td>
+</tr>
+<tr class="even">
+<td>Pain</td>
+<td>Step-1 / Step-2 mild</td>
+<td>Paracetamol, ibuprofen, codeine combos = Schedule 2/3</td>
+<td><strong>Schedule 5 morphine = out</strong></td>
+</tr>
+</tbody>
+</table>
+<p>This table belongs in the rules engine as the canonical Tier 1 in-scope set. Anything outside it routes to the Tier 4 Supervising Prescribing Authority module (or to a human GP) under the Cipla MoU's 4-tier scope.</p>
+<hr />
+<h2 id="notifiable-medical-conditions-list-reporting">7. Notifiable Medical Conditions list + reporting</h2>
+<p><strong>Legal basis</strong>: NHA: <em>Regulations relating to the Surveillance and Control of Notifiable Medical Conditions</em>, GN R.1434 of 15 Dec 2017; disease list updated by NICD (most recent Dec 2024).</p>
+<p><strong>Categories + timelines</strong> (NICD four-category system):
+- <strong>Category 1</strong> — immediate by rapid means (phone / NMC app), then written within 24 h. Examples (Dec 2024): Anthrax, AFP, Cholera, CCHF, Diphtheria, Ebola/Marburg, EHEC, Food-borne outbreak, Hib, Measles, Meningococcal, Mpox, Plague, Polio, Rabies (human), Novel respiratory pathogen, Rift Valley fever, Smallpox, Typhoid, VHF, Yellow fever.
+- <strong>Category 2</strong> — written/electronic within 7 days. Examples: most TB forms, congenital rubella, hepatitis A/B/C, lead/mercury poisoning, legionellosis, listeriosis, malaria, MDR/XDR-TB, paratyphoid, pertussis, salmonellosis, shigellosis, tetanus, brucellosis, leprosy.
+- <strong>Category 3</strong> — monthly aggregate surveillance.
+- <strong>Category 4</strong> — laboratory-only confirmed (HIV goes through DHIS2 / TIER.Net, not NMC).</p>
+<p><strong>Reporting mechanism</strong>: canonical = <strong>NMC mobile app</strong> (2017+, Android/iOS) → NICD electronic NMC database. Fallbacks: GW17/5 paper Notification Form → local CDC Co-ordinator + provincial DoH; email to NICD Notifiable Conditions desk.</p>
+<p><strong>Rule for ROSE</strong>: when a Category 1 condition is on the differential, surface a reminder banner ("Category 1 NMC — notify within 24 h via NMC app or CDC Coordinator"). ROSE must not auto-submit — duty is on clinician + facility, not the SaMD vendor.</p>
+<hr />
+<h2 id="cross-border-popia-72-routes-for-au-sa">8. Cross-border POPIA §72 routes for AU ↔︎ SA</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>§72 route</th>
+<th>Trigger</th>
+<th>Evidence Botaniqal needs</th>
+<th>Practical fit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(a) Adequacy + binding agreement</td>
+<td>Recipient subject to law/BCRs/binding contract giving "substantially similar" protection</td>
+<td>Cross-border DPA AU parent ↔︎ SA operator; counsel opinion on Privacy Act 1988 + APPs equivalence</td>
+<td><strong>Primary basis</strong></td>
+</tr>
+<tr class="even">
+<td>(b) Consent</td>
+<td>Specific, voluntary, informed</td>
+<td>Consent text covering AU hosting + retention</td>
+<td>Belt-and-braces</td>
+</tr>
+<tr class="odd">
+<td>(c) Contract performance with data subject</td>
+<td>Patient = contracting party</td>
+<td>Weak (Cipla NPC pays)</td>
+<td>Not load-bearing</td>
+</tr>
+<tr class="even">
+<td>(d) Third-party contract in data-subject's interest</td>
+<td>Cipla MoU + Service Agreements arguably qualify</td>
+<td>Secondary basis</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>(e) Benefit + impractical consent</td>
+<td>Emergency only</td>
+<td>Sha'p Left consent is collectable</td>
+<td>Not load-bearing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No statutory SA SCCs exist as at May 2026</strong> — Information Regulator publishes guidance notes only (most recent 2024). Botaniqal should: maintain a <strong>§21 DPA</strong> with Cipla; maintain a <strong>§72(a) cross-border transfer addendum</strong> modelled on EU SCCs; plan <strong>af-south-1 migration</strong> per Tshikululu MoU 18.4 — once at-rest data is in SA, §72 stops biting. The Information Regulator's <strong>draft Code of Conduct for Health Research</strong> (re-circulated 2024 in SA Journal of Bioethics &amp; Law) will become the sectoral code when finalised — subscribe + comply.</p>
+<hr />
+<h2 id="references-citations">9. References + citations</h2>
+<p>Primary sources cached at <code>/home/adaptation/cipla-regs/extended-research/</code>:
+- <code>SAHPGL-MD-04_v5_classification.txt</code> — SAHPRA Classification Guideline (Feb 2025)
+- <code>SAHPRA-MD08-AI-Communication.txt</code> — SAHPRA AI/ML SaMD requirements (Sept 2025)
+- <code>SAHPGL-CEM-NS-04_scheduling.txt</code> — SAHPRA scheduling for non-medical prescribers (May 2022)</p>
+<p>Public sources used:
+- Crowley T, Mokoka E, Gray A. <em>Nurse prescribing and dispensing in South Africa: Gaps in the current legislative framework.</em> Health SA Gesondheid (2024). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11219604/">PMC11219604</a>
+- Genoa Healthcare Capital. <em>Nurse and Pharmacist Prescribing Laws in South Africa.</em> (October 2025). <a href="https://genoa.co.za/2025/10/02/prescribing-south-africa-nurses-pharmacists/">genoa.co.za</a>
+- POPIA Act 4 of 2013. <a href="https://www.saflii.org/za/legis/consol_act/popia4o2013399/">SAFLII consolidated</a> and <a href="https://popia.co.za/">popia.co.za section browser</a>
+- National Health Act 61 of 2003. <a href="https://www.saflii.org/za/legis/consol_act/nha2003147/">SAFLII consolidated</a>
+- Medicines and Related Substances Act 101 of 1965. <a href="https://www.sahpra.org.za/wp-content/uploads/2019/09/Medicines-and-Related-Substances-Act_101-of-1965_Act_GG-40869_2017-05-26.pdf">SAHPRA reprint</a>
+- ECT Act 25 of 2002. <a href="https://www.saflii.org/za/legis/consol_act/ecata2002427/">SAFLII consolidated</a>
+- RICA Act 70 of 2002. <a href="https://www.saflii.org/za/legis/consol_act/roiocapocia2002943/">SAFLII consolidated</a>
+- Children's Act 38 of 2005. <a href="https://www.justice.gov.za/legislation/acts/2005-038%20childrensact.pdf">Justice Department PDF</a>
+- CTOP Act 92 of 1996. <a href="https://www.saflii.org/za/legis/consol_act/cotopa1996325/">SAFLII</a>
+- Mental Health Care Act 17 of 2002. <a href="https://www.justice.gov.za/legislation/acts/2002-017_mentalhealthcare.pdf">Justice Department PDF</a>
+- PAIA Act 2 of 2000. <a href="https://inforegulator.org.za/paia/">Information Regulator PAIA portal</a>
+- NICD NMC Disease List (December 2024). <a href="https://www.nicd.ac.za/wp-content/uploads/2024/12/NMC_DiseaseList_December2024.pdf">NICD PDF</a>
+- NDOH PHC STG/EML 8th edition (2024, updated December 2025). <a href="https://www.health.gov.za/wp-content/uploads/2025/12/Primary-Healthcare-Standard-Treatment-Guidelines-and-Essential-Medicines-List-8th-Edition-2024-Updated-December-2025.pdf">NDOH PDF</a>
+- SANC Generic Competency Framework for Advanced Nurse Practitioners (May 2014) — referenced via <a href="https://www.sanc.co.za/professional-practice/">sanc.co.za/professional-practice</a> (PDF gated).
+- SANC R.2418 (medicine schedules nurses may prescribe, 1984) — referenced via <a href="https://www.sanc.co.za/r-2418/">sanc.co.za/r-2418</a>.
+- SANC R.2598 (scope of practice of registered/enrolled nurses, 1984) — referenced via <a href="https://www.sanc.co.za/r-2598/">sanc.co.za/r-2598</a>.
+- Information Regulator (SA). <em>Cross-border data transfers and PoPIA</em> — Crux Compliance summary; <a href="https://popia.co.za/section-72-transfers-of-personal-information-outside-republic/">popia.co.za §72</a>.
+- Dentons. <em>Cross-border data transfers under POPIA</em> (October 2022). <a href="https://www.dentons.com/en/insights/articles/2022/october/13/cross-border-data-transfers-under-the-protection-of-personal-information-act-4-of-2013">dentons.com</a>.</p>
+<p>Outstanding gap: SANC PCNS Competencies (2014) verbatim text. The Cipla Drive copy is canonical until SANC unblock the PDF on sanc.co.za. Suggested next step: ask Puni for a re-share via Tshikululu data-room (<code>ltdlabs.sharepoint.com/sites/Agentic-AI-Doctor-DataRoom-Lite</code>) where it can sit alongside the rest of the SA regulatory canvas.</p>
+
+  </article>
+  <aside class="chapter-sidebar">
+  <div class="sidebar-eyebrow">On this page</div>
+  <ul>
+  <li><a href="#apex-law-tree" class="h2">D2 · Apex law tree</a></li>
+  <li><a href="#popia-sequence" class="h2">D3 · §72 cross-border flow</a></li>
+  <li><a href="#why-this-bundle-exists" class="h2">Why this bundle exists</a></li>
+  <li><a href="#the-12-documents-at-a-glance" class="h2">The 12 documents at a glance</a></li>
+  <li><a href="#document-deep-dives" class="h2">Document deep-dives</a></li>
+  <li><a href="#sanc-code-of-ethics-for-nursing-practitioners-in-south-africa-2013-current" class="h3">1. SANC Code of Ethics for Nursing Practitioners in South Africa (2013, current)</a></li>
+  <li><a href="#national-health-act-regulations-categories-of-hospitals-gg-r.185-2-march-2012" class="h3">2. National Health Act Regulations: Categories of Hospitals (GG R.185, 2 March 2012)</a></li>
+  <li><a href="#hpcsa-booklet-9-guidelines-on-the-keeping-of-patient-records-2016-nov-2022-revision" class="h3">3. HPCSA Booklet 9: Guidelines on the Keeping of Patient Records (2016, Nov 2022 revision)</a></li>
+  <li><a href="#hpcsa-booklet-10-ethical-guidelines-for-good-practice-in-telehealth-december-2021-revised" class="h3">4. HPCSA Booklet 10: Ethical Guidelines for Good Practice in Telehealth (December 2021, revised)</a></li>
+  <li><a href="#ndoh-integrated-clinical-services-management-icsm-manual" class="h3">5+8. NDOH Integrated Clinical Services Management (ICSM) Manual</a></li>
+  <li><a href="#ndoh-ideal-clinic-community-health-centre-facility-profile" class="h3">6. NDOH Ideal Clinic &amp;amp; Community Health Centre Facility Profile</a></li>
+  <li><a href="#ideal-clinic-framework-version-19-april-2022-update-puni-cites-may-2021" class="h3">7. Ideal Clinic Framework Version 19 (April 2022 update; Puni cites May 2021)</a></li>
+  <li><a href="#national-core-standards-for-health-establishments-in-south-africa-2011" class="h3">9. National Core Standards for Health Establishments in South Africa (2011)</a></li>
+  <li><a href="#ndoh-national-infection-prevention-and-control-practical-manual-march-2020" class="h3">10. NDOH National Infection Prevention and Control Practical Manual (March 2020)</a></li>
+  <li><a href="#sanc-competencies-for-the-primary-care-nurse-specialist-2014" class="h3">12. SANC Competencies for the Primary Care Nurse Specialist (2014)</a></li>
+  <li><a href="#synthesis-regulatory-map" class="h2">Synthesis: regulatory map</a></li>
+  <li><a href="#implementation-impact-matrix" class="h2">Implementation impact matrix</a></li>
+  <li><a href="#open-questions-clarifications-needed-from-cipla" class="h2">Open questions / clarifications needed from Cipla</a></li>
+  <li><a href="#cross-references" class="h2">Cross-references</a></li>
+  <li><a href="#document-locations" class="h2">Document Locations</a></li>
+  <li><a href="#change-log" class="h2">Change Log</a></li>
+  <li><a href="#why-this-page-exists" class="h2">1. Why this page exists</a></li>
+  <li><a href="#sanc-pcns-section-566-deep-dive" class="h2">2. SANC PCNS — Section 56(6) deep dive</a></li>
+  <li><a href="#what-the-pcns-qualification-is" class="h3">2.1 What the PCNS qualification is</a></li>
+  <li><a href="#the-two-legal-pathways-for-nurse-prescribing" class="h3">2.2 The two legal pathways for nurse prescribing</a></li>
+  <li><a href="#what-schedules-of-medicines-a-pcns-can-prescribe" class="h3">2.3 What schedules of medicines a PCNS can prescribe</a></li>
+  <li><a href="#conditions-a-pcns-may-diagnose-and-manage-independently" class="h3">2.4 Conditions a PCNS may diagnose and manage independently</a></li>
+  <li><a href="#mandatory-escalation-triggers-production-rule-set" class="h3">2.5 Mandatory escalation triggers (production rule set)</a></li>
+  <li><a href="#the-sanc-authorisation-gap" class="h3">2.6 The SANC authorisation gap</a></li>
+  <li><a href="#popia-requirements-relevant-to-a-cdss" class="h2">3. POPIA — requirements relevant to a CDSS</a></li>
+  <li><a href="#nha-mca-nursing-act-ecta-rica-paia-childrens-ctop-mhca" class="h2">4. NHA / MCA / Nursing Act / ECTA / RICA / PAIA / Children&#x27;s / CTOP / MHCA</a></li>
+  <li><a href="#sahpra-samd-framework-likely-classification-of-rose" class="h2">5. SAHPRA SaMD framework (likely classification of ROSE)</a></li>
+  <li><a href="#the-framework-documents" class="h3">5.1 The framework documents</a></li>
+  <li><a href="#the-classification-system" class="h3">5.2 The classification system</a></li>
+  <li><a href="#where-rose-sophia-lands" class="h3">5.3 Where ROSE / Sophia lands</a></li>
+  <li><a href="#what-regulated-means-today-and-the-timing" class="h3">5.4 What &quot;regulated&quot; means today — and the timing</a></li>
+  <li><a href="#the-five-md08-guiding-principles-active-today-regardless-of-registration-status" class="h3">5.5 The five MD08 guiding principles (active today regardless of registration status)</a></li>
+  <li><a href="#phc-stg-eml-8th-edition-2024-tier-1-scope" class="h2">6. PHC STG / EML 8th edition (2024) — Tier 1 scope</a></li>
+  <li><a href="#notifiable-medical-conditions-list-reporting" class="h2">7. Notifiable Medical Conditions list + reporting</a></li>
+  <li><a href="#cross-border-popia-72-routes-for-au-sa" class="h2">8. Cross-border POPIA §72 routes for AU ↔︎ SA</a></li>
+  <li><a href="#references-citations" class="h2">9. References + citations</a></li>
+  </ul>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+<script>
+(function () {
+  // Wait for mermaid to be available, then init
+  function init() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#d4e8df',
+          primaryBorderColor: '#00633c',
+          primaryTextColor: '#00422a',
+          lineColor: '#00633c',
+          fontFamily: '-apple-system, "Inter", sans-serif'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

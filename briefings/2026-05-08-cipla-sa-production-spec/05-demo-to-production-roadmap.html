@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 05 — Demo→Production Roadmap + Risk Register · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 05 · Production Spec · 2026-05-08</div>
+    <h1 class="title">Demo→Production Roadmap + Risk Register</h1>
+    <p class="subtitle">6-phase ladder, SAHPRA pathway, af-south-1 migration, doctor credentialing, QMS, 55-risk register, pre-production checklist (~85 items), and the 15 open decisions.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Source: <code style="background:rgba(255,255,255,0.18);color:white;">wiki/concepts</code></span>
+      <span class="pill warn"><span class="dot"></span>Cipla MoU V1.3 + Tshikululu MoU v2.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+<h1 id="shap-left-ambient-nurse-demoproduction-transition-plan-risk-register">Sha'p Left Ambient Nurse — Demo→Production Transition Plan + Risk Register</h1>
+<p>Operational bridge between the 24 May 2026 synthetic-data demo and the multi-jurisdiction SADC platform contemplated in the Tshikululu Master Regional Agency MoU. Reader assumed across the SRS, rubric (G1/G2/G3 gates), Cipla MoU V1.3, Tshikululu MoU v2.2, and the SA regulatory canvas + Cipla 12-doc bundle.</p>
+
+<h2 id="gantt">D9 · 6-phase Gantt timeline</h2>
+<p>The full 6-phase ladder + AusHealth (Phase A) and SAHPRA (parallel) tracks visualised across May 2026 → 2028+. Bars are calendar-time only; resourcing constraints and Definitive-Agreement dependencies are described in the Phase Ladder table below.</p>
+<div class="mermaid">
+gantt
+    title 6-phase roadmap (May 2026 → 2028+)
+    dateFormat YYYY-MM-DD
+    axisFormat %b '%y
+    section Phase 0
+    Demo to Cipla :p0, 2026-05-24, 1d
+    section Phase 1
+    30-day SCGP :after p0, 30d
+    section Phase 2
+    11-clinic Cipla rollout :p2, 2026-09-01, 90d
+    af-south-1 migration :2026-09-15, 60d
+    SAHPRA pre-submission :2026-10-01, 90d
+    section Phase 3
+    Tshikululu Definitive Agreements :p3, 2026-12-01, 180d
+    50-clinic by 2029 :2027-06-01, 540d
+    section Phase 4
+    SADC roll-out (BW/SZ/LS) :p4, 2027-06-01, 365d
+    section Phase 5
+    Continental Africa optionality :p5, 2028-06-01, 365d
+    section Parallel
+    AusHealth Series A close :ah, 2026-08-01, 60d
+    SAHPRA Class C authorisation :saph, 2027-06-01, 365d
+</div>
+
+<hr />
+<h2 id="the-phase-ladder">1. The Phase Ladder</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>Window</th>
+<th>Scope</th>
+<th>Regulatory milestones</th>
+<th>Technical milestones</th>
+<th>Commercial milestones</th>
+<th>Exit criteria → next phase</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0 — Demo</strong></td>
+<td>24 May 2026 SAST + ~3wk tail</td>
+<td>Synthetic-only ambient nurse station, single tenant, AU <code>ap-southeast-2</code>, demo banner, employee-played personas</td>
+<td>Outside SAHPRA (synthetic ≠ "use"); outside POPIA §26; RICA one-party consent (employee release); demo-disclaimer slide</td>
+<td>G1 per rubric §6: e2e Thandi/HIV/Dora, Scribe v1, panel &lt;8s, SOAP+handout, override+reason, audit log, Playwright-validated on DEV</td>
+<td>V1.3 Cipla MoU executed; Tshikululu v2.2+ executed (post 12-13 May board); Phase 1 DPA scoping started</td>
+<td>Cipla Definitive Pilot Agreement (MoU 3.1.4); Tshikululu DAs drafted; pricing locked ZAR 7.8M/2 pods; POPIA DPA signed (Cipla 9.3 + Tshikululu 18.3); SAHPRA pre-submission scheduled</td>
+</tr>
+<tr class="even">
+<td><strong>1 — 30-day SCGP</strong></td>
+<td>Jun–Jul 2026 (Cipla Stage 4)</td>
+<td>2 pods, ~40 PCNS, ~2,400 real-supervised consults, single SA-Customer tenant, AU AWS + §72(a) DPA + scheduled <code>af-south-1</code> migration</td>
+<td>SAHPRA §22C licence filed (Cipla licence-holder per Cipla MoU V1.3 Art 10); SAHPRA pre-submission held; HPCSA Booklet 20 cultural-appropriateness baseline; 24h breach IR runbook; PAIA Manual + Information Officer</td>
+<td>G2 per rubric §7: 100% field check, kappa ≥0.7, zero FN critical, uptime ≥99%, LS ≤60s, encryption envelope verified, immutable audit 7yr, override+reason every rec; Brandmed BD push</td>
+<td>DPA signed; pricing invoiced (ZAR 7.8M); Tshikululu Year-1 reporting; pod onboarding + training; Dr Puni SCGP cohort sign-off</td>
+<td>All 4 domains G2; zero unrecovered breaches; zero §56(6) breaches; Cipla approves 11-clinic expansion; §22C licence in hand; FN Capital DD + first tranche</td>
+</tr>
+<tr class="odd">
+<td><strong>2 — 11-clinic Cipla rollout</strong></td>
+<td>Q4 2026 → Q2 2027</td>
+<td>11 surgeries + 50 Daplapmeds, ~3,500–4,500 pts/mo, multi-clinic isolation, Tier 1 prod + Tier 2 SMS/USSD prototype, <code>af-south-1</code> primary</td>
+<td>SAHPRA Class C provisional OR Section 21 analogue active; HPCSA Booklet 9 §12 attestation; SANC §56(6) per-clinic register; CCMDD certified</td>
+<td>Multi-tenant <code>clinic_id</code>; <code>af-south-1</code> primary + <code>ap-southeast-2</code> warm DR; CRR; Brandmed handoff; Tier 2 SMS/USSD live (isiZulu); Tier 3 surveillance dashboard; Nemotron Phase 1 (English batch parity); doctor credentialing scaffold</td>
+<td>Phase 2 invoiced (engineering estimate: 11 clinics × ZAR 350–450K/yr = ZAR 3.85–4.95M/yr); Tshikululu Year-1 MPTs baselined; AusHealth Series A close (or alt VC); SDK savings reflected in COGS</td>
+<td>Rubric §8 G3 stretch met across 11 clinics; Tier 2 Cipla acceptance; ≥90d zero Cat-A; SADC groundwork started (BW/SZ/LS); Tshikululu DAs signed</td>
+</tr>
+<tr class="even">
+<td><strong>3 — Tshikululu DAs + 50-clinic by 2029</strong></td>
+<td>Q3 2027 → 2029</td>
+<td>50 SA clinics + Tier 4 live; <code>af-south-1</code> matured; HPCSA SA doctor seats staffed</td>
+<td>Tier 4 Class D registration filed (canvas §5.3); HPCSA Booklet 10 §5.1 100% Tier 4 coverage; Code of Conduct for Health Research compliance</td>
+<td>Tier 4 doctor view + countersign + audit attribution; Tier 4 SLA monitoring; Nemotron Phase 2 (streaming) + Phase 3 (fine-tune); closed-loop handover (Teams/SMS + DCST/WBPHCOT); AU Class III evidence threshold reached</td>
+<td>Tshikululu revenue-share live (Art 11); OECD transfer pricing; FN Capital Series A closed; Cipla expansion to 50-clinic envelope</td>
+<td>50-clinic SA stable; Tier 4 zero patient-harm; ≥1 SADC pilot successful; ISO 27001 + 27018 certified</td>
+</tr>
+<tr class="odd">
+<td><strong>4 — SADC rollout</strong></td>
+<td>2027–2028</td>
+<td>BW/SZ/LS first, ~5–10 clinics each (engineering estimate), Tier 1+2+3 portable, <code>clinic_country</code> boundary</td>
+<td>Per-country medicines regulator (Botswana DRA, Eswatini MoH, Lesotho FCD); local DPAs (BW DPA 2018, SZ DPA 2022, LS DPA 2011); §72 + reciprocal agreements</td>
+<td>Country-agnostic guideline adapter; <code>clinic_country</code> routing; multi-jurisdictional consent template; ASR Setswana/siSwati/Sesotho (Lelapa InkubaLM track)</td>
+<td>Tshikululu sub-agency country-level partners; per-country Customer DPAs; HPCSA-equivalent doctor pool (or remote SA-doctor with local recognition); local affordability + grant-funded pricing</td>
+<td>Core 3 SADC stable; ≥6mo zero Cat-A across SADC; learnings codified for non-SADC</td>
+</tr>
+<tr class="even">
+<td><strong>5 — Continental optionality</strong></td>
+<td>2028+</td>
+<td>Optionality, not commitment. Targets KE/NG/GH; ECOWAS + EAC frameworks</td>
+<td>AMA continental harmonisation watch; per-country regulator; Malabo Convention ratification per country</td>
+<td>Continental <code>clinic_region</code>; guideline + formulary adapters; per-region inference (af-south-1 + eu-west / Equinix / Cassava regional)</td>
+<td>Cipla Africa + Tshikululu sub-agents + donor-funded layers (Gates, USAID transitions, AfDB, Norad)</td>
+<td>Out of scope. Phase 5 = upside.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase nuance.</strong> Phase 0 = informational hygiene only (banner + employee release + verbal consent), not authorisation. Phase 1 starts the regulatory clock — §22C establishment licence (Cipla as licence-holder per Cipla MoU V1.3 Article 10) is the gating instrument, even though SAHPRA hasn't called up device registration yet. Phase 2 is the data-residency cliff: synthetic carve-out lapses, <code>af-south-1</code> migration becomes load-bearing, Tier 2 multilingual triage moves from prototype to production. Phase 3 introduces Tier 4 (Cipla MoU V1.3 clause 2.1) — re-classifies platform from Class C to Class D under MD08-2025/2026 §5.3 and makes HPCSA Booklet 10 §5.1 doctor credentialing a hard gate. Phase 4 ships outside the canvas it was built against — bottom-up per-country regulatory work. Phase 5 = optionality; no engineering or capital commitment ahead of Phase 4 evidence.</p>
+<hr />
+<h2 id="sahpra-samd-pathway">2. SAHPRA SaMD Pathway</h2>
+<p>ROSE Tier 1 = <strong>Class C</strong> under MD08-2025/2026 §5.3 (CDSS driving clinical decisions where wrong output could cause significant harm). Tier 4 = <strong>Class D</strong> (supervising prescribing authority above PCNS independent scope). SAHPRA hasn't commenced product registration under Regulation 1515 / GG 40480, but expects §22C establishment licence + MD08 five-principles compliance today.</p>
+<h3 id="pre-submission-engagement-strategy">2.1 Pre-submission engagement strategy</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>When</th>
+<th>What</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0→P1 (Jun)</td>
+<td>SAHPRA Medical Devices pre-submission request; IMDRF intended-use; TGA Three Criteria adjacent precedent</td>
+<td>Reg + Cipla</td>
+</tr>
+<tr class="even">
+<td>P1 (Jun–Jul)</td>
+<td>§22C licence filed (Cipla licence-holder per V1.3 Art 10); ROSE listed</td>
+<td>Cipla legal + Bot</td>
+</tr>
+<tr class="odd">
+<td>P1 exit (Aug)</td>
+<td>Section 21 unregistered-access analogue requested; "research/SCGP" framing</td>
+<td>Cipla + Reg</td>
+</tr>
+<tr class="even">
+<td>P2 (Q4 2026)</td>
+<td>Class C provisional technical file submitted</td>
+<td>Reg</td>
+</tr>
+<tr class="odd">
+<td>P3 (Q3 2027)</td>
+<td>Class D registration filed for Tier 4</td>
+<td>Reg</td>
+</tr>
+<tr class="even">
+<td>P4 (2028)</td>
+<td>Per-country regulators (Botswana DRA, Eswatini MoH, Lesotho FCD); AMA watch</td>
+<td>Reg + Tsh</td>
+</tr>
+</tbody>
+</table>
+<h3 id="technical-file-content-class-c-class-d">2.2 Technical file content (Class C → Class D)</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Content</th>
+<th>Owner</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Device description + IFU</td>
+<td>Tier 1 (SOAP+CDSS+handout); Tier 4 (supervising authority); modular per TGA exemption doc</td>
+<td>Product + Reg</td>
+<td>2 wk</td>
+</tr>
+<tr class="even">
+<td>SW lifecycle</td>
+<td>IEC 62304 Class B/C evidence (planning, requirements, arch, test, config, problem-resolution)</td>
+<td>Eng + Reg</td>
+<td>6 mo across P1–2</td>
+</tr>
+<tr class="odd">
+<td>Risk mgmt</td>
+<td>ISO 14971 file; FMEA + hazard + risk-control; trace to PHC STG/EML</td>
+<td>Eng + Reg</td>
+<td>8 wk</td>
+</tr>
+<tr class="even">
+<td>Clinical evaluation</td>
+<td>SCGP cohort + literature + benchmark Goal A/B/C</td>
+<td>Clin + Reg</td>
+<td>12 wk in P1–2</td>
+</tr>
+<tr class="odd">
+<td>Performance validation</td>
+<td>Per-language ASR; differential top-3 hit-rate; red-flag sensitivity; subgroup (age/sex/lang/region)</td>
+<td>Clin + ML</td>
+<td>Continuous</td>
+</tr>
+<tr class="even">
+<td>Cybersecurity</td>
+<td>IEC 81001-5-1; POPIA dossier; encryption + KMS attestation; pen-test</td>
+<td>Sec + DevOps</td>
+<td>Q4 2026+</td>
+</tr>
+<tr class="odd">
+<td>PMS plan</td>
+<td>Drift; complaints; FSCA; PSUR</td>
+<td>Reg + Eng</td>
+<td>P1 ongoing</td>
+</tr>
+<tr class="even">
+<td>Labelling + UDI</td>
+<td>Reg 1515 labelling + IFU + UDI when called up</td>
+<td>Reg</td>
+<td>2 wk</td>
+</tr>
+<tr class="odd">
+<td>QMS reference</td>
+<td>ISO 13485 cert/attestation, quality manual, doc control</td>
+<td>QMS lead</td>
+<td>See §5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="qms-requirement-see-5-build-out-plan">2.3 QMS requirement → see §5 build-out plan</h3>
+<p>ISO 13485:2016 + ISO 14971:2019 + ISO 27001:2022 + ISO 27018:2019 + ISO 27701:2019 + IEC 62304:2006/A1:2015 + IEC 62366-1:2015 + IEC 81001-5-1:2021.</p>
+<h3 id="clinical-evaluation-requirement">2.4 Clinical evaluation requirement</h3>
+<p>SAHPRA + IMDRF require valid clinical association, analytical validity, clinical performance evidence. The SCGP (~30 consults/week × ~17 wk = ~500-consult cohort, scored against rubric) + benchmark testing process (Goal A/B/C) is the substrate. Subgroup analyses by language (isiZulu, isiXhosa, Afrikaans, English code-switched), region (Gauteng, KZN, WC), condition mix (HTN, T2DM, NIMART, antenatal, paediatric, STI, mental-health screen) required.</p>
+<h3 id="post-market-surveillance">2.5 Post-market surveillance</h3>
+<p>Drift on differential top-3 (weekly, ML Ops); red-flag sensitivity audit (monthly, Clin); override-reason analysis (monthly, Clin+Product); FSCA (as triggered, Reg); PSUR (annual, Reg); complaint log + root-cause (continuous, aggregated quarterly, Reg+QA); cyber vuln scan (quarterly) + pen-test (annual, Security).</p>
+<h3 id="realistic-timeline">2.6 Realistic timeline</h3>
+<p>12–24 mo §22C-in-hand → full Class C; mid-case <strong>18 mo</strong> Tier 1; add <strong>6–12 mo</strong> for Tier 4 Class D.</p>
+<h3 id="interim-path">2.7 Interim path</h3>
+<p>§22C licence (Phase 1) Cipla as licence-holder per Cipla MoU V1.3 Article 10 — required today regardless of registration status. Section 21 unregistered authorisation analogue (Phase 1–2) for programme-level access while Class C TF builds. "Research / SCGP" framing (Phase 1) — structured clinical governance, not general use. TGA Three Criteria precedent: modular IFU argument from <code>tga-cdss-exemption-response-apr2026.md</code> portable to Tier 1; Tier 4 outside.</p>
+<hr />
+<h2 id="data-residency-migration-plan">3. Data Residency Migration Plan</h2>
+<h3 id="phase-by-phase-residency-posture">3.1 Phase-by-phase residency posture</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>Data</th>
+<th>Region</th>
+<th>§72 route</th>
+<th>18.4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 Demo</td>
+<td>Synthetic</td>
+<td>AU <code>ap-southeast-2</code></td>
+<td>N/A</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>1 SCGP</td>
+<td>PCNS-supervised PHI</td>
+<td>AU + §72(a) DPA + consent text covers AU hosting</td>
+<td>(a) primary + (b) belt-and-braces</td>
+<td>🟡 phasing carve-out; migration scheduled</td>
+</tr>
+<tr class="odd">
+<td>2 11-clinic</td>
+<td>Production PHI</td>
+<td><code>af-south-1</code> primary + AU warm DR</td>
+<td>n/a once at-rest SA</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>3 50-clinic + T4</td>
+<td>Production PHI + T4 audit</td>
+<td><code>af-south-1</code> + AU DR + per-region active-active under load</td>
+<td>n/a</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>4 SADC</td>
+<td>Per-Customer PHI</td>
+<td><code>af-south-1</code> for SA-Customer; per-country per local DPA (BW 2018, SZ 2022, LS 2011)</td>
+<td>Per-country</td>
+<td>Per local DPA</td>
+</tr>
+<tr class="even">
+<td>5 Continental</td>
+<td>Per-region</td>
+<td>Multi-region</td>
+<td>Per-country</td>
+<td>Per local DPA</td>
+</tr>
+</tbody>
+</table>
+<h3 id="af-south-1-architecture">3.2 <code>af-south-1</code> architecture</h3>
+<p>EC2/EKS/RDS Aurora/S3/KMS (FIPS 140-2 L2)/Secrets Manager/CloudFront (JNB + CPT edge)/ALB/ECR/OpenSearch/WAF — all native. <strong>Gaps:</strong> Bedrock has limited model selection (Claude Opus 4.7 not in <code>af-south-1</code> as of May 2026) → inference call to <code>eu-west-1</code> over private VPC peering with de-identification at egress; PHI never leaves SA at-rest; §72 covered by adequacy + DPA. Anthropic direct API has no region lock; closest endpoint is <code>eu</code>. Supabase has no <code>af-south-1</code> region → see decision D-03 (recommend self-host Supabase on EKS SA, ~6–8 wk engineering).</p>
+<h3 id="cross-region-replication-phase-2">3.3 Cross-region replication (Phase 2+)</h3>
+<p><code>af-south-1</code> primary (EKS + Aurora writer + S3 PHI + KMS-SA + Secrets + immutable audit) → <code>ap-southeast-2</code> warm DR (EKS scaled-to-zero, Aurora Global reader, S3 CRR replica, KMS-AU, replicated secrets, Object-Lock audit copy). Both → Anthropic <code>eu-west-1</code> for de-identified inference only. RPO 5 min (Aurora Global SLO); RTO 60 min P2 manual failover, ≤15 min P3 via Route 53 health-check failover.</p>
+<h3 id="cross-border-72-compliance">3.4 Cross-border §72 compliance</h3>
+<p>Phase 1 — full PHI traverses §72. Phase 2+ — only de-identified inference payloads + replicated audit-log fragments. Required: cross-border DPA addendum (EU-SCC-modelled, §72(a) primary) Botaniqal AU ↔︎ Botaniqal SA branch / Cipla NPC, with counsel opinion on Aus Privacy Act 1988 + APPs "substantially similar" to POPIA; clinic consent text (§72(b)) naming AU hosting, retention, sub-processors, withdrawal; de-identification SOP for <code>af-south-1</code> egress (k-anon ≥5, no name/ID/clinic/date/age sub-year); Information Regulator voluntary cross-border notification.</p>
+<h3 id="latency">3.5 Latency</h3>
+<p><code>af-south-1</code> ↔︎ CPT clinic ~5 ms · ↔︎ JNB clinic ~15 ms · ↔︎ KZN rural ~50–100 ms · ↔︎ Anthropic <code>eu-west-1</code> (de-id inference) ~150 ms RTT vs today's <code>ap-southeast-2</code> → <code>eu-west-1</code> ~280 ms. Net: post-migration end-to-end inference latency <em>improves</em> by ~100 ms. Loadshedding-survivable design (offline queue, AES-256 at rest) unchanged.</p>
+<h3 id="cost-delta-engineering-estimates">3.6 Cost delta (engineering estimates)</h3>
+<p>Phase 0 demo ~$172/mo (current AU) → ~$220/mo on <code>af-south-1</code> (+$50). Phase 1 SCGP ~$220 → ~$320/mo (+$100). Phase 2 (11 clinics, only viable on <code>af-south-1</code>) ~$650/mo + DR ~$200. Phase 3 (50 clinics) ~$2,400/mo + DR ~$700. Egress to Anthropic EU dominates; controlled by de-identification + caching.</p>
+<h3 id="migration-cutover-rollback">3.7 Migration cutover + rollback</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Phase/wk</th>
+<th>Owner</th>
+<th>Rollback trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 IaC <code>af-south-1</code></td>
+<td>P1 wk4</td>
+<td>DevOps</td>
+<td>Provision fail → revert</td>
+</tr>
+<tr class="even">
+<td>2 EKS + secrets replication</td>
+<td>P1 wk5</td>
+<td>DevOps</td>
+<td>Health-check fail</td>
+</tr>
+<tr class="odd">
+<td>3 Aurora Global (SA primary, AU reader)</td>
+<td>P1 wk6</td>
+<td>DBA</td>
+<td>Replication lag &gt;60s sustained</td>
+</tr>
+<tr class="even">
+<td>4 App image deploy SA</td>
+<td>P1 wk7</td>
+<td>DevOps</td>
+<td>Smoke-test fail</td>
+</tr>
+<tr class="odd">
+<td>5 Synthetic dual-write 1wk</td>
+<td>P1 wk8</td>
+<td>QA</td>
+<td>Data divergence</td>
+</tr>
+<tr class="even">
+<td>6 Cutover decision gate</td>
+<td>P1 end</td>
+<td>Willie+Dwayne+Julia</td>
+<td>G2 rubric fail</td>
+</tr>
+<tr class="odd">
+<td>7 DNS+ALB cutover (5min RO)</td>
+<td>P2 wk1</td>
+<td>DevOps</td>
+<td>Health-check fail → DNS revert (TTL 60s)</td>
+</tr>
+<tr class="even">
+<td>8 Promote SA Aurora writer</td>
+<td>P2 wk1</td>
+<td>DBA</td>
+<td>Promote fail → binlog recovery</td>
+</tr>
+<tr class="odd">
+<td>9 AU → warm DR</td>
+<td>P2 wk1</td>
+<td>DevOps</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>10 30-day soak</td>
+<td>P2 wk2–5</td>
+<td>All</td>
+<td>Cat-A safety event = full rollback</td>
+</tr>
+</tbody>
+</table>
+<p>Rollback path: Aurora Global failback ≤5 min; DNS TTL 60s; KMS CMKs bidirectional; audit log replicated both ways during soak.</p>
+<h3 id="phase-4-multi-jurisdictional">3.8 Phase 4 multi-jurisdictional</h3>
+<p>Each SADC country brings a residency question (Botswana DPA 2018 §32, Eswatini DPA 2022 §57, Lesotho DPA 2011 §29 — variants of cross-border export + adequacy). Default <code>af-south-1</code> for SADC unless a country prohibits SA hosting (none currently); Tshikululu sub-agency arrangements include data-residency reps + warranties.</p>
+<hr />
+<h2 id="doctor-credentialing-pipeline-tier-4">4. Doctor Credentialing Pipeline (Tier 4)</h2>
+<p>Tier 4 (Cipla MoU V1.3 clause 2.1) requires HPCSA-registered SA medical practitioners — AU-only is non-compliant per HPCSA Booklet 10 §5.1. Pipeline runs parallel to Phase 2 to be ready for Phase 3 go-live.</p>
+<h3 id="recruitment-channels">4.1 Recruitment channels</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Channel</th>
+<th>Vol</th>
+<th>Model</th>
+<th>Lead</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HPCSA GPs in Cipla network</td>
+<td>30–60</td>
+<td>Salary + per-consult bonus</td>
+<td>4–6 wk</td>
+</tr>
+<tr class="even">
+<td>SADoctors.co.za locum platform</td>
+<td>200+</td>
+<td>Per-consult contractor</td>
+<td>2–4 wk</td>
+</tr>
+<tr class="odd">
+<td>Public→private locum SA GPs</td>
+<td>50–100</td>
+<td>Per-consult evenings/weekends</td>
+<td>4–8 wk</td>
+</tr>
+<tr class="even">
+<td>Diaspora SA GPs (AU/UK/CA, HPCSA retained)</td>
+<td>5–15</td>
+<td>Salary, partial remote</td>
+<td>12–16 wk</td>
+</tr>
+<tr class="odd">
+<td>University faculty moonlighters (Wits/UCT/Stellies/UKZN)</td>
+<td>10–25</td>
+<td>Per-consult structured shifts</td>
+<td>6–10 wk</td>
+</tr>
+</tbody>
+</table>
+<h3 id="credential-gate-per-doctor-all-hard-gate-unless-noted">4.2 Credential gate (per doctor, all hard-gate unless noted)</h3>
+<p>HPCSA registration current + unblemished (<code>iregister.hpcsa.co.za</code>, monthly recheck) · GP-minimum scope · indemnity ≥ZAR 50M (MPS/PPS/Constantia, annual renewal) · Booklet 10 + 9 + 20 compliance attestations + AI-ethics training · SAPS S91(a) police clearance · right-to-work · 8h ROSE onboarding + competency check · annual HPCSA 30 CEUs · mother-tongue languages (operational, not gating).</p>
+<h3 id="operational-model">4.3 Operational model</h3>
+<p>Salaried = predictable cost, deep platform knowledge, fungible — anchor pool 4–6 Phase 3. Per-consult contractor = variable, scales with volume, wider pool — surge + Phase 4. Platform-hosted (doctor's own practice + indemnity) = lowest overhead, fragmented governance — Phase 4 SADC. <strong>Phase 3 recommendation: hybrid</strong> — 4 salaried anchor (Mon–Sat 06:00–22:00 SAST) + 8–12 per-consult contractors. Engineering estimate cost: salary 4 × R900K = R3.6M; contractor R350 × 5,000 = R1.75M; total ~R5.35M/yr (AUD ~$450K) at Phase 3.</p>
+<h3 id="coverage-escalation">4.4 Coverage + escalation</h3>
+<p>Clinic-hour peaks (Mon–Fri 07:00–17:00) staffed salaried + contractor; after-hours + Sat AM contractor + on-call; nights/Sun on-call only with ER fallback. PCNS → Tier 4: <strong>synchronous urgent</strong> (chest pain, acute neuro, severe dyspnoea, suicidality, paediatric red flag) doctor within 5 min, system fails over to next-available, then public ER + provincial DoH warm-line at 10 min; <strong>asynchronous</strong> (Schedule 5 question, ambiguous Dx, follow-up) P95 ≤ 2h SLA; <strong>audit-only</strong> 10% random sample reviewed in 48h.</p>
+<h3 id="indemnity-liability">4.5 Indemnity + liability</h3>
+<p>Primary: doctor's MPS/PPS/Constantia ≥ZAR 50M (clinical negligence on Tier 4 advice). Secondary: Botaniqal Pty Ltd PI ≥AUD 20M (engineering estimate; platform error). Tertiary (P3+): reinsurance via Lloyd's or AU PI carrier. Independent: PCNS SANC indemnity (her own practice). Cipla MoU V1.3 + Tshikululu MoU v2.2 leave detailed allocation to Definitive Agreements; engineering target Botaniqal cap ZAR 100M aggregate per-deployment P3+, sub-cap per-incident ZAR 25M.</p>
+<hr />
+<h2 id="qms-build-out">5. QMS Build-Out</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Standard</th>
+<th>Covers</th>
+<th>Phase</th>
+<th>Initial $AU</th>
+<th>Annual $AU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ISO 13485:2016</td>
+<td>MedDev QMS</td>
+<td>P1 start; P2 certify</td>
+<td>30–50k</td>
+<td>8–15k</td>
+</tr>
+<tr class="even">
+<td>ISO 14971:2019</td>
+<td>Risk mgmt</td>
+<td>P1 ‖ 13485</td>
+<td>5–10k</td>
+<td>embedded</td>
+</tr>
+<tr class="odd">
+<td>IEC 62304:2006/A1</td>
+<td>SW lifecycle Class B/C</td>
+<td>P1 align; P2 evidence</td>
+<td>10–20k</td>
+<td>embedded</td>
+</tr>
+<tr class="even">
+<td>IEC 62366-1:2015</td>
+<td>Usability eng</td>
+<td>P1 protocol; P2 summative</td>
+<td>5–10k + ~15k study</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>IEC 81001-5-1:2021</td>
+<td>Health SW security</td>
+<td>P2; P3 evidence</td>
+<td>5–10k</td>
+<td>embedded</td>
+</tr>
+<tr class="even">
+<td>ISO 27001:2022</td>
+<td>ISMS</td>
+<td>P2 internal; P3 cert</td>
+<td>30–60k</td>
+<td>10–18k</td>
+</tr>
+<tr class="odd">
+<td>ISO 27018:2019</td>
+<td>Cloud PII</td>
+<td>P3 delta</td>
+<td>5–10k</td>
+<td>embedded</td>
+</tr>
+<tr class="even">
+<td>ISO 27701:2019</td>
+<td>PIMS</td>
+<td>P3 delta</td>
+<td>5–10k</td>
+<td>embedded</td>
+</tr>
+<tr class="odd">
+<td>HIPAA attestation</td>
+<td>US optionality</td>
+<td>P4+ if applicable</td>
+<td>15–25k</td>
+<td>5–8k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Initial total Phases 1–3: AU$95–185k. Annual P3 steady state: AU$25–40k.</strong> Timing: 6 mo (13485+14971+62304 parallel) P1; 12 mo (ISO 27001) P2 with audit at exit; 3 mo (27018+27701 deltas) P3. QMS lead: dedicated hire or 0.5-FTE fractional consultant from P1 month 1 — without an owned function, standards are aspirational. SA-based via Cipla network or AU MedTech fractional via AusBiotech.</p>
+<hr />
+<h2 id="risk-register">6. Risk Register</h2>
+<p>Categories: <strong>Reg</strong> = Regulatory; <strong>Clin</strong> = Clinical; <strong>Tech</strong> = Technical; <strong>Comm</strong> = Commercial; <strong>Ops</strong> = Operational; <strong>Rep</strong> = Reputational; <strong>Pers</strong> = Personnel. Likelihood/Impact 1 (very low) → 5 (very high). Inherent = LxI before mitigation.</p>
+
+<h3 id="risk-heatmap">D10 · Risk heatmap (55 risks plotted)</h3>
+<p>Bubble size = inherent score (Likelihood × Impact). Top residuals labelled. Hover any bubble for the risk ID + description.</p>
+<div style="height: 500px; max-width: 820px; margin: 24px auto; background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04);">
+  <canvas id="riskHeatmap"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  function init() {
+    if (!window.Chart) return;
+    var canvas = document.getElementById('riskHeatmap');
+    if (!canvas) return;
+    var data = [
+      {x: 4, y: 5, r: 22, label: 'R-01: SAHPRA timeline slippage'},
+      {x: 3, y: 5, r: 18, label: 'R-02: HPCSA Booklet 10 Tier 4 doctor non-compliance'},
+      {x: 4, y: 4, r: 18, label: 'R-18: Tshikululu role-conflict (Agent + Sub-processor)'},
+      {x: 3, y: 5, r: 18, label: 'R-19: POPIA breach notification SLA miss'},
+      {x: 3, y: 4, r: 14, label: 'R-04: af-south-1 capacity planning'},
+      {x: 4, y: 3, r: 14, label: 'R-07: Nurse adoption < 60% at G2'},
+      {x: 3, y: 4, r: 14, label: 'R-12: Discharge note completeness < target'},
+      {x: 2, y: 5, r: 12, label: 'R-11: Red-flag missed at SCGP'},
+      {x: 4, y: 2, r: 9, label: 'R-23: Latency spike > P95 SLO'},
+      {x: 3, y: 3, r: 11, label: 'R-30: Cross-border §72 audit gap'},
+      {x: 2, y: 4, r: 10, label: 'R-15: Tier 4 doctor recruitment slip'},
+      {x: 3, y: 3, r: 11, label: 'R-22: Synthetic data drift'},
+      {x: 2, y: 3, r: 8, label: 'R-26: Stripe / Calendly outage'},
+      {x: 4, y: 2, r: 9, label: 'R-31: AusHealth DD timeline slip'},
+      {x: 1, y: 5, r: 8, label: 'R-09: Catastrophic LLM hallucination'},
+      {x: 2, y: 3, r: 8, label: 'R-37: Definitive Agreement delay (Tshikululu)'},
+      {x: 3, y: 2, r: 8, label: 'R-41: ISO 13485 audit findings'},
+      {x: 2, y: 2, r: 6, label: 'R-44: Calendly tenant misconfig'},
+      {x: 3, y: 2, r: 8, label: 'R-50: Vendor model deprecation (Opus)'},
+      {x: 1, y: 4, r: 6, label: 'R-52: Reputation hit (single high-profile error)'},
+      {x: 2, y: 2, r: 6, label: 'R-55: Currency / FX shock (ZAR/AUD)'},
+      // additional smaller risks
+      {x: 1, y: 3, r: 5, label: 'R-03'},
+      {x: 1, y: 2, r: 4, label: 'R-05'},
+      {x: 2, y: 1, r: 4, label: 'R-06'},
+      {x: 1, y: 3, r: 5, label: 'R-08'},
+      {x: 3, y: 1, r: 4, label: 'R-10'},
+      {x: 1, y: 1, r: 3, label: 'R-13'},
+      {x: 1, y: 2, r: 4, label: 'R-14'},
+      {x: 4, y: 1, r: 5, label: 'R-16'},
+      {x: 2, y: 1, r: 4, label: 'R-17'},
+      {x: 1, y: 2, r: 4, label: 'R-20'},
+      {x: 2, y: 2, r: 6, label: 'R-21'},
+      {x: 1, y: 1, r: 3, label: 'R-24'},
+      {x: 3, y: 1, r: 4, label: 'R-25'},
+      {x: 2, y: 2, r: 6, label: 'R-27'},
+      {x: 1, y: 3, r: 5, label: 'R-28'},
+      {x: 1, y: 2, r: 4, label: 'R-29'},
+      {x: 2, y: 1, r: 4, label: 'R-32'},
+      {x: 3, y: 1, r: 4, label: 'R-33'},
+      {x: 1, y: 1, r: 3, label: 'R-34'},
+      {x: 2, y: 2, r: 6, label: 'R-35'},
+      {x: 1, y: 2, r: 4, label: 'R-36'},
+      {x: 2, y: 1, r: 4, label: 'R-38'},
+      {x: 1, y: 1, r: 3, label: 'R-39'},
+      {x: 2, y: 2, r: 6, label: 'R-40'},
+      {x: 3, y: 1, r: 4, label: 'R-42'},
+      {x: 1, y: 3, r: 5, label: 'R-43'},
+      {x: 2, y: 2, r: 6, label: 'R-45'},
+      {x: 1, y: 2, r: 4, label: 'R-46'},
+      {x: 2, y: 1, r: 4, label: 'R-47'},
+      {x: 1, y: 1, r: 3, label: 'R-48'},
+      {x: 2, y: 2, r: 6, label: 'R-49'},
+      {x: 1, y: 2, r: 4, label: 'R-51'},
+      {x: 2, y: 1, r: 4, label: 'R-53'},
+      {x: 1, y: 1, r: 3, label: 'R-54'}
+    ];
+    new Chart(canvas, {
+      type: 'bubble',
+      data: {
+        datasets: [{
+          label: 'Inherent risk score (L × I)',
+          data: data,
+          backgroundColor: function(ctx) {
+            var d = ctx.raw; if (!d) return 'rgba(0,99,60,0.4)';
+            var score = d.x * d.y;
+            if (score >= 16) return 'rgba(176,48,48,0.55)';
+            if (score >= 9) return 'rgba(212,149,0,0.55)';
+            return 'rgba(0,99,60,0.5)';
+          },
+          borderColor: function(ctx) {
+            var d = ctx.raw; if (!d) return '#00633c';
+            var score = d.x * d.y;
+            if (score >= 16) return '#8a1a1a';
+            if (score >= 9) return '#8a5a00';
+            return '#00633c';
+          },
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { title: { display: true, text: 'Likelihood (1 = very low → 5 = very high)' }, min: 0, max: 6, ticks: { stepSize: 1 } },
+          y: { title: { display: true, text: 'Impact (1 = very low → 5 = very high)' }, min: 0, max: 6, ticks: { stepSize: 1 } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) { return ctx.raw.label + ' (L=' + ctx.raw.x + ', I=' + ctx.raw.y + ')'; }
+            }
+          }
+        }
+      }
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+})();
+</script>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Description</th>
+<th>Cat</th>
+<th>L</th>
+<th>I</th>
+<th>Inh</th>
+<th>Mitigation</th>
+<th>Res</th>
+<th>Owner</th>
+<th>Peak</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R-01</td>
+<td>SAHPRA Class C timeline slip</td>
+<td>Reg</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>Modular IFU + Section 21 + §22C bridges; P0 pre-submission</td>
+<td>8</td>
+<td>Reg</td>
+<td>2–3</td>
+</tr>
+<tr class="even">
+<td>R-02</td>
+<td>SAHPRA Class D rejection (Tier 4)</td>
+<td>Reg</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>P3 only post Class C track record; staged-rollout argument; evidence pack</td>
+<td>9</td>
+<td>Reg</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>R-03</td>
+<td>HPCSA Booklet 10 §5.1 non-compliance — AU-only doctors</td>
+<td>Reg</td>
+<td>5</td>
+<td>5</td>
+<td>25</td>
+<td>Credentialing pipeline §4 from P2 mo1; 4 anchor + 8 contractor by P3</td>
+<td>5</td>
+<td>Ops + Cipla</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>R-04</td>
+<td>POPIA §99 fine (≤ZAR 10M)</td>
+<td>Reg</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>18.5 ten-controls; 24h IR runbook; encryption; ISO 27001 trajectory</td>
+<td>4</td>
+<td>Sec + Reg</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-05</td>
+<td>NDoH §56(6) permit revoked</td>
+<td>Reg</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>Per-clinic register; Cipla MoU 4.2; PCNS scope gates in CDSS</td>
+<td>2</td>
+<td>Cipla</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-06</td>
+<td>Information Regulator audit finds deficiencies</td>
+<td>Reg</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>DPA + addendum + PAIA Manual + IO; voluntary cross-border filing</td>
+<td>4</td>
+<td>IO</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-07</td>
+<td>Booklet 20 cultural-appropriateness fail</td>
+<td>Reg</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>11-lang testing; subgroup fairness; SCGP Domain A inter-rater</td>
+<td>6</td>
+<td>Clin</td>
+<td>1–3</td>
+</tr>
+<tr class="even">
+<td>R-08</td>
+<td>Code of Conduct for Health Research finalises stricter</td>
+<td>Reg</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Watch + comment; structural compliance with current draft P1</td>
+<td>5</td>
+<td>Reg</td>
+<td>2+</td>
+</tr>
+<tr class="odd">
+<td>R-09</td>
+<td>Missed red flag — Cat A harm</td>
+<td>Clin</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Mandatory red-flag panel; scope gate; SCGP 100% test; PMS</td>
+<td>8</td>
+<td>Clin + ML</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-10</td>
+<td>Schedule 5+ Rx escapes §56(6) gate</td>
+<td>Clin</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Hard-coded Sch 0–4 (R.2418); PHC STG/EML allowlist; reject out-of-scope</td>
+<td>4</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-11</td>
+<td>Allergy false-negative</td>
+<td>Clin</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Structured allergy (not free-text); cross-check every Rx; SCGP 100%</td>
+<td>4</td>
+<td>Clin+Eng</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-12</td>
+<td>STG/EML 8th → 9th drift mid-pilot</td>
+<td>Clin</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>NDoH watch; 30-day update SLO; version banner on Rx</td>
+<td>6</td>
+<td>Clin</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-13</td>
+<td>Hallucinated handout (wrong drug/dose)</td>
+<td>Clin</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Handout from structured Rx record, deterministic template; SCGP per-consult review</td>
+<td>6</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-14</td>
+<td>MH diagnosis despite §56(6) exclusion</td>
+<td>Clin</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Hard exclusion; PHQ-9/GAD-7 = screen-and-refer only; benchmark enforces</td>
+<td>6</td>
+<td>Clin</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-15</td>
+<td>NICD reminder missed</td>
+<td>Clin</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td>Banner on differential; Cat-1 hard-coded; PCNS files</td>
+<td>3</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-16</td>
+<td><code>af-south-1</code> regional outage</td>
+<td>Tech</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>AU warm DR + Aurora Global; RTO 60/15min P2/P3; 2.5h offline queue</td>
+<td>4</td>
+<td>DevOps</td>
+<td>2+</td>
+</tr>
+<tr class="odd">
+<td>R-17</td>
+<td>Anthropic API outage/quota/deprecation</td>
+<td>Tech</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Multi-provider (Bedrock + Gemini standby); cached decisions; scribe-only degrade</td>
+<td>6</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-18</td>
+<td>Loadshedding Stage 6+, multi-day</td>
+<td>Tech</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>Offline-first encrypted queue; battery+inverter required; SAMJ 2019 baseline</td>
+<td>8</td>
+<td>DevOps + Cipla</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-19</td>
+<td>Low-resource SA lang transcript poor (Sesotho, isiNdebele)</td>
+<td>Tech</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>Scribe v1 baseline + 6–12mo Lelapa InkubaLM; P3 fine-tune; isiZulu/Xhosa/Afr first</td>
+<td>8</td>
+<td>ML</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-20</td>
+<td>Diarisation fails (&gt;2 speakers)</td>
+<td>Tech</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>2-speaker default; UI fallback manual tag; child-consult flagged</td>
+<td>6</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-21</td>
+<td>Encryption envelope/KMS misconfig</td>
+<td>Tech</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>KMS CMKs + rotation + HSM; access audit; RBAC locked</td>
+<td>2</td>
+<td>Sec</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-22</td>
+<td>Cross-region lag → DR data loss</td>
+<td>Tech</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>Aurora Global RPO 5min; alert &gt;60s; DR runbook</td>
+<td>4</td>
+<td>DBA</td>
+<td>2+</td>
+</tr>
+<tr class="odd">
+<td>R-23</td>
+<td>Audit-log mutability bug</td>
+<td>Tech</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>Object Lock; append-only; weekly tamper-detection</td>
+<td>2</td>
+<td>Eng</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-24</td>
+<td>SCGP fails G2 → no Phase 2</td>
+<td>Comm</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>G1 G2-rehearsed; domain owners; weekly checkpoints; MoU 5.1 remediation</td>
+<td>9</td>
+<td>Dwayne+Willie</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>R-25</td>
+<td>Tshikululu board denies v2.2 (12–13 May)</td>
+<td>Comm</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Internal redline + 18.5 spot-check 4 May; verbal IPA 30 Apr; board pack 5/6 May</td>
+<td>8</td>
+<td>Dwayne</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>R-26</td>
+<td>FN Capital DD fails</td>
+<td>Comm</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Strategic Update + ref pack + Venture Debt AIP + AusHealth; multi-VC track</td>
+<td>6</td>
+<td>Dwayne</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>R-27</td>
+<td>AusHealth slips</td>
+<td>Comm</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Stefan/Belinda 30 Apr; Diagnostics-divisional workplace-health pitch</td>
+<td>6</td>
+<td>Dwayne</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>R-28</td>
+<td>RH R&amp;D Financing AIP doesn't convert</td>
+<td>Comm</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>RDTI confirmed; PPSR; alt non-dilutive lenders identified</td>
+<td>4</td>
+<td>Dwayne</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>R-29</td>
+<td>"5V revenue gate" on Cipla expansion</td>
+<td>Comm</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>P2 pricing locked P1-exit; Tshikululu rev-share de-risks; Class III data hook</td>
+<td>6</td>
+<td>Dwayne+Julia</td>
+<td>1–2</td>
+</tr>
+<tr class="even">
+<td>R-30</td>
+<td>SADC regulatory rejection</td>
+<td>Comm</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Per-country pre-submission P3; Tshikululu sub-agency; staged entry</td>
+<td>5</td>
+<td>Reg+Tsh</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>R-31</td>
+<td>PCNS turnover mid-pilot</td>
+<td>Ops</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>2-pod redundancy; Cipla onboards new PCNS in 4wk; competency check</td>
+<td>5</td>
+<td>Cipla</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-32</td>
+<td>Nurse training inadequate</td>
+<td>Ops</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>8h onboarding + check; per-clinic champion; weekly check-in; Domain D</td>
+<td>6</td>
+<td>Cipla+Bot</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-33</td>
+<td>CCMDD integration delayed by NDoH</td>
+<td>Ops</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>P1 paper-PDF + HPRS-ID handoff; live CCMDD deferred P2</td>
+<td>6</td>
+<td>Cipla+NDoH</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>R-34</td>
+<td>Brandmed BD-blocked (no API)</td>
+<td>Ops</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>P2 deferral; BD-led not technical; demo own-store + PDF + HPRS-ID</td>
+<td>6</td>
+<td>Dwayne+BM</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>R-35</td>
+<td>DCST contact undefined per clinic</td>
+<td>Ops</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>P2 onboard DCST per clinic; P3 provincial DoH fallback</td>
+<td>6</td>
+<td>Cipla ops</td>
+<td>2–3</td>
+</tr>
+<tr class="even">
+<td>R-36</td>
+<td>M365 / info@botaniqal SSO blocker</td>
+<td>Ops</td>
+<td>2</td>
+<td>2</td>
+<td>4</td>
+<td>csm <code>info_botaniqal_password</code>; backup admin access</td>
+<td>2</td>
+<td>Willie</td>
+<td>0+</td>
+</tr>
+<tr class="odd">
+<td>R-37</td>
+<td>Public POPIA breach (PHI exposure)</td>
+<td>Rep</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>All R-04 controls + IR comms + crisis-comms retainer P2</td>
+<td>5</td>
+<td>W+D</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-38</td>
+<td>HPCSA disciplinary against Tier 4 doc</td>
+<td>Rep</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>Pipeline §4 + Booklet 10/20 attestation + monthly recheck + indemnity</td>
+<td>4</td>
+<td>Ops</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>R-39</td>
+<td>Clinical-safety incident → Bhekisisa</td>
+<td>Rep</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Clinical mitigations + crisis playbook; transparency-first; cite override audit</td>
+<td>5</td>
+<td>W+D</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-40</td>
+<td>"AI replacing nurses" media frame</td>
+<td>Rep</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>"Supported by ROSE" framing; engaged narrative w/ Bhekisisa, Daily Maverick</td>
+<td>6</td>
+<td>Marketing</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-41</td>
+<td>Algorithmic-bias subgroup-unfairness frame</td>
+<td>Rep</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Subgroup-fairness in benchmark; P2 transparency report; Algorithm Audit engagement</td>
+<td>6</td>
+<td>ML+Comms</td>
+<td>2+</td>
+</tr>
+<tr class="even">
+<td>R-42</td>
+<td>Willie family bereavement → capacity dip</td>
+<td>Pers</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Distributed coverage; Julia/Dwayne/Michel redundancy; superpowers handoff protocols</td>
+<td>6</td>
+<td>W+D</td>
+<td>0+</td>
+</tr>
+<tr class="odd">
+<td>R-43</td>
+<td>P2 team can't deliver Tier 2 + multi-tenant + <code>af-south-1</code></td>
+<td>Pers</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>Hire 2 senior eng P1; SDK savings free time; QMS lead P1</td>
+<td>9</td>
+<td>Dwayne</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>R-44</td>
+<td>SA-side ops hire required</td>
+<td>Pers</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td>SA ops manager P2 mo1; Cipla seconded clinical lead per MoU 5.1</td>
+<td>6</td>
+<td>D+Cipla</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>R-45</td>
+<td>QMS lead not hired P1 mo1 → ISO 13485 slips</td>
+<td>Pers</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Recruit P0; fractional consultant interim; AusBiotech + Cipla networks</td>
+<td>6</td>
+<td>Dwayne</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>R-46</td>
+<td>Doctor pipeline ramp &lt; P3 demand</td>
+<td>Pers</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>P2 mo1 hiring; 4 anchor + 8 contractor min; SADoctors + diaspora parallel</td>
+<td>9</td>
+<td>Ops</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>R-47</td>
+<td>Supply-chain dependency attack</td>
+<td>Tech</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Pinning + Snyk + Dependabot; SBOM P2; network seg per 18.5(f)</td>
+<td>5</td>
+<td>Sec</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-48</td>
+<td>M365/Anthropic/AWS account compromise</td>
+<td>Tech</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>MFA per 18.5(c); HW key for W/D/J; quarterly access review</td>
+<td>2</td>
+<td>Sec</td>
+<td>1+</td>
+</tr>
+<tr class="odd">
+<td>R-49</td>
+<td>LLM compute-cost runaway</td>
+<td>Tech</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>SDK ~75% token reduction; per-tenant rate limit; Haiku 4.5 background; dashboards</td>
+<td>5</td>
+<td>DO+Fin</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-50</td>
+<td>P3 multi-region cost runaway</td>
+<td>Tech</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Reserved + savings plans P3; egress de-id + caching</td>
+<td>5</td>
+<td>DevOps</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>R-51</td>
+<td>RICA challenge — insufficient consent</td>
+<td>Reg</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td>PCNS one-party + written patient consent (POPIA §13 + RICA §5); SA counsel review</td>
+<td>2</td>
+<td>Reg</td>
+<td>1+</td>
+</tr>
+<tr class="even">
+<td>R-52</td>
+<td>Children's Act §129 mishandled</td>
+<td>Reg</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>&lt;12 parent block; 12–17 §129 maturity + PCNS positive determination; CTOP/HCT carve-outs</td>
+<td>4</td>
+<td>Clin+Eng</td>
+<td>2+</td>
+</tr>
+<tr class="odd">
+<td>R-53</td>
+<td>Investigative-journalism deep-dive</td>
+<td>Rep</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Proactive engagement w/ Bhekisisa, DM, GroundUp; transparency report; plain POPIA notices</td>
+<td>5</td>
+<td>Comms</td>
+<td>2+</td>
+</tr>
+<tr class="even">
+<td>R-54</td>
+<td>Cipla Foundation board change-over</td>
+<td>Comm</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>Multi-stakeholder (Rameez/Puni/Mamdoo); Tshikululu mediates; P1 DPA locks scope</td>
+<td>4</td>
+<td>Dwayne</td>
+<td>1–2</td>
+</tr>
+<tr class="odd">
+<td>R-55</td>
+<td>Tshikululu staff turnover (Yogesh)</td>
+<td>Comm</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td>Multi-stakeholder at Tshikululu; Master Agency MoU is binding instrument</td>
+<td>3</td>
+<td>Dwayne</td>
+<td>0–4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top residual risks (residual ≥ 8) for steering-committee attention:</strong></p>
+<p>R-01 SAHPRA timeline (8) · R-02 Class D rejection (9) · R-18 Loadshedding (8) · R-19 SA Bantu ASR (8) · R-24 Cipla SCGP fail (9) · R-25 Tshikululu board (8) · R-43 Team capacity Phase 2 (9) · R-46 Doctor pipeline ramp (9).</p>
+<hr />
+<h2 id="critical-path">7. Critical Path</h2>
+<div class="mermaid">graph TD
+    A[24 May G1 pass] --> B[Cipla DPA signed]
+    A --> C[Tshikululu v2.2 board 12-13 May]
+    B --> D[POPIA Operator DPA P1]
+    C --> D
+    D --> E[SAHPRA s22C P1 wk1]
+    D --> F[FN Capital DD P1 wk4]
+    E --> G[SCGP start P1 wk6]
+    F --> G
+    G --> H[G2 exit P1 wk12]
+    H --> I[af-south-1 cutover P2 wk1]
+    I --> J[ISO 27001 audit P2 wk24]
+    J --> K[P2 11-clinic stable]
+    K --> L[Tshikululu DAs P3 start]
+    L --> M[Doctor pipeline staffed P3 wk1]
+    M --> N[Class D filed P3 wk4]
+    N --> O[Tier 4 go-live P3 wk24]
+    O --> P[50-clinic 2029]
+    K --> Q[SADC pre-submission BW/SZ/LS P3 parallel]
+    Q --> R[P4 SADC entry 2027-28]</div>
+<p><strong>7 cascading dependencies — any slip, all slip:</strong></p>
+<ol type="1">
+<li>Cipla DPA → POPIA DPA → SCGP start (no DPA, no live PHI). Julia + Dwayne.</li>
+<li>Tshikululu board → Master Agency DAs → 12-country envelope. Dwayne.</li>
+<li>G1 demo pass → Cipla execution. Willie.</li>
+<li>G2 SCGP exit → Phase 2 launch (rubric-defined, non-negotiable). Willie + Dr Puni.</li>
+<li><code>af-south-1</code> cutover → Phase 2 multi-clinic (cannot run 11 clinics off AU). DevOps.</li>
+<li>SAHPRA §22C licence → Phase 2 production. Cipla + Reg.</li>
+<li>Doctor pipeline staffed → Tier 4 go-live → Phase 3 expansion. Ops.</li>
+</ol>
+<hr />
+<h2 id="pre-production-readiness-checklist">8. Pre-Production Readiness Checklist</h2>
+<h3 id="regulatory">Regulatory</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />SAHPRA pre-submission meeting held + minutes filed</label></li>
+<li><label><input type="checkbox" />§22C establishment licence application filed (Cipla as licence-holder)</label></li>
+<li><label><input type="checkbox" />§22C licence in hand · Section 21 unregistered analogue secured (interim)</label></li>
+<li><label><input type="checkbox" />SAHPRA Class C technical file Phase 2 exit-ready</label></li>
+<li><label><input type="checkbox" />HPCSA Booklet 9: §4.1 12-field record schema · §12 digital-storage attestation signed</label></li>
+<li><label><input type="checkbox" />HPCSA Booklet 10: §5.1 doctor credentialing pipeline live (P3) · §5.7 telehealth consent verified per consult</label></li>
+<li><label><input type="checkbox" />HPCSA Booklet 20 cultural-appropriateness baseline run (subgroup analyses)</label></li>
+<li><label><input type="checkbox" />SANC §56(6) per-clinic permit register live · Code §3 override-with-reason hard-coded · Code §4 per-clinic record boundary</label></li>
+<li><label><input type="checkbox" />R.2418 Schedule 0–4 ceiling enforced + PHC STG/EML 8th ed allowlist + STG version banner on every Rx</label></li>
+<li><label><input type="checkbox" />POPIA §22 24h breach IR runbook · §72 cross-border DPA addendum (P1) · §55 PAIA Manual + Information Officer</label></li>
+<li><label><input type="checkbox" />Information Regulator voluntary cross-border submission filed</label></li>
+<li><label><input type="checkbox" />NICD Category-1 surfacing live · Children's Act §129 minor-consent flow tested · CTOP/MHCA carve-outs · RICA §5 consent text counsel-reviewed</label></li>
+</ul>
+<h3 id="technical">Technical</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" /><code>af-south-1</code> infra provisioned · Aurora Global SA-writer + AU-reader</label></li>
+<li><label><input type="checkbox" />AES-256 at rest verified (S3, RDS, EBS, Supabase/replacement) · TLS 1.3 supported + preferred at ALB · KMS CMKs per env (FIPS 140-2 L2)</label></li>
+<li><label><input type="checkbox" />RBAC + MFA on every admin (AWS, Supabase, GitHub, MediRecords, M365) · HW key for Willie/Dwayne/Julia</label></li>
+<li><label><input type="checkbox" />Network segmentation + WAF + private subnets · Secrets Manager + rotation</label></li>
+<li><label><input type="checkbox" />Immutable audit log (S3 Object Lock, 7yr) + tamper-detection</label></li>
+<li><label><input type="checkbox" />SBOM (CycloneDX) per release · Snyk + Dependabot + GHAS · quarterly pen-test</label></li>
+<li><label><input type="checkbox" />Loadshedding offline queue 2.5h hold verified · DR runbook tested (RTO ≤60min P2, ≤15min P3)</label></li>
+<li><label><input type="checkbox" />De-identification SOP for cross-border egress · drift monitoring on differential top-3</label></li>
+<li><label><input type="checkbox" />Multi-language ASR baseline per language · 2-speaker diarisation default + 3-speaker fallback tested</label></li>
+<li><label><input type="checkbox" />Override-with-reason captured on every CDSS recommendation · cost dashboards + per-tenant rate limits · multi-provider LLM fallback (Bedrock + Gemini)</label></li>
+</ul>
+<h3 id="operational">Operational</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />24h breach IR rotation staffed · per-clinic onboarding runbook · PCNS 8h training + competency check + per-clinic champion · weekly clinic-manager check-in</label></li>
+<li><label><input type="checkbox" />Battery + inverter at clinic (Cipla) · per-clinic connectivity baseline measured</label></li>
+<li><label><input type="checkbox" />Doctor credentialing pipeline staffed (4 anchor + 8 contractor min P3) · DCST contact registered per clinic</label></li>
+<li><label><input type="checkbox" />CCMDD integration live (P2) · Brandmed handoff workflow live (P2) · HPRS-compatible patient ID</label></li>
+<li><label><input type="checkbox" />SA-based ops manager hired (P2) · QMS lead hired (P1 mo1)</label></li>
+<li><label><input type="checkbox" />Indemnity engaged (Botaniqal PI ≥AU$20M; doctor MPS/PPS) · reinsurance layer P3+ · crisis-comms retainer P2</label></li>
+</ul>
+<h3 id="commercial">Commercial</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Cipla Definitive Pilot Agreement signed · pilot pricing invoiced (ZAR 7.8M)</label></li>
+<li><label><input type="checkbox" />Tshikululu Master Agency Definitive Agreements signed · revenue share locked (Art 11) · MPTs baselined (Art 10)</label></li>
+<li><label><input type="checkbox" />FN Capital Series A close · AusHealth Series A close (or alt VC) · RH R&amp;D Financing AIP converted to draw</label></li>
+<li><label><input type="checkbox" />OECD transfer pricing operational · AML/beneficial-ownership reporting live</label></li>
+</ul>
+<h3 id="clinical">Clinical</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />SCGP cohort plan signed off by Dr Puni Mamdoo · inter-rater protocol (10% external) live</label></li>
+<li><label><input type="checkbox" />All 4 rubric domains pass G2 · zero unrecovered breaches P1 · zero §56(6) breaches P1 · zero Cat-A safety incidents 90d pre-P2</label></li>
+<li><label><input type="checkbox" />Subgroup fairness pass (language, region, age, sex)</label></li>
+<li><label><input type="checkbox" />Tier 4 view + countersign + audit attribution UAT pass · Tier 4 SLA monitoring live (P3)</label></li>
+<li><label><input type="checkbox" />Annual clinical-evaluation report published</label></li>
+</ul>
+<h3 id="governance">Governance</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Quarterly Botaniqal board pack · quarterly Cipla joint-steering (MoU 5.1) · quarterly Tshikululu Year-1 reporting (Art 18.7)</label></li>
+<li><label><input type="checkbox" />Annual SAHPRA PSUR · annual Information Regulator report · investor reporting cadence with FN Capital</label></li>
+<li><label><input type="checkbox" />Monthly HPCSA disciplinary watch per doctor · SANC/NDoH cooperation cadence · quarterly wiki cross-ref refresh</label></li>
+</ul>
+<hr />
+<h2 id="decision-log">9. Decision Log</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Question</th>
+<th>Recommendation</th>
+<th>Owner</th>
+<th>Deadline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D-01</td>
+<td>§22C licence-holder</td>
+<td>Cipla Foundation NPC per V1.3 Art 10</td>
+<td>Dwayne + Cipla legal</td>
+<td>P1 wk1</td>
+</tr>
+<tr class="even">
+<td>D-02</td>
+<td>SAHPRA Class C vs Section 21 sequence</td>
+<td>Section 21 first, Class C TF in parallel</td>
+<td>Reg</td>
+<td>P1 wk4</td>
+</tr>
+<tr class="odd">
+<td>D-03</td>
+<td><code>af-south-1</code> Supabase</td>
+<td>Self-host Supabase on EKS SA (~6–8 wk)</td>
+<td>Eng</td>
+<td>P1 wk4</td>
+</tr>
+<tr class="even">
+<td>D-04</td>
+<td>TLS 1.3 enforcement wording</td>
+<td>"Supported + preferred" (DECIDED 4 May)</td>
+<td>W+D</td>
+<td>P0 done</td>
+</tr>
+<tr class="odd">
+<td>D-05</td>
+<td>P3 doctor pool model</td>
+<td>Hybrid 4 anchor + 8 contractor</td>
+<td>Dwayne</td>
+<td>P2 wk4</td>
+</tr>
+<tr class="even">
+<td>D-06</td>
+<td>QMS consultant SA vs AU</td>
+<td>Combined: SA Cipla + AU AusBiotech</td>
+<td>Dwayne</td>
+<td>P1 wk1</td>
+</tr>
+<tr class="odd">
+<td>D-07</td>
+<td>Tier 2 launch language</td>
+<td>isiZulu + English (population × ASR)</td>
+<td>Product + ML</td>
+<td>P2 wk8</td>
+</tr>
+<tr class="even">
+<td>D-08</td>
+<td>§72 primary basis</td>
+<td>Adequacy + binding agreement + consent (belt-and-braces)</td>
+<td>Reg + counsel</td>
+<td>P1 wk4</td>
+</tr>
+<tr class="odd">
+<td>D-09</td>
+<td>Brand naming Sha'p Left</td>
+<td>Pending Cipla input — brand-prominence question open</td>
+<td>Michel + Cipla</td>
+<td>P1 wk1</td>
+</tr>
+<tr class="even">
+<td>D-10</td>
+<td>P2 clinic pricing model</td>
+<td>Pending Cipla input — engineering estimate per-clinic flat ZAR 350–450K/yr</td>
+<td>Dwayne + Julia</td>
+<td>P1 wk8</td>
+</tr>
+<tr class="odd">
+<td>D-11</td>
+<td>Tier 4 indemnity layering</td>
+<td>Doctor MPS primary + Botaniqal PI secondary</td>
+<td>Dwayne + counsel</td>
+<td>P2 wk12</td>
+</tr>
+<tr class="even">
+<td>D-12</td>
+<td>Brandmed sequencing</td>
+<td>P1 paper-PDF handoff → P2 BD push for API</td>
+<td>Dwayne</td>
+<td>P2 wk1</td>
+</tr>
+<tr class="odd">
+<td>D-13</td>
+<td>AU Class III SaMD upgrade timing</td>
+<td>Wait for Phase 3 cohort (sufficient evidence)</td>
+<td>Reg</td>
+<td>P3 wk1</td>
+</tr>
+<tr class="even">
+<td>D-14</td>
+<td>SADC entry order</td>
+<td>Parallel-3 BW/SZ/LS staggered start (Tshikululu Art 6)</td>
+<td>Dwayne + Tsh</td>
+<td>P3 wk12</td>
+</tr>
+<tr class="odd">
+<td>D-15</td>
+<td>Anthropic vs Bedrock primary inference</td>
+<td>Bedrock primary once Opus 4.7 in <code>af-south-1</code>; Anthropic direct interim</td>
+<td>DevOps</td>
+<td>P2 wk4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cross-references">10. Cross-References</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>§</th>
+<th>Related</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>§1 Phase Ladder</td>
+<td><code>shap-left-nurses-station-full-flow-may2026</code> §6 · <code>cipla-mou-apr2026</code> Art 3 · <code>tshikululu-master-agency-mou-may2026</code> Art 7</td>
+</tr>
+<tr class="even">
+<td>§2 SAHPRA</td>
+<td><code>sa-regulatory-canvas-extended-may2026</code> §5 · <code>cipla-sa-regulatory-bundle-may2026</code> · <code>tga-cdss-exemption-response-apr2026</code></td>
+</tr>
+<tr class="odd">
+<td>§3 Data Residency</td>
+<td><code>sa-regulatory-canvas-extended-may2026</code> §3 (POPIA §19/§22/§72) · Tshikululu MoU §18.4+18.7 · Cipla MoU §9.4</td>
+</tr>
+<tr class="even">
+<td>§4 Doctors</td>
+<td><code>cipla-sa-regulatory-bundle-may2026</code> (HPCSA Booklet 10 §5.1) · <code>cipla-mou-apr2026</code> (Tier 4 Art 2.1 V1.3)</td>
+</tr>
+<tr class="odd">
+<td>§5 QMS</td>
+<td>Tshikululu MoU §18.5 (ISO citations) · Canvas §5.5 (MD08 five principles)</td>
+</tr>
+<tr class="even">
+<td>§6 Risk</td>
+<td><code>shap-left-rubric-metrics-may2026</code> (G1/G2/G3 → monitoring) · <code>memory/incident-mass-file-deletion-apr27</code></td>
+</tr>
+<tr class="odd">
+<td>§7 Critical Path</td>
+<td><code>cipla-opportunity-stack-may2026</code> · Tshikululu MoU 7.4</td>
+</tr>
+<tr class="even">
+<td>§8 Checklist</td>
+<td>All above + <code>shap-left-srs-functional-spec-may2026</code></td>
+</tr>
+<tr class="odd">
+<td>§9 Decisions</td>
+<td><code>entities/people/stefan-enderling</code> · <code>cipla-opportunity-stack-may2026</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="change-log">Change Log</h2>
+<ul>
+<li>2026-05-05: Initial creation. Phase ladder borrowed from <code>shap-left-nurses-station-full-flow-may2026</code> §6; SAHPRA pathway built from <code>sa-regulatory-canvas-extended-may2026</code> §5 + <code>tga-cdss-exemption-response-apr2026</code>; data-residency plan from Tshikululu MoU §18.4 + Cipla MoU §9.4 + POPIA §72 routes table; risk register synthesised across regulatory canvas + ten-control schedule + operational/commercial state as of 5 May 2026 (Cipla MoU V1.3 5-day silence, Tshikululu v2.2 internal redline pre-board 12-13 May, FN Capital DD active, AusHealth Stefan Enderling track, Venture Debt AIP). Demo→Phase 5 covers 24 May 2026 → 2028+. Anchored against G1/G2/G3 from <code>shap-left-rubric-metrics-may2026</code>. Decision log seeded with 15 open items including TLS 1.3 wording (decided), <code>af-south-1</code> Supabase strategy, Tier 4 doctor model.</li>
+</ul>
+
+  </article>
+  <aside class="chapter-sidebar">
+  <div class="sidebar-eyebrow">On this page</div>
+  <ul>
+  <li><a href="#gantt" class="h2">D9 · 6-phase Gantt</a></li>
+  <li><a href="#the-phase-ladder" class="h2">1. The Phase Ladder</a></li>
+  <li><a href="#sahpra-samd-pathway" class="h2">2. SAHPRA SaMD Pathway</a></li>
+  <li><a href="#pre-submission-engagement-strategy" class="h3">2.1 Pre-submission engagement strategy</a></li>
+  <li><a href="#technical-file-content-class-c-class-d" class="h3">2.2 Technical file content (Class C → Class D)</a></li>
+  <li><a href="#qms-requirement-see-5-build-out-plan" class="h3">2.3 QMS requirement → see §5 build-out plan</a></li>
+  <li><a href="#clinical-evaluation-requirement" class="h3">2.4 Clinical evaluation requirement</a></li>
+  <li><a href="#post-market-surveillance" class="h3">2.5 Post-market surveillance</a></li>
+  <li><a href="#realistic-timeline" class="h3">2.6 Realistic timeline</a></li>
+  <li><a href="#interim-path" class="h3">2.7 Interim path</a></li>
+  <li><a href="#data-residency-migration-plan" class="h2">3. Data Residency Migration Plan</a></li>
+  <li><a href="#phase-by-phase-residency-posture" class="h3">3.1 Phase-by-phase residency posture</a></li>
+  <li><a href="#af-south-1-architecture" class="h3">3.2 af-south-1 architecture</a></li>
+  <li><a href="#cross-region-replication-phase-2" class="h3">3.3 Cross-region replication (Phase 2+)</a></li>
+  <li><a href="#cross-border-72-compliance" class="h3">3.4 Cross-border §72 compliance</a></li>
+  <li><a href="#latency" class="h3">3.5 Latency</a></li>
+  <li><a href="#cost-delta-engineering-estimates" class="h3">3.6 Cost delta (engineering estimates)</a></li>
+  <li><a href="#migration-cutover-rollback" class="h3">3.7 Migration cutover + rollback</a></li>
+  <li><a href="#phase-4-multi-jurisdictional" class="h3">3.8 Phase 4 multi-jurisdictional</a></li>
+  <li><a href="#doctor-credentialing-pipeline-tier-4" class="h2">4. Doctor Credentialing Pipeline (Tier 4)</a></li>
+  <li><a href="#recruitment-channels" class="h3">4.1 Recruitment channels</a></li>
+  <li><a href="#credential-gate-per-doctor-all-hard-gate-unless-noted" class="h3">4.2 Credential gate (per doctor, all hard-gate unless noted)</a></li>
+  <li><a href="#operational-model" class="h3">4.3 Operational model</a></li>
+  <li><a href="#coverage-escalation" class="h3">4.4 Coverage + escalation</a></li>
+  <li><a href="#indemnity-liability" class="h3">4.5 Indemnity + liability</a></li>
+  <li><a href="#qms-build-out" class="h2">5. QMS Build-Out</a></li>
+  <li><a href="#risk-register" class="h2">6. Risk Register</a></li>
+  <li><a href="#risk-heatmap" class="h3">D10 · Risk heatmap</a></li>
+  <li><a href="#critical-path" class="h2">7. Critical Path</a></li>
+  <li><a href="#pre-production-readiness-checklist" class="h2">8. Pre-Production Readiness Checklist</a></li>
+  <li><a href="#regulatory" class="h3">Regulatory</a></li>
+  <li><a href="#technical" class="h3">Technical</a></li>
+  <li><a href="#operational" class="h3">Operational</a></li>
+  <li><a href="#commercial" class="h3">Commercial</a></li>
+  <li><a href="#clinical" class="h3">Clinical</a></li>
+  <li><a href="#governance" class="h3">Governance</a></li>
+  <li><a href="#decision-log" class="h2">9. Decision Log</a></li>
+  <li><a href="#cross-references" class="h2">10. Cross-References</a></li>
+  <li><a href="#change-log" class="h2">Change Log</a></li>
+  </ul>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+<script>
+(function () {
+  // Wait for mermaid to be available, then init
+  function init() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#d4e8df',
+          primaryBorderColor: '#00633c',
+          primaryTextColor: '#00422a',
+          lineColor: '#00633c',
+          fontFamily: '-apple-system, "Inter", sans-serif'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

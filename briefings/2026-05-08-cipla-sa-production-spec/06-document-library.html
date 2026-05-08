@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 06 — Document Library · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 06 · Document Library · 2026-05-08</div>
+    <h1 class="title">Document Library</h1>
+    <p class="subtitle">Source pointers — every PDF, wiki page, MoU draft, and internal cache used to assemble this production spec. Pathways assume access to the Botaniqal/Adaptation file system + SharePoint.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Pointers only — content lives at source</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+    <h2 id="puni-bundle">Cipla / Puni Mamdoo Regulatory Bundle (11 PDFs)</h2>
+    <p>Sent by Dr Puni Mamdoo (Cipla Foundation Medical Director) on 28 Apr 2026. Cached locally at <code>docs/cipla-regs/</code> on the Botaniqal repo. Cross-referenced throughout Chapter 02.</p>
+    <table>
+      <thead><tr><th>#</th><th>Document</th><th>Local cache path</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>HPCSA Booklet 10 — Telemedicine guidelines (2014, amended 2020)</td><td><code>docs/cipla-regs/hpcsa-booklet-10-telemedicine.pdf</code></td></tr>
+        <tr><td>2</td><td>HPCSA Booklet 5 — Confidentiality and patient records</td><td><code>docs/cipla-regs/hpcsa-booklet-5-confidentiality.pdf</code></td></tr>
+        <tr><td>3</td><td>SANC Scope of Practice — R2598 / R2418 (Professional Nurse, Enrolled Nurse)</td><td><code>docs/cipla-regs/sanc-scope-of-practice.pdf</code></td></tr>
+        <tr><td>4</td><td>National Department of Health — Ideal Clinic Manual v17 (2018)</td><td><code>docs/cipla-regs/ndoh-ideal-clinic-manual-v17.pdf</code></td></tr>
+        <tr><td>5</td><td>SAHPRA Medical Devices Guideline — MD08-2025 / MD08-2026 (SaMD)</td><td><code>docs/cipla-regs/sahpra-md08-samd-2026.pdf</code></td></tr>
+        <tr><td>6</td><td>National Core Standards (NCS) — §1.2 (Patient Safety) + §1.7 (Clinical Records)</td><td><code>docs/cipla-regs/ncs-domains-1-7.pdf</code></td></tr>
+        <tr><td>7</td><td>Primary Health Care Standard Treatment Guidelines + Essential Medicines List 2024 (PHC STG/EML)</td><td><code>docs/cipla-regs/phc-stg-eml-2024.pdf</code></td></tr>
+        <tr><td>8</td><td>NIMART training & accreditation (NDoH, latest revision 2023)</td><td><code>docs/cipla-regs/nimart-training-2023.pdf</code></td></tr>
+        <tr><td>9</td><td>Central Chronic Medicines Dispensing & Distribution (CCMDD) operational manual</td><td><code>docs/cipla-regs/ccmdd-operational-manual.pdf</code></td></tr>
+        <tr><td>10</td><td>Infection Prevention & Control (IPC) practical manual for PHC clinics</td><td><code>docs/cipla-regs/ipc-phc-manual.pdf</code></td></tr>
+        <tr><td>11</td><td>POPIA Code of Conduct for the Medical Industry (gazetted)</td><td><code>docs/cipla-regs/popia-code-medical.pdf</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="adjacent-statutes">Adjacent SA Statutes (8 — referenced in Chapter 02)</h2>
+    <table>
+      <thead><tr><th>Statute</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td>National Health Act 61 of 2003 (NHA) — §61 (records), §90 (regulations), §66 (consent)</td><td>Master statute. Discharge note + retention requirement live here.</td></tr>
+        <tr><td>Medicines & Related Substances Act 101 of 1965 (MCA) — §22A (schedules), §39 (controlled)</td><td>Tier 4 prescribing authority depends on this. CCMDD operates under §22A.</td></tr>
+        <tr><td>Electronic Communications & Transactions Act 25 of 2002 (ECTA) — Ch IX (electronic records, signatures)</td><td>Digital SOAP notes + e-signatures + cross-border data routes.</td></tr>
+        <tr><td>Regulation of Interception of Communications Act 70 of 2002 (RICA)</td><td>Recording consent + voice telemetry compliance.</td></tr>
+        <tr><td>Promotion of Access to Information Act 2 of 2000 (PAIA)</td><td>Patient subject access requests.</td></tr>
+        <tr><td>Choice on Termination of Pregnancy Act 92 of 1996 (TOP)</td><td>Out-of-scope by design — Tier 1 redirects.</td></tr>
+        <tr><td>Mental Health Care Act 17 of 2002</td><td>Out-of-scope by design — Tier 1 redirects 72-hour assessments.</td></tr>
+        <tr><td>Children's Act 38 of 2005 — §129 (consent at age 12)</td><td>Pediatric consent + capacity rules.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="wiki-concepts">Wiki Concept Pages (Team Willie)</h2>
+    <p>Located at <code>/mnt/c/data/github/team_willie/wiki/concepts/</code>. These are the canonical living source-of-truth documents — this briefing is a snapshot rendering as of 2026-05-08.</p>
+    <table>
+      <thead><tr><th>Slug</th><th>Title</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>shap-left-nurses-station-full-flow-may2026</code></td><td>Sha'p Left Nurses Station — Full Flow + Meta Idea</td><td>active</td></tr>
+        <tr><td><code>cipla-sa-regulatory-bundle-may2026</code></td><td>Cipla Foundation SA Regulatory Bundle</td><td>active</td></tr>
+        <tr><td><code>sa-regulatory-canvas-extended-may2026</code></td><td>SA Regulatory Canvas — Extended</td><td>active</td></tr>
+        <tr><td><code>shap-left-srs-functional-spec-may2026</code></td><td>Sha'p Left SRS — IEEE 29148</td><td>active</td></tr>
+        <tr><td><code>shap-left-rubric-metrics-may2026</code></td><td>Sha'p Left Rubric, Metrics, KPIs, SLOs</td><td>active</td></tr>
+        <tr><td><code>shap-left-demo-to-production-roadmap-may2026</code></td><td>Sha'p Left Demo→Production + Risk Register</td><td>active</td></tr>
+        <tr><td><code>cipla-mou-apr2026</code></td><td>Cipla Foundation MoU V1.3 (sent 30 Apr)</td><td>active</td></tr>
+        <tr><td><code>tshikululu-master-agency-mou-may2026</code></td><td>Tshikululu Master Regional Agency MoU v2.2</td><td>active</td></tr>
+        <tr><td><code>cipla-opportunity-stack-may2026</code></td><td>Cipla Opportunity Stack</td><td>active</td></tr>
+        <tr><td><code>aushealth-opportunity-stack-may2026</code></td><td>AusHealth Opportunity Stack — Series A + Workplace Health (NEW)</td><td>active</td></tr>
+        <tr><td><code>shap-left-ambient-nurse-mvp-apr2026</code></td><td>Sha'p Left Ambient Nurse MVP (Apr 2026 — superseded by full-flow)</td><td>active</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="sharepoint">SharePoint &mdash; Agentic-AI-Doctor-DataRoom-Lite</h2>
+    <p>Tenant: <code>ltdlabs.sharepoint.com</code>. Path: <code>/sites/Agentic-AI-Doctor-DataRoom-Lite</code>. Login via M365 SSO as <code>willie@ltdlabs.com.au</code> (or <code>info@botaniqal.com.au</code> for delegate access).</p>
+    <ul>
+      <li><strong>Cipla Foundation MoU V1.3</strong> — sent to Rameez Johaar 30 Apr 13:13 ACST</li>
+      <li><strong>Tshikululu Master Regional Agency MoU v2.2</strong> — Julia drafted 1 May, Dwayne reviewed 4 May, internal-only until board 12-13 May</li>
+      <li><strong>POPIA DPA template</strong> — placeholder pending Definitive Agreements</li>
+      <li><strong>SAHPRA SaMD pre-submission package</strong> — drafted post-30-Apr-demo readiness</li>
+    </ul>
+
+    <h2 id="briefing-pack">Briefing Pack — 2026-04-30</h2>
+    <p>The earlier sibling briefing covering the demo-scope MVP. Different scope (demo-only, AU-AWS, synthetic data) but cross-referenced in Chapter 01 and Chapter 05.</p>
+    <ul>
+      <li><a href="../2026-04-30-shap-left-passive-nurse/index.html">2026-04-30 Sha'p Left Ambient Nurse Briefing</a></li>
+    </ul>
+
+    <h2 id="contacts">Key Contacts</h2>
+    <table>
+      <thead><tr><th>Role</th><th>Name</th><th>Email</th></tr></thead>
+      <tbody>
+        <tr><td>Cipla Foundation — Medical Director (regs bundle owner)</td><td>Dr Puni Mamdoo</td><td><code>puni.mamdoo@cipla.com</code></td></tr>
+        <tr><td>Cipla Foundation — MoU counterparty</td><td>Rameez Johaar</td><td><code>rameez@shapleft.com</code></td></tr>
+        <tr><td>Tshikululu Social Investments — Master Regional Agent</td><td>(TBD — finalised at board 12-13 May)</td><td>—</td></tr>
+        <tr><td>AusHealth — Diagnostics partnership</td><td>Stefan Enderling</td><td><code>stenderling@aushealth.com.au</code></td></tr>
+        <tr><td>Botaniqal Medtech — CEO</td><td>Willie Prosek</td><td><code>willie@drsophia.ai</code></td></tr>
+        <tr><td>Adaptation.io — clinical lead</td><td>Dr Julia (TBD email)</td><td>—</td></tr>
+        <tr><td>LTD Labs — counsel + ops</td><td>Dwayne Boyes</td><td><code>dwayne@ltdlabs.com.au</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="briefing-chapters">Briefing Chapters (this site)</h2>
+    <table>
+      <thead><tr><th>#</th><th>Chapter</th><th>Words</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td><a href="01-meta-idea-and-nurses-station-flow.html">The Meta Idea + Nurses Station Full Flow</a></td><td>~11,500</td></tr>
+        <tr><td>02</td><td><a href="02-regulatory-canvas.html">Regulatory Canvas</a></td><td>~9,000</td></tr>
+        <tr><td>03</td><td><a href="03-srs-functional-spec.html">Software Requirements Specification</a></td><td>~19,000</td></tr>
+        <tr><td>04</td><td><a href="04-rubric-metrics-slos.html">Rubric, Metrics, KPIs, SLOs</a></td><td>~8,000</td></tr>
+        <tr><td>05</td><td><a href="05-demo-to-production-roadmap.html">Demo→Production Roadmap + Risk Register</a></td><td>~6,500</td></tr>
+        <tr><td>06</td><td><a href="06-document-library.html">Document Library</a></td><td>Reference</td></tr>
+        <tr><td>07</td><td><a href="07-aushealth-opportunity-stack.html">AusHealth Opportunity Stack (NEW v2.0)</a></td><td>~4,800</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="version">Version Notes</h2>
+    <p>This briefing is version <strong>2.0</strong>, generated <strong>2026-05-08</strong>. Version <strong>1.0</strong> shipped earlier the same day with 6 chapters; v2.0 adds Chapter 07 (AusHealth Opportunity Stack), 5 new diagrams (system map, regulatory tree, POPIA §72 sequence, 6-phase Gantt, risk heatmap), an 8-KPI dashboard on the rubric chapter, the SRS live search, the print stylesheet with confidentiality watermark, and a third load-bearing finding (Tshikululu role-conflict). Full diff log at <a href="CHANGELOG.html">CHANGELOG.html</a>. Subsequent versions (2.1, 2.2 …) will be appended to that log. The wiki concept pages are the living source of truth — this briefing is a frozen snapshot for sharing with named counterparties.</p>
+  </article>
+
+  <aside class="chapter-sidebar">
+    <div class="sidebar-eyebrow">On this page</div>
+    <ul>
+      <li><a href="#puni-bundle" class="h2">Puni's Regulatory Bundle</a></li>
+      <li><a href="#adjacent-statutes" class="h2">Adjacent SA Statutes</a></li>
+      <li><a href="#wiki-concepts" class="h2">Wiki Concept Pages</a></li>
+      <li><a href="#sharepoint" class="h2">SharePoint Data Room</a></li>
+      <li><a href="#briefing-pack" class="h2">Earlier Briefing Pack</a></li>
+      <li><a href="#contacts" class="h2">Key Contacts</a></li>
+      <li><a href="#briefing-chapters" class="h2">Briefing Chapters</a></li>
+      <li><a href="#version" class="h2">Version Notes</a></li>
+      <li><a href="CHANGELOG.html" class="h2">Changelog (v1 → v2)</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+</body>
+</html>

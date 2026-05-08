@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 01 — The Meta Idea + Nurses Station Full Flow · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 01 · Production Spec · 2026-05-08</div>
+    <h1 class="title">The Meta Idea + Nurses Station Full Flow</h1>
+    <p class="subtitle">Why ambient AI fits SA nurse-led PHC, end-to-end patient journey, the clinic day, the 4-tier build, demo→production differences, and system diagrams.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Source: <code style="background:rgba(255,255,255,0.18);color:white;">wiki/concepts</code></span>
+      <span class="pill warn"><span class="dot"></span>Cipla MoU V1.3 + Tshikululu MoU v2.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+<h1 id="shap-left-nurses-station-full-flow-meta-idea">Sha'p Left Nurses Station — Full Flow + Meta Idea</h1>
+<h2 id="how-to-read-this-page">How to read this page</h2>
+<p>This is the operational walkthrough that sits between the <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> (what we're shipping for the 24 May demo), the <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> (the rules we're building inside), and the <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> / <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/tshikululu-master-agency-mou-may2026.md" target="_blank"><code>tshikululu-master-agency-mou-may2026</code></a> (the commercial wrappers). The MVP page tells you <em>what we're building.</em> The bundle tells you <em>what the regulator expects.</em> This page tells you <em>what a working day in the clinic looks like</em> — for one patient, for one nurse, for one clinic, for one tier, and then for a network of clinics over the next decade. It is the document a Cipla legal reviewer can read alongside Article 9 and a HPCSA auditor can read alongside Booklet 9 §4.1 and a Tshikululu IT reviewer can read alongside Article 18 and walk away believing the system is real.</p>
+<p>It is deliberately written in plain English. Every regulatory claim is cited back to the bundle.</p>
+<hr />
+<h2 id="the-meta-idea">1. The Meta Idea</h2>
+<h3 id="what-ambient-ai-nurse-station-actually-means-in-sa-primary-care">What "ambient AI nurse station" actually means in SA primary care</h3>
+<p>A Sha'p Left clinic is not a hospital. It is a single-room owner-operated nurse-led primary-healthcare practice, usually a converted shipping container or a renovated shop unit in a community hub or near a taxi rank, run by a Primary Care Nurse Specialist (PCNS) operating under a Section 56(6) Nursing Act 2005 permit and a Section 22A(15) Medicines Act dispensing licence issued in the name of the supervising medical practitioner. The nurse is the receptionist, the triage clinician, the prescriber, the dispenser, and the discharge planner. The patient walks in off the street, pays R350, and walks out ten minutes later with an assessment, a script, the actual medicine in hand (Schedule 4 and below), and — under National Core Standards Domain 1 §1.2.1.3 — a discharge note. There is no medical-records clerk. There is no dictation pool. There is no fellow physician to bounce off in the corridor. The nurse charts in English; the patient speaks isiZulu, isiXhosa, Sesotho, Afrikaans, English, or any of the eleven official languages of South Africa, usually code-switching mid-sentence.</p>
+<p>This is the floor we are designing for. Everything in the system has to survive this constraint set: ten minutes per patient, one practitioner, one screen, a laptop on the dispensing-software desk, LTE/4G connectivity that loadshedding will drop without warning, and a regulatory expectation under HPCSA Booklet 9 §4.1 that the record contains twelve mandatory fields by the time the encounter closes — including the bio-psychosocial history, allergies, the proposed clinical management, the medication and dosage prescribed, written proof of informed consent, and details of any referral.</p>
+<p>"Ambient" is the right architectural choice for that floor for a single load-bearing reason: <strong>the nurse cannot type and consult at the same time at this consultation length.</strong> Structured EMR data entry is what kills ten-minute primary care. The Brandmed chronic-disease workflow already concedes this — it focuses on chronic-stable patients on quarterly review where the data-entry overhead can be amortised. Acute episodes at Sha'p Left don't have that luxury. The ambient pattern (passive listening + structured capture + nurse review and amend) preserves the consult as a human conversation and lets the system do the documentation work that the regulator already requires the nurse to produce.</p>
+<p>The second reason ambient is the right choice is multilingual reality. Eleven official languages, code-switching mid-sentence, nurses charting in English even when the consult happens in isiZulu. A structured EMR with English form fields silently throws away the isiZulu-language richness of what the patient actually said. An ambient transcript captures it, even if the downstream record gets translated to English for charting. That captured original-language content is the substrate for the multilingual triage Tier 2 (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> Article 2.1) and for any future fine-tuning of language models on real Sha'p Left audio.</p>
+<h3 id="why-grounded-llm-stgeml-alignment-beats-ai-doctor-framing">Why grounded LLM + STG/EML alignment beats "AI doctor" framing</h3>
+<p>The South African regulator that matters at the consult level is not HPCSA — it is the South African Nursing Council (SANC) and, beneath that, the National Department of Health (NDOH) clinical guidelines that define what is in scope for a Section 56(6) PCNS. The clinical reference is the Primary Healthcare Standard Treatment Guidelines and Essential Medicines List, 8th edition (2024) — the PHC STG/EML — which encodes the antibiotic algorithms, the antihypertensive ladder, the contraception algorithms, the antiretroviral initiation logic for NIMART, and the Schedule-level boundaries the nurse can cross independently. It is the source of truth. Anything our system suggests must reason to the same answer as this document, and must do so in language that maps directly back to it. If we surface a drug name that isn't on the SA EML, we lose credibility on the spot.</p>
+<p>That makes "AI doctor" the wrong frame. A doctor frame implies a Tier-4-level prescribing scope (Schedule 5+, autonomous diagnosis, surgical decisions). The PCNS scope does not extend there — and the Section 56(6) permit explicitly carves out a sub-scope (named conditions, named medicine classes, up to Schedule 4) that varies clinic by clinic, supervisor by supervisor. What the system actually has to do is operate as a <strong>scope-aware grounded clinical decision support layer</strong> that helps the nurse apply the PHC STG/EML correctly inside her permit, escalates anything outside it, and never tries to substitute its judgment for hers. SANC Code of Ethics §3 makes this binding: <em>"Nursing Practitioners will be personally accountable for all actions and omissions while carrying out their responsibilities in their profession and must always be able to justify all decisions taken and carried out."</em> The nurse owns the consult. The system informs it. The audit log attributes every accepted action to her, not to it.</p>
+<p>This is the same regulatory frame ROSE adopts for the TGA exemption response (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/tga-cdss-exemption-response-apr2026.md" target="_blank"><code>tga-cdss-exemption-response-apr2026</code></a>): advisory, not directive; transparent, not opaque; the clinician is the agent, the software is the tool. SAHPRA MD08-2025/2026 (the SA SaMD framework) is built on the same IMDRF-aligned three-criteria CDSS exemption logic as TGA Rule 2.15 — and HPCSA Booklet 10 §5.5(b) restates it explicitly: <em>"Treatment, including issuing a prescription, based solely on an online questionnaire, does not constitute an acceptable standard of care."</em> Our advisory framing satisfies all three.</p>
+<h3 id="why-the-privacy-audit-scope-aware-suppression-pattern-matches-the-sanc-code">Why the privacy / audit / scope-aware-suppression pattern matches the SANC Code</h3>
+<p>The SANC Code of Ethics is a binding code under the Nursing Act 33/2005 (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> §1). Verbatim from §1: <em>"The Code of Ethics does not only provide guidance to nurses in the process of their ethical decision-making, but is a binding document the content of which must be complied with."</em> §5.3 commits the same enforcement weight to it as to the acts-and-omissions regulations.</p>
+<p>Three pillars of the Code map directly onto how we already build:</p>
+<ol type="1">
+<li><strong>Veracity + Fidelity</strong> — the nurse is bound to provide accurate, truthful information and to keep balanced, factual, confidential records. Our existing quote-grounding pattern (every clinical claim by ROSE is anchored to a transcript span or a guideline citation) is load-bearing here. Sophia must never paraphrase findings into the record.</li>
+<li><strong>Autonomy</strong> — <em>"Respect for the autonomy of eligible persons (healthcare users) to make their own decisions and choices."</em> This translates directly into our consent gate (explicit, not a checkbox) and into the override-with-reason pattern: every CDSS suggestion the nurse rejects must be capturable with a free-text reason and must not block the consult.</li>
+<li><strong>Confidentiality + privacy (§4 Value Statement, §5.1.2)</strong> — informs the per-clinic, per-nurse access scoping. No cross-clinic readability without explicit consent; no analytics that re-identify. This is the architectural predicate for the <code>clinic_id</code> row-level boundary we are adding in v1.1.</li>
+</ol>
+<p>Crucially, the Code also defines the limit on what the system is allowed to be. SANC Code §3 says the nurse is accountable for actions <strong>and omissions</strong>. That means the audit log cannot just log what the system did — it has to log what the system surfaced and the nurse declined to do. An override-with-reason for an antibiotic the system thought was contra-indicated is a clinical event in the SANC sense; it must be captured. Our existing AU build supports this for prescribing only. The SA Tier 1 has to support it for everything from day one.</p>
+<h3 id="why-the-discharge-note-is-regulatorily-mandatory-anyway">Why the discharge note is regulatorily mandatory anyway</h3>
+<p>Here is the load-bearing observation that changes how we frame the build commercially:</p>
+<p><strong>Per-consult discharge note generation is a regulatory hard requirement, not a UX nice-to-have.</strong> It is mandated by three independent instruments stacked on top of each other. National Health Act 61 of 2003 §61 establishes the patient's right to written records of care. National Core Standards 2011 Domain 1 §1.2.1.3 binds it operationally: <em>"All patients receive a discharge report (as required by the National Health Act 61 of 2003)."</em> HPCSA Booklet 9 §4.1 enumerates the twelve fields that must be in the record by the time the encounter closes — and §13 prescribes the structured format (history, physical findings, investigations, diagnosis, treatment, outcome). The Office of Health Standards Compliance (OHSC) audits public clinics against these standards via the Norms and Standards Regulations 2018 (GG 1036). Whether it audits the private nurse-led Sha'p Left network is the open question logged in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> §6.</p>
+<p>That stack matters because the AI is not adding a workflow burden — it is automating compliance. Today, ten-minute consults at Sha'p Left almost certainly produce no compliant discharge note (paper-folder reality, no time, no template). Bringing the system in <em>creates</em> the regulatory capability they are already supposed to have. That reframes the system from "AI tool we are selling you" to "compliance scaffolding we are giving you", which is a much easier sell to a clinical reviewer like Dr Punithasvaree Mamdoo and a much easier sell internally at OHSC if Sha'p Left ever becomes audit-relevant.</p>
+<h3 id="the-meta-loop">The meta loop</h3>
+<p>The end-to-end architecture is one continuous information loop, not a workflow tree. Read it forward as a typical day, backward as the data lineage:</p>
+<pre><code>consult conversation
+    → ambient capture (transcript + structured turns)
+        → STG/EML-aligned reasoning (CDSS surfaces differentials, red flags, drug-drug interactions)
+            → record + discharge note (mandatory under NHA §61 + NCS §1.2.1.3 + HPCSA Booklet 9 §4.1)
+                → CCMDD / Daplapmeds handoff (stable chronic stream)
+                    → DHIS rollup (Ideal Clinic Facility Profile schema)
+                        → population health surveillance (Tier 3 — Cipla MoU Article 2.1)
+                            → quality improvement (NCS Domain 2, OHSC norms)
+                                → fine-tuning loop on Sha&#39;p Left audio (POPIA-clean, in-VPC, post-pilot)
+                                    → better model
+                                        → consult conversation</code></pre>
+<p>Every node in this loop is already a regulatory expectation that the nurse cannot meet today at the consult length she works at. The system makes meeting it possible. That is the meta idea.</p>
+<h3 id="why-this-lifts-the-nurse-it-does-not-replace-her">Why this lifts the nurse — it does not replace her</h3>
+<p>SANC Code §3 forbids replacement on its face. The nurse is the agent of accountability; she has to be able to justify every decision. A system that wants to replace her judgement is non-compliant with the regulator that licenses her. A system that wants to augment her — to capture what she said in the language she said it in, surface what the STG/EML 8th ed says about it, suggest the differential she might want to consider, flag the drug-drug interaction she didn't see, draft the discharge note she doesn't have time to type, file the NICD report on the notifiable condition, and pre-populate the CCMDD enrolment for the stable chronic patient — that system is doing the work the regulator already expects of the nurse but acknowledges (under HPCSA Booklet 9 §13's brevity-and-completeness tension) cannot reasonably be done in ten minutes by a human alone. We are not automating the nurse out. We are catching up the system to what the law already says the consult is supposed to produce.</p>
+<p>This is also the right framing for the Cipla Foundation board, the Tshikululu IT diligence, and the AusHealth diagnostics partner. The narrative is "compliance + scale", not "AI replacement of clinical labour".</p>
+<hr />
+<h2 id="the-patient-journey-full-end-to-end-walkthrough">2. The Patient Journey — Full End-to-End Walkthrough</h2>
+<p>To ground the abstraction, walk through one consult end to end. The patient is <strong>Thandi Mokoena</strong>, a 28-year-old isiZulu-first-language woman who lives two streets from the Sha'p Left container clinic in Soweto. She presents with three weeks of intermittent headache, occasional blurred vision when she stands up, and fatigue she put down to her shift work at a packing plant. The presenting nurse is <strong>Sister Nokuthula Dlamini</strong>, a PCNS who has run this Soweto clinic for four years. She holds a Section 56(6) permit issued by Dr S. Naidoo (the supervising medical practitioner of record), is NIMART-trained, and is dispensing-licensed for Schedule 4 and below.</p>
+<p>Read each step in three columns: what the nurse does, what the system does, what the regulator expects. The italicised footnote at the bottom of each step is what fails the consult if it is missing.</p>
+<h3 id="step-1-arrival-queue-screening">Step 1: Arrival, queue, screening</h3>
+<p><strong>Nurse.</strong> Thandi walks in at 09:14. The clinic opened at 08:00 and this is the third patient of the morning. Sister Dlamini greets her in isiZulu, asks her to take a seat, and pulls a paper folder from the shelf — Thandi has been here twice before for contraception and one URTI. She updates the day-sheet (paper) with Thandi's name, ID number and presenting complaint heading. She takes a manual blood pressure: 156/98 mmHg, sitting, right arm. Pulse 88. She enters this into the dispensing-software desktop on the consult table.</p>
+<p><strong>System.</strong> The nurse station application is open. She clicks New Consultation, types T-H-A-N — and the patient picker (PatientSearch.jsx, already staff-capable per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> codebase verification) returns Thandi's existing record. The vitals capture form is pre-loaded with the last visit's BMI and her prior BP readings. She enters today's BP and pulse; the system flags 156/98 against PHC STG/EML 8th ed Chapter 6 (Cardiovascular) thresholds — Stage 2 hypertension, second consecutive elevated reading on her record — and silently primes the differential panel.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.1 (personal identifying particulars) + §4.1.3 (time, date, place of every consultation). NCS Domain 1 §1.5.1.5 (efficient filing system in place). National Core Standards §1.7.1.1 (services meet national guidelines). The PCNS competency framework (SANC) implicitly assumes the entry visit produces a triage that maps onto the four ICSM streams (acute / MCWH / chronic / unplanned) — Thandi's visit is acute pending differential.</p>
+<p><em>If missing, what fails:</em> no audit trail of arrival timestamp = HPCSA Booklet 9 §4.1.3 violated; no patient ID matched = downstream record fragmentation = NCS Domain 1 §1.5.1.5 + CCMDD HPRS-compatibility violated.</p>
+<h3 id="step-2-consent-recording-start">Step 2: Consent + recording start</h3>
+<p><strong>Nurse.</strong> Sister Dlamini swivels the laptop slightly so Thandi can see it. She reads the consent script aloud in isiZulu (the system displays it in two languages side-by-side; she switches as Thandi prefers): "I am going to use a computer assistant that listens to our conversation today and helps me write your notes. The recording is processed in Australia and the audio is deleted after I finish. Your record stays here at this clinic with me. Is that okay?" Thandi nods and says, in isiZulu, "Yes, that's fine, sister."</p>
+<p><strong>System.</strong> Sister Dlamini ticks two checkboxes (I have informed the patient / Patient has verbally consented), and the system begins recording. The first ten seconds capture Thandi's verbal acknowledgement, anchored in the transcript as the consent proof. The persistent banner at the top of the screen reads "RECORDING — REAL CONSULT" (in production; on the 24 May demo it reads "DEMO — SYNTHETIC PATIENT — NOT FOR CLINICAL USE"). The session is flagged is_demo=false in production.</p>
+<p><strong>Regulator.</strong> RICA §4(1) — nurse is a party to the recording, so one-party consent is sufficient under SA recording law for the recording itself; POPIA still governs the processing. POPIA §11 (consent to process), §26 (special PI prohibition), §32 (health-data exception for healthcare provision). HPCSA Booklet 9 §4.1.12 (written proof of informed consent). HPCSA Booklet 10 §5.7 (telehealth consent must include encryption details + sub-processor disclosure — even though Sha'p Left is in-person, the data is processed cross-border, so 5.7 conservatively applies). SANC Code Autonomy principle (§4 Value Statement).</p>
+<p><em>If missing, what fails:</em> no consent capture = §4.1.12 violated, RICA §4(1) loses one-party defence the moment the nurse later disclaims being a party to a portion, POPIA §11 lawful-basis fails, the entire transcript becomes inadmissible as a record.</p>
+<h3 id="step-3-history-taking">Step 3: History taking</h3>
+<p><strong>Nurse.</strong> "Sister, ngiphethwe yikhanda izinsuku ezintathu kanye nomzimba odiniwe." (My head has been hurting for three weeks and my body is tired.) Sister Dlamini elicits the history in isiZulu mostly, switching to English for technical terms. She asks about onset, severity, character, alleviating and aggravating factors, family history (Thandi's mother is hypertensive on enalapril; her grandmother had a stroke at 56), medication (combined oral contraceptive Yasmin for two years), pregnancy possibility (last menstrual period eight days ago, on the pill), allergies (none known), substance use (no smoking, occasional alcohol).</p>
+<p><strong>System.</strong> The transcript runs in two columns — original isiZulu utterances and an inline English gloss. The structured history panel is populated in real time: HPI (3-week intermittent headache, postural blurred vision), PMH (combined OCP × 2 years), FHx (maternal HTN, maternal-grandmother CVA at 56), allergies (NKDA), social (occasional EtOH, no tobacco). The bio-psychosocial history panel — required as a first-class object under HPCSA Booklet 9 §4.1.2 — auto-creates from this and persists across visits. The CDSS reasoning loop has now flagged the postural visual symptoms + hypertension + COCP + family CVA history as a meaningful cluster.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.2 (bio-psychosocial history including allergies and idiosyncrasies). SANC Code Veracity + Fidelity (accurate factual records). PCNS competency: physical assessment, history-taking. ICSM Manual: this is the patient-flow archetype "acute/unplanned" stream, with chronic disease management priming as a cross-stream concern.</p>
+<p><em>If missing, what fails:</em> no allergies captured = §4.1.2 violated, downstream prescribing safety check is groundless; no bio-psychosocial first-class object = future visits start cold every time.</p>
+<h3 id="step-4-examination-vitals-input-point-of-care-testing">Step 4: Examination + vitals input + point-of-care testing</h3>
+<p><strong>Nurse.</strong> Sister Dlamini repeats the BP at three minutes and again at six minutes (PHC STG/EML chapter 6 procedure for BP confirmation). Both readings: 154/96 and 152/95. She does a fundoscopy (no papilloedema, no haemorrhages); urine dipstick shows trace protein, no glucose, no blood. She measures weight (72 kg), height (162 cm), calculates BMI (27.4 — overweight). She does a focused neurological screen — cranial nerves intact, no focal weakness, no neck stiffness. Random capillary glucose (the clinic has a glucometer for point-of-care testing — ICSM Manual references this as a standard PHC capability): 5.4 mmol/L.</p>
+<p><strong>System.</strong> The vitals panel updates with the three serial BP readings. The CDSS classifies confirmed Stage 2 hypertension per PHC STG/EML 8th ed thresholds. The structured exam panel renders the negative neuro screen and dipstick result. The differential panel surfaces three possibilities ranked by prior probability against the PHC STG/EML algorithm: (1) essential hypertension with end-organ assessment indicated; (2) secondary hypertension (renal, given proteinuria — escalation candidate); (3) COCP-associated hypertension (drug-induced, modifiable). The red-flag panel highlights the postural visual symptoms + family CVA history + Stage 2 BP as a stroke-risk signal that warrants escalation if any neurological deficit emerges, and a Schedule-level reminder that any Schedule 5 antihypertensive is outside the §56(6) permit.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.4 (assessment of patient's condition), §4.1.9 (test results). PHC STG/EML 8th ed Chapter 6 (cardiovascular). ICSM Manual point-of-care testing standard. NCS Domain 2 (clinical care + safety). PCNS competency: physical assessment, diagnosis.</p>
+<p><em>If missing, what fails:</em> no serial BP confirmation = STG/EML chapter 6 violated, the diagnosis of hypertension is not safely established; no proteinuria captured = secondary hypertension differential cannot be reasoned.</p>
+<h3 id="step-5-cdss-reasoning-loop">Step 5: CDSS reasoning loop</h3>
+<p><strong>Nurse.</strong> Sister Dlamini reads the differential panel. She accepts the essential-HTN-with-end-organ-assessment-needed framing as the working diagnosis but flags the proteinuria for follow-up. She wants to start lifestyle counselling and a first-line antihypertensive, but she pauses on the COCP question — Yasmin (drospirenone/ethinylestradiol) is on the SA EML and is a known mild BP elevator; in the context of confirmed Stage 2 HTN it should probably be switched to a progestogen-only method per WHO MEC and PHC STG/EML chapter 7 (Reproductive). She also wants to recheck the postural blurred vision — possible orthostatic component, possible early hypertensive retinopathy not yet visible on fundoscopy.</p>
+<p><strong>System.</strong> The CDSS surfaces, in sequence:</p>
+<ul>
+<li><strong>Diagnostic suggestion:</strong> essential HTN Stage 2 (PHC STG/EML 8th ed Chapter 6.1, page reference cited inline). Confidence: high. Citation source visible on hover.</li>
+<li><strong>Drug-drug + drug-condition interaction:</strong> Yasmin (drospirenone) + confirmed Stage 2 HTN → relative contra-indication per WHO MEC category 3; PHC STG/EML chapter 7 recommends switching to progestogen-only injectable (Depo-Provera, on EML, Schedule 4, in-permit) or progestogen-only pill.</li>
+<li><strong>Treatment ladder:</strong> first-line for Stage 2 HTN in non-pregnant adult women &lt; 55 = HCTZ 25 mg + amlodipine 5 mg per PHC STG/EML 8th ed; both Schedule 3, both on EML, both in-permit. Lifestyle counselling: salt reduction, weight loss target, exercise, alcohol moderation.</li>
+<li><strong>Red-flag escalation:</strong> if postural symptoms persist after 2 weeks of treatment OR if proteinuria persists on repeat dipstick → refer to district hospital for renal panel + ACR + ECG. Geographic referral target auto-populated: Chris Hani Baragwanath Academic Hospital, Soweto sub-district (NHA Categories of Hospitals R.185/2012 annex, district-level paeds/OB-Gyn/internal med/general surg/family physician scope).</li>
+<li><strong>Schedule boundary check:</strong> all proposed medicines are Schedule 3–4, in-permit. No escalation needed for prescribing.</li>
+</ul>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.5 (proposed clinical management). HPCSA Booklet 10 §5.5(b) (no prescribing on questionnaire alone — clinical judgment required and exercised here). NCS Domain 2 (clinical governance). SANC Code §3 (accountability — the nurse owns this decision; the system is advisory). PCNS competency: diagnosis + prescribing within scope. PHC STG/EML 8th ed.</p>
+<p><em>If missing, what fails:</em> CDSS without citation = SANC veracity principle fails (the nurse cannot justify the suggestion to the auditor); no Schedule-level check = §56(6) permit boundary may be silently breached; no drug-drug interaction = SANC Code accountability for omissions principle is at risk.</p>
+<h3 id="step-6-diagnosis-plan">Step 6: Diagnosis + plan</h3>
+<p><strong>Nurse.</strong> Sister Dlamini explains the diagnosis to Thandi in isiZulu: confirmed high blood pressure, which is what made her tired and gave her the visual symptoms. She explains the contraception change. She explains why the diet changes matter. Thandi asks whether she will need to be on tablets forever — Sister Dlamini says probably yes, like her mother, but the lifestyle changes can reduce the dose required. She agrees the plan.</p>
+<p><strong>System.</strong> The plan panel records:</p>
+<ul>
+<li>Diagnosis: I10 essential hypertension + Z30.42 surveillance of contraceptive method (ICD-10 codes that map to the SA DHIS reporting taxonomy and the Ideal Clinic Facility Profile chronic NCD category).</li>
+<li>Education: lifestyle modification counselling delivered (DASH-equivalent SA diet messaging + exercise + weight target).</li>
+<li>Plan summary auto-drafts in English for the discharge note + an isiZulu translation pre-rendered for patient handout.</li>
+</ul>
+<p><strong>Regulator.</strong> NCS Domain 1 §1.2.1.3 (discharge report). PHC STG/EML 8th ed alignment. ICSM Manual chronic-disease integration onset (Thandi now becomes a chronic NCD patient; future visits will go through the chronic-stream pathway not the acute-stream pathway).</p>
+<p><em>If missing, what fails:</em> no plain-language explanation = NCS Patient Rights Domain 1 §1.2 violated; no diagnosis code = DHIS rollup fails, Tier 3 surveillance loses this case.</p>
+<h3 id="step-7-prescription">Step 7: Prescription</h3>
+<p><strong>Nurse.</strong> Sister Dlamini prescribes:</p>
+<ul>
+<li>HCTZ 25 mg, 1 tablet OD, 28 days × 1 (Schedule 3, EML, in-permit)</li>
+<li>Amlodipine 5 mg, 1 tablet OD, 28 days × 1 (Schedule 3, EML, in-permit)</li>
+<li>Switch contraception: Depo-Provera 150 mg IM injection today (Schedule 4, EML, in-permit; nurse-administered)</li>
+</ul>
+<p><strong>System.</strong> The prescription panel populates from the CDSS suggestions (each editable). The Schedule-level guard confirms all three are within the §56(6) permit issued by Dr Naidoo for this clinic. No escalation triggered. The dispensing pipeline pre-checks stock: HCTZ 25 mg in stock (28 tablets allocated), amlodipine 5 mg in stock (28 tablets allocated), Depo-Provera 150 mg in stock (1 vial allocated). The prescription is signed in the audit log under Sister Dlamini's PCNS registration number, with the supervising practitioner's reference number captured per Booklet 9 §4.1.6.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.6 (medication and dosage prescribed). Section 22A(15) Medicines Act + Section 56(6) Nursing Act 2005 permit framework. SAHPRA scheduling regulations. PHC STG/EML 8th ed alignment. SANC PCNS competency.</p>
+<p><em>If missing, what fails:</em> Schedule-level guard absent = §56(6) permit may be breached silently; prescription unsigned in audit = the nurse cannot demonstrate compliance to the supervising practitioner or to SANC; medication not on EML = STG/EML alignment violated.</p>
+<h3 id="step-8-education-discharge-note-generation">Step 8: Education + discharge note generation</h3>
+<p><strong>Nurse.</strong> Sister Dlamini administers the Depo-Provera injection (gluteal IM, sterile technique per IPC Practical Manual Part A standard precautions). She walks through the medicine packets and demonstrates how to take them. She writes the next appointment on a paper card — two weeks for BP recheck and dipstick — and clicks "End Consultation" on the screen.</p>
+<p><strong>System.</strong> The discharge note auto-generates in English and isiZulu from the running record — diagnosis, plan, medicine list with administration instructions, lifestyle counselling summary, follow-up date, red flags ("come back immediately if vision worsens, severe headache, weakness on one side"). Two A4 printer pages out the side; Sister Dlamini hands them to Thandi.</p>
+<p><strong>Regulator.</strong> NCS Domain 1 §1.2.1.3 (discharge report mandatory). NHA §61 (patient right to record of care). HPCSA Booklet 9 §4.1.5 (proposed clinical management) + §4.1.7 (referrals if any). SANC Code Veracity (accurate written record).</p>
+<p><em>If missing, what fails:</em> no printed handout = NCS §1.2.1.3 violated, NHA §61 violated, the patient leaves without the record-of-care she has a statutory right to.</p>
+<h3 id="step-9-referral-if-needed">Step 9: Referral if needed</h3>
+<p><strong>Nurse.</strong> Sister Dlamini does not refer Thandi today. The plan is two-week review; if proteinuria persists or postural symptoms worsen, the referral to Chris Hani Baragwanath outpatients is pre-staged in the system.</p>
+<p><strong>System.</strong> The referral object exists as a draft, pre-populated with Thandi's demographics, the working diagnosis, the relevant findings, and the auto-resolved district hospital target (NHA R.185/2012 annex). It will trigger automatically if the two-week review meets the escalation criteria.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.1.7 (referral details). NCS Domain 1 §1.4.1.1 (effective district health-care referral system). NHA Categories of Hospitals R.185/2012 (the upward referral pathway is regulated). ICSM Manual DCST escalation channel.</p>
+<p><em>If missing, what fails:</em> if the two-week deterioration arrives and the referral is not staged, the nurse will be re-doing five minutes of admin in a constrained consult window; the patient may be referred to the wrong facility (NHA R.185/2012 violated).</p>
+<h3 id="step-10-stable-chronic-decision-ccmdd-diversion">Step 10: Stable chronic decision (CCMDD diversion)</h3>
+<p><strong>Nurse.</strong> Thandi is <em>not yet</em> stable enough for CCMDD/Daplapmeds diversion — she's brand-new on antihypertensives, needs at least two clinical reviews to confirm BP control before her three-month repeats can be diverted to a chronic-medication pickup point. The system records this decision: "chronic NCD patient, not yet stable, review in 2 weeks then 3 months → re-evaluate for CCMDD enrolment".</p>
+<p><strong>System.</strong> The chronic-disease management state machine takes over Thandi's record. Future visits surface the prior plan, BP trend, dipstick history, and CCMDD-eligibility flag. When she's stable (typically 6 months in, three consecutive in-target readings, no acute complications), the system pre-fills the CCMDD enrolment form and prompts Sister Dlamini to enrol her at the next visit.</p>
+<p><strong>Regulator.</strong> ICSM Manual chronic-disease management stream + pre-dispensed medications under CCMDD. NDOH CCMDD SOP 2021. PHC STG/EML 8th ed chronic management algorithms.</p>
+<p><em>If missing, what fails:</em> no CCMDD pathway = Sha'p Left's structural model breaks (acute at the surgery, stable chronic to Daplapmeds); the surgery becomes congested with stable patients on quarterly repeats.</p>
+<h3 id="step-11-notifiable-condition-check">Step 11: Notifiable condition check</h3>
+<p><strong>Nurse.</strong> Hypertension is not notifiable. No NICD report needed for Thandi today. (For comparison: had the consult been a TB diagnosis, a measles case, a food-borne illness cluster, or certain STIs, the system would have auto-flagged the NICD reporting obligation per IPC Practical Manual Part G + the Notifiable Medical Conditions Surveillance System.)</p>
+<p><strong>System.</strong> The notifiable-conditions check ran silently during step 5; nothing was flagged. The ICD-10 codes I10 + Z30.42 are filed for the DHIS rollup but do not enter the NICD pipeline.</p>
+<p><strong>Regulator.</strong> IPC Practical Manual Part G (reporting of notifiable medical conditions). National Health Act + the Notifiable Medical Conditions Regulations.</p>
+<p><em>If missing, what fails:</em> notifiable condition silently goes unreported = §61 of the National Health Act + IPC Practical Manual Part G violated; for a real notifiable case (TB, measles, COVID-equivalent), this is a public-health regulatory breach with audit consequences for the supervising practitioner.</p>
+<h3 id="step-12-record-close-audit-log-retention">Step 12: Record close + audit log + retention</h3>
+<p><strong>Nurse.</strong> Sister Dlamini reviews the auto-drafted SOAP note (the system shows it inline, edits visible in audit-trail format with line-through markers per HPCSA Booklet 9 §4.2 / §8). She tweaks two phrases — Sophia called the postural visual symptoms "presyncope" and she preferred "transient postural visual blurring", which she edits inline; the audit log captures the change. She signs the record. The encounter closes.</p>
+<p><strong>System.</strong> The full record is encrypted at rest (AES-256-GCM via the existing encryption module), stored against Thandi's clinic-scoped record, the audio is deleted within 60 seconds (transcript-only retention), and the retention engine schedules the record for 6-year retention from dormant date per HPCSA Booklet 9 §9. The audit log captures: who created the record (Sister Dlamini), every CDSS suggestion accepted or overridden, every edit (with original and replacement text), every view-event of the record from this point forward.</p>
+<p><strong>Regulator.</strong> HPCSA Booklet 9 §4.2 / §8 (immutable records, line-through correction). §9 (retention rules: 6 years for adults from dormant date, until 21st birthday for minors, lifetime for mentally incompetent, 20 years for occupational health, ≥25 years for long-latency conditions). §12 (write-once / encrypted / password-protected / off-site backup). POPIA §19 (security safeguards). Tshikululu MoU Article 18.5(a) AES-256/FIPS KMS. SANC Code Confidentiality.</p>
+<p><em>If missing, what fails:</em> mutable record = §4.2 / §8 violated, an auditor can't trust any retrospective record review; no retention scheduling = §9 violated, records may be deleted prematurely or kept indefinitely; no encryption = §12 + POPIA §19 + Tshikululu MoU 18.5(a) all violated simultaneously.</p>
+<h3 id="step-13-follow-up-scheduling">Step 13: Follow-up scheduling</h3>
+<p><strong>Nurse.</strong> Sister Dlamini hands Thandi the appointment card — two weeks today, 09:00. She reminds her to bring her medication packets to the next visit. She sets a one-week SMS reminder on the system (Twilio / Africa's Talking integration, per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> Strategic Update).</p>
+<p><strong>System.</strong> The follow-up object is created. SMS reminder scheduled. Ward-based outreach team (WBPHCOT — ICSM Manual standard component of district PHC) is notified if Thandi misses the follow-up by more than 7 days.</p>
+<p><strong>Regulator.</strong> ICSM Manual ward-based outreach + appointment scheduling integration. NCS Domain 1 §1.3 (continuity of care).</p>
+<p><em>If missing, what fails:</em> missed follow-up = lost-to-follow-up chronic NCD patient = NCS §1.3 violated and patient at clinical risk; WBPHCOT not notified = the safety net the SA PHC system designed for exactly this case is not engaged.</p>
+<p>The whole encounter, end to end, has run 11 minutes. Sister Dlamini collects the R350, files the paper folder back on the shelf (production won't fully retire paper — Cipla has been clear that paper will run in parallel for at least the first year), and calls the next patient. The record is filed, the discharge note is in Thandi's hand, the prescription is signed and dispensed, the audit log is intact, the notifiable-conditions check ran, the CCMDD path is staged, the SMS reminder is scheduled, and twelve regulatory instruments have been satisfied without Sister Dlamini typing a single word of structured EMR data.</p>
+<p>That is what the system does. That is what an ambient AI nurse station means in SA primary care.</p>
+<hr />
+<h2 id="the-clinic-day-operational-layer">3. The Clinic Day — Operational Layer</h2>
+<p>One consult is a unit. A clinic day is what scales. Sha'p Left clinics run 12–18 patients per day, 5 days per week, ~300–350 patients per month per surgery (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/entities/companies/cipla.md" target="_blank"><code>entities/companies/cipla</code></a> verified workflow). The operational layer on top of the consult walkthrough has to survive that throughput at the constraint set described in §1: one practitioner, one room, one screen, intermittent connectivity.</p>
+<h3 id="opening-procedures">Opening procedures</h3>
+<p>By 08:00, Sister Dlamini has done a system check: laptop on, dispensing-software desktop loaded, nurse station application open and authenticated against the clinic's RBAC (clinic_id boundary enforced, per SANC Code §4 confidentiality). The system surfaces an opening dashboard:</p>
+<ul>
+<li><strong>Clinic status:</strong> EML stock visibility (HCTZ 25 mg: 124 tablets, OK; amoxicillin 500 mg caps: 380, OK; Depo-Provera 150 mg: 6 vials, low — order today; ARVs first-line: 22 patient-months, OK). This maps to the Ideal Clinic Framework V19 Component 3 (Medicines, Supplies and Laboratory Services) standardised facility-stationery list.</li>
+<li><strong>Yesterday close:</strong> end-of-day rollup completed, 14 consults, 1 NICD report filed (suspected measles in a 6-year-old → district communicable disease unit), 0 unresolved escalations, 1 patient flagged for WBPHCOT follow-up.</li>
+<li><strong>Today queue:</strong> 4 booked appointments (chronic reviews + a contraception consult), expected walk-ins ~10–12.</li>
+<li><strong>Connectivity baseline:</strong> LTE strong; loadshedding schedule for today is Stage 2 from 14:00–16:30 → battery+inverter will hold the laptop and modem.</li>
+</ul>
+<p><strong>Regulator:</strong> Ideal Clinic Framework V19 Component 1 (Administration) + Component 3 (Medicines). NCS Domain 6 (Operational Management).</p>
+<h3 id="patient-flow-archetypes">Patient flow archetypes</h3>
+<p>ICSM Manual codifies four patient streams. Every Sha'p Left day mixes them:</p>
+<ol type="1">
+<li><strong>Acute / minor ailments</strong> — URTIs, gastro, minor injuries, contraception queries, suspected STIs, mental-health acute triage. ~40% of typical day. Walk-in dominant. ~10-min consults.</li>
+<li><strong>MCWH (Maternal, Child, Women's Health)</strong> — antenatal first booking, well-baby immunisation, family planning, post-natal review, cervical screening. ~25%. Booked appointments + walk-in. ~15-min consults.</li>
+<li><strong>Chronic disease management</strong> — HTN/T2DM/asthma/COPD/HIV stable reviews, NIMART initiation/repeat, mental-health stable scripts. ~30%. Booked-appointment dominant. ~10-min consults except NIMART initiation (~20 min).</li>
+<li><strong>Unplanned vs planned</strong> — overlay rather than separate stream; tracks whether the visit was on-the-day or pre-booked. Reporting-relevant for CCMDD eligibility and DCST review.</li>
+</ol>
+<p>The system's opening triage at every consult is "which of the four streams is this?" — same model Brandmed uses for chronic-stream patients. ROSE's conversation flow branches accordingly: acute → presenting-complaint-driven; MCWH → protocol-driven (e.g. ANC profile from PHC STG/EML chapter 4); chronic → trend-driven (BP/HbA1c/CD4 panel auto-loaded).</p>
+<h3 id="lunch-break-loadshedding-connectivity-dropouts">Lunch break / loadshedding / connectivity dropouts</h3>
+<p>Stage 2 loadshedding hits at 14:00. The grid drops; the inverter takes over. The laptop and modem stay up; the dispensing-software desktop stays alive. The cloud sync queue starts buffering — any consult records created during the dropout queue locally (encrypted at rest, in the same AES-256 envelope as the synced records), and back-fill once connectivity restores. The system's offline-first design is a hard requirement for SA PHC, not optional. SAMJ 2019 documents loadshedding's clinical impact; if our system fails during a 2.5-hour outage, we have failed the operational test. By 16:35, the grid is back, the queue flushes, three consults that ran during the outage post their records to the central store. No data loss. The offline-mode banner clears.</p>
+<p><strong>Regulator:</strong> HPCSA Booklet 9 §12 (encrypted storage applies whether the record is in-cloud or on the local laptop; an offline record that gets stolen is still a breach without encryption). POPIA §19. Tshikululu MoU Article 18.5(a). SANC Code Confidentiality.</p>
+<h3 id="closing-procedures">Closing procedures</h3>
+<p>At 17:00 close, Sister Dlamini clicks "End-of-Day". The system rolls up:</p>
+<ul>
+<li><strong>DHIS report draft.</strong> All 14 consults bucketed by ICSM stream + condition + ICD-10 code. Auto-formatted to the DHIS data set the district health information officer expects. (For Tier 3, this becomes hub-and-spoke surveillance — see §4 Tier 3.)</li>
+<li><strong>NICD report check.</strong> Any notifiable conditions diagnosed today, with auto-pre-filled NICD report ready for nurse review and submission. The measles case from yesterday already filed; today, no new notifiables.</li>
+<li><strong>Stock count.</strong> EML drawdown for today auto-calculated from prescriptions issued. Any item below 7-day reserve flagged for ordering.</li>
+<li><strong>End-of-day report.</strong> Plain-text summary suitable for the supervising practitioner (Dr Naidoo) to review weekly.</li>
+<li><strong>Audit log integrity check.</strong> All records signed; no unsigned encounters; no orphan records.</li>
+</ul>
+<p>She reviews, edits, signs off. The day closes. Records are persisted. Tomorrow's queue is staged.</p>
+<p><strong>Regulator:</strong> ICSM Manual Facility Data Tool (headcount + per-condition counts). Ideal Clinic Facility Profile (annual capture; daily/monthly contributes). IPC Practical Manual Part G (notifiable conditions). NCS Domain 4 (Public Health).</p>
+<h3 id="weekly-cadence">Weekly cadence</h3>
+<ul>
+<li><strong>DCST contact.</strong> District Clinical Specialist Team (paeds + OB-Gyn + family physician + internal med + general surg, per NHA R.185/2012 §3(4)) has a weekly virtual case-conference slot. Sister Dlamini queues any clinically complex case (e.g. Thandi if her 2-week recheck is unfavourable; a paediatric case with an unusual rash; a refractory diabetes patient). The system pre-packages the case file, redacts according to SANC Code §4, and posts it on the DCST queue.</li>
+<li><strong>DOH liaison.</strong> Weekly check-in with the sub-district DOH coordinator covers stock exceptions, NICD escalations, ward-based outreach team referrals, Ideal Clinic Programme audit prep if applicable.</li>
+<li><strong>Supervising practitioner sign-off.</strong> Dr Naidoo reviews the week's prescriptions outside the §56(6) permit (none, this week) plus a sample of in-permit prescriptions (per HPCSA supervisory practice). The system serves the sample, the audit log, and the override-with-reason history. Dr Naidoo's countersign is captured and time-stamped.</li>
+</ul>
+<p><strong>Regulator:</strong> ICSM Manual DCST escalation channel. SANC §56(6) permit framework (supervisory practitioner accountability). HPCSA Booklet 10 §3.7/§3.8 (no exclusive telehealth — the supervising practitioner has an established practitioner-to-practitioner relationship with the clinic, not the patient, but the principle holds). HPCSA Booklet 9 §4 record-keeping continuity.</p>
+<h3 id="monthly-cadence">Monthly cadence</h3>
+<ul>
+<li><strong>Cipla / Tshikululu reporting.</strong> Monthly rollup of operational KPIs (consult volume, condition mix, ICSM stream ratios, NICD reports filed, stock turn) per the Tshikululu MoU Article 18.7 reporting cadence. Auto-generated from the same DHIS-aligned schema.</li>
+<li><strong>Population health rollup.</strong> Cross-clinic aggregation (Tier 3 — Cipla MoU Article 2.1) — disease patterns, chronic outcomes, care-gap identification, formulary utilisation. Read by Cipla Foundation clinical leadership + the supervising practitioners + (eventually) the NDOH liaison. Anonymised + clinic-bucket level by default; clinic-identifying detail only with consent.</li>
+<li><strong>KPI review.</strong> The 30-day Structured Clinical Governance Pilot KPIs (Cipla MoU Stage 4) — documentation quality (HPCSA Booklet 9 §4.1 compliance rate), triage alignment (ICSM stream classification accuracy), operational efficiency (per-consult time, queue length) — read against the pilot baselines.</li>
+<li><strong>Ideal Clinic Profile auto-update.</strong> If the clinic participates in the Ideal Clinic Programme, the monthly rollup feeds into the annual Facility Profile capture (due 31 March each year per OHSC Procedural Regulations 2016). The system pre-fills the entire form from operational data; the practice manager only has to verify and submit.</li>
+</ul>
+<p><strong>Regulator:</strong> Ideal Clinic Framework V19 + Facility Profile + OHSC Procedural Regulations 2016. ICSM Manual Facility Data Tool. NCS Domain 4 + Domain 5 (Leadership and Governance). Cipla MoU Articles 2 + 9. Tshikululu MoU Articles 18 + 19.</p>
+<hr />
+<h2 id="the-4-tier-build-how-each-tier-layers-on">4. The 4-Tier Build — How Each Tier Layers On</h2>
+<p>The Cipla Foundation MoU Article 2.1 codifies four deployment tiers (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a>). They are sequential, not parallel — each tier adds capability and brings additional regulators into scope.</p>
+<h3 id="tier-1-clinical-decision-support-cdss">Tier 1 — Clinical Decision Support (CDSS)</h3>
+<p><strong>What is added at this tier.</strong> Everything in the Patient Journey walkthrough above. Real-time safety checks, STG/EML alignment, formulary alignment, chronic-disease management state, SOAP from verbal consultation, red-flag detection, multilingual capture of patient input, scope-aware suppression at the §56(6) permit boundary, discharge note generation, NICD reporting check, CCMDD eligibility flag, audit log + retention engine.</p>
+<p><strong>Which regulators come into play.</strong> SANC (Code of Ethics + PCNS competencies), NDOH (PHC STG/EML 8th ed + ICSM + IPC Practical Manual + Notifiable Conditions Regulations), HPCSA (Booklet 9 records, Booklet 20 AI transparency), POPIA + Information Regulator (data protection), SAHPRA (MD08-2025/2026 SaMD framework — Section 21 unregistered access for pilot, Class A or C registration for production), the Information Regulator (POPIA enforcement, breach reporting). The OHSC may apply via Norms and Standards Regulations 2018 if private nurse-led clinics are eventually deemed in scope.</p>
+<p><strong>Which existing nurse workflows change vs are augmented.</strong> The consult conversation does not change. The dispensing flow does not change. The paper folder does not disappear in pilot phase (kept in parallel for resilience). What changes: the discharge note is now generated, not skipped; the NICD report is now flagged automatically, not silently missed; the audit log is now machine-readable; the CCMDD enrolment is now pre-staged, not re-typed; the supervising practitioner's weekly review now has a pre-packaged sample, not a paper-folder dive.</p>
+<p><strong>What net-new system capability is required.</strong> The full nurse station application (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> MVP work breakdown). Continuous-mode audio capture, chunked Scribe v1 transcription with diarisation, the nurse dashboard layout, the bio-psychosocial first-class history object, the per-clinic RBAC boundary, override-with-reason for every CDSS suggestion, the discharge note printer integration, the retention engine, the offline-first sync queue.</p>
+<p><strong>What KPI shifts indicate readiness for Tier 2.</strong> Documentation quality rate (HPCSA Booklet 9 §4.1 compliance) ≥ 95%. Triage classification (ICSM stream) accuracy ≥ 90% on supervisor sample audit. Per-consult time within ±15% of baseline (i.e. the system is not slowing the consult). Override-with-reason rate stable (CDSS suggestions not being overridden at &gt; 30%, suggesting the model is in the right scope). NICD reporting rate up vs paper baseline.</p>
+<h3 id="tier-2-multilingual-agentic-triage">Tier 2 — Multilingual Agentic Triage</h3>
+<p><strong>What is added at this tier.</strong> A patient-facing layer that responds to patients in their preferred language without nurse mediation, performs initial symptom assessment + risk-stratification + routing, and hands off to the nurse with a structured pre-consult summary. Could be SMS-based (Africa's Talking + Twilio per the FN Capital Strategic Update reference pack), USSD-menu-based for feature-phone users (60% of African mobile users on feature phones — same pack), or in-clinic queue-tablet-based.</p>
+<p><strong>Which regulators come into play.</strong> All Tier 1 regulators plus: HPCSA Booklet 10 §5.5(b) (no prescribing on questionnaire alone — the agentic triage cannot make clinical decisions, it can only route + prepare). HPCSA Booklet 20 (AI in healthcare ethical guidelines, especially cultural appropriateness validation across all 11 SA languages). POPIA §11 (consent for an unsupervised channel — needs explicit lawful basis, possibly §32 health-data exception). SAHPRA likely now in scope as a Class A or B SaMD.</p>
+<p><strong>Which existing nurse workflows change vs are augmented.</strong> Triage moves partly upstream of the nurse — the patient's pre-consult summary is in the queue when they arrive. The opening minute of the consult is freed; the nurse picks up where the triage left off. Walk-in volume can scale because the front-end is not human-bottlenecked. NICD checks move further upstream too — symptom clusters that match notifiable patterns can flag at triage, before clinical confirmation.</p>
+<p><strong>What net-new system capability is required.</strong> Multilingual ASR + NLG at production quality across the priority SA languages (isiZulu, isiXhosa, Sesotho, Afrikaans + English). USSD + SMS gateway integration. Identity continuity across channels (phone-number-based identity that links to the clinic record). The triage algorithm itself, scope-bounded so it can't make clinical decisions. Cultural-appropriateness validation evidence per HPCSA Booklet 20.</p>
+<p><strong>What KPI shifts indicate readiness for Tier 3.</strong> Triage precision (the agent's pre-consult summary matches the nurse's eventual diagnosis at ≥ 80%). False-negative rate on red-flag escalation &lt; 1%. Patient acceptance / completion rates ≥ 70%. Language coverage live for at least 4 of the priority languages.</p>
+<h3 id="tier-3-population-health-surveillance">Tier 3 — Population Health Surveillance</h3>
+<p><strong>What is added at this tier.</strong> The hub-and-spoke surveillance described in the meta loop above. Real-time disease pattern detection across the network, chronic outcomes tracking, care-gap identification (e.g. patients overdue for cervical screening), formulary utilisation analytics, stock-level management with predictive reorder, Ideal Clinic Facility Profile auto-generation at network level, NICD reporting at network level (early-cluster detection across clinics), DHIS rollup feeding directly into the sub-district health information officer's pipeline.</p>
+<p><strong>Which regulators come into play.</strong> All Tier 1 + 2 regulators plus: NDOH (DHIS data set ownership; Notifiable Medical Conditions Surveillance System integration). NICD (data-sharing agreements). OHSC (if Sha'p Left becomes an Ideal Clinic Programme participant network, the Facility Profile auto-generation is an OHSC reporting integration). Information Regulator (cross-clinic aggregation triggers POPIA §57 — special-protection processing requires a code of conduct or information officer authorisation).</p>
+<p><strong>Which existing nurse workflows change vs are augmented.</strong> Minimal change at the consult level. The big change is at the clinic-network level: Cipla Foundation gains a real-time view of what's happening across 11→50→300 clinics, which it does not have today. Stock predictive reorder reduces outages. Care-gap identification surfaces patients to outreach (WBPHCOT) before they fall out of care.</p>
+<p><strong>What net-new system capability is required.</strong> Cross-clinic data architecture (the clinic_id boundary becomes a cross-clinic-aggregation API with explicit consent + redaction). DHIS schema integration. NICD pipeline. Predictive analytics layer (stock, care gaps, disease patterns). Network-level dashboards for Cipla Foundation clinical leadership + Tshikululu reporting + Cipla MoU Article 2 reporting cadence.</p>
+<p><strong>What KPI shifts indicate readiness for Tier 4.</strong> Cross-clinic aggregation live with no privacy incidents. NICD pipeline integrated. DHIS rollup accepted by sub-district health information officers. Stock outage reduction quantified (target: &lt; 5% time-out-of-stock on EML essentials).</p>
+<h3 id="tier-4-supervising-prescribing-authority">Tier 4 — Supervising Prescribing Authority</h3>
+<p><strong>What is added at this tier.</strong> A doctor-supervision layer, where the §56(6) permit boundary is augmented by an on-call HPCSA-registered medical practitioner who can authorise a prescription above the nurse's independent scope (Schedule 5+, off-EML medicines, complex differentials). The doctor reviews the case, the captured transcript, the structured record, and the nurse's reasoning, and counter-signs (or declines) the prescription in real time — within a target 15-minute SLA.</p>
+<p><strong>Which regulators come into play.</strong> All Tier 1 + 2 + 3 regulators plus: HPCSA Booklet 10 §3.7/§3.8 (no exclusive telehealth; established practitioner-patient relationship preferred — Tier 4 doctor escalation must be hand-off to a doctor with prior knowledge of the patient OR with explicit consent for the new relationship). HPCSA Booklet 10 §5.1 (any Tier 4 doctor must hold HPCSA registration — AU-only-registered doctors providing remote SA oversight is non-compliant). HPCSA Booklet 10 §5.7 (richer telehealth-specific informed consent, including encryption and sub-processor disclosure). SAHPRA (Class B or C SaMD likely; the prescribing-supervision logic is a clinical-decision-support tool with materially higher risk than Tier 1).</p>
+<p><strong>Which existing nurse workflows change vs are augmented.</strong> The Schedule-level guard at step 5 / 7 of the consult walkthrough now has an escalation path that doesn't require referring the patient out — the patient stays in the clinic, the doctor connects in, the nurse co-manages. This is a material expansion of what Sha'p Left can treat in-house. It's also where the §56(6) permit boundary becomes negotiable case by case rather than absolute. Walk-in capacity can grow because patients who would have been referred to a district hospital can be managed at the clinic.</p>
+<p><strong>What net-new system capability is required.</strong> A doctor recruitment + credentialing pipeline that issues HPCSA-registered seats first, before any AU seats (this is the load-bearing insight from <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> §"Implementation impact matrix"). The credential-verification gate. The Tier 4 doctor's view of the case (read-only nurse record + transcript + evidence + ability to counter-sign or decline). Real-time SLA monitoring. The richer SA-variant telehealth consent form. Audit-log attribution for the doctor's countersign separate from the nurse's signature. Supplementary insurance, indemnity, and credentialing administration for the doctor pool.</p>
+<p><strong>What KPI shifts indicate readiness for network-wide rollout.</strong> Tier 4 escalation success rate ≥ 95% (doctor available within SLA, prescription authorised or declined with reason). HPCSA-registered doctor pool sized adequately for clinic load (target ratio TBD with Cipla — initial estimate ~1 doctor per 5–8 clinics). Zero §56(6) permit breaches. Patient retention at the clinic post-Tier-4-escalation ≥ 90% (i.e. the patient is not re-referred elsewhere).</p>
+<hr />
+<h2 id="the-production-reality-differences-from-the-demo">5. The "Production Reality" Differences from the Demo</h2>
+<p>The 24 May SAST demo (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> status update) is the validation artefact. It runs on synthetic patient data, on AU AWS (<code>ap-southeast-2</code>), with a single nurse, a single role-played scenario, and a persistent "DEMO" banner. It is engineered to pass the SAHPRA + POPIA bar at exactly that scope (per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> §2 demo bar).</p>
+<p>Production is a different system. The list below is what changes between demo and the eventual 11→50→300-clinic deployment.</p>
+<h3 id="data-residency-migration">Data residency migration</h3>
+<p>Demo runs on <code>ap-southeast-2</code> (Sydney). Production runs on <code>af-south-1</code> (Cape Town) for live PHI, per Cipla MoU Article 9.4 + Tshikululu MoU Article 18.4 (SA-residency-by-default). The migration is non-trivial: it requires re-architecting the Supabase deployment, the EKS cluster, the encryption-at-rest envelopes, the audit log, and the inter-region replication for backup. Estimate: 4–6 weeks of dedicated infrastructure work, post-pilot. AusHealth diligence in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/aushealth-fy26-priorities-apr2026.md" target="_blank"><code>aushealth-fy26-priorities-apr2026</code></a> explicitly raised this as a regulatory line; AWS publishes the <code>af-south-1</code> capabilities and POPIA compatibility (per the AWS South Africa data privacy page in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> sources).</p>
+<h3 id="multi-clinic-isolation">Multi-clinic isolation</h3>
+<p>Demo is single-tenant. Production is per-clinic RBAC: every record carries a <code>clinic_id</code>, every nurse is bound to her clinic, no cross-clinic readability without explicit consent (SANC Code §4 confidentiality). The current Sophia stack has domain-based tenancy but no row-level (per the codebase verification spike). v1.1 work introduces <code>clinic_id</code> as a first-class column on every patient + consult record, plus the cross-clinic aggregation API (Tier 3 substrate) with explicit consent gating + clinic-bucket-level redaction by default.</p>
+<h3 id="real-phi-real-patient-consent-flows">Real PHI + real patient consent flows</h3>
+<p>Demo uses synthetic patients (Botaniqal employees role-playing) with a one-page release. Production processes real PHI from the moment Sister Dlamini hits Start Consultation. That triggers the full POPIA §11/§18/§32 consent flow, the March 2026 POPIA Health Information Regulations compliance pack, the HPCSA Booklet 10 §5.7 telehealth-consent payload (encryption + sub-processors disclosed in plain language), the consent-disclosure script in the patient's preferred language, and the verbal-acknowledgement-anchored proof-of-consent in the transcript. The Cipla MoU Article 9.3 DPA (we = Operator, Cipla = Responsible Party) must be in force before the first real consult.</p>
+<h3 id="hour-breach-notification-on-call">24-hour breach notification on-call</h3>
+<p>Tshikululu MoU Article 18.8 (per the Dwayne 4 May 12:13 ACST "Quick Compliance check") requires 24-hour breach notification — to the Information Regulator under POPIA §22 + §72 + to Tshikululu as Exclusive Regional Agent + to Cipla Foundation as Responsible Party + to affected data subjects under POPIA §22. Production needs an on-call rota, a breach-response runbook, a notification-letter generator (per POPIA §22 NDB content requirements), and an integration with the Information Regulator's Notification Portal. AusHealth diligence is likely to verify this exists.</p>
+<h3 id="doctor-credentialing-pipeline-tier-4">Doctor credentialing pipeline (Tier 4)</h3>
+<p>Demo defers Tier 4 entirely. Production requires a doctor-recruitment + HPCSA-credential-verification + indemnity-coverage + onboarding pipeline. The single biggest "this affects how we build" insight from <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a>: HPCSA Booklet 10 §5.1 requires Tier 4 doctors to be HPCSA-registered. AU-only registration is non-compliant. We need to recruit and credential a SA HPCSA-registered doctor pool before Tier 4 goes live. Cipla / Sha'p Left may have an existing roster (the supervising practitioners who currently issue the §56(6) permits — open question logged in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> §6 for Cipla to clarify).</p>
+<h3 id="discharge-note-printing">Discharge note printing</h3>
+<p>Demo can show the discharge note on screen. Production requires actual printers in every clinic — A4 thermal or inkjet, one per clinic, paper supply, ink replacement logistics, fall-back to PDF download or SMS-to-patient link if printer fails. This is a procurement + logistics workstream, not just a tech workstream. NCS Domain 1 §1.2.1.3 (discharge report mandatory) does not relax if the printer is out of paper; the system needs a fall-back.</p>
+<h3 id="connectivity-heuristics-offline-first">Connectivity heuristics — offline-first</h3>
+<p>Demo can assume connectivity. Production cannot. SAMJ 2019 documents loadshedding's clinical impact; at MVP volumes loadshedding will hit our deployment within the first month. The offline-first sync queue described in §3 (Lunch break / loadshedding) is not optional. The application must run fully offline (record creation, encryption-at-rest, dispensing-software integration, paper-discharge-note generation), buffer the sync queue, and back-fill on reconnect with no data loss and no retroactive timestamp manipulation (HPCSA Booklet 9 §4.2 / §8 immutability holds offline).</p>
+<h3 id="audit-retention-engine">Audit + retention engine</h3>
+<p>Demo can store records on indefinite retention. Production requires the full HPCSA Booklet 9 §9 retention rules: 6 years for adults from dormant date, until 21st birthday for minors, lifetime for mentally incompetent patients, 20 years for occupational-health records (OHSA 85/1993), at least 25 years recommended for long-latency conditions. AWS S3 with object-lock and Glacier transitions can encode this — but it has to be encoded, with per-record-class lifecycle policies and an auditable disposal log. Practitioner-death / closure custody (§10) must also be handled in production: a Sha'p Left clinic operator who closes the clinic must transfer or safekeep records for ≥12 months; the system needs an export-and-archive pathway.</p>
+<h3 id="annual-ideal-clinic-facility-profile-auto-generation">Annual Ideal Clinic Facility Profile auto-generation</h3>
+<p>Demo doesn't need this. If Cipla wants Sha'p Left clinics to file annual Facility Profiles (open question for Cipla in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> §6), production can auto-generate from operational data — facility metadata + monthly headcount + service-mix + personnel breakdown by SANC category. It's a high-value-add deliverable that doesn't exist in any other CDSS in the market and is operationally trivial once Tier 3 is live.</p>
+<hr />
+<h2 id="the-three-system-diagrams">6. The Three System Diagrams</h2>
+<h3 id="system-architecture">6.1 System architecture</h3>
+<div class="mermaid">flowchart TB
+    subgraph Patient["Patient (Thandi)"]
+        P1[isiZulu / English voice]
+        P2[Phone — SMS / USSD for Tier 2]
+        P3[Discharge note — A4 paper]
+    end
+
+    subgraph Clinic["Sha'p Left Clinic (1 of 11→50→300)"]
+        N[Nurse — PCNS, §56(6) permit]
+        L[Laptop + dispensing software]
+        PR[A4 printer]
+        I[Inverter + battery — loadshedding]
+        D[Dispensing — Schedule 4 in-room]
+        F[Paper folder — kept in parallel]
+    end
+
+    subgraph EdgeApp["Nurse Station Application (in-clinic)"]
+        UI[Nurse dashboard — panel-first UI]
+        AR[Audio recorder — continuous chunked]
+        OQ[Offline sync queue — encrypted at rest]
+    end
+
+    subgraph SophiaBackend["Sophia / ROSE Backend (af-south-1 in production)"]
+        ASR[Scribe v1 ASR — diarised, multilingual]
+        LLM[Opus 4.6 — grounded reasoning]
+        STG[PHC STG/EML 8th ed RAG]
+        SCG[Scope-aware suppression + §56(6) guard]
+        NIC[NICD report check]
+        DSC[Discharge note generator]
+        AUD[Audit log + retention engine]
+        ENC[Encryption — AES-256-GCM]
+    end
+
+    subgraph DataResidency["Data Residency"]
+        AFS[(AWS af-south-1<br/>Cape Town<br/>PHI by default)]
+        APS[(AWS ap-southeast-2<br/>Sydney<br/>demo + non-PHI dev)]
+    end
+
+    subgraph SAEcosystem["SA Health Ecosystem"]
+        DH[District Hospital<br/>NHA R.185/2012 referral]
+        DCST[DCST — weekly case conf]
+        WB[WBPHCOT — outreach]
+        CCMDD[CCMDD / Daplapmeds]
+        DHIS[DHIS sub-district HIO]
+        NICD[NICD — notifiable conditions]
+        OHSC[OHSC — Norms & Standards]
+        BM[Brandmed — chronic stream]
+    end
+
+    subgraph Governance["Governance + Commercial"]
+        SANC[SANC — nurse regulator]
+        HPCSA[HPCSA — doctor + records]
+        SAHPRA[SAHPRA — SaMD]
+        IR[Information Regulator — POPIA]
+        CIPLA[Cipla Foundation NPC<br/>Responsible Party]
+        TSI[Tshikululu — Exclusive Regional Agent<br/>POPIA sub-processor]
+        NDOH[NDOH — clinical guidelines]
+    end
+
+    P1 --> N
+    P2 -.Tier 2.-> SophiaBackend
+    N --> L
+    L --> UI
+    UI --> AR
+    AR --> ASR
+    ASR --> LLM
+    LLM --> STG
+    LLM --> SCG
+    LLM --> NIC
+    LLM --> DSC
+    LLM --> AUD
+    AUD --> ENC
+    ENC --> AFS
+    AFS -.dev/demo only.- APS
+
+    UI --> OQ
+    OQ -.loadshedding sync.-> AFS
+
+    DSC --> PR
+    PR --> P3
+
+    SCG -.Tier 4 escalation.-> HPCSA
+    LLM -.referral.-> DH
+    LLM -.weekly.-> DCST
+    LLM -.lost-to-FU.-> WB
+    LLM -.stable chronic.-> CCMDD
+    AUD -.monthly DHIS rollup.-> DHIS
+    NIC --> NICD
+
+    Clinic -.compliance audit.-> OHSC
+    N -.governed by.-> SANC
+    NDOH -.clinical guidelines.-> STG
+    SAHPRA -.SaMD authorisation.-> SophiaBackend
+    IR -.POPIA enforcement.-> Governance
+    CIPLA -.Responsible Party.-> AFS
+    TSI -.sub-processor.-> AFS
+    BM -.Phase 2 BD.-> SophiaBackend</div>
+<h3 id="data-flow-phi-lifecycle">6.2 Data flow — PHI lifecycle</h3>
+<div class="mermaid">flowchart LR
+    subgraph Capture["Capture (in-room)"]
+        V[Voice — isiZulu/English]
+        VAC[Verbal consent ack —<br/>first 10s of recording]
+        TR[Transcript — diarised,<br/>2 speakers, original lang + gloss]
+    end
+
+    subgraph Reasoning["Reasoning (real time)"]
+        STG[STG/EML 8th ed alignment]
+        DDI[Drug-drug + drug-condition checks]
+        SCH[Schedule-level guard<br/>§56(6) permit]
+        RFG[Red-flag detection]
+        BPS[Bio-psychosocial first-class object]
+    end
+
+    subgraph Record["Record close"]
+        SOAP[SOAP note —<br/>HPCSA Booklet 9 §4.1<br/>twelve mandatory fields]
+        DN[Discharge note —<br/>NCS §1.2.1.3 + NHA §61<br/>printed A4 to patient]
+        SIG[Nurse signature +<br/>audit-log corrections<br/>§4.2 / §8 immutability]
+    end
+
+    subgraph Downstream["Downstream pipelines"]
+        CCMDD[CCMDD / Daplapmeds —<br/>stable chronic enrolment]
+        DHIS[DHIS rollup —<br/>sub-district HIO]
+        NICD[NICD —<br/>notifiable conditions]
+        REF[District hospital referral —<br/>R.185/2012 annex]
+        WB[WBPHCOT — lost-to-FU]
+        SMS[SMS reminder —<br/>Africa's Talking / Twilio]
+    end
+
+    subgraph Retention["Retention + Disposal"]
+        ENC[(AES-256-GCM<br/>encryption at rest)]
+        S3[(AWS S3 af-south-1<br/>object-lock + Glacier)]
+        LF[Lifecycle policy —<br/>6yr / 21st bday / lifetime /<br/>20yr / 25yr per §9]
+        DISP[Auditable disposal log]
+    end
+
+    subgraph Audit["Audit + Aggregation"]
+        AL[Audit log —<br/>every CDSS suggestion,<br/>accept/override + reason]
+        FP[Ideal Clinic Facility Profile —<br/>annual auto-generate]
+        TIER3[Tier 3 surveillance —<br/>cross-clinic, redacted,<br/>consent-gated]
+        BRC[Breach response —<br/>POPIA §22 + Tshikululu 18.8<br/>24-hour notification]
+    end
+
+    V --> VAC --> TR
+    TR --> STG --> DDI --> SCH --> RFG
+    TR --> BPS
+    STG --> SOAP
+    DDI --> SOAP
+    SCH --> SOAP
+    RFG --> SOAP
+    BPS --> SOAP
+    SOAP --> DN
+    SOAP --> SIG
+    SIG --> ENC --> S3 --> LF --> DISP
+
+    SOAP --> CCMDD
+    SOAP --> DHIS
+    SOAP --> NICD
+    SOAP --> REF
+    SOAP --> WB
+    SOAP --> SMS
+
+    SIG --> AL
+    DHIS --> FP
+    AL --> TIER3
+    AL -.breach detected.-> BRC
+
+    V -.audio deleted within 60s.-> X[deleted]</div>
+<h3 id="authority-governance">6.3 Authority + governance</h3>
+<div class="mermaid">flowchart TB
+    CON[Constitution + NHA 61/2003 — apex]
+
+    subgraph Statutes["Primary statutes"]
+        POP[POPIA 4/2013 — privacy]
+        HPA[Health Professions Act 56/1974]
+        NA[Nursing Act 33/2005]
+        MA[Medicines & Related Substances Act<br/>§22A 15]
+    end
+
+    subgraph Regulators["Regulators"]
+        IR[Information Regulator — POPIA]
+        HPCSA[HPCSA — doctors,<br/>Booklet 9 records,<br/>Booklet 10 telehealth,<br/>Booklet 20 AI]
+        SANC[SANC — nurses,<br/>Code of Ethics,<br/>PCNS Competencies]
+        SAH[SAHPRA — SaMD<br/>MD08-2025/2026]
+    end
+
+    subgraph Policy["NDOH policy + binding regs"]
+        STG[PHC STG/EML 8th ed 2024]
+        NCS[National Core Standards 2011]
+        ICSM[ICSM Manual]
+        IDC[Ideal Clinic Framework V19 +<br/>Facility Profile]
+        IPC[IPC Practical Manual 2020]
+        NHR[Norms & Standards Regs 2018<br/>GG 1036]
+        CAT[Categories of Hospitals R.185/2012]
+        NMC[Notifiable Medical<br/>Conditions Regs]
+    end
+
+    subgraph Enforce["Enforcement"]
+        OHSC[OHSC — Norms & Standards audit]
+        AFSA[AFSA Johannesburg —<br/>arbitration, MoU governing law]
+    end
+
+    subgraph Commercial["Commercial wrappers"]
+        CMOU[Cipla Foundation MoU V1.3 —<br/>17 articles, 12-month term]
+        TMOU[Tshikululu Master Agency<br/>MoU v2.2 — 30 articles,<br/>10-year term, 12 SADC countries]
+    end
+
+    subgraph Ground["The clinic"]
+        SHL[Sha'p Left clinic —<br/>PCNS §56(6) permit,<br/>1 nurse, 1 room,<br/>R350 / 10 min consult]
+    end
+
+    CON --> POP --> IR
+    CON --> HPA --> HPCSA
+    CON --> NA --> SANC
+    CON --> MA --> SAH
+    NA --> SANC
+
+    HPCSA --> STG
+    SANC --> STG
+    SANC --> ICSM
+    STG --> SHL
+    ICSM --> SHL
+    NCS --> NHR --> OHSC --> SHL
+    IDC --> SHL
+    IPC --> SHL
+    CAT --> SHL
+    NMC --> SHL
+
+    IR --> SHL
+    HPCSA --> SHL
+    SAH --> SHL
+
+    CMOU --> SHL
+    TMOU --> CMOU
+    AFSA -.disputes.-> CMOU
+    AFSA -.disputes.-> TMOU</div>
+<hr />
+<h2 id="the-build-sequence-from-today-to-production">7. The Build Sequence — From Today to Production</h2>
+<p>The phase ladder runs from the 24 May SAST demo (locked-in per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> status) through the 30-day Structured Clinical Governance Pilot (Cipla MoU Stage 4) to network-scale and continental optionality. Each phase has scope, regulatory milestones, technical milestones, commercial milestones, and exit criteria into the next phase.</p>
+<h3 id="phase-0-demo-24-may-2026-sast">Phase 0 — Demo (24 May 2026 SAST)</h3>
+<p><strong>Scope.</strong> Tier 1 only. Synthetic data on AU AWS <code>ap-southeast-2</code>. Two or three role-played scenarios (suggested in <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> §10): Gauteng URTI/HTN/contraception, KZN HIV initiation visit, WC diabetes routine + mental-health flag. One or two Botaniqal employee patients. One Botaniqal nurse persona. Persistent "DEMO — SYNTHETIC PATIENT — NOT FOR CLINICAL USE" banner. <code>is_demo=true</code> flag. Disabled real prescribing output (or framed as "this is what the production system would do"). Audio deleted within 60s post-transcription. <code>is_synthetic=true</code> retention isolation.</p>
+<p><strong>Regulatory milestones.</strong> None new — the demo sits outside SAHPRA MD08-2025/2026 (synthetic data is not "use" or "placing on the market"; pure scribe is below SaMD line per TGA-mirror reasoning). Outside POPIA §26 (no real special PI). RICA §4(1) one-party consent satisfied (nurse is a party). Re-use of Julia's Mar 31 SAHPRA comparison doc + a one-page acknowledgement slide (POPIA + HPCSA Booklet 20 + SAHPRA MD08).</p>
+<p><strong>Technical milestones.</strong> Per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> MVP work breakdown: <code>/nurse</code> route + auth shell, <code>nurse_sessions</code> table + <code>role: 'nurse'</code> migration, continuous-mode <code>audioRecorder.js</code>, chunked Scribe v1 with diarisation, <code>io.of('/nurse')</code> Socket.IO namespace, nurse dashboard layout, multi-speaker transcript display, <code>buildNurseSystemPrompt()</code> STG/EML-anchored, manual End Consultation → ClinicalNoteGenerator, demo banner + employee consent flow, <code>is_demo</code> flag, ambient-mode 6-team trigger frequency, E2E Playwright suite. 2–3 weeks for one engineer.</p>
+<p><strong>Commercial milestones.</strong> Cipla Foundation V1.3 MoU response (5-day silence as of 5 May; nudge at ~7 days). 24 May 09:00 SAST live demo with Cipla attendees (Rameez Johaar, Dr Punithasvaree, P Mamdoo). Tshikululu Master Agency MoU v2.2 sent (target 5/6 May ahead of Tshikululu board 12/13 May).</p>
+<p><strong>Exit criteria into Phase 1.</strong> Cipla Foundation signs definitive Phase 1 pilot agreement (under MoU clause 3.1.4). Tshikululu Master Agency signed (definitive agreements under that). Pilot pricing locked at ZAR 7.8M for 2 nurse pods (per Strategic Update). DPA in force (POPIA Operator Agreement, MoU Article 9.3). Section 21 SAHPRA submission filed (or unregistered-access pathway agreed with SAHPRA).</p>
+<h3 id="phase-1-30-day-structured-clinical-governance-pilot-cipla-mou-stage-4">Phase 1 — 30-day Structured Clinical Governance Pilot (Cipla MoU Stage 4)</h3>
+<p><strong>Scope.</strong> Tier 1 only on real patients at 2 nurse pods. Real PHI. Live consent flows (POPIA §11/§18/§32 + HPCSA Booklet 10 §5.7 telehealth-consent-equivalent). KPIs covering documentation quality, triage alignment, operational efficiency. 30 days of monitored operation. Daily ops check-in with Cipla Foundation clinical leadership; weekly DCST case conference; weekly supervising-practitioner sign-off.</p>
+<p><strong>Regulatory milestones.</strong> SAHPRA Section 21 unregistered access in force OR SAHPRA Class A registration filed (depending on which path Cipla MoU Article 10 joint reg-pathway determination produces). POPIA Operator DPA in force between Cipla Foundation (Responsible Party) and Dr Sophia AI (Operator). Mar 2026 POPIA Health Information Regulations compliance pack filed. HPCSA Booklet 20 cultural-appropriateness validation evidence (at least isiZulu + English). Information Regulator notification framework operational (24-hour breach response per Tshikululu MoU Article 18.8). Clinic operators carry §56(6) permits as today; supervising-practitioner countersign loop integrated.</p>
+<p><strong>Technical milestones.</strong> <code>af-south-1</code> migration for live PHI (or carve-out under Article 9.4 phasing). <code>clinic_id</code> row-level boundary live. Override-with-reason for every CDSS suggestion (SANC Code §3 accountability for omissions). Bio-psychosocial first-class object. Per-clinic RBAC. Discharge note printing + paper fall-back. Offline-first sync queue. Audit + retention engine with HPCSA Booklet 9 §9 lifecycle policies. NICD report check + auto-pre-fill. CCMDD eligibility flag. WBPHCOT integration. SMS reminder via Africa's Talking + Twilio. Hardened WebSocket JWT validation. <code>is_demo</code> enforced false; <code>is_synthetic</code> retired.</p>
+<p><strong>Commercial milestones.</strong> ZAR 7.8M pilot value invoiced + paid. Cipla Foundation acceptance of pilot KPIs. Tshikululu Master Agency definitive agreements signed. AusHealth Series-relevant DD pack delivered. FN Capital Series-relevant DD pack delivered. Class III data-generation hook explicit (per Dwayne's Strategic Update — SA pilot doubles as patient-data generator for AU Class III SaMD upgrade).</p>
+<p><strong>Exit criteria into Phase 2.</strong> Pilot KPIs met (documentation quality ≥ 95%, triage alignment ≥ 90%, per-consult time ±15% baseline, NICD reporting up vs paper). Zero unrecovered breaches. Zero §56(6) permit breaches. Cipla approves expansion to all 11 current Sha'p Left clinics.</p>
+<h3 id="phase-2-cipla-foundation-pilot-expansion-to-all-11-current-shap-left-clinics">Phase 2 — Cipla Foundation pilot expansion to all 11 current Sha'p Left clinics</h3>
+<p><strong>Scope.</strong> Tier 1 across all 11 nurse surgeries. Daplapmeds CCMDD handoff live for stable chronic patients. Brandmed integration BD push complete (HPRS-compatible patient ID export, paper-equivalent PDF export, executive sponsorship via Cipla Medpro 30% stake). Tier 3 partial — DHIS rollup live; population-health surveillance dashboards live for Cipla Foundation clinical leadership. Multi-clinic operational (clinic_id boundary at scale; cross-clinic aggregation API consent-gated). 24-month definitive pilot agreement under Cipla MoU Article 6.</p>
+<p><strong>Regulatory milestones.</strong> SAHPRA Class A registration in force (or Class C if scope expansion warrants). HPCSA Booklet 20 validation pack expanded (target 6+ SA languages: isiZulu + isiXhosa + Sesotho + Afrikaans + English + one of Setswana/Xitsonga/Tshivenda/siSwati/Sepedi/isiNdebele). NICD pipeline integrated at network level. Ideal Clinic Programme participation confirmed if Cipla wants it; Facility Profile auto-generation live.</p>
+<p><strong>Technical milestones.</strong> Tier 2 prototype live (multilingual agentic triage SMS/USSD-based for one priority language). Brandmed handoff workflow. Hub-and-spoke surveillance + predictive stock reorder. Cross-clinic Tier 3 dashboards. Nemotron Phase 1 batch parity (English; per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> §7) — POPIA-clean inference path live. Doctor-credentialing pipeline scaffold (HPCSA-registered seats, ahead of Tier 4).</p>
+<p><strong>Commercial milestones.</strong> Phase 2 contract value (TBD with Cipla — 11 clinics × ~ZAR 300K-500K/year/clinic estimated; not the 2-pod ZAR 7.8M figure). Tshikululu Master Agency Year-1 reporting cadence operational (Article 18.7). Patient-data volume sufficient for AU Class III SaMD evidence package.</p>
+<p><strong>Exit criteria into Phase 3.</strong> Phase 2 KPIs met across all 11 clinics. Tier 2 acceptance from Cipla Foundation. SADC-country regulatory groundwork started (Botswana, Eswatini, Lesotho first per <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/tshikululu-master-agency-mou-may2026.md" target="_blank"><code>tshikululu-master-agency-mou-may2026</code></a> Article 3 territory).</p>
+<h3 id="phase-3-tshikululu-definitive-agreements-signed-expansion-to-50-clinics-by-2029">Phase 3 — Tshikululu Definitive Agreements signed → expansion to 50 clinics by 2029</h3>
+<p><strong>Scope.</strong> Tier 1 + Tier 2 at full network scale across the 50 clinics Cipla Foundation targets by 2029. Tier 3 at full scale. Tier 4 (Supervising Prescribing Authority) launched at a subset of clinics (target: 10–15 clinics with high acute-presentation volume). HPCSA-registered doctor pool live (target ~6–10 doctors). All 11 SA languages supported in Tier 2 (per Tshikululu MoU Article 18.8 cultural validation).</p>
+<p><strong>Regulatory milestones.</strong> SAHPRA Class C registration for the Tier 4 supervising-prescribing module (likely required given material risk). All Tier 4 doctors HPCSA-registered + indemnified + onboarded. Expanded HPCSA Booklet 20 validation across all 11 SA languages. SADC-country regulatory authorisations in progress: Botswana Health Professions Council, Eswatini Ministry of Health, Lesotho Nursing Council. POPIA cross-border §72 clearances for SADC reach.</p>
+<p><strong>Technical milestones.</strong> Nemotron Phase 2 (continuous WebSocket streaming) + Phase 3 (fine-tune on Sha'p Left audio) — POPIA-clean inference + accent + Bantu-language adaptation. Closed-loop handover routing (Teams/SMS + DCST/WBPHCOT). Multi-jurisdictional clinic_id (extends to clinic_country). Tier 4 doctor view + countersign + audit attribution. SLA monitoring for Tier 4 escalation.</p>
+<p><strong>Commercial milestones.</strong> Tshikululu Master Agency Initial Agency Term (10 years) running; revenue share active; KPIs reporting. SADC-country Customer agreements signed (one or two of the SADC-12). Continental Africa optionality (Cipla MoU Article 2.3) actively explored.</p>
+<p><strong>Exit criteria into Phase 4.</strong> 50-clinic SA network stable. Tier 4 acceptance + clinical safety record. SADC-country pilots successful in at least one country.</p>
+<h3 id="phase-4-sadc-roll-out-botswana-eswatini-lesotho-first">Phase 4 — SADC roll-out (Botswana, Eswatini, Lesotho first)</h3>
+<p><strong>Scope.</strong> Sha'p Left-equivalent or partner-led nurse-led PHC networks in Botswana, Eswatini, Lesotho. Tier 1 live; Tier 2 in priority languages (Setswana, siSwati, Sesotho); Tier 3 cross-country aggregation under Tshikululu Master Agency Article 18 sub-processor framework; Tier 4 if local nursing-act + medicines-act frameworks support it.</p>
+<p><strong>Regulatory milestones.</strong> Local CDSS / SaMD regulators engaged (Botswana DRA, Eswatini MoH, Lesotho MoH). Local nursing-council scope-of-practice mapped (the SA §56(6) framework does not transplant directly — each country has its own). Local data-protection regulators engaged (Botswana Data Protection Commission, Eswatini Data Protection Authority, Lesotho Communications Authority). POPIA §72 cross-border transfers cleared. Local-language HPCSA-Booklet-20-equivalent validation.</p>
+<p><strong>Technical milestones.</strong> Multi-country clinic_country boundary. Country-specific clinical guideline anchors (Botswana STG-equivalent, Eswatini STG-equivalent, Lesotho STG-equivalent — each takes the place of the SA PHC STG/EML 8th ed). Country-specific Schedule frameworks. Country-specific notifiable conditions lists. Country-specific referral pathways.</p>
+<p><strong>Commercial milestones.</strong> Tshikululu Master Agency Year-3 to Year-5 reporting cadence. SADC-country Customer agreements active in 3+ countries. Continental Africa optionality moving from contemplation to plan.</p>
+<p><strong>Exit criteria into Phase 5.</strong> SADC core 3 countries stable. Operational learnings reusable for non-SADC African countries.</p>
+<h3 id="phase-5-continental-africa-optionality">Phase 5 — Continental Africa optionality</h3>
+<p><strong>Scope.</strong> Beyond SADC: Kenya, Nigeria, Ghana, Rwanda first. Cipla MoU Article 2.3 explicitly contemplates extension to other African jurisdictions where Cipla Foundation, affiliates or partners operate primary-healthcare programmes — this is the activation. Tshikululu Master Agency Article 3 territory does NOT extend beyond SADC-12; continental Africa requires either renegotiation of the Tshikululu Agency or direct Cipla / partner agreements.</p>
+<p><strong>Regulatory milestones.</strong> Per-country regulatory framework maps (Kenya HealthIT, Nigeria NCC + DPC, Ghana DPC, Rwanda HIE FHIR alignment — per Strategic Update Integration Architecture). Country-specific nursing-council scope-of-practice maps. SADC-out cross-border data flow framework (POPIA §72 + each country's domestic equivalent). African Union health-data harmonisation tracked.</p>
+<p><strong>Technical milestones.</strong> Continental clinic_region boundary. Country-agnostic clinical-guideline-anchor adapter pattern. African-language ASR coverage (Lelapa InkubaLM-style adaptation; this is the moat the Phase 3 Sha'p Left audio fine-tuning was building toward). Continental DHIS-equivalent integration (varies country to country).</p>
+<p><strong>Commercial milestones.</strong> $4.4Bn African community health funding gap (per Strategic Update) addressable. Continental-Africa-relevant venture / strategic partner conversations active. Class III SaMD evidence package back into AU + EU + US markets.</p>
+<p><strong>Exit criteria into Phase 6.</strong> Out of scope of this document. Phase 5 is the optionality, not a fixed plan.</p>
+<hr />
+<h2 id="cross-references">Cross-references</h2>
+<ul>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-ambient-nurse-mvp-apr2026.md" target="_blank"><code>shap-left-ambient-nurse-mvp-apr2026</code></a> — what we're building for the 24 May demo.</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> — every regulatory citation in this page is grounded there.</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-mou-apr2026.md" target="_blank"><code>cipla-mou-apr2026</code></a> — the Cipla Foundation commercial wrapper (V1.3, 17 articles).</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/tshikululu-master-agency-mou-may2026.md" target="_blank"><code>tshikululu-master-agency-mou-may2026</code></a> — the Tshikululu Exclusive Regional Agency for 12 SADC countries (v2.2, 30 articles).</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-opportunity-stack-may2026.md" target="_blank"><code>cipla-opportunity-stack-may2026</code></a> — the integrated commercial + investor narrative across the Cipla + Tshikululu deals.</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/shap-left-production-spec-may2026.md" target="_blank"><code>shap-left-production-spec-may2026</code></a> — companion production spec for the Phase 1 pilot build (cross-link).</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/entities/companies/cipla.md" target="_blank"><code>entities/companies/cipla</code></a> — Sha'p Left operational reality (300-350 pts/month, 60/40 F/M, ~10-min consults, paper folders + dispensing software + Brandmed).</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/tga-cdss-exemption-response-apr2026.md" target="_blank"><code>tga-cdss-exemption-response-apr2026</code></a> — precedent for the advisory-not-directive CDSS framing.</li>
+<li><a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/architecture-rose-on-messenger-apr27.md" target="_blank"><code>architecture-rose-on-messenger-apr27</code></a> — current Rose architecture under the SDK migration.</li>
+</ul>
+<h2 id="change-log">Change Log</h2>
+<ul>
+<li><strong>2026-05-05</strong> — Initial creation. Authored as the operational walkthrough sitting between the MVP spec, the regulatory bundle, and the two MoUs. Sections 1-7 cover the meta idea, the patient journey end-to-end (Thandi Mokoena archetype), the clinic day operational layer, the 4-tier build, the production-vs-demo deltas, the three system diagrams (architecture / data flow / governance), and the phase ladder from Phase 0 (24 May demo) through Phase 5 (continental Africa). All regulatory claims cited back to <a href="https://github.com/botaniqal-medtech/team_willie/blob/main/wiki/concepts/cipla-sa-regulatory-bundle-may2026.md" target="_blank"><code>cipla-sa-regulatory-bundle-may2026</code></a> (HPCSA Booklets 9 + 10, SANC Code, NCS, ICSM Manual, IPC Practical Manual, NHA R.185/2012, Ideal Clinic Framework V19 + Facility Profile, PCNS Competencies). Tone: plain English, suitable for a clinical reviewer (Cipla legal, Dr Puni), a regulatory reviewer (HPCSA, SANC), and a technical reviewer (Tshikululu IT, AusHealth diligence).</li>
+</ul>
+
+  </article>
+  <aside class="chapter-sidebar">
+  <div class="sidebar-eyebrow">On this page</div>
+  <ul>
+  <li><a href="#how-to-read-this-page" class="h2">How to read this page</a></li>
+  <li><a href="#the-meta-idea" class="h2">1. The Meta Idea</a></li>
+  <li><a href="#what-ambient-ai-nurse-station-actually-means-in-sa-primary-care" class="h3">What &quot;ambient AI nurse station&quot; actually means in SA primary care</a></li>
+  <li><a href="#why-grounded-llm-stgeml-alignment-beats-ai-doctor-framing" class="h3">Why grounded LLM + STG/EML alignment beats &quot;AI doctor&quot; framing</a></li>
+  <li><a href="#why-the-privacy-audit-scope-aware-suppression-pattern-matches-the-sanc-code" class="h3">Why the privacy / audit / scope-aware-suppression pattern matches the SANC Code</a></li>
+  <li><a href="#why-the-discharge-note-is-regulatorily-mandatory-anyway" class="h3">Why the discharge note is regulatorily mandatory anyway</a></li>
+  <li><a href="#the-meta-loop" class="h3">The meta loop</a></li>
+  <li><a href="#why-this-lifts-the-nurse-it-does-not-replace-her" class="h3">Why this lifts the nurse — it does not replace her</a></li>
+  <li><a href="#the-patient-journey-full-end-to-end-walkthrough" class="h2">2. The Patient Journey — Full End-to-End Walkthrough</a></li>
+  <li><a href="#step-1-arrival-queue-screening" class="h3">Step 1: Arrival, queue, screening</a></li>
+  <li><a href="#step-2-consent-recording-start" class="h3">Step 2: Consent + recording start</a></li>
+  <li><a href="#step-3-history-taking" class="h3">Step 3: History taking</a></li>
+  <li><a href="#step-4-examination-vitals-input-point-of-care-testing" class="h3">Step 4: Examination + vitals input + point-of-care testing</a></li>
+  <li><a href="#step-5-cdss-reasoning-loop" class="h3">Step 5: CDSS reasoning loop</a></li>
+  <li><a href="#step-6-diagnosis-plan" class="h3">Step 6: Diagnosis + plan</a></li>
+  <li><a href="#step-7-prescription" class="h3">Step 7: Prescription</a></li>
+  <li><a href="#step-8-education-discharge-note-generation" class="h3">Step 8: Education + discharge note generation</a></li>
+  <li><a href="#step-9-referral-if-needed" class="h3">Step 9: Referral if needed</a></li>
+  <li><a href="#step-10-stable-chronic-decision-ccmdd-diversion" class="h3">Step 10: Stable chronic decision (CCMDD diversion)</a></li>
+  <li><a href="#step-11-notifiable-condition-check" class="h3">Step 11: Notifiable condition check</a></li>
+  <li><a href="#step-12-record-close-audit-log-retention" class="h3">Step 12: Record close + audit log + retention</a></li>
+  <li><a href="#step-13-follow-up-scheduling" class="h3">Step 13: Follow-up scheduling</a></li>
+  <li><a href="#the-clinic-day-operational-layer" class="h2">3. The Clinic Day — Operational Layer</a></li>
+  <li><a href="#opening-procedures" class="h3">Opening procedures</a></li>
+  <li><a href="#patient-flow-archetypes" class="h3">Patient flow archetypes</a></li>
+  <li><a href="#lunch-break-loadshedding-connectivity-dropouts" class="h3">Lunch break / loadshedding / connectivity dropouts</a></li>
+  <li><a href="#closing-procedures" class="h3">Closing procedures</a></li>
+  <li><a href="#weekly-cadence" class="h3">Weekly cadence</a></li>
+  <li><a href="#monthly-cadence" class="h3">Monthly cadence</a></li>
+  <li><a href="#the-4-tier-build-how-each-tier-layers-on" class="h2">4. The 4-Tier Build — How Each Tier Layers On</a></li>
+  <li><a href="#tier-1-clinical-decision-support-cdss" class="h3">Tier 1 — Clinical Decision Support (CDSS)</a></li>
+  <li><a href="#tier-2-multilingual-agentic-triage" class="h3">Tier 2 — Multilingual Agentic Triage</a></li>
+  <li><a href="#tier-3-population-health-surveillance" class="h3">Tier 3 — Population Health Surveillance</a></li>
+  <li><a href="#tier-4-supervising-prescribing-authority" class="h3">Tier 4 — Supervising Prescribing Authority</a></li>
+  <li><a href="#the-production-reality-differences-from-the-demo" class="h2">5. The &quot;Production Reality&quot; Differences from the Demo</a></li>
+  <li><a href="#data-residency-migration" class="h3">Data residency migration</a></li>
+  <li><a href="#multi-clinic-isolation" class="h3">Multi-clinic isolation</a></li>
+  <li><a href="#real-phi-real-patient-consent-flows" class="h3">Real PHI + real patient consent flows</a></li>
+  <li><a href="#hour-breach-notification-on-call" class="h3">24-hour breach notification on-call</a></li>
+  <li><a href="#doctor-credentialing-pipeline-tier-4" class="h3">Doctor credentialing pipeline (Tier 4)</a></li>
+  <li><a href="#discharge-note-printing" class="h3">Discharge note printing</a></li>
+  <li><a href="#connectivity-heuristics-offline-first" class="h3">Connectivity heuristics — offline-first</a></li>
+  <li><a href="#audit-retention-engine" class="h3">Audit + retention engine</a></li>
+  <li><a href="#annual-ideal-clinic-facility-profile-auto-generation" class="h3">Annual Ideal Clinic Facility Profile auto-generation</a></li>
+  <li><a href="#the-three-system-diagrams" class="h2">6. The Three System Diagrams</a></li>
+  <li><a href="#system-architecture" class="h3">6.1 System architecture</a></li>
+  <li><a href="#data-flow-phi-lifecycle" class="h3">6.2 Data flow — PHI lifecycle</a></li>
+  <li><a href="#authority-governance" class="h3">6.3 Authority + governance</a></li>
+  <li><a href="#the-build-sequence-from-today-to-production" class="h2">7. The Build Sequence — From Today to Production</a></li>
+  <li><a href="#phase-0-demo-24-may-2026-sast" class="h3">Phase 0 — Demo (24 May 2026 SAST)</a></li>
+  <li><a href="#phase-1-30-day-structured-clinical-governance-pilot-cipla-mou-stage-4" class="h3">Phase 1 — 30-day Structured Clinical Governance Pilot (Cipla MoU Stage 4)</a></li>
+  <li><a href="#phase-2-cipla-foundation-pilot-expansion-to-all-11-current-shap-left-clinics" class="h3">Phase 2 — Cipla Foundation pilot expansion to all 11 current Sha&#x27;p Left clinics</a></li>
+  <li><a href="#phase-3-tshikululu-definitive-agreements-signed-expansion-to-50-clinics-by-2029" class="h3">Phase 3 — Tshikululu Definitive Agreements signed → expansion to 50 clinics by 2029</a></li>
+  <li><a href="#phase-4-sadc-roll-out-botswana-eswatini-lesotho-first" class="h3">Phase 4 — SADC roll-out (Botswana, Eswatini, Lesotho first)</a></li>
+  <li><a href="#phase-5-continental-africa-optionality" class="h3">Phase 5 — Continental Africa optionality</a></li>
+  <li><a href="#cross-references" class="h2">Cross-references</a></li>
+  <li><a href="#change-log" class="h2">Change Log</a></li>
+  </ul>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+<script>
+(function () {
+  // Wait for mermaid to be available, then init
+  function init() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#d4e8df',
+          primaryBorderColor: '#00633c',
+          primaryTextColor: '#00422a',
+          lineColor: '#00633c',
+          fontFamily: '-apple-system, "Inter", sans-serif'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

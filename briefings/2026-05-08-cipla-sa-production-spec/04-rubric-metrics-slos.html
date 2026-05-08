@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 04 — Rubric, Metrics, KPIs, SLOs · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 04 · Production Spec · 2026-05-08</div>
+    <h1 class="title">Rubric, Metrics, KPIs, SLOs</h1>
+    <p class="subtitle">Per-consult rubric (16 dimensions × 0–4 scale), 35 SCGP KPIs, 15 SLOs, and the G1/G2/G3 acceptance criteria for the 30-day Structured Clinical Governance Pilot.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Source: <code style="background:rgba(255,255,255,0.18);color:white;">wiki/concepts</code></span>
+      <span class="pill warn"><span class="dot"></span>Cipla MoU V1.3 + Tshikululu MoU v2.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+<h1 id="shap-left-ambient-nurse-evaluation-rubric-metrics-kpis-and-slos">Sha'p Left Ambient Nurse — Evaluation Rubric, Metrics, KPIs and SLOs</h1>
+
+<h2 id="kpi-dashboard">KPI dashboard at a glance</h2>
+<p>8 of the 35 SCGP KPIs visualised as gauges. Each gauge shows the current expected SCGP exit-target reading against the G2 (pilot exit) bar. Red ring = below floor; amber = within tolerance; green = at or above target. Click any tile to jump to the full KPI definition.</p>
+<div class="kpi-grid">
+  <a href="#clinical-kpis-8" class="kpi-card good">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#00633c" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="14" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#00422a">90%</text>
+    </svg>
+    <div class="value">90%</div>
+    <div class="label">Differential accuracy</div>
+    <div class="target">Target ≥ 85% · G2 floor 80%</div>
+  </a>
+  <a href="#clinical-kpis-8" class="kpi-card good">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#00633c" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="2" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#00422a">99%</text>
+    </svg>
+    <div class="value">99%</div>
+    <div class="label">Red-flag sensitivity</div>
+    <div class="target">Target ≥ 98% · G2 floor 95%</div>
+  </a>
+  <a href="#clinical-kpis-8" class="kpi-card good">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#00633c" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="0" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="14" font-weight="700" fill="#00422a">0/m</text>
+    </svg>
+    <div class="value">0 / mo</div>
+    <div class="label">Scope violations</div>
+    <div class="target">Target = 0 hard · G2 floor = 0</div>
+  </a>
+  <a href="#documentation-kpis-5" class="kpi-card warn">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#d49500" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="28" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#8a5a00">80%</text>
+    </svg>
+    <div class="value">80%</div>
+    <div class="label">SOAP completeness</div>
+    <div class="target">Target ≥ 92% · G2 floor 85%</div>
+  </a>
+  <a href="#documentation-kpis-5" class="kpi-card warn">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#d49500" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="35" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#8a5a00">75%</text>
+    </svg>
+    <div class="value">75%</div>
+    <div class="label">Discharge note rate</div>
+    <div class="target">NCS §1.2.1.3 · Target 100%</div>
+  </a>
+  <a href="#compliance-kpis-4" class="kpi-card good">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#00633c" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="0" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="15" font-weight="700" fill="#00422a">100%</text>
+    </svg>
+    <div class="value">100%</div>
+    <div class="label">Consent capture</div>
+    <div class="target">RICA §4 · POPIA §11 · hard 100%</div>
+  </a>
+  <a href="#compliance-kpis-4" class="kpi-card good">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#00633c" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="0" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="14" font-weight="700" fill="#00422a">0/m</text>
+    </svg>
+    <div class="value">0 / mo</div>
+    <div class="label">Breach incidents</div>
+    <div class="target">POPIA §22 · 24-hr notify · target 0</div>
+  </a>
+  <a href="#engagement-kpis-3" class="kpi-card warn">
+    <svg class="gauge" viewBox="0 0 120 70">
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#eee" stroke-width="10" />
+      <path d="M10,60 A50,50 0 0 1 110,60" fill="none" stroke="#d49500" stroke-width="10" stroke-dasharray="141" stroke-dashoffset="42" stroke-linecap="round" />
+      <text x="60" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#8a5a00">70%</text>
+    </svg>
+    <div class="value">70%</div>
+    <div class="label">Nurse adoption</div>
+    <div class="target">Target ≥ 80% · G2 floor 60%</div>
+  </a>
+</div>
+
+<p>This document is the <strong>measurement contract</strong> for the Sha'p Left ambient nurse station. It anchors the <strong>30-day Structured Clinical Governance Pilot (SCGP)</strong> named in Cipla Foundation MoU V1.3 Stage 4, defines the per-consult clinical rubric, sets the production-grade SLOs, and lays out the acceptance gates for the <strong>24 May 2026 demo</strong>, the <strong>30-day pilot exit</strong>, and the post-pilot <strong>production transition</strong>.</p>
+<p>Every metric below is either <strong>(a) traceable to a regulatory source</strong> (HPCSA Booklet 9 / 10, SANC Code, NCS, NHA, POPIA, SAHPRA, Tshikululu MoU Article 18.5 ten-control schedule), <strong>(b) traceable to a contractual commitment</strong> (Cipla MoU article number / Tshikululu MoU article number), or <strong>(c) explicitly self-set as an engineering target</strong> when no external source binds the bar. We mark each as <code>Reg</code>, <code>Contract</code>, or <code>Eng-target</code> in the source columns.</p>
+<hr />
+<h2 id="the-evaluation-theory-of-operation">1. The Evaluation Theory of Operation</h2>
+<p>The system being evaluated is an <strong>ambient passive-listening assistant</strong> sitting on a Sha'p Left clinic-room laptop, running while a Primary Care Nurse Specialist (PCNS) consults a patient (≈10-min average, 12–18 patients/day, isiZulu/isiXhosa/Afrikaans/English code-switched). It transcribes, structures, surfaces decision support against the <strong>PHC STG/EML 8th edition (2024)</strong>, generates a SOAP note + patient discharge handout, captures override-with-reason where the nurse disagrees, and produces an audit trail. It is <strong>not autonomous</strong>; the nurse is the responsible practitioner under the SANC Code §3 accountability clause.</p>
+<p>The <strong>measurement question</strong> is therefore not "is the system right?" — it is <strong>"does the system make a competent PCNS measurably better, faster, safer and more compliant, without making her measurably worse on anything?"</strong> That question decomposes into four orthogonal evaluation domains (see §2). Each domain is independently scored. A domain failure is a system failure; passing three of four is not a pass.</p>
+<p>The <strong>anchoring construct</strong> is the <strong>30-day Structured Clinical Governance Pilot (SCGP)</strong> — the Cipla MoU V1.3 Stage 4 vehicle in which all four domains are scored on real (initially supervised, then progressively-relaxed) Sha'p Left consults with Cipla clinical reviewer (Dr Puni Mamdoo) signing off the clinical and documentation domains, a POPIA-Information-Officer review covering compliance, and Sha'p Left clinic-manager observation covering operations.</p>
+<p>The <strong>measurement timeline</strong> has three gates:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gate</th>
+<th>Date / trigger</th>
+<th>Bar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G1: 24 May Demo</strong> (synthetic data)</td>
+<td>Locked-in 24 May 2026 09:00 SAST</td>
+<td>Demoable end-to-end story (§6)</td>
+</tr>
+<tr class="even">
+<td><strong>G2: 30-day SCGP exit</strong> (live-supervised data)</td>
+<td>T+30 from pilot start</td>
+<td>Composite gate of all four domains (§7)</td>
+</tr>
+<tr class="odd">
+<td><strong>G3: Production go-live</strong> (live-unsupervised data)</td>
+<td>Post-SCGP, Definitive Pilot Agreement signed</td>
+<td>Higher bar incl. SAHPRA + ISO 27001 + af-south-1 + HPCSA-credentialed Tier 4 (§8)</td>
+</tr>
+</tbody>
+</table>
+<p>Every metric below is tagged <code>G1</code>, <code>G2</code>, <code>G3</code>, or some combination — telling you when that metric must be green.</p>
+<p>The <strong>measurement philosophy</strong> is borrowed from the production <code>consultation-rubric</code> skill (488 metrics across 31 domains for the AU GLP-1 build) and the <code>soap-rubric</code> skill (100 points across 10 domains for AI-generated SOAP notes), adapted for SA nurse-led PHC consults. The 0-4 scoring scale is borrowed from <code>soap-rubric</code>'s "Score Categories" framing.</p>
+<hr />
+<h2 id="the-four-evaluation-domains">2. The Four Evaluation Domains</h2>
+<p>The SCGP composite is built from four <strong>independent</strong> evaluation domains. Each is scored separately. A domain owner is named for each.</p>
+<h3 id="domain-a-clinical-safety-reasoning-quality">2.1 Domain A — Clinical Safety + Reasoning Quality</h3>
+<p><strong>Definition.</strong> Does the system give clinically sound, scope-appropriate, evidence-anchored output? Is the differential diagnosis correct? Are red flags detected when present? Are scope-of-practice (§56(6) permit + Schedule 4 ceiling) boundaries respected? Are drug-drug interactions and allergies cross-checked?</p>
+<p><strong>What good looks like.</strong> For 100 representative Sha'p Left consults (sampled across geography, language, condition mix per the ICSM 4-stream taxonomy), the most-likely diagnosis is in the top-3 ranked differentials in ≥85% of cases; all red-flag conditions are surfaced to the nurse in 100% of cases where they exist; no Schedule-5+ medication is recommended; every prescription suggestion is traceable to a PHC STG/EML 8th edition (2024) line; every override is logged with a free-text reason.</p>
+<p><strong>What bad looks like.</strong> Confabulated drug name not in the SA EML; confidently-wrong differential with the actual diagnosis missing entirely; recommendation of a Schedule 5 medication without escalation flag; a prescribed medication that conflicts with the patient's known allergy; an isiZulu transcript misinterpreted such that a critical history element is lost.</p>
+<p><strong>Who scores.</strong> Cipla clinical reviewer Dr Puni Mamdoo (per Cipla MoU 5.1 nominated POC); supplemented by an external SA-registered clinician for inter-rater reliability on ≥10% of consults. The scoring is per-consult against §3's clinical rubric.</p>
+<p><strong>Source.</strong> Reg (HPCSA Booklet 9 §4.1, SANC PCNS scope, PHC STG/EML 8th ed) + Contract (Cipla MoU 4.1 + 9.1 + 10.2).</p>
+<h3 id="domain-b-documentation-quality">2.2 Domain B — Documentation Quality</h3>
+<p><strong>Definition.</strong> Does the record meet HPCSA Booklet 9 §4.1 (twelve mandatory fields), NCS Domain 1 §1.2.1.3 (discharge note for every patient), and NHA §61 (informed consent + confidentiality)?</p>
+<p><strong>What good looks like.</strong> All 12 §4.1 fields populated in 100% of records; bio-psychosocial history captured as a first-class first-encounter object; allergies/idiosyncrasies structured (not free-text); audit-trail of corrections present; printable patient discharge handout generated for 100% of consults; consent payload meets POPIA §13 + HPCSA Booklet 10 §5.7 (consent-to-encryption + sub-processors disclosure).</p>
+<p><strong>What bad looks like.</strong> Missing bio-psychosocial; allergies in free-text; no audit trail on a correction; no discharge note; consent that doesn't name the encryption mechanism in plain language.</p>
+<p><strong>Who scores.</strong> Automated check (deterministic field-presence on the record schema) + Cipla clinical reviewer (qualitative depth check on a 20-record sample for HPCSA Booklet 9 §13 "complete but concise" criteria).</p>
+<p><strong>Source.</strong> Reg (HPCSA Booklet 9 §4.1 + §4.2 + §8 + §12, NCS §1.2.1.3, NHA §61, POPIA §13, HPCSA Booklet 10 §5.7) + Contract (Cipla MoU 9.5 + Tshikululu MoU 18.5(e) immutable audit log).</p>
+<h3 id="domain-c-triage-alignment">2.3 Domain C — Triage Alignment</h3>
+<p><strong>Definition.</strong> Does the system's risk-stratification of a consult match a clinician's? When the nurse classifies a patient as "acute-refer" vs "stable-CCMDD-divert" vs "routine-followup", does the system's parallel classification agree?</p>
+<p><strong>What good looks like.</strong> Cohen's kappa ≥0.7 between system classification and the gold-standard clinician classification (Dr Puni or external) on the SCGP cohort; <strong>zero false-negative critical-case rate</strong> (system says "routine" when clinician says "acute-refer"); ≤10% false-positive critical-case rate (system over-escalates).</p>
+<p><strong>What bad looks like.</strong> A patient with red-flag chest pain classified as "routine"; a stable hypertensive patient repeatedly classified as needing escalation (alert fatigue); systematic disagreement on patients in any one language (a fairness failure).</p>
+<p><strong>Who scores.</strong> Cipla clinical reviewer + external SA clinician (inter-rater 10% sample). Calculation method: weighted Cohen's kappa with the three categories ordered by acuity (acute-refer &gt; stable-active &gt; routine).</p>
+<p><strong>Source.</strong> Reg (NCS Domain 1 §1.4.1.1 referral pathway, ICSM Manual 4-stream taxonomy) + Eng-target (kappa threshold).</p>
+<h3 id="domain-d-operational-efficiency">2.4 Domain D — Operational Efficiency</h3>
+<p><strong>Definition.</strong> Does the system fit the Sha'p Left operating cadence (12–18 consults/day, ≈10-min consults) without slowing the nurse? Does it survive loadshedding? Does the nurse find it usable?</p>
+<p><strong>What good looks like.</strong> Consult duration unchanged or shorter vs. baseline (no system-induced slowdown); panel populates within 8s of relevant audio; nurse does not have to re-enter data the system already heard; uptime ≥99% over 30 days; loadshedding-recovery ≤60s; nurse satisfaction ≥7/10 on a 10-point Likert (post-pilot).</p>
+<p><strong>What bad looks like.</strong> Consults running 15 min instead of 10; nurse repeatedly typing into a panel because the system mis-heard; system blocking on a stuck request; loadshedding crash with data loss; nurse satisfaction &lt;5/10.</p>
+<p><strong>Who scores.</strong> Sha'p Left clinic manager (operational observation) + Tshikululu facilitator (cross-clinic comparability) + automated SLI logging (latency, uptime).</p>
+<p><strong>Source.</strong> Eng-target (latency thresholds, satisfaction score) + Reg (Ideal Clinic Framework V19 Component 7 Health Information Management — "fits the workflow without disruption").</p>
+<hr />
+<h2 id="the-clinical-rubric-per-consult-scoring">3. The Clinical Rubric (Per-Consult Scoring)</h2>
+<p>Every consult sampled for review (the SCGP draws <strong>30 consults/week ≈ 120/month</strong> from across the participating clinics, evenly stratified by language and ICSM stream, plus all category-A safety incidents 100%) is scored across the <strong>16 dimensions</strong> below on a <strong>0-4 scale</strong>.</p>
+<h3 id="scoring-scale-applied-to-every-dimension-below">3.1 Scoring scale (applied to every dimension below)</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Score</th>
+<th>Label</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0</strong></td>
+<td>Fail</td>
+<td>System produced unsafe, regulatorily non-compliant, or clinically wrong output. Counts as a Category-A safety incident if patient harm could result.</td>
+</tr>
+<tr class="even">
+<td><strong>1</strong></td>
+<td>Poor</td>
+<td>Output present but materially deficient; nurse had to substantially correct.</td>
+</tr>
+<tr class="odd">
+<td><strong>2</strong></td>
+<td>Acceptable</td>
+<td>Output meets the minimum bar; nurse made minor corrections only. <strong>This is the SCGP-pass floor.</strong></td>
+</tr>
+<tr class="even">
+<td><strong>3</strong></td>
+<td>Good</td>
+<td>Output is what an experienced PCNS would have written.</td>
+</tr>
+<tr class="odd">
+<td><strong>4</strong></td>
+<td>Excellent</td>
+<td>Output exceeds typical PCNS quality; cited, structured, actionable, multilingual fidelity preserved.</td>
+</tr>
+</tbody>
+</table>
+<p>A consult passes only if the <strong>minimum score across all 16 dimensions is ≥2</strong>. The composite per-consult score is reported as both (a) minimum across dimensions and (b) mean across dimensions.</p>
+<h3 id="the-16-dimensions">3.2 The 16 dimensions</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Dimension</th>
+<th>What's measured</th>
+<th>Scoring exemplars (0 / 2 / 4)</th>
+<th>Scorer</th>
+<th>Audit method</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>D1</strong></td>
+<td><strong>Differential generation accuracy</strong></td>
+<td>Is the most-likely diagnosis in the system's top-3 ranked differentials?</td>
+<td>0: dx absent. 2: dx in top-5 not top-3. 4: dx is rank 1, with ≥2 plausible alternatives ranked.</td>
+<td>Cipla clinical reviewer</td>
+<td>Transcript review against gold-standard diagnosis</td>
+<td>Reg (PHC STG/EML 8th ed)</td>
+</tr>
+<tr class="even">
+<td><strong>D2</strong></td>
+<td><strong>Red-flag detection</strong></td>
+<td>Were ALL red-flag features present in the encounter surfaced?</td>
+<td>0: any red flag missed. 2: all surfaced but with delay. 4: all surfaced within 5s of being mentioned.</td>
+<td>Cipla clinical reviewer + automated check on red-flag dictionary</td>
+<td>Transcript + system-event log</td>
+<td>Reg (HPCSA Booklet 9 §4.1.4)</td>
+</tr>
+<tr class="odd">
+<td><strong>D3</strong></td>
+<td><strong>Scope-of-practice gating</strong></td>
+<td>Were §56(6) permit + Schedule-4 ceiling boundaries respected? Did the system escalate when out-of-scope?</td>
+<td>0: Schedule-5+ recommended without escalation flag. 2: escalation flag raised but late. 4: scope correctly respected throughout; clean escalation when out-of-scope.</td>
+<td>Automated rule (drug schedule lookup) + reviewer</td>
+<td>Prescription-suggestion log + permit config</td>
+<td>Reg (Nursing Act §56(6), Medicines Act §22A(15), SANC PCNS Competencies)</td>
+</tr>
+<tr class="even">
+<td><strong>D4</strong></td>
+<td><strong>Drug-drug interaction detection</strong></td>
+<td>Were known interactions (per SA Medicines Formulary + Stockley's) caught between proposed Rx and current Rx?</td>
+<td>0: clinically-significant interaction missed. 2: interaction caught but warning unclear. 4: interaction caught with severity grade + alternative suggested.</td>
+<td>Automated interaction-table check + reviewer</td>
+<td>Rx-suggestion log vs. patient med list</td>
+<td>Reg (SANC Code §3 accountability)</td>
+</tr>
+<tr class="odd">
+<td><strong>D5</strong></td>
+<td><strong>Allergy cross-check</strong></td>
+<td>Were patient-listed allergies cross-checked against proposed Rx?</td>
+<td>0: allergy known + Rx contraindicated still suggested. 2: allergy flagged but only after suggestion shown. 4: contraindicated Rx never surfaced.</td>
+<td>Automated check (allergy field vs. drug class)</td>
+<td>Allergies object + Rx log</td>
+<td>Reg (HPCSA Booklet 9 §4.1.2)</td>
+</tr>
+<tr class="even">
+<td><strong>D6</strong></td>
+<td><strong>STG/EML alignment</strong></td>
+<td>Does the recommended Rx align with PHC STG/EML 8th ed (2024) for the diagnosis?</td>
+<td>0: Rx not in EML. 2: in EML but not first-line. 4: first-line + dose + duration aligned.</td>
+<td>Reviewer + automated EML lookup</td>
+<td>Rx vs. EML reference</td>
+<td>Reg (PHC STG/EML 8th ed; ICSM Manual)</td>
+</tr>
+<tr class="odd">
+<td><strong>D7</strong></td>
+<td><strong>Schedule-level appropriateness</strong></td>
+<td>Were only Schedule 0–4 medications independently recommended? Schedule 5+ correctly escalated?</td>
+<td>0: Schedule 5+ recommended without escalation. 2: escalation present but workflow unclear. 4: clean Tier 4 supervisor escalation triggered.</td>
+<td>Automated rule</td>
+<td>Rx schedule lookup</td>
+<td>Reg (Medicines Act §22A)</td>
+</tr>
+<tr class="even">
+<td><strong>D8</strong></td>
+<td><strong>Notifiable condition flag</strong></td>
+<td>Was a notifiable diagnosis auto-flagged with NICD report pre-fill?</td>
+<td>0: notifiable Dx not flagged. 2: flagged but report not pre-filled. 4: flagged + NICD report pre-filled + nurse one-click submit.</td>
+<td>Automated check (notifiable list per IPC Manual Part G)</td>
+<td>Diagnosis log + NICD-report state</td>
+<td>Reg (IPC Practical Manual Part G; National Health Act notifiable-conditions reg)</td>
+</tr>
+<tr class="odd">
+<td><strong>D9</strong></td>
+<td><strong>CCMDD eligibility flag</strong></td>
+<td>Was a chronic stable patient flagged for Daplapmeds / CCMDD diversion per ICSM stable-stream criteria?</td>
+<td>0: stable chronic patient missed. 2: flagged but criteria unclear. 4: flagged with criteria + Daplapmeds dispatch info.</td>
+<td>Reviewer + automated check on chronicity criteria</td>
+<td>Patient stability classification log</td>
+<td>Reg (ICSM Manual chronic-stream taxonomy; NDoH CCMDD programme rules)</td>
+</tr>
+<tr class="even">
+<td><strong>D10</strong></td>
+<td><strong>Documentation completeness</strong></td>
+<td>Are all 12 HPCSA Booklet 9 §4.1 fields populated in the final record?</td>
+<td>0: any §4.1 field empty. 2: all populated, depth shallow. 4: all populated, structured, audit-trail clean.</td>
+<td>Automated field-presence check + reviewer</td>
+<td>Final record vs. §4.1 schema</td>
+<td>Reg (HPCSA Booklet 9 §4.1)</td>
+</tr>
+<tr class="odd">
+<td><strong>D11</strong></td>
+<td><strong>Discharge note quality</strong></td>
+<td>Is the patient handout patient-readable, in patient's preferred language, includes Dx + Rx + follow-up + red-flag return advice?</td>
+<td>0: no handout generated. 2: generated but missing language or follow-up. 4: full handout in patient's language, plain prose, red-flag return advice clear.</td>
+<td>Reviewer (linguistic) + reviewer (clinical) + automated language detection</td>
+<td>Generated PDF</td>
+<td>Reg (NCS Domain 1 §1.2.1.3; NHA §61)</td>
+</tr>
+<tr class="even">
+<td><strong>D12</strong></td>
+<td><strong>Patient consent capture</strong></td>
+<td>Does informed consent payload meet POPIA §13 + HPCSA Booklet 10 §5.7 telehealth consent (encryption, sub-processors, material risks)?</td>
+<td>0: consent absent or generic. 2: consent captured but missing encryption / sub-processor disclosure. 4: full SA telehealth consent payload captured + signed.</td>
+<td>Automated check on consent record</td>
+<td>Consent object schema</td>
+<td>Reg (POPIA §13, HPCSA Booklet 10 §5.7); Contract (Cipla MoU 9.3)</td>
+</tr>
+<tr class="odd">
+<td><strong>D13</strong></td>
+<td><strong>Override-with-reason captured</strong></td>
+<td>When the nurse overrode any system suggestion, was a free-text reason captured and logged?</td>
+<td>0: override accepted without reason. 2: reason captured but free-text empty / single-word. 4: reason captured with substantive explanation.</td>
+<td>Automated check (every override has non-empty reason); reviewer for substantive-reason quality on 10% sample</td>
+<td>Override log</td>
+<td>Reg (SANC Code §3 accountability)</td>
+</tr>
+<tr class="even">
+<td><strong>D14</strong></td>
+<td><strong>Multilingual fidelity</strong></td>
+<td>Was multilingual content (isiZulu / isiXhosa / Afrikaans / English) captured correctly in the transcript and faithfully translated where needed?</td>
+<td>0: critical history element lost in translation. 2: minor losses; gist preserved. 4: high fidelity; idioms preserved; code-switching handled.</td>
+<td>SA-language reviewer (random 10% sample re-listened)</td>
+<td>Audio + transcript pair</td>
+<td>Reg (HPCSA Booklet 20 cultural-appropriateness; NHA §6 right to be informed in patient's language)</td>
+</tr>
+<tr class="odd">
+<td><strong>D15</strong></td>
+<td><strong>Privacy boundary respected</strong></td>
+<td>No cross-clinic information leaked; per-clinic isolation honoured; patient confidentiality maintained per SANC §4.</td>
+<td>0: cross-clinic data leaked. 2: scope respected but logging incidentally surfaced cross-clinic data. 4: full per-clinic boundary; clean RLS; audit trail confirms.</td>
+<td>Automated check (RLS query log) + security review</td>
+<td>Database access log</td>
+<td>Reg (SANC Code §4; POPIA §11); Contract (Tshikululu MoU 18.5(d) tenant isolation)</td>
+</tr>
+<tr class="even">
+<td><strong>D16</strong></td>
+<td><strong>Latency</strong></td>
+<td>First audio response time, panel-populate latency, SOAP-delivery latency.</td>
+<td>0: any P95 over 2× target. 2: P95 within target. 4: P95 ≤50% of target.</td>
+<td>Automated SLI logging</td>
+<td>Latency telemetry</td>
+<td>Eng-target (see §5 SLOs)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-30-day-scgp-kpis-cipla-mou-stage-4">4. The 30-Day SCGP KPIs (Cipla MoU Stage 4)</h2>
+<p>The full numerical commitment for the SCGP. <strong>35 KPIs</strong>, organised by category. Each is independently calculable, measurable in real time over the 30-day window, and reported to Cipla weekly + summarised at exit.</p>
+<p>Threshold-for-pass = the floor below which the SCGP is deemed to have failed on that KPI. Target = the value we commit to internally as our delivery bar.</p>
+<h3 id="clinical-kpis-8">4.1 Clinical KPIs (8)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-01</strong></td>
+<td><strong>Differential accuracy (top-3)</strong></td>
+<td>% of consults where actual final Dx is in top-3 ranked differentials</td>
+<td>(consults with Dx in top-3) / (consults reviewed) × 100</td>
+<td>≥85%</td>
+<td>≥80%</td>
+<td>Reg + Contract (Cipla MoU 4.1 KPI category "documentation quality")</td>
+<td>Per-consult, aggregated weekly</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-02</strong></td>
+<td><strong>Red-flag sensitivity</strong></td>
+<td>% of consults with a red-flag feature where the system surfaced it to the nurse</td>
+<td>(red-flags surfaced) / (red-flags present) × 100</td>
+<td>100%</td>
+<td>≥98%</td>
+<td>Reg (HPCSA Booklet 9 §4.1.4)</td>
+<td>Per-consult, aggregated weekly</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-03</strong></td>
+<td><strong>Red-flag false-positive rate</strong></td>
+<td>Red-flags raised when no red-flag actually present (alert-fatigue control)</td>
+<td>(false-positive red-flags) / (consults) × 100</td>
+<td>≤10%</td>
+<td>≤20%</td>
+<td>Eng-target (alert-fatigue threshold from clinical-decision-support literature)</td>
+<td>Per-consult, aggregated weekly</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-04</strong></td>
+<td><strong>Scope-of-practice violation rate</strong></td>
+<td>Consults where Schedule 5+ Rx recommended without escalation flag</td>
+<td>(scope violations) / (consults) × 100</td>
+<td>0%</td>
+<td>0%</td>
+<td>Reg (Nursing Act §56(6); Medicines Act §22A(15))</td>
+<td>Per-consult; any violation = pilot fail</td>
+<td>Automated + reviewer</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-05</strong></td>
+<td><strong>Prescription appropriateness</strong></td>
+<td>% of Rx suggestions traceable to PHC STG/EML 8th ed, first-line where applicable</td>
+<td>(EML-aligned Rx) / (Rx suggestions) × 100</td>
+<td>≥95%</td>
+<td>≥90%</td>
+<td>Reg (PHC STG/EML 8th ed); Contract (Cipla MoU 4.1)</td>
+<td>Per-consult, aggregated weekly</td>
+<td>Automated lookup + reviewer</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-06</strong></td>
+<td><strong>Allergy crosscheck completeness</strong></td>
+<td>% of Rx suggestions where allergy crosscheck ran (and blocked contraindicated Rx)</td>
+<td>(Rx suggestions with allergy check) / (Rx suggestions) × 100</td>
+<td>100%</td>
+<td>100%</td>
+<td>Reg (HPCSA Booklet 9 §4.1.2)</td>
+<td>Per-consult; gap = Cat-A</td>
+<td>Automated</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-07</strong></td>
+<td><strong>Drug-drug interaction detection rate</strong></td>
+<td>% of consults with known DDI in proposed Rx where the system caught it</td>
+<td>(DDI caught) / (DDI present) × 100</td>
+<td>100%</td>
+<td>≥95%</td>
+<td>Reg (SANC Code §3)</td>
+<td>Per-consult, weekly</td>
+<td>Automated + reviewer</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-08</strong></td>
+<td><strong>Category-A safety incident count</strong></td>
+<td>Count of consults with patient-harm-capable system error (defined in §7)</td>
+<td>absolute count</td>
+<td>0</td>
+<td>0</td>
+<td>Reg + Contract</td>
+<td>30-day window; any = fail</td>
+<td>Cipla clinical reviewer + Botaniqal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="documentation-kpis-5">4.2 Documentation KPIs (5)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-09</strong></td>
+<td><strong>§4.1 record completeness</strong></td>
+<td>% of records with all 12 HPCSA Booklet 9 §4.1 fields populated</td>
+<td>(complete records) / (records) × 100</td>
+<td>≥98%</td>
+<td>≥90%</td>
+<td>Reg (HPCSA Booklet 9 §4.1)</td>
+<td>Daily</td>
+<td>Automated</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-10</strong></td>
+<td><strong>Discharge-note generation rate</strong></td>
+<td>% of consults producing a printable patient handout</td>
+<td>(handouts generated) / (consults) × 100</td>
+<td>100%</td>
+<td>100%</td>
+<td>Reg (NCS §1.2.1.3, NHA §61)</td>
+<td>Per-consult; any gap = Cat-B</td>
+<td>Automated</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-11</strong></td>
+<td><strong>Discharge-note language match</strong></td>
+<td>% of handouts in patient's preferred language</td>
+<td>(handouts in preferred lang) / (handouts) × 100</td>
+<td>≥95%</td>
+<td>≥85%</td>
+<td>Reg (NHA §6)</td>
+<td>Daily</td>
+<td>Automated language detection + reviewer 10% sample</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-12</strong></td>
+<td><strong>Audit-trail integrity</strong></td>
+<td>% of records with intact audit trail (no gap, no orphan, no unsigned correction)</td>
+<td>passes audit checksum / (records) × 100</td>
+<td>100%</td>
+<td>100%</td>
+<td>Reg (HPCSA Booklet 9 §4.2 + §8); Contract (Tshikululu 18.5(e))</td>
+<td>Daily</td>
+<td>Automated</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-13</strong></td>
+<td><strong>Bio-psychosocial first-encounter capture</strong></td>
+<td>% of new-patient first encounters with bio-psychosocial object populated</td>
+<td>(BP-S populated) / (new-patient encounters) × 100</td>
+<td>≥90%</td>
+<td>≥80%</td>
+<td>Reg (HPCSA Booklet 9 §4.1.2)</td>
+<td>Weekly</td>
+<td>Automated + reviewer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="triage-kpis-3">4.3 Triage KPIs (3)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-14</strong></td>
+<td><strong>Triage agreement (Cohen's kappa)</strong></td>
+<td>Weighted Cohen's kappa between system + clinician on 3-class severity (acute-refer / stable-active / routine)</td>
+<td>κ_w on the SCGP review cohort</td>
+<td>≥0.70</td>
+<td>≥0.60</td>
+<td>Eng-target (clinical-AI literature for kappa floor)</td>
+<td>30-day rolling</td>
+<td>Cipla clinical reviewer + external</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-15</strong></td>
+<td><strong>False-negative critical-case rate</strong></td>
+<td>% of clinician-acute-refer consults where system said "routine"</td>
+<td>FN / (clinician acute) × 100</td>
+<td>0%</td>
+<td>0%</td>
+<td>Reg + Contract; any FN-critical = pilot fail</td>
+<td>Per-consult</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-16</strong></td>
+<td><strong>False-positive critical-case rate</strong></td>
+<td>% of clinician-routine consults where system said "acute-refer" (alert fatigue)</td>
+<td>FP / (clinician routine) × 100</td>
+<td>≤10%</td>
+<td>≤20%</td>
+<td>Eng-target</td>
+<td>Daily</td>
+<td>Automated + reviewer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="operational-kpis-5">4.4 Operational KPIs (5)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-17</strong></td>
+<td><strong>Average consult duration</strong></td>
+<td>Mean consult length (audio start → "End Consultation" button)</td>
+<td>seconds; mean across consults</td>
+<td>≤600s (10-min Sha'p Left baseline)</td>
+<td>≤720s (≤20% slowdown)</td>
+<td>Reg (Sha'p Left ops baseline 12–18 pts/day at 10 min)</td>
+<td>Daily</td>
+<td>Automated</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-18</strong></td>
+<td><strong>System-blocking-event rate</strong></td>
+<td>Events that prevented the nurse from continuing without restart</td>
+<td>events / consults × 100</td>
+<td>0</td>
+<td>≤1%</td>
+<td>Eng-target</td>
+<td>Daily</td>
+<td>Automated + nurse log</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-19</strong></td>
+<td><strong>Loadshedding recovery time</strong></td>
+<td>Time from power-loss-recovery to system fully operational</td>
+<td>seconds (P95)</td>
+<td>≤60s</td>
+<td>≤120s</td>
+<td>Eng-target (Sha'p Left LTE/4G baseline)</td>
+<td>Per loadshedding event</td>
+<td>Automated</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-20</strong></td>
+<td><strong>Daily-throughput preservation</strong></td>
+<td>Consults/day per clinic, vs baseline 12–18</td>
+<td>consults/day mean</td>
+<td>≥12/day</td>
+<td>≥10/day (any drop is operational concern)</td>
+<td>Eng-target + Reg (Sha'p Left baseline)</td>
+<td>Weekly</td>
+<td>Sha'p Left clinic mgr</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-21</strong></td>
+<td><strong>Re-entry rate</strong></td>
+<td>Consults where the nurse had to re-type something the system already heard</td>
+<td>manual-corrections / consults × 100</td>
+<td>≤10%</td>
+<td>≤25%</td>
+<td>Eng-target</td>
+<td>Weekly</td>
+<td>Nurse log + review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="compliance-kpis-4">4.5 Compliance KPIs (4)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-22</strong></td>
+<td><strong>Consent capture rate</strong></td>
+<td>% of consults with informed consent recorded BEFORE consult start</td>
+<td>(consults with prior consent) / (consults) × 100</td>
+<td>100%</td>
+<td>100%</td>
+<td>Reg (POPIA §13, HPCSA Booklet 10 §5.7); any gap = Cat-A</td>
+<td>Per-consult</td>
+<td>Automated</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-23</strong></td>
+<td><strong>POPIA breach incident count</strong></td>
+<td>Confirmed POPIA personal-info breaches</td>
+<td>absolute count</td>
+<td>0</td>
+<td>0</td>
+<td>Reg (POPIA §22); Contract (Tshikululu 18.8 24-hour notification)</td>
+<td>30-day window; any = fail</td>
+<td>POPIA Information Officer</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-24</strong></td>
+<td><strong>24-hour breach notification compliance</strong></td>
+<td>% of breach incidents where notification met the 24-hour clock</td>
+<td>(timely notifs) / (breaches) × 100</td>
+<td>100%</td>
+<td>100%</td>
+<td>Contract (Tshikululu 18.8)</td>
+<td>Per incident</td>
+<td>POPIA IO + Botaniqal IR lead</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-25</strong></td>
+<td><strong>Data subject access request fulfilment</strong></td>
+<td>% of POPIA §23 / §24 / §25 requests fulfilled within 30 calendar days</td>
+<td>(timely fulfilments) / (requests) × 100</td>
+<td>100%</td>
+<td>≥95%</td>
+<td>Reg (POPIA §23–25)</td>
+<td>Monthly</td>
+<td>POPIA IO</td>
+</tr>
+</tbody>
+</table>
+<h3 id="patient-kpis-3">4.6 Patient KPIs (3)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-26</strong></td>
+<td><strong>Patient satisfaction</strong></td>
+<td>Post-consult 5-point survey: "How was your visit?" 1=poor 5=excellent</td>
+<td>mean rating; %≥4</td>
+<td>mean ≥4.0; ≥75% rate ≥4</td>
+<td>mean ≥3.5; ≥70% rate ≥4</td>
+<td>Eng-target + Contract (Cipla MoU 4.1)</td>
+<td>Weekly</td>
+<td>Sha'p Left clinic mgr</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-27</strong></td>
+<td><strong>NPS proxy</strong></td>
+<td>% "would recommend Sha'p Left to a friend"</td>
+<td>(yes) / (responses) × 100</td>
+<td>≥70%</td>
+<td>≥60%</td>
+<td>Eng-target</td>
+<td>Weekly</td>
+<td>Sha'p Left clinic mgr</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-28</strong></td>
+<td><strong>Patient comprehension of discharge note</strong></td>
+<td>Random-sample 10/wk; nurse-administered teach-back: did patient explain Dx + Rx + follow-up correctly?</td>
+<td>(correct teach-backs) / (sample) × 100</td>
+<td>≥80%</td>
+<td>≥70%</td>
+<td>Reg (NCS Domain 1 patient-rights). Eng-target on threshold.</td>
+<td>Weekly</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="engagement-kpis-3">4.7 Engagement KPIs (3)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-29</strong></td>
+<td><strong>Nurse override rate</strong></td>
+<td>% of system suggestions overridden by the nurse</td>
+<td>(overrides) / (suggestions) × 100</td>
+<td>5–25% (healthy band)</td>
+<td>not &gt;40%</td>
+<td>Eng-target. &gt;40% suggests system out-of-tune; &lt;5% suggests automation bias.</td>
+<td>Weekly</td>
+<td>Cipla clinical reviewer + Botaniqal</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-30</strong></td>
+<td><strong>Nurse satisfaction</strong></td>
+<td>Post-pilot 10-point Likert "Would you keep using ROSE Nurse Mode?"</td>
+<td>mean</td>
+<td>≥7/10</td>
+<td>≥6/10</td>
+<td>Eng-target</td>
+<td>End of SCGP</td>
+<td>Sha'p Left clinic mgr</td>
+</tr>
+<tr class="odd">
+<td><strong>KPI-31</strong></td>
+<td><strong>Override-reason quality</strong></td>
+<td>10% sample of override reasons reviewed; % substantive (&gt;5 words, clinically reasoned)</td>
+<td>(substantive) / (sampled) × 100</td>
+<td>≥75%</td>
+<td>≥60%</td>
+<td>Reg (SANC Code §3 accountability — overrides must be defensible)</td>
+<td>Weekly</td>
+<td>Cipla clinical reviewer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reliability-kpis-2">4.8 Reliability KPIs (2)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-32</strong></td>
+<td><strong>Service uptime</strong></td>
+<td>% availability of <code>/nurse</code> flow during clinic hours (Mon-Fri 08:00–17:00 SAST)</td>
+<td>(up minutes) / (clinic minutes) × 100</td>
+<td>≥99.5%</td>
+<td>≥99.0%</td>
+<td>Eng-target. Production SLO targets 99.9% (§5).</td>
+<td>30-day rolling</td>
+<td>Botaniqal SRE</td>
+</tr>
+<tr class="even">
+<td><strong>KPI-33</strong></td>
+<td><strong>MTTR (mean time to recover)</strong></td>
+<td>Mean minutes from incident-detected to incident-resolved</td>
+<td>minutes</td>
+<td>≤30 min</td>
+<td>≤60 min</td>
+<td>Eng-target</td>
+<td>Per incident; rolling</td>
+<td>Botaniqal SRE</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-kpi-2">4.9 Cost KPI (2)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Definition</th>
+<th>Calculation</th>
+<th>Target</th>
+<th>Threshold for pass</th>
+<th>Source</th>
+<th>Period</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KPI-34</strong></td>
+<td><strong>Cost per consult</strong></td>
+<td>Total compute + LLM + storage cost ÷ consults processed</td>
+<td>AU$ per consult</td>
+<td>≤$0.05</td>
+<td>≤<span class="math inline">$0.10 | Eng-target. SDK migration target per `memory/architecture-rose-on-messenger-apr27.md`. | Weekly | Botaniqal finance + SRE | | **KPI-35** | **Cost per clinic per month** | Monthly total cost (compute + storage + bandwidth) per active clinic | AU$</span> per clinic-month</td>
+<td>≤$300</td>
+<td>≤$500</td>
+<td>Eng-target. Pilot pricing ZAR 7.8M / 2 nurse pods ÷ 12 months ≈ AU$27.5K/clinic-month service price; cost target ≪ price for pilot economics.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="slos-slis-error-budgets">5. SLOs / SLIs / Error Budgets</h2>
+<p>The production-grade reliability story. Each SLO has an SLI (what we measure), an objective (what we commit to), an error budget (failures tolerated), and an alert threshold. Demo-phase tolerances are looser; production-phase tolerances are tighter.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>SLO ID</th>
+<th>Service</th>
+<th>SLI</th>
+<th>SLO target — Demo (G1)</th>
+<th>SLO target — SCGP (G2)</th>
+<th>SLO target — Production (G3)</th>
+<th>Error budget (production, monthly)</th>
+<th>Alert threshold</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SLO-01</strong></td>
+<td>API availability</td>
+<td>(HTTP 2xx + 3xx) / (total requests), measured at ALB</td>
+<td>99%</td>
+<td>99.5%</td>
+<td>99.9%</td>
+<td>43 min / month</td>
+<td>&lt;99.5% over 1h rolling</td>
+<td>Eng-target (industry standard for clinical SaaS)</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-02</strong></td>
+<td>Transcription latency (Scribe v1 chunk → words)</td>
+<td>P95 round-trip per 25–30s chunk</td>
+<td>&lt;60s</td>
+<td>&lt;45s</td>
+<td>&lt;30s</td>
+<td>5% of chunks may exceed</td>
+<td>P95 &gt;2× target for &gt;5min</td>
+<td>Eng-target</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-03</strong></td>
+<td>Reasoning latency (first AI response from end of nurse turn)</td>
+<td>P95 first-token-time from chunk-finalise</td>
+<td>&lt;12s</td>
+<td>&lt;10s</td>
+<td>&lt;8s</td>
+<td>5% of turns may exceed</td>
+<td>P95 &gt;2× target for &gt;5min</td>
+<td>Eng-target</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-04</strong></td>
+<td>Panel-populate latency (structured update appears)</td>
+<td>P95 from clinical-event detection → panel render</td>
+<td>&lt;15s</td>
+<td>&lt;10s</td>
+<td>&lt;8s</td>
+<td>5% of events may exceed</td>
+<td>P95 &gt;2× target for &gt;5min</td>
+<td>Eng-target. Cipla MoU 24 May demo bar = 8s.</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-05</strong></td>
+<td>SOAP generation latency (button press → PDF available)</td>
+<td>P95 end-to-end</td>
+<td>&lt;90s</td>
+<td>&lt;75s</td>
+<td>&lt;60s</td>
+<td>5% of consults may exceed</td>
+<td>P95 &gt;2× target for &gt;5min</td>
+<td>Eng-target</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-06</strong></td>
+<td>Audit-log write durability</td>
+<td>(writes confirmed-durable) / (write-attempts), measured against immutable backing store</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+<td><strong>Zero error budget</strong></td>
+<td>Any single failure</td>
+<td>Reg (HPCSA Booklet 9 §4.2 + §8); Contract (Tshikululu 18.5(e))</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-07</strong></td>
+<td>Encryption-key rotation cadence</td>
+<td>Time-since-last-rotation per CMK</td>
+<td>n/a</td>
+<td>manual rotation tracked</td>
+<td>per AWS KMS scheduled rotation (annual minimum, 90-day for sensitive contexts)</td>
+<td>n/a (compliance metric)</td>
+<td>rotation overdue &gt;7 days</td>
+<td>Reg (POPIA §19); Contract (Tshikululu 18.5(g))</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-08</strong></td>
+<td>Backup completion rate</td>
+<td>(successful daily backups) / (backup attempts)</td>
+<td>n/a</td>
+<td>100% (demo data set)</td>
+<td>100%</td>
+<td><strong>Zero error budget</strong></td>
+<td>Any failure within 24h window</td>
+<td>Reg (HPCSA Booklet 9 §12 off-site backup)</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-09</strong></td>
+<td>Cross-region replication lag (ap-southeast-2 → af-south-1)</td>
+<td>Replication lag P99</td>
+<td>n/a</td>
+<td>n/a (no live SA PHI yet)</td>
+<td>&lt;30s</td>
+<td>5% of windows may exceed</td>
+<td>&gt;5min sustained for &gt;10min</td>
+<td>Contract (Cipla MoU 9.4; Tshikululu 18.4)</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-10</strong></td>
+<td>RTO — recovery time objective</td>
+<td>Time from incident-declaration to full service restored</td>
+<td>&lt;8h</td>
+<td>&lt;4h</td>
+<td>&lt;2h</td>
+<td>n/a (compliance metric; missed RTO = post-mortem)</td>
+<td>RTO breach</td>
+<td>Eng-target</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-11</strong></td>
+<td>RPO — recovery point objective</td>
+<td>Maximum data loss tolerated in seconds</td>
+<td>&lt;300s (5 min)</td>
+<td>&lt;60s</td>
+<td>&lt;30s</td>
+<td>n/a</td>
+<td>RPO breach</td>
+<td>Reg (HPCSA Booklet 9 §12 backup-currency)</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-12</strong></td>
+<td>Audit-log retention</td>
+<td>Time-since-write for oldest log entry</td>
+<td>demo only</td>
+<td>30 days</td>
+<td><strong>7 years</strong> (POPIA + HPCSA aligned)</td>
+<td>n/a (must hold)</td>
+<td>Any expiry breach</td>
+<td>Reg + Contract (Tshikululu 18.5(e))</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-13</strong></td>
+<td>TLS configuration</td>
+<td>(connections terminated TLS ≥1.2) / (total)</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%; ≥80% TLS 1.3 (preferred-where-supported per Tshikululu 18.5(b) softened wording)</td>
+<td>n/a</td>
+<td>TLS&lt;1.2 connection observed</td>
+<td>Contract (Tshikululu 18.5(b))</td>
+</tr>
+<tr class="even">
+<td><strong>SLO-14</strong></td>
+<td>MFA on privileged accounts</td>
+<td>(MFA-enabled admin sessions) / (admin sessions)</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+<td><strong>Zero error budget</strong></td>
+<td>any non-MFA admin session</td>
+<td>Contract (Tshikululu 18.5(c))</td>
+</tr>
+<tr class="odd">
+<td><strong>SLO-15</strong></td>
+<td>Vulnerability remediation SLA</td>
+<td>Time-from-CVSS-published to patched in production, by severity</td>
+<td>n/a</td>
+<td>tracked, not gated</td>
+<td>Critical ≤7 days; High ≤30 days; Medium ≤90 days</td>
+<td>Critical breach = post-mortem</td>
+<td>SLA breach by severity tier</td>
+<td>Contract (Tshikululu 18.5(h) ISO/IEC 27001:2022 A.8.8)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="acceptance-criteria-for-the-24-may-demo-gate-g1">6. Acceptance Criteria for the 24 May Demo (Gate G1)</h2>
+<p>The demo is success <strong>if and only if</strong> every one of the following is true. Each criterion is <strong>falsifiable, observable, demoable</strong> in a 60-minute Teams meeting.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>AC</th>
+<th>Criterion</th>
+<th>Pass test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G1.1</strong></td>
+<td><strong>3 personas walk through end-to-end with no system-blocking failure</strong></td>
+<td>Live demo: Gauteng URTI/HTN/contraception persona + KZN HIV-initiation persona + WC diabetes-routine + mental-health-flag persona. Each completes from open audio → final SOAP + handout, no restart required.</td>
+</tr>
+<tr class="even">
+<td><strong>G1.2</strong></td>
+<td><strong>Multilingual capture demonstrated</strong> (isiZulu + English)</td>
+<td>Live audio in isiZulu + English code-switch produces transcript with both segments preserved; nurse-facing translation visible in panel.</td>
+</tr>
+<tr class="odd">
+<td><strong>G1.3</strong></td>
+<td><strong>Sha'p Left-branded SOAP PDF generated</strong></td>
+<td>At demo, "Generate SOAP" → PDF appears within 75s, has Sha'p Left logo + clinic identity + nurse name + patient ID + structured Assessment + Plan + Rx + follow-up.</td>
+</tr>
+<tr class="even">
+<td><strong>G1.4</strong></td>
+<td><strong>All clinical chips resolve to authoritative sources</strong></td>
+<td>Each clinical-decision chip shown on screen has a one-click drill-down to the underlying PHC STG/EML 8th ed citation (page + section). Demoable with 5 random chips per persona.</td>
+</tr>
+<tr class="odd">
+<td><strong>G1.5</strong></td>
+<td><strong>Live panels populate within 8s</strong></td>
+<td>SLO-04 instrumented; demo shows latency widget. P95 panel-populate ≤8s across the 3 personas.</td>
+</tr>
+<tr class="even">
+<td><strong>G1.6</strong></td>
+<td><strong>Cache pre-warm reduces first-message latency by ≥20%</strong></td>
+<td>Side-by-side: cold-start vs. pre-warmed. First-message latency improvement ≥20%, instrumented + visible.</td>
+</tr>
+<tr class="odd">
+<td><strong>G1.7</strong></td>
+<td><strong>"DEMO — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE" banner persistent</strong></td>
+<td>Verifies Tshikululu/Cipla-side regulatory boundary. (Required per <code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> "Bare minimum for the Tshikululu demo".)</td>
+</tr>
+<tr class="even">
+<td><strong>G1.8</strong></td>
+<td><strong><code>is_demo=true</code> flag in audit log + CDSS prescribe/block disabled OR explicitly framed as "production would do"</strong></td>
+<td>Backend log inspection by reviewer.</td>
+</tr>
+<tr class="odd">
+<td><strong>G1.9</strong></td>
+<td><strong>One-page slide acknowledging POPIA / HPCSA / SAHPRA</strong></td>
+<td>Shown at demo open. Re-uses Julia's Mar 31 SAHPRA comparison doc.</td>
+</tr>
+<tr class="even">
+<td><strong>G1.10</strong></td>
+<td><strong>Demoable patient discharge handout</strong></td>
+<td>At demo, generated handout shown on screen — patient-readable in patient's language with red-flag return advice. NCS §1.2.1.3 substantively met even at demo phase.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Failure modes that void G1</strong>:
+- Any of G1.1–G1.10 false.
+- System-blocking failure during the live demo requiring engineer intervention.
+- Audible audio drift / transcript desync visible to attendees.
+- Any reviewer leaves with the impression Rose is being used clinically in SA today (the single biggest demo risk per the MVP wiki page).</p>
+<hr />
+<h2 id="acceptance-criteria-for-the-30-day-scgp-exit-gate-g2">7. Acceptance Criteria for the 30-Day SCGP Exit (Gate G2)</h2>
+<p>The pilot is <strong>passed</strong> if and only if <strong>all</strong> of the following composite gates are green. Any one failure blocks production progression and triggers either a remediation cycle or pilot termination.</p>
+<h3 id="pass-conditions-all-must-be-true">7.1 Pass conditions (all must be true)</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Gate</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G2.1</strong></td>
+<td><strong>All KPI thresholds met</strong></td>
+<td>Every KPI in §4 meets its "Threshold for pass" column. Failure on any single KPI requires explicit waiver from Cipla.</td>
+</tr>
+<tr class="even">
+<td><strong>G2.2</strong></td>
+<td><strong>Zero category-A safety incidents</strong></td>
+<td>Cat-A defined in §7.3 below. KPI-08 = 0.</td>
+</tr>
+<tr class="odd">
+<td><strong>G2.3</strong></td>
+<td><strong>Cipla clinical reviewer (Dr Puni) signs off all four domains as ≥acceptable (rubric 2/4)</strong></td>
+<td>Sign-off doc filed. Mean rubric score ≥2 across all 16 dimensions for the SCGP cohort.</td>
+</tr>
+<tr class="even">
+<td><strong>G2.4</strong></td>
+<td><strong>POPIA Information Officer review clean</strong></td>
+<td>Designated POPIA IO produces a clean review covering: lawful basis, data minimisation, security baseline (Tshikululu 18.5 a–j), breach IR drill, DSAR fulfilment.</td>
+</tr>
+<tr class="odd">
+<td><strong>G2.5</strong></td>
+<td><strong>HPCSA Booklet 9 audit clean (sample of 20 records)</strong></td>
+<td>Independent SA-registered clinician (or HPCSA-registered audit body if Cipla nominates) audits 20 random records against Booklet 9 §4.1 + §4.2 + §8 + §9 + §11 + §12 + §13 — finds no material non-compliance.</td>
+</tr>
+<tr class="even">
+<td><strong>G2.6</strong></td>
+<td><strong>Patient satisfaction ≥70% positive</strong></td>
+<td>KPI-26 met.</td>
+</tr>
+<tr class="odd">
+<td><strong>G2.7</strong></td>
+<td><strong>Override-rate within healthy band (5–25%)</strong></td>
+<td>KPI-29 met.</td>
+</tr>
+<tr class="even">
+<td><strong>G2.8</strong></td>
+<td><strong>No POPIA breach undetected within 24 hours</strong></td>
+<td>KPI-23 = 0; KPI-24 = 100% on any incidents that did occur.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fail-conditions-any-one-is-sufficient-to-fail-the-pilot">7.2 Fail conditions (any one is sufficient to fail the pilot)</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Fail trigger</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>F2.1</strong></td>
+<td>Any category-A safety incident</td>
+<td>Patient-harm-capable error; no waiver possible.</td>
+</tr>
+<tr class="even">
+<td><strong>F2.2</strong></td>
+<td>Any POPIA breach not detected within 24 hours</td>
+<td>Tshikululu 18.8 contractual commitment; Information Regulator notification clock starts ticking.</td>
+</tr>
+<tr class="odd">
+<td><strong>F2.3</strong></td>
+<td>Documentation completeness &lt;90% (KPI-09 below threshold)</td>
+<td>Below this, the regulatory bar from HPCSA Booklet 9 §4.1 is not credibly met.</td>
+</tr>
+<tr class="even">
+<td><strong>F2.4</strong></td>
+<td>Nurse override rate &gt;40% (KPI-29)</td>
+<td>System out-of-tune. Cipla clinical reviewer can override this with explicit written waiver naming the cause.</td>
+</tr>
+<tr class="odd">
+<td><strong>F2.5</strong></td>
+<td>False-negative critical-case (KPI-15 &gt;0)</td>
+<td>Patient-safety pattern; even one is a system failure.</td>
+</tr>
+<tr class="even">
+<td><strong>F2.6</strong></td>
+<td>Scope-of-practice violation (KPI-04 &gt;0)</td>
+<td>Schedule 5+ recommended without escalation; Nursing Act §56(6) violation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="category-a-safety-incident-definition">7.3 Category-A safety incident definition</h3>
+<p>A <strong>Category-A</strong> incident is any system event where, had the nurse acted on the system's output without correction, <strong>patient harm could plausibly have resulted</strong>. Examples: confidently-recommended Schedule-5 medication (Nursing Act violation + potential overdose), missed red-flag chest pain (cardiac), confabulated drug name not in SA EML, contraindicated Rx against known allergy, false-negative critical-case classification, transcript loss losing a "I'm allergic to penicillin" disclosure that subsequently informs Rx, missed notifiable condition leading to delayed NICD reporting, cross-clinic data leak revealing patient identity.</p>
+<p>Cat-A incidents are reported within 24 hours of detection (Tshikululu 18.8 cadence) to: (a) Cipla clinical reviewer, (b) POPIA Information Officer, (c) Botaniqal incident-response lead, (d) Sha'p Left affected clinic manager.</p>
+<h3 id="remediation-cycle">7.4 Remediation cycle</h3>
+<p>If a single KPI is below threshold (no Cat-A, no POPIA breach), the SCGP can be extended by up to 30 days with a remediation plan agreed by Cipla. If after the extension the KPI still does not pass, pilot terminates.</p>
+<hr />
+<h2 id="acceptance-criteria-for-production-post-pilot-gate-g3">8. Acceptance Criteria for Production (Post-Pilot, Gate G3)</h2>
+<p>The bar for moving from supervised SCGP to live, unsupervised production deployment across multiple Sha'p Left clinics. <strong>All G2 gates remain prerequisites</strong>, plus the following additional commitments.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Gate</th>
+<th>Test</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G3.1</strong></td>
+<td><strong>SAHPRA SaMD authorisation obtained (or formal exemption letter)</strong></td>
+<td>SAHPRA Section 21 unregistered access OR Class A/C registration depending on tier scope.</td>
+<td>Reg (SAHPRA MD08-2025/2026); Contract (Cipla MoU 4.1 + 10.1)</td>
+</tr>
+<tr class="even">
+<td><strong>G3.2</strong></td>
+<td><strong>ISO 27001 certification commenced (audit booked)</strong></td>
+<td>Tshikululu MoU 18.5 commitment. Certification body engaged, gap analysis complete, Stage 1 audit booked.</td>
+<td>Contract (Tshikululu 18.5 + 18.6 evidence-and-assurance)</td>
+</tr>
+<tr class="odd">
+<td><strong>G3.3</strong></td>
+<td><strong>Data residency migration to af-south-1 complete for live PHI</strong></td>
+<td>Verified by penetration test + DR drill. Live SA patient PHI in af-south-1; ap-southeast-2 holds only synthetic / de-identified secondary copies if any.</td>
+<td>Contract (Cipla MoU 9.4; Tshikululu 18.4); Reg (POPIA §72)</td>
+</tr>
+<tr class="even">
+<td><strong>G3.4</strong></td>
+<td><strong>Doctor credentialing pipeline live (HPCSA-registered Tier 4 supervisors)</strong></td>
+<td>Cipla MoU Article 2.4 Tier 4 requires HPCSA-registered supervisors. Pipeline ingests credentials, verifies registration, gates supervisory sign-off accordingly. <strong>AU-only registration is non-compliant.</strong></td>
+<td>Reg (HPCSA Booklet 10 §5.1); Contract (Cipla MoU 2.4 + 4.1 Tier 4)</td>
+</tr>
+<tr class="odd">
+<td><strong>G3.5</strong></td>
+<td><strong>Multi-clinic isolation tested across ≥3 clinics</strong></td>
+<td>Live RLS + per-clinic boundary verified by attempted-cross-clinic-query test. Audit log shows zero false-positive cross-clinic reads.</td>
+<td>Reg (SANC Code §4); Contract (Tshikululu 18.5(d))</td>
+</tr>
+<tr class="even">
+<td><strong>G3.6</strong></td>
+<td><strong>24-hour breach notification IR runbook drilled</strong></td>
+<td>Full tabletop + at least one live drill within 60 days of go-live. POPIA IO + Botaniqal IR lead + Cipla clinical reviewer all participating.</td>
+<td>Contract (Tshikululu 18.8); Reg (POPIA §22)</td>
+</tr>
+<tr class="odd">
+<td><strong>G3.7</strong></td>
+<td><strong>SLO targets in §5 G3 column met for 90 consecutive days</strong></td>
+<td>SLI dashboards green for 90 days under live load. Error budgets respected.</td>
+<td>Eng-target</td>
+</tr>
+<tr class="even">
+<td><strong>G3.8</strong></td>
+<td><strong>Operator (DPA) agreement signed under Cipla MoU 9.3</strong></td>
+<td>Definitive Operator Agreement papered between Cipla Foundation (responsible party) + Botaniqal/Dr Sophia AI (operator) + Tshikululu (sub-operator under Tshikululu MoU 18.2 where applicable).</td>
+<td>Contract (Cipla MoU 9.2 + 9.3)</td>
+</tr>
+<tr class="odd">
+<td><strong>G3.9</strong></td>
+<td><strong>Definitive Pilot Agreement signed</strong></td>
+<td>Cipla MoU is principally non-binding; production requires the Definitive Pilot Agreement contemplated in Cipla MoU 6.1.</td>
+<td>Contract (Cipla MoU 6.1)</td>
+</tr>
+<tr class="even">
+<td><strong>G3.10</strong></td>
+<td><strong>PCNS scope mapping ingested</strong></td>
+<td>Full SANC Primary Care Nurse Specialist Competencies doc (currently Cloudflare-gated) ingested + per-clinic §56(6) permit list encoded. Without this, scope-of-practice gating relies on a fall-back PHC STG/EML proxy.</td>
+<td>Reg (SANC PCNS Competencies; Nursing Act §56(6))</td>
+</tr>
+<tr class="odd">
+<td><strong>G3.11</strong></td>
+<td><strong>Discharge note format approved by Cipla</strong></td>
+<td>Per <code>concepts/cipla-sa-regulatory-bundle-may2026.md</code> Open Q #8 — Sha'p Left has its own preferred handout format; system output must match.</td>
+<td>Reg (NCS §1.2.1.3); Contract</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="continuous-quality-improvement-loop">9. Continuous Quality Improvement Loop</h2>
+<p>The "after the pilot" feedback mechanism. The SCGP is a one-shot proof; this is the steady-state quality posture.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cadence</th>
+<th>Activity</th>
+<th>Owner</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Weekly (every Friday)</strong></td>
+<td>Sample 10 consults from the past week, score against the §3 16-dimension rubric, produce variance report</td>
+<td>Cipla clinical reviewer (Dr Puni)</td>
+<td>Weekly Variance Report → Botaniqal eng + Cipla MoU 5.1 governance contact</td>
+</tr>
+<tr class="even">
+<td><strong>Weekly</strong></td>
+<td>KPI dashboard refresh; any KPI breach triggers an issue</td>
+<td>Botaniqal SRE + reviewer</td>
+<td>Dashboard URL; GitHub issue per breach</td>
+</tr>
+<tr class="odd">
+<td><strong>Monthly</strong></td>
+<td>Aggregate KPI report → Cipla quarterly governance review</td>
+<td>Botaniqal account lead</td>
+<td>Monthly KPI Report PDF + meeting</td>
+</tr>
+<tr class="even">
+<td><strong>Quarterly</strong></td>
+<td>External clinical-safety audit; 50 random consults reviewed by an SA-registered clinician outside the Cipla / Botaniqal / Tshikululu trio</td>
+<td>Independent clinician (rotated annually)</td>
+<td>Quarterly External Audit Report → all 3 parties</td>
+</tr>
+<tr class="odd">
+<td><strong>Annually</strong></td>
+<td>ISO 27001 surveillance audit</td>
+<td>Certification body</td>
+<td>Surveillance audit report; non-conformities tracked + closed within 90 days</td>
+</tr>
+<tr class="even">
+<td><strong>Annually</strong></td>
+<td>SAHPRA post-market surveillance report (Class A/C device requirement once registered)</td>
+<td>Botaniqal regulatory + Cipla</td>
+<td>SAHPRA submission</td>
+</tr>
+<tr class="odd">
+<td><strong>Annually</strong></td>
+<td>POPIA Information Officer review of consents + DSARs + breach log</td>
+<td>POPIA IO</td>
+<td>Annual POPIA Review Report</td>
+</tr>
+<tr class="even">
+<td><strong>Per Cat-A / Cat-B incident</strong></td>
+<td>Root-cause analysis within 5 working days; remediation within 30; permanent fix within 90</td>
+<td>Botaniqal IR lead</td>
+<td>Post-mortem doc + remediation tracker</td>
+</tr>
+<tr class="odd">
+<td><strong>Per major release (≥monthly)</strong></td>
+<td>Re-run 50-consult regression suite (the SCGP-derived gold-standard cohort)</td>
+<td>Botaniqal QA</td>
+<td>Regression report; release blocked if any gate red</td>
+</tr>
+</tbody>
+</table>
+<p>The improvement loop modelled directly on the production <code>consultation-rubric</code> skill pattern (§§ Phase 1–4 in <code>botaniqal-medtech/.claude/skills/consultation-rubric/SKILL.md</code>) but with SA-specific reviewer roles and a cadence dampened to weekly (vs. continuous) to match clinical-pilot governance.</p>
+<hr />
+<h2 id="reference-mappings">10. Reference Mappings</h2>
+<p>Every metric in this document maps to one or more of: a regulatory clause, a contractual article, or an internal Sophia/ROSE quality goal. Below is the consolidated traceability.</p>
+<h3 id="regulatory-clause-kpi-slo-mapping">10.1 Regulatory clause → KPI / SLO mapping</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Regulatory clause</th>
+<th>Applicable metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>HPCSA Booklet 9 §4.1</strong> (12 mandatory record fields)</td>
+<td>D5, D10, D13, KPI-09, KPI-13, G2.5</td>
+</tr>
+<tr class="even">
+<td><strong>HPCSA Booklet 9 §4.2 + §8</strong> (immutable record + audit-trail of corrections)</td>
+<td>D15, KPI-12, SLO-06, SLO-12</td>
+</tr>
+<tr class="odd">
+<td><strong>HPCSA Booklet 9 §9</strong> (retention 6/21/lifetime/20/25)</td>
+<td>SLO-12, G3.3</td>
+</tr>
+<tr class="even">
+<td><strong>HPCSA Booklet 9 §11</strong> (access control)</td>
+<td>D15, G2.5</td>
+</tr>
+<tr class="odd">
+<td><strong>HPCSA Booklet 9 §12</strong> (encryption + 2-site backup)</td>
+<td>SLO-08, SLO-13, G3.3</td>
+</tr>
+<tr class="even">
+<td><strong>HPCSA Booklet 10 §5.1</strong> (HPCSA registration of practitioners)</td>
+<td>G3.4</td>
+</tr>
+<tr class="odd">
+<td><strong>HPCSA Booklet 10 §5.5(b)</strong> (no Rx on questionnaire alone)</td>
+<td>D3, KPI-04, KPI-07</td>
+</tr>
+<tr class="even">
+<td><strong>HPCSA Booklet 10 §5.7</strong> (telehealth consent payload)</td>
+<td>D12, KPI-22</td>
+</tr>
+<tr class="odd">
+<td><strong>HPCSA Booklet 10 §5.9.3 + §5.9.4</strong> (encryption + ECT Act + POPIA)</td>
+<td>SLO-13, G3.3</td>
+</tr>
+<tr class="even">
+<td><strong>HPCSA Booklet 20</strong> (cultural appropriateness AI guidance)</td>
+<td>D14, KPI-11</td>
+</tr>
+<tr class="odd">
+<td><strong>SANC Code §3</strong> (accountability for actions + omissions)</td>
+<td>D13, KPI-29, KPI-31</td>
+</tr>
+<tr class="even">
+<td><strong>SANC Code §4 + §5.1</strong> (confidentiality)</td>
+<td>D15, KPI-23, G3.5</td>
+</tr>
+<tr class="odd">
+<td><strong>SANC PCNS Competencies</strong> (scope of practice)</td>
+<td>D3, KPI-04, G3.10</td>
+</tr>
+<tr class="even">
+<td><strong>Nursing Act §56(6) + Medicines Act §22A(15)</strong> (Schedule 4 ceiling permit)</td>
+<td>D3, D7, KPI-04</td>
+</tr>
+<tr class="odd">
+<td><strong>PHC STG/EML 8th ed (2024)</strong></td>
+<td>D1, D6, KPI-01, KPI-05</td>
+</tr>
+<tr class="even">
+<td><strong>NCS Domain 1 §1.2.1.2</strong> (informed consent procedures)</td>
+<td>D12, KPI-22</td>
+</tr>
+<tr class="odd">
+<td><strong>NCS Domain 1 §1.2.1.3</strong> (discharge report mandatory)</td>
+<td>D11, KPI-10, G1.10, G3.11</td>
+</tr>
+<tr class="even">
+<td><strong>NCS Domain 1 §1.4.1.1</strong> (district referral system)</td>
+<td>D14 framing for triage routing; KPI-14</td>
+</tr>
+<tr class="odd">
+<td><strong>NHA §61</strong></td>
+<td>D11, D12</td>
+</tr>
+<tr class="even">
+<td><strong>NHA §6</strong> (information in patient's language)</td>
+<td>D11, D14, KPI-11</td>
+</tr>
+<tr class="odd">
+<td><strong>ICSM Manual</strong> (4-stream patient flow taxonomy)</td>
+<td>KPI-14, KPI-15</td>
+</tr>
+<tr class="even">
+<td><strong>IPC Practical Manual Part E</strong> (antimicrobial stewardship)</td>
+<td>D6, KPI-05</td>
+</tr>
+<tr class="odd">
+<td><strong>IPC Practical Manual Part G</strong> (notifiable conditions)</td>
+<td>D8</td>
+</tr>
+<tr class="even">
+<td><strong>POPIA §11 + §13</strong> (lawful processing + consent)</td>
+<td>D12, KPI-22</td>
+</tr>
+<tr class="odd">
+<td><strong>POPIA §19 + 2018 Regs</strong> (security safeguards)</td>
+<td>SLO-07, G3.3</td>
+</tr>
+<tr class="even">
+<td><strong>POPIA §22</strong> (breach notification)</td>
+<td>KPI-23, KPI-24, G2.4, G2.8, G3.6</td>
+</tr>
+<tr class="odd">
+<td><strong>POPIA §23–25</strong> (DSAR rights)</td>
+<td>KPI-25</td>
+</tr>
+<tr class="even">
+<td><strong>POPIA §72</strong> (cross-border transfer)</td>
+<td>SLO-09, G3.3</td>
+</tr>
+<tr class="odd">
+<td><strong>GG R.185/2012 Categories of Hospitals</strong></td>
+<td>KPI-14 (referral-pathway routing)</td>
+</tr>
+<tr class="even">
+<td><strong>SAHPRA MD08-2025/2026</strong></td>
+<td>G3.1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="contractual-article-kpi-slo-mapping">10.2 Contractual article → KPI / SLO mapping</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Contract article</th>
+<th>Applicable metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Cipla MoU 4.1</strong> (KPI joint-definition obligation)</td>
+<td>All KPI-* metrics</td>
+</tr>
+<tr class="even">
+<td><strong>Cipla MoU 6.1</strong> (12-month MoU term, definitive agreement target)</td>
+<td>G3.9</td>
+</tr>
+<tr class="odd">
+<td><strong>Cipla MoU 9.2 + 9.3</strong> (operator agreement / DPA pre-Phase 1 pilot)</td>
+<td>G3.8</td>
+</tr>
+<tr class="even">
+<td><strong>Cipla MoU 9.4</strong> (SA-residency-by-default)</td>
+<td>SLO-09, G3.3</td>
+</tr>
+<tr class="odd">
+<td><strong>Cipla MoU 9.5</strong> (Willie's ten-control schedule, ported into Tshikululu 18.5)</td>
+<td>SLO-06, SLO-07, SLO-13, SLO-14, SLO-15</td>
+</tr>
+<tr class="even">
+<td><strong>Cipla MoU 10.1</strong> (SAHPRA responsibility)</td>
+<td>G3.1</td>
+</tr>
+<tr class="odd">
+<td><strong>Cipla MoU 2.4 + 10.2</strong> (Tier 4 = HPCSA-registered doctor; Section 56(6) joint engagement)</td>
+<td>G3.4</td>
+</tr>
+<tr class="even">
+<td><strong>Cipla MoU Stage 4 (V1.3)</strong> (30-day SCGP framing)</td>
+<td>KPI-01 to KPI-35 collectively</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.2</strong> (Customer = controller; Dr Sophia = operator; Tshikululu = sub-processor)</td>
+<td>G3.5, G3.8</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.4</strong> (SA-residency-by-default for SA-customer PHI)</td>
+<td>SLO-09, G3.3</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.5(a)</strong> (AES-256 at rest + FIPS KMS + CMKs)</td>
+<td>SLO-07</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.5(b)</strong> (TLS 1.2+ / 1.3 supported-and-preferred)</td>
+<td>SLO-13</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.5(c)</strong> (RBAC + MFA + NIST 800-53 r5 AC)</td>
+<td>SLO-14</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.5(d)</strong> (tenant-level isolation)</td>
+<td>D15, G3.5</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.5(e)</strong> (immutable audit log + 7-year retention)</td>
+<td>KPI-12, SLO-06, SLO-12</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.5(f)</strong> (network segmentation + WAF)</td>
+<td>G3.7</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.5(g)</strong> (secrets vault + rotation)</td>
+<td>SLO-07</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.5(h)</strong> (vuln management ISO 27001 A.8.8 + ASD ISM)</td>
+<td>SLO-15, G3.2</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.5(i)</strong> (incident response + breach notification)</td>
+<td>KPI-24, G2.8, G3.6</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.5(j)</strong> (personnel controls)</td>
+<td>G3.7</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 18.6</strong> (evidence + assurance — ISO 27001 + 27018)</td>
+<td>G3.2</td>
+</tr>
+<tr class="even">
+<td><strong>Tshikululu MoU 18.8</strong> (24-hour breach notification)</td>
+<td>KPI-24, G2.8, G3.6</td>
+</tr>
+<tr class="odd">
+<td><strong>Tshikululu MoU 19</strong> (regulatory compliance — SAHPRA + SA Nursing Council)</td>
+<td>G3.1, G3.4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="srs-nfr-functional-cross-references">10.3 SRS NFR / functional cross-references</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cross-reference</th>
+<th>Applicable metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>NFR — security baseline</strong> (per <code>concepts/shap-left-srs-functional-spec</code> §"Security NFRs")</td>
+<td>SLO-06 to SLO-15, G3.3</td>
+</tr>
+<tr class="even">
+<td><strong>NFR — performance / latency</strong></td>
+<td>SLO-01 to SLO-05</td>
+</tr>
+<tr class="odd">
+<td><strong>NFR — reliability / DR</strong></td>
+<td>SLO-10, SLO-11, KPI-32, KPI-33</td>
+</tr>
+<tr class="even">
+<td><strong>NFR — language coverage</strong></td>
+<td>D14, KPI-11, G1.2</td>
+</tr>
+<tr class="odd">
+<td><strong>FR — clinical decision support panel</strong></td>
+<td>D1, D2, D3, D6, D7, KPI-01 to KPI-07</td>
+</tr>
+<tr class="even">
+<td><strong>FR — ambient transcription + diarisation</strong></td>
+<td>D14, SLO-02</td>
+</tr>
+<tr class="odd">
+<td><strong>FR — SOAP + handout generation</strong></td>
+<td>D11, KPI-10, KPI-11, SLO-05, G1.3, G1.10</td>
+</tr>
+<tr class="even">
+<td><strong>FR — override-with-reason</strong></td>
+<td>D13, KPI-29, KPI-31</td>
+</tr>
+<tr class="odd">
+<td><strong>FR — consent capture (SA telehealth)</strong></td>
+<td>D12, KPI-22, G1.7</td>
+</tr>
+<tr class="even">
+<td><strong>FR — audit log (immutable, queryable)</strong></td>
+<td>D15, KPI-12, SLO-06, SLO-12</td>
+</tr>
+<tr class="odd">
+<td><strong>FR — multi-clinic isolation (RLS)</strong></td>
+<td>D15, G3.5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="demo-to-production-transition-cross-reference">10.4 Demo-to-production transition cross-reference</h3>
+<p>The <code>concepts/shap-left-demo-to-production-roadmap</code> page sequences the work that closes the gap from G1 → G2 → G3. Each gate in §§6-8 above is a milestone there. The metrics in this document are the <strong>measurement instrument</strong> that proves a milestone is met; the roadmap is the <strong>work plan</strong> that gets us to the milestone.</p>
+<p>Specifically, the roadmap's phase-transitions map onto this document as:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Roadmap phase</th>
+<th>This document</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Phase 0</strong> (current — synthetic-data demo prep)</td>
+<td>§6 (G1 acceptance criteria)</td>
+</tr>
+<tr class="even">
+<td><strong>Phase 1</strong> (SCGP)</td>
+<td>§3 (rubric), §4 (KPIs), §7 (G2 gates)</td>
+</tr>
+<tr class="odd">
+<td><strong>Phase 2</strong> (production transition)</td>
+<td>§5 (full SLOs), §8 (G3 gates), §9 (CQI loop)</td>
+</tr>
+<tr class="even">
+<td><strong>Phase 3</strong> (steady state, multi-clinic, multi-tier)</td>
+<td>§9 (cadence), §10 (mappings refreshed quarterly)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="change-log">Change Log</h2>
+<ul>
+<li><strong>2026-05-05</strong> — Initial creation. Authored alongside <code>concepts/shap-left-srs-functional-spec</code> and <code>concepts/shap-left-demo-to-production-roadmap</code> to form the three-document SCGP measurement bundle. Anchors Cipla MoU V1.3 Stage 4 (30-day Structured Clinical Governance Pilot). 16 rubric dimensions, 35 KPIs across 9 categories, 15 SLOs spanning demo / pilot / production, 10 + 8 + 11 acceptance criteria across the three gates. Borrows scoring framing from <code>consultation-rubric</code> (488-metric AU build) and <code>soap-rubric</code> (100-point SOAP scorecard). Every metric tagged Reg / Contract / Eng-target with traceability matrices in §10.</li>
+</ul>
+
+  </article>
+  <aside class="chapter-sidebar">
+  <div class="sidebar-eyebrow">On this page</div>
+  <ul>
+  <li><a href="#kpi-dashboard" class="h2">KPI dashboard at a glance</a></li>
+  <li><a href="#the-evaluation-theory-of-operation" class="h2">1. The Evaluation Theory of Operation</a></li>
+  <li><a href="#the-four-evaluation-domains" class="h2">2. The Four Evaluation Domains</a></li>
+  <li><a href="#domain-a-clinical-safety-reasoning-quality" class="h3">2.1 Domain A — Clinical Safety + Reasoning Quality</a></li>
+  <li><a href="#domain-b-documentation-quality" class="h3">2.2 Domain B — Documentation Quality</a></li>
+  <li><a href="#domain-c-triage-alignment" class="h3">2.3 Domain C — Triage Alignment</a></li>
+  <li><a href="#domain-d-operational-efficiency" class="h3">2.4 Domain D — Operational Efficiency</a></li>
+  <li><a href="#the-clinical-rubric-per-consult-scoring" class="h2">3. The Clinical Rubric (Per-Consult Scoring)</a></li>
+  <li><a href="#scoring-scale-applied-to-every-dimension-below" class="h3">3.1 Scoring scale (applied to every dimension below)</a></li>
+  <li><a href="#the-16-dimensions" class="h3">3.2 The 16 dimensions</a></li>
+  <li><a href="#the-30-day-scgp-kpis-cipla-mou-stage-4" class="h2">4. The 30-Day SCGP KPIs (Cipla MoU Stage 4)</a></li>
+  <li><a href="#clinical-kpis-8" class="h3">4.1 Clinical KPIs (8)</a></li>
+  <li><a href="#documentation-kpis-5" class="h3">4.2 Documentation KPIs (5)</a></li>
+  <li><a href="#triage-kpis-3" class="h3">4.3 Triage KPIs (3)</a></li>
+  <li><a href="#operational-kpis-5" class="h3">4.4 Operational KPIs (5)</a></li>
+  <li><a href="#compliance-kpis-4" class="h3">4.5 Compliance KPIs (4)</a></li>
+  <li><a href="#patient-kpis-3" class="h3">4.6 Patient KPIs (3)</a></li>
+  <li><a href="#engagement-kpis-3" class="h3">4.7 Engagement KPIs (3)</a></li>
+  <li><a href="#reliability-kpis-2" class="h3">4.8 Reliability KPIs (2)</a></li>
+  <li><a href="#cost-kpi-2" class="h3">4.9 Cost KPI (2)</a></li>
+  <li><a href="#slos-slis-error-budgets" class="h2">5. SLOs / SLIs / Error Budgets</a></li>
+  <li><a href="#acceptance-criteria-for-the-24-may-demo-gate-g1" class="h2">6. Acceptance Criteria for the 24 May Demo (Gate G1)</a></li>
+  <li><a href="#acceptance-criteria-for-the-30-day-scgp-exit-gate-g2" class="h2">7. Acceptance Criteria for the 30-Day SCGP Exit (Gate G2)</a></li>
+  <li><a href="#pass-conditions-all-must-be-true" class="h3">7.1 Pass conditions (all must be true)</a></li>
+  <li><a href="#fail-conditions-any-one-is-sufficient-to-fail-the-pilot" class="h3">7.2 Fail conditions (any one is sufficient to fail the pilot)</a></li>
+  <li><a href="#category-a-safety-incident-definition" class="h3">7.3 Category-A safety incident definition</a></li>
+  <li><a href="#remediation-cycle" class="h3">7.4 Remediation cycle</a></li>
+  <li><a href="#acceptance-criteria-for-production-post-pilot-gate-g3" class="h2">8. Acceptance Criteria for Production (Post-Pilot, Gate G3)</a></li>
+  <li><a href="#continuous-quality-improvement-loop" class="h2">9. Continuous Quality Improvement Loop</a></li>
+  <li><a href="#reference-mappings" class="h2">10. Reference Mappings</a></li>
+  <li><a href="#regulatory-clause-kpi-slo-mapping" class="h3">10.1 Regulatory clause → KPI / SLO mapping</a></li>
+  <li><a href="#contractual-article-kpi-slo-mapping" class="h3">10.2 Contractual article → KPI / SLO mapping</a></li>
+  <li><a href="#srs-nfr-functional-cross-references" class="h3">10.3 SRS NFR / functional cross-references</a></li>
+  <li><a href="#demo-to-production-transition-cross-reference" class="h3">10.4 Demo-to-production transition cross-reference</a></li>
+  <li><a href="#change-log" class="h2">Change Log</a></li>
+  </ul>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+<script>
+(function () {
+  // Wait for mermaid to be available, then init
+  function init() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#d4e8df',
+          primaryBorderColor: '#00633c',
+          primaryTextColor: '#00422a',
+          lineColor: '#00633c',
+          fontFamily: '-apple-system, "Inter", sans-serif'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

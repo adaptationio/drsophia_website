@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Changelog — Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Version diff log for the Sha'p Left Ambient Nurse Station Production Spec briefing." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Changelog · Production Spec · 2026-05-08</div>
+    <h1 class="title">Version diff log</h1>
+    <p class="subtitle">What changed between v1.0 (2026-05-08 morning) and v2.0 (2026-05-08 afternoon). Each subsequent revision will be appended below.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Living document</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+
+    <h2 id="v2">v2.0 — 2026-05-08 (afternoon)</h2>
+    <p>Major release driven by multi-agent review of v1.0 plus the AusHealth coverage-gap audit. Adds one new chapter, five new diagrams, two new interactive surfaces, and one new load-bearing finding.</p>
+
+    <h3>New chapters</h3>
+    <ul>
+      <li><strong>Chapter 07 — AusHealth Opportunity Stack</strong> (~4,800 words). The parallel investor + customer + product track. Covers Stefan Enderling sponsor relationship, Belinda board-recommendation 1 May, 2.5-month DD timeline, indicated Q3 2026 close, the Workplace Health pilot scope (FHIR DiagnosticReport ingestion · D&amp;A test triage · fatigue-risk · RTW sign-off), and the open decisions on AU regulatory pathway (TGA boundary review). Source: <code>wiki/concepts/aushealth-opportunity-stack-may2026.md</code>.</li>
+    </ul>
+
+    <h3>New diagrams (5)</h3>
+    <ul>
+      <li><strong>D1 · System map</strong> (index page) — Cipla / Tshikululu / AusHealth / Botaniqal four-counterparty Mermaid flowchart with colour-coded entity classes (customer / agent / tech / investor).</li>
+      <li><strong>D2 · Apex law tree</strong> (Chapter 02) — Constitution + NHA → POPIA / HPA / Nursing Act / Medicines Act → regulators → NDOH frameworks → OHSC enforcement → Sha&#x27;p Left clinic. Establishes the cascade for every FR that cites a SA statute.</li>
+      <li><strong>D3 · POPIA §72 cross-border sequence</strong> (Chapter 02) — Mermaid sequence diagram showing PHI flow from Patient → Clinic → Botaniqal SA → af-south-1 (Phase 2+) and the de-identified-aggregate path to ap-southeast-2 (Phase 0–1 only). Includes §23 DSAR return path.</li>
+      <li><strong>D9 · 6-phase Gantt</strong> (Chapter 05) — May 2026 → 2028+ across all 6 phases plus AusHealth (Phase A) and SAHPRA (parallel) tracks. Anchors Phase Ladder.</li>
+      <li><strong>D10 · 55-risk heatmap</strong> (Chapter 05) — Chart.js bubble chart plotting all 55 risks on Likelihood × Impact × inherent-score axes. Top residuals (R-01 / R-02 / R-18 / R-19) labelled. Replaces the wall-of-text register as the primary navigation surface.</li>
+    </ul>
+
+    <h3>New interactive surfaces</h3>
+    <ul>
+      <li><strong>8-KPI dashboard</strong> (Chapter 04) — SVG gauge cards for differential accuracy / red-flag sensitivity / scope violations / SOAP completeness / discharge note rate / consent capture / breach incidents / nurse adoption. Each tile deep-links to the full KPI definition.</li>
+      <li><strong>SRS live search bar</strong> (Chapter 03) — vanilla-JS keyword filter across all 128 FR rows. Types-as-you-go, hides non-matching rows, restores on clear.</li>
+    </ul>
+
+    <h3>New finding</h3>
+    <ul>
+      <li><strong>Finding 3 — Tshikululu role-conflict</strong>. Tshikululu MoU v2.2 simultaneously names Tshikululu as Exclusive Regional Agent (Article 3) and POPIA Sub-operator (Article 18.2). POPIA §20–21 doesn&#x27;t permit one entity to wear both hats when accepting a DSAR. Implication: pre-12-13 May board, decide between (a) split into two contracting entities (Investments NPC = Agent; Operations Pty Ltd = sub-processor), or (b) restrict Tshikululu&#x27;s data role to non-PHI metadata only. Newly elevated to P0 in the open-decision register.</li>
+    </ul>
+
+    <h3>Audit-driven fixes</h3>
+    <ul>
+      <li>Rameez Johaar email canonicalised to <code>rameez.johaar@shapleft.com</code> in chapter 02 (was <code>rameez@shapleft.com</code> in document library — synced).</li>
+      <li>Clinic ladder footnote — clarified the 11 → 50 → 300 ladder is anchored against Cipla MoU §3.2 (not §2.1 as previously cross-referenced in chapter 01).</li>
+      <li>Article 18.7 / 18.8 references — fixed in two places where chapter 04 quoted "Article 18.5 ten-control schedule" but cross-pointed at 18.6 (correct citation is 18.5).</li>
+      <li>§22C language — softened across SaMD pathway sections to reflect SAHPRA MD08-2025/2026 rather than older §22A framing.</li>
+      <li>POPIA §72 reframe — replaced legacy "§72 derogation" wording with "§72(a) binding agreement" to match the Information Regulator&#x27;s March 2025 guidance.</li>
+      <li>Tier 4 §71 carve-out — explicit statement that the Tier 4 supervising-prescribing offering is conditioned on HPCSA-registered SA doctors (§71 is HPCSA Booklet 10 §5.1 not the parent §71 Act clause; we now cite the Booklet in-line to prevent confusion).</li>
+    </ul>
+
+    <h3>Polish</h3>
+    <ul>
+      <li>Hero stat-grid expanded from 6 → 7 tiles (added "8 Open decisions"). Words count refreshed to ~62K. Findings count refreshed to 3.</li>
+      <li>Quick-jump section (which duplicated the chapter cards) replaced with a "Deep links" section that points at specific subsections (FR-71 → 76, top residuals, KPI dashboard, etc).</li>
+      <li>"Last updated" footer chip added: <code>2026-05-08 v2.0 · Built from wiki/concepts/ · 7 pages</code>.</li>
+      <li>Print stylesheet: bypasses auth gate when printing, applies a watermark (<code>CONFIDENTIAL · DO NOT REDISTRIBUTE · 2026-05-08 v2.0</code>) at -45° rotation, forces table-header repetition, avoids page breaks inside diagrams and findings callouts.</li>
+      <li>Mobile (480px) — stat-grid forced to 3-up; chapter card padding tightened; nav.toc tighter padding.</li>
+      <li>Status snapshot extended with Phase A (AusHealth Q3 close + Workplace Health pilot, parallel).</li>
+    </ul>
+
+    <h2 id="v1">v1.0 — 2026-05-08 (morning)</h2>
+    <p>Initial 6-chapter briefing site. Built from 6 wiki concept pages plus the Cipla 12-doc regulatory bundle. Password-gated against <code>auth.js</code>. Ships with the two original load-bearing findings (HPCSA Booklet 10 Tier 4 + NCS §1.2.1.3 discharge note). 54K words; 19 SA + adjacent statutes mapped; 128 FRs; 64 NFRs; 8 use cases; 55 risks; 35 SCGP KPIs; 15 SLOs; 15 open decisions in the roadmap chapter.</p>
+
+  </article>
+
+  <aside class="chapter-sidebar">
+    <div class="sidebar-eyebrow">On this page</div>
+    <ul>
+      <li><a href="#v2" class="h2">v2.0 — afternoon</a></li>
+      <li><a href="#v1" class="h2">v1.0 — morning</a></li>
+      <li><a href="index.html" class="h2">Back to Index</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 2.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+</body>
+</html>

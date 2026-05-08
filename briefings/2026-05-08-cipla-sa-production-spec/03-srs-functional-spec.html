@@ -1,0 +1,4441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 03 — Software Requirements Specification · Cipla / Sha&#x27;p Left Production Spec</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<header class="hero" style="padding: 44px 24px 56px 24px;">
+  <div class="hero-inner">
+    <div style="margin-bottom: 18px;">
+      <a href="index.html" class="chapter-back">Back to Index</a>
+    </div>
+    <div class="eyebrow">Chapter 03 · Production Spec · 2026-05-08</div>
+    <h1 class="title">Software Requirements Specification</h1>
+    <p class="subtitle">IEEE/ISO/IEC/IEEE 29148-style SRS — 128 functional requirements, 64 non-functional requirements, 8 use cases, verification criteria, traceability matrix.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Confidential</span>
+      <span class="pill info"><span class="dot"></span>Source: <code style="background:rgba(255,255,255,0.18);color:white;">wiki/concepts</code></span>
+      <span class="pill warn"><span class="dot"></span>Cipla MoU V1.3 + Tshikululu MoU v2.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="chapter-layout">
+  <article class="prose">
+<h1 id="shap-left-ambient-nurse-station-software-requirements-specification-srs">Sha'p Left Ambient Nurse Station — Software Requirements Specification (SRS)</h1>
+<p><strong>Document type:</strong> Software Requirements Specification, IEEE/ISO/IEC/IEEE 29148:2018-aligned
+<strong>Product:</strong> Dr Sophia AI Sha'p Left Ambient Nurse Station ("ROSE Nurse Mode" — codename)
+<strong>Version:</strong> 1.0
+<strong>Status:</strong> Authoritative draft for engineering build + auditor verification
+<strong>Owner:</strong> Botaniqal-main (Dr Sophia AI Pty Ltd)
+<strong>Counterparties:</strong> Cipla Foundation NPC (Customer/Responsible Party); Tshikululu Social Investments NPC (Exclusive Regional Agent / Sub-processor); Sha'p Left clinic operators (deployment site); Botaniqal Pty Ltd (downstream commercial vehicle)
+<strong>Conformance keywords (RFC 2119 / IEEE 29148):</strong> SHALL = mandatory; SHOULD = recommended; MAY = optional; MUST = the same force as SHALL but used in operational policy text.</p>
+<hr />
+<h1 id="introduction">1. Introduction</h1>
+<h2 id="purpose">1.1 Purpose</h2>
+<p>This Software Requirements Specification (SRS) defines, in formal IEEE/ISO/IEC/IEEE 29148:2018 style, the functional, non-functional, data, interface, and verification requirements for the <strong>Sha'p Left Ambient Nurse Station</strong> — Tier 1 of the Cipla Foundation MoU (<code>concepts/cipla-mou-apr2026.md</code> Article 2.1 Tier 1) — and provides the requirements substrate for Tiers 2, 3 and 4 (Multilingual Agentic Triage; Population Health Surveillance; Supervising Prescribing Authority).</p>
+<p>The SRS exists to:</p>
+<ul>
+<li>give engineering an unambiguous, traceable build target;</li>
+<li>give the Cipla Foundation Clinical Lead (Dr Punithasvaree Mamdoo) and the Tshikululu Master Agency steering committee an artefact they can verify against the SA regulatory canvas;</li>
+<li>give an external auditor (HPCSA / SANC / Information Regulator / OHSC / SAHPRA / ASD-IRAP / ISO 27001 lead auditor / SOC 2 Type II auditor) a single document mapping every system capability to a binding SA legal or quality clause;</li>
+<li>give a future SAHPRA Section 21 / Class A or C registration dossier the Software Description and the Specifications-of-Conformance backbone.</li>
+</ul>
+<p>The SRS supersedes, for production-track requirements purposes, the prototype scope of <code>docs/superpowers/specs/2026-04-27-shap-left-ambient-nurse-mvp.md</code>. The April 2026 demo spec remains authoritative for the <strong>demonstration</strong> build (synthetic data, AU AWS, Tshikululu pitch) running Apr-May 2026; this SRS is authoritative for the <strong>pilot and production</strong> build that Cipla MoU clause 3.1.4 (Stage 4 — 30-day Structured Clinical Governance Pilot) and onwards calls for.</p>
+<h2 id="scope">1.2 Scope</h2>
+<h3 id="product-identification">1.2.1 Product identification</h3>
+<p>The product is a multilingual, ambient-listening clinical decision support system (CDSS) and ambient digital scribe for nurse-led primary health care (PHC), deployed in the Cipla Foundation Sha'p Left clinic network in the Republic of South Africa, with a contractual roadmap to 12 SADC-aligned jurisdictions (Tshikululu MoU Article 6: South Africa, Botswana, Eswatini, Lesotho, Namibia, Zimbabwe, Mozambique, Zambia, Malawi, Angola, Madagascar, Mauritius).</p>
+<h3 id="what-it-will-do">1.2.2 What it will do</h3>
+<p>The product:</p>
+<ul>
+<li>captures the patient encounter ambiently (mic-on consultation) and produces a structured clinical record meeting HPCSA Booklet 9 §4.1 (12 mandatory record fields);</li>
+<li>transcribes and diarises multilingual SA conversation (English; isiZulu; isiXhosa; Sesotho; Afrikaans, with Setswana, Sepedi, Xitsonga, Tshivenda, isiNdebele, siSwati staged for later releases);</li>
+<li>performs real-time clinical reasoning grounded in PHC STG/EML 8th edition (2024) and the PACK guide as the canonical SA references (Cipla MoU Article 2.1 Tier 1; ICSM Manual);</li>
+<li>surfaces red flags, drug-allergy and drug-drug interaction alerts, and scope-of-practice gates;</li>
+<li>generates discharge notes (every consult, mandatory under National Core Standards 2011 §1.2.1.3 + NHA §61);</li>
+<li>produces auditable, immutable encounter records meeting HPCSA Booklet 9 §4.2/§8 + §12;</li>
+<li>enforces the Section 56(6) Nursing Act 2005 + Section 22A(15) Medicines Act 101 of 1965 prescribing scope (Schedule 0–4 by default; Schedule 5 and above gated to the supervising medical practitioner);</li>
+<li>supports notifiable medical condition flagging and NICD pre-fill (IPC Practical Manual 2020 Part G);</li>
+<li>supports Tier 4 escalation to a HPCSA-registered supervising medical practitioner where clinically required (HPCSA Booklet 10 §5.1, §5.5(b)).</li>
+</ul>
+<h3 id="what-it-will-not-do">1.2.3 What it will not do</h3>
+<p>The product:</p>
+<ul>
+<li>SHALL NOT operate as the sole clinical decision-maker — every recommendation is advisory and overridable by the nurse (SANC Code §3 accountability; HPCSA Booklet 20 §4 transparency-with-human-in-the-loop pillar);</li>
+<li>SHALL NOT provide a "treatment based solely on an online questionnaire" service path (HPCSA Booklet 10 §5.5(b) — explicitly disallowed);</li>
+<li>SHALL NOT permit a nurse to prescribe outside their Section 56(6) permit without doctor-co-sign;</li>
+<li>SHALL NOT export, transfer, or process special personal information (POPIA §26) about a SA data subject outside the Republic except via the routes in POPIA §72 plus the Cross-Border Transfer Agreement contemplated by Tshikululu MoU Article 18.7.</li>
+</ul>
+<h3 id="benefits-objectives-goals">1.2.4 Benefits, objectives, goals</h3>
+<p>Per Cipla MoU §B (Recital): support nurse-led primary care in 11 → 50 → up-to-300 Sha'p Left clinics in SA; grow into the SADC Territory of 12 countries under the Tshikululu Master Agency. Per Cipla MoU §3.1.4: a 30-day Structured Clinical Governance Pilot delivering documentation quality, triage alignment, and operational efficiency KPIs. Per Sha'p Left MVP wiki (<code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code>) the operational target is 12–18 patients/day per surgery, ≈10-minute consults, R350 inclusive of consult + meds + dispensing.</p>
+<h2 id="definitions-acronyms-and-abbreviations">1.3 Definitions, Acronyms and Abbreviations</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Expansion / definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AFSA</td>
+<td>Arbitration Foundation of Southern Africa (Cipla MoU Article 14; Tshikululu MoU Article 28)</td>
+</tr>
+<tr class="even">
+<td>AHPRA</td>
+<td>Australian Health Practitioner Regulation Agency (out of SA scope; informational only)</td>
+</tr>
+<tr class="odd">
+<td>AMR</td>
+<td>Antimicrobial resistance — SA Framework for Prevention and Containment of AMR 2018</td>
+</tr>
+<tr class="even">
+<td>APP</td>
+<td>Australian Privacy Principle (Privacy Act 1988 (Cth))</td>
+</tr>
+<tr class="odd">
+<td>ASD ISM</td>
+<td>Australian Signals Directorate Information Security Manual (referenced in Cipla MoU 9.5(e); Tshikululu MoU 18.5(e))</td>
+</tr>
+<tr class="even">
+<td>Brandmed</td>
+<td>Cipla Medpro 30%-owned chronic-disease platform; portal <code>b2b-2.kardiogroup.com</code></td>
+</tr>
+<tr class="odd">
+<td>CCMDD</td>
+<td>Centralised Chronic Medicines Dispensing and Distribution programme (NDOH); Sha'p Left equivalent = "Daplapmeds"</td>
+</tr>
+<tr class="even">
+<td>CDSS</td>
+<td>Clinical Decision Support System (Cipla MoU Article 2.1 Tier 1)</td>
+</tr>
+<tr class="odd">
+<td>CHC</td>
+<td>Community Health Centre (NDOH Ideal Clinic Programme)</td>
+</tr>
+<tr class="even">
+<td>Customer</td>
+<td>Cipla Foundation NPC, in its capacity as POPIA "Responsible Party" (Tshikululu MoU 18.2)</td>
+</tr>
+<tr class="odd">
+<td>DCST</td>
+<td>District Clinical Specialist Team (NDOH ICSM Manual)</td>
+</tr>
+<tr class="even">
+<td>DHIS</td>
+<td>District Health Information System (NDOH)</td>
+</tr>
+<tr class="odd">
+<td>DPA</td>
+<td>Data Processing / Operator Agreement (POPIA §20; Cipla MoU 9.3; Tshikululu MoU 18.3)</td>
+</tr>
+<tr class="even">
+<td>DPIA</td>
+<td>Data Protection Impact Assessment (POPIA §38 read with Information Regulator guidance)</td>
+</tr>
+<tr class="odd">
+<td>EML</td>
+<td>Essential Medicines List (NDOH PHC STG/EML 8th edition 2024)</td>
+</tr>
+<tr class="even">
+<td>FHIR</td>
+<td>HL7 Fast Healthcare Interoperability Resources Release 4 (R4)</td>
+</tr>
+<tr class="odd">
+<td>FIPS</td>
+<td>Federal Information Processing Standards (FIPS 140-2 / 140-3 KMS; FIPS 197 AES)</td>
+</tr>
+<tr class="even">
+<td>HPCSA</td>
+<td>Health Professions Council of South Africa</td>
+</tr>
+<tr class="odd">
+<td>HPRS</td>
+<td>Health Patient Registration System (NDOH)</td>
+</tr>
+<tr class="even">
+<td>ICSM</td>
+<td>Integrated Clinical Services Management (NDOH 2015–2023 Manual)</td>
+</tr>
+<tr class="odd">
+<td>IPC</td>
+<td>Infection Prevention and Control (NDOH National IPC Practical Manual 2020)</td>
+</tr>
+<tr class="even">
+<td>ISBAR</td>
+<td>Identify–Situation–Background–Assessment–Recommendation handover format</td>
+</tr>
+<tr class="odd">
+<td>KMS</td>
+<td>Key Management Service (AWS KMS, FIPS 140-2 Level 2 validated)</td>
+</tr>
+<tr class="even">
+<td>MoU</td>
+<td>Memorandum of Understanding</td>
+</tr>
+<tr class="odd">
+<td>NCS</td>
+<td>National Core Standards for Health Establishments in South Africa (NDOH 2011)</td>
+</tr>
+<tr class="even">
+<td>NDOH</td>
+<td>National Department of Health (Republic of South Africa)</td>
+</tr>
+<tr class="odd">
+<td>NHA</td>
+<td>National Health Act 61 of 2003</td>
+</tr>
+<tr class="even">
+<td>NICD</td>
+<td>National Institute for Communicable Diseases</td>
+</tr>
+<tr class="odd">
+<td>NIMART</td>
+<td>Nurse-Initiated Management of Antiretroviral Therapy</td>
+</tr>
+<tr class="even">
+<td>NPC</td>
+<td>Non-Profit Company (Companies Act 71 of 2008)</td>
+</tr>
+<tr class="odd">
+<td>OHSC</td>
+<td>Office of Health Standards Compliance (NHA §79)</td>
+</tr>
+<tr class="even">
+<td>Operator</td>
+<td>Botaniqal / Dr Sophia AI Pty Ltd in its POPIA Operator role (Cipla MoU 9.2; Tshikululu MoU 18.2)</td>
+</tr>
+<tr class="odd">
+<td>PACK</td>
+<td>Practical Approach to Care Kit (NDOH PHC algorithm guide)</td>
+</tr>
+<tr class="even">
+<td>PCNS</td>
+<td>Primary Care Nurse Specialist (SANC competency framework, 2014)</td>
+</tr>
+<tr class="odd">
+<td>PHC</td>
+<td>Primary Health Care</td>
+</tr>
+<tr class="even">
+<td>POPIA</td>
+<td>Protection of Personal Information Act 4 of 2013</td>
+</tr>
+<tr class="odd">
+<td>RBAC</td>
+<td>Role-Based Access Control</td>
+</tr>
+<tr class="even">
+<td>RICA</td>
+<td>Regulation of Interception of Communications and Provision of Communication-Related Information Act 70 of 2002</td>
+</tr>
+<tr class="odd">
+<td>RLS</td>
+<td>Row-Level Security (Supabase/PostgreSQL)</td>
+</tr>
+<tr class="even">
+<td>RTW</td>
+<td>Return-to-work (occupational health term used in AusHealth Diagnostics scope)</td>
+</tr>
+<tr class="odd">
+<td>SADC</td>
+<td>Southern African Development Community (Tshikululu MoU Territory)</td>
+</tr>
+<tr class="even">
+<td>SAHPRA</td>
+<td>South African Health Products Regulatory Authority</td>
+</tr>
+<tr class="odd">
+<td>SaMD</td>
+<td>Software as a Medical Device (IMDRF; SAHPRA MD08-2025/2026)</td>
+</tr>
+<tr class="even">
+<td>SANC</td>
+<td>South African Nursing Council (Nursing Act 33 of 2005)</td>
+</tr>
+<tr class="odd">
+<td>SOAP / SOAPIE</td>
+<td>Subjective–Objective–Assessment–Plan / + Implementation–Evaluation note format</td>
+</tr>
+<tr class="even">
+<td>STG</td>
+<td>Standard Treatment Guidelines (PHC STG/EML 8th edition 2024)</td>
+</tr>
+<tr class="odd">
+<td>Sub-operator</td>
+<td>Tshikululu in its Tshikululu MoU 18.2 sub-processor role</td>
+</tr>
+<tr class="even">
+<td>TLS</td>
+<td>Transport Layer Security (TLS 1.2/1.3 — RFC 8446)</td>
+</tr>
+<tr class="odd">
+<td>WBPHCOT</td>
+<td>Ward-Based Primary Health Care Outreach Team</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">1.4 References</h2>
+<h3 id="binding-sa-primary-law">1.4.1 Binding SA primary law</h3>
+<ul>
+<li>Constitution of the Republic of South Africa, 1996 (apex)</li>
+<li>National Health Act 61 of 2003 ("NHA")</li>
+<li>Protection of Personal Information Act 4 of 2013 ("POPIA"); POPIA Regulations 2018; Mar 2026 Health Information Regulations</li>
+<li>Health Professions Act 56 of 1974 ("HPA")</li>
+<li>Nursing Act 33 of 2005</li>
+<li>Medicines and Related Substances Act 101 of 1965 ("Medicines Act")</li>
+<li>Choice on Termination of Pregnancy Act 92 of 1996</li>
+<li>Regulation of Interception of Communications and Provision of Communication-Related Information Act 70 of 2002 ("RICA")</li>
+<li>Electronic Communications and Transactions Act 25 of 2002 ("ECT Act")</li>
+<li>Occupational Health and Safety Act 85 of 1993 ("OHSA")</li>
+</ul>
+<h3 id="binding-sa-secondary-law-regulations">1.4.2 Binding SA secondary law / regulations</h3>
+<ul>
+<li>Government Gazette R.185, 2 March 2012 — Categories of Hospitals (NHA §35 + §90) — <code>/home/adaptation/cipla-regs/DOH-Reg-Categories-Hospitals.txt</code></li>
+<li>Government Gazette R.1036, 2 September 2018 — Norms and Standards Regulations applicable to different categories of health establishments (NHA §47 + §90)</li>
+<li>POPIA Regulations 2018; Health Information Regulations Mar 2026</li>
+<li>OHSC Procedural Regulations 2016 (NHA §79(2)(b))</li>
+</ul>
+<h3 id="binding-professional-codes-guidelines">1.4.3 Binding professional codes / guidelines</h3>
+<ul>
+<li>HPCSA Booklet 9 — <em>Guidelines on the Keeping of Patient Records</em>, 2016, Nov 2022 revision — <code>/home/adaptation/cipla-regs/HPCSA-Booklet-9-PatientRecords.txt</code></li>
+<li>HPCSA Booklet 10 — <em>Ethical Guidelines for Good Practice in Telehealth</em>, December 2021 (revised) — <code>/home/adaptation/cipla-regs/HPCSA-Booklet-10-Telehealth.txt</code></li>
+<li>HPCSA Booklet 20 — <em>Ethical Guidelines on the Use of AI in Healthcare</em>, November 2025</li>
+<li>SANC Code of Ethics for Nursing Practitioners in South Africa (2013, current) — <code>/home/adaptation/cipla-regs/extract-batch1.json</code></li>
+<li>SANC Competencies for the Primary Care Nurse Specialist (2014) — pending Cipla Drive ingestion (Cloudflare-blocked on sanc.co.za)</li>
+</ul>
+<h3 id="ndoh-policy-quality-framework">1.4.4 NDOH policy / quality framework</h3>
+<ul>
+<li>PHC STG/EML 8th edition (2024) — canonical clinical reference for ROSE recommendations</li>
+<li>National Core Standards for Health Establishments in South Africa (2011) — <code>/home/adaptation/cipla-regs/National-Core-Standards.txt</code></li>
+<li>Ideal Clinic Framework Version 19 (April 2022 update) — <code>/home/adaptation/cipla-regs/Ideal-Clinic-Framework-V19.txt</code></li>
+<li>Ideal Clinic &amp; Community Health Centre Facility Profile — <code>/home/adaptation/cipla-regs/Ideal-Clinic-CHC-Facility-Profile.txt</code></li>
+<li>ICSM Manual (5th June FINAL, 2023-04 update) — <code>/home/adaptation/cipla-regs/ICSM-Manual.txt</code></li>
+<li>National Infection Prevention and Control Practical Manual (March 2020) — <code>/home/adaptation/cipla-regs/IPC-Practical-Manual.txt</code></li>
+<li>SA Framework for the Prevention and Containment of Antimicrobial Resistance 2018</li>
+</ul>
+<h3 id="device-regulator-and-adjacent-regulators">1.4.5 Device regulator and adjacent regulators</h3>
+<ul>
+<li>SAHPRA MD08-2025/2026 — <em>Communication to Industry on AI Medical Devices</em> (and the SaMD framework therein)</li>
+<li>SAHPRA Section 21 Access to Unregistered Medicines / Devices framework</li>
+<li>Information Regulator Guidance Notes (cross-border transfer; child data; health data)</li>
+</ul>
+<h3 id="international-standards-referenced-in-mou-clauses">1.4.6 International standards referenced in MoU clauses</h3>
+<ul>
+<li>ISO/IEC 27001:2022 — Information security management systems</li>
+<li>ISO/IEC 27018:2019 — PII protection in public clouds acting as PII processors</li>
+<li>ISO/IEC 27701:2019 — Privacy information management extension to 27001</li>
+<li>NIST SP 800-53 r5 — Security and Privacy Controls (AC family + AU family)</li>
+<li>ASD ISM (Australian Government Information Security Manual) — Controls 1467, 1698 (vuln management)</li>
+<li>IEC 62304 — Medical device software life cycle (informational; SAHPRA pathway)</li>
+<li>ISO 14971 — Medical device risk management (informational; SAHPRA pathway)</li>
+<li>HL7 FHIR R4 — Fast Healthcare Interoperability Resources</li>
+<li>WCAG 2.1 — Web Content Accessibility Guidelines</li>
+<li>RFC 8446 — TLS 1.3</li>
+<li>FIPS 140-2 / 140-3 — Cryptographic module validation</li>
+<li>FIPS 197 — Advanced Encryption Standard (AES)</li>
+</ul>
+<h3 id="internal-corpus-wiki-repo">1.4.7 Internal corpus (wiki + repo)</h3>
+<ul>
+<li><code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> — MVP wiki (Tshikululu prototype)</li>
+<li><code>concepts/cipla-sa-regulatory-bundle-may2026.md</code> — regulatory canvas + implementation impact matrix (the source of every regulatory traceability tag in this SRS)</li>
+<li><code>concepts/cipla-mou-apr2026.md</code> — Cipla Foundation MoU V1.3 (Articles 2, 4, 8, 9, 10)</li>
+<li><code>concepts/tshikululu-master-agency-mou-may2026.md</code> — Tshikululu Master Agency MoU v2.2 (Article 18 Data Protection — 18.5(a)–(j) ten-control schedule; Article 19 Regulatory Compliance)</li>
+<li><code>entities/companies/cipla.md</code> — Sha'p Left operational reality</li>
+<li><code>botaniqal-medtech/docs/superpowers/specs/2026-04-27-shap-left-ambient-nurse-mvp.md</code> — Tier 1 demo spec</li>
+</ul>
+<h2 id="overview-of-the-document">1.5 Overview of the document</h2>
+<p>Section 2 sets the product perspective, user characteristics, constraints, and assumptions. Section 3 contains the binding requirements: 3.1 functional (table FR-001…FR-128); 3.2 non-functional (table NFR-001…NFR-064); 3.3 use cases (UC-01…UC-08); 3.4 data requirements; 3.5 external interface requirements; 3.6 design constraints; 3.7 a verification &amp; traceability matrix that maps every FR/NFR to its source clause and verification method. Section 4 sets the verification approach. Section 5 is the glossary. Appendix A is the regulatory citation index.</p>
+<hr />
+<h1 id="overall-description">2. Overall Description</h1>
+<h2 id="product-perspective">2.1 Product perspective</h2>
+<p>The Sha'p Left Ambient Nurse Station is a <strong>deployment configuration</strong> of the Dr Sophia AI Platform ("the Platform"), the same platform that today serves Botaniqal's Australian weight-loss and alternative-medicine telehealth use cases. Architecturally the Platform is a multi-tenant React + Node.js + Supabase PostgreSQL + AWS EKS stack with a Claude-powered reasoning core (Opus 4.6 default model for clinical reasoning; Haiku 4.5 for background classification and compression). The Sha'p Left configuration adds a <code>nurse</code> role and a <code>/nurse</code> route, an ambient continuous-recording extension to the existing <code>audioRecorder.js</code>, an <code>io.of('/nurse')</code> Socket.IO namespace, a SA-anchored <code>buildNurseSystemPrompt()</code>, and a clinical-knowledge anchor on PHC STG/EML 8th edition (2024) replacing the AU NICE/RACGP/eTG anchor.</p>
+<p>The product fits the <strong>Cipla MoU 4-tier scope</strong> (Article 2.1) as follows:</p>
+<ul>
+<li><strong>Tier 1 — Clinical Decision Support</strong> — the primary Sha'p Left build; everything functional in this SRS that does not specify "Tier 2/3/4" is Tier 1.</li>
+<li><strong>Tier 2 — Multilingual Agentic Triage</strong> — a patient-facing triage layer (e.g. accessed via SMS, USSD, WhatsApp, or in-clinic kiosk) that produces a pre-consult triage summary for the nurse. Subject to SAHPRA SaMD authorisation; included in this SRS at requirements granularity but gated on regulatory clearance.</li>
+<li><strong>Tier 3 — Population Health Surveillance</strong> — a real-time hub-and-spoke surveillance layer rolling up Tier 1 + Tier 2 anonymised aggregates to the NDOH Ideal Clinic Facility Profile schema and the DHIS reporting cadence.</li>
+<li><strong>Tier 4 — Supervising Prescribing Authority</strong> — an asynchronous review path where a HPCSA-registered medical practitioner (the Section 56(6) permit issuer or a delegated supervisor) reviews and co-signs prescriptions outside the nurse's Section 56(6) scope or otherwise flagged for supervision.</li>
+</ul>
+<p>The product sits <strong>inside</strong> the Sha'p Left clinic ecosystem alongside (a) the dispensing-licence software (regulated under the Medicines Act + Pharmacy Act), (b) Brandmed for chronic-disease management, (c) NDOH systems (CCMDD/Daplapmeds, DHIS, NICD reporting, HPRS for patient identification). The product does not replace any of these; it integrates with them where APIs exist (FHIR R4 preferred; HL7 v2 for legacy NDOH systems where required) and produces paper-equivalent PDF + HPRS-compatible patient ID export where they do not.</p>
+<h2 id="product-functions-high-level-enumeration">2.2 Product functions (high-level enumeration)</h2>
+<p>P-1. Patient identity capture and verification.
+P-2. Multi-modality consent capture (verbal patient consent in the recording; nurse attestation at session start; signed Botaniqal employee release for demo phase only).
+P-3. Vitals capture (manual entry; later: Bluetooth/serial point-of-care device integration).
+P-4. Ambient continuous audio recording with persistent on-screen "RECORDING" indicator.
+P-5. Real-time multilingual transcription with speaker diarisation.
+P-6. Clinical history capture (history of presenting complaint; bio-psychosocial; allergies; chronic conditions).
+P-7. Differential diagnosis generation grounded in PHC STG/EML 8th ed (2024).
+P-8. Red-flag and danger-sign detection.
+P-9. Drug-allergy cross-check and drug-drug interaction (DDI) check.
+P-10. Scope-of-practice gate (Section 56(6) Nursing Act + Schedule 0–4 ceiling).
+P-11. Prescription generation and write-out.
+P-12. Schedule-level evaluation and Tier 4 escalation gating.
+P-13. Dispense-vs-refer decision support.
+P-14. Discharge note (patient-facing handout) generation per consult.
+P-15. Patient education content generation.
+P-16. Referral generation with district-hospital lookup.
+P-17. DCST escalation channel (Tier 4 supervising authority + ICSM).
+P-18. Notifiable medical condition flagging and NICD report pre-fill.
+P-19. Encounter close, immutable record commit, and audit log entry.
+P-20. Retention policy enforcement (HPCSA Booklet 9 §9 retention rules).
+P-21. Multi-clinic access scoping and data isolation.
+P-22. Sub-processor disclosure and operator-instructions binding.
+P-23. Data Subject Access Request (DSAR) handling per POPIA §23 / PAIA.
+P-24. Override-with-reason capture for any AI suggestion the nurse declines.
+P-25. Loadshedding-tolerant local cache + offline queue + automatic resync.
+P-26. Tier 2: patient-facing multilingual triage entry (SMS / USSD / WhatsApp / kiosk).
+P-27. Tier 3: population health surveillance aggregation and reporting (DHIS-aligned).
+P-28. Tier 4: HPCSA-credentialled supervising-doctor review queue.</p>
+<h2 id="user-characteristics">2.3 User characteristics</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>User class</th>
+<th>Profile</th>
+<th>Volume</th>
+<th>Skills</th>
+<th>Operating context</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Primary Care Nurse Specialist (PCNS)</td>
+<td>SANC-registered post-graduate PHC nurse holding a Section 56(6) permit issued by a medical practitioner-in-charge; Sha'p Left clinic owner-operator (per Cipla MoU recital B; entities/companies/cipla.md)</td>
+<td>11 today → 50 → 300; one PCNS per surgery</td>
+<td>Schedule 0–4 prescribe + dispense; NIMART-trained; English-charting; isiZulu/isiXhosa/Sesotho/Afrikaans-speaking (region-dependent); laptop-fluent; privacy-aware</td>
+<td>Female-led owner-operator clinic; community hubs / taxi ranks; LTE/4G; loadshedding-frequent; ~12–18 patients/day; 10-minute consults</td>
+</tr>
+<tr class="even">
+<td>Patient</td>
+<td>SA resident (60% female / 40% male per BizNews); Gauteng / Western Cape / KZN; mostly low-to-middle income; languages per region</td>
+<td>300–350/month per surgery (~5,000+/month network-wide)</td>
+<td>Variable — assumed lay; literacy in home language not always English</td>
+<td>At Sha'p Left clinic for acute episode, MCWH visit, family planning, NIMART or chronic-disease check; privacy and dignity expected (NCS Domain 1 §1.1.1.2)</td>
+</tr>
+<tr class="odd">
+<td>Cipla Foundation supervisor / clinical lead</td>
+<td>Dr Punithasvaree Mamdoo (current Cipla Foundation clinical lead) and equivalents</td>
+<td>≤10 across the network</td>
+<td>MBChB or PhD; HPCSA-registered MP or non-clinical PhD; reads aggregated outcomes + audits clinical-governance signals</td>
+<td>Cipla Foundation HQ + clinic visits; needs read access to aggregate dashboards + per-clinic compliance views; no patient-record access without consent gate</td>
+</tr>
+<tr class="even">
+<td>Tier 4 Supervising Medical Practitioner</td>
+<td>HPCSA-registered MP (HPCSA Booklet 10 §5.1) — typically the Section 56(6) permit-issuing practitioner or a delegated peer; geographically near the clinic for fall-back in-person referral</td>
+<td>1 per Sha'p Left surgery as a baseline</td>
+<td>Independent prescribing including Schedule 5+; review + co-sign; able to receive escalations within target SLA (≤4 hrs initial response)</td>
+<td>Remote (telehealth-rules-bound per HPCSA Booklet 10) or in-clinic; iOS/Android/Web; signed engagement agreement with Sha'p Left operator</td>
+</tr>
+<tr class="odd">
+<td>District Clinical Specialist Team (DCST)</td>
+<td>NDOH-employed specialists per district (paeds, OB-Gyn, internal medicine, family physician, anaesthetist)</td>
+<td>1 team per health district</td>
+<td>Full specialist competence per ICSM Manual</td>
+<td>District hospital base; receives ROSE escalations via Tier 4 router</td>
+</tr>
+<tr class="even">
+<td>Dr Sophia operations / SRE</td>
+<td>Botaniqal engineering, on-call rotation</td>
+<td>4–6 on-call seats globally</td>
+<td>Full-stack + AWS EKS + Supabase + Anthropic API; SOC trained on POPIA breach drill (Tshikululu MoU 18.8)</td>
+<td>Adelaide, Sydney, remote — 24/7 on-call with SAST hours coverage requirement</td>
+</tr>
+<tr class="odd">
+<td>Cipla Foundation compliance / Tshikululu agency</td>
+<td>Compliance reviewer (Cipla legal + Tshikululu programme management)</td>
+<td>2–4 across the parties</td>
+<td>Privacy + clinical governance + funder reporting</td>
+<td>Quarterly evidence pulls + ad-hoc audit</td>
+</tr>
+<tr class="even">
+<td>Patient (DSAR) — same as patient class above but in DSAR posture</td>
+<td>—</td>
+<td>low</td>
+<td>—</td>
+<td>PAIA + POPIA §23 path; written request → 30 days</td>
+</tr>
+</tbody>
+</table>
+<h2 id="constraints">2.4 Constraints</h2>
+<h3 id="regulatory-constraints">2.4.1 Regulatory constraints</h3>
+<p>R-1. SA primary and secondary law as listed in §1.4.1–§1.4.2 binds the deployment.
+R-2. SANC Code of Ethics binds the nurse using the system; design SHALL not push the nurse outside the Code (Code §3 accountability; §4 confidentiality).
+R-3. HPCSA Booklets 9 (records), 10 (telehealth), 20 (AI) bind any HPCSA-registered practitioner in the loop and effectively cascade onto the platform.
+R-4. NDOH PHC STG/EML 8th edition (2024) and the PACK guide are the canonical clinical references; non-SA drug names or non-EML formulary suggestions are forbidden.
+R-5. POPIA §11 (consent), §19 (security safeguards), §22 (breach), §26 (special PI prohibition), §32 (health exception), §72 (cross-border) all apply once live PHI flows.
+R-6. RICA §4(1) one-party consent is sufficient for the recording itself (the nurse is a party); POPIA still governs processing of the recording's content.
+R-7. Tshikululu MoU 18.8 — 24-hour breach notification clock — binds the Operator (us) under the agency-side instrument.
+R-8. SAHPRA MD08-2025/2026 SaMD framework determines registration class (likely Class A or C) at production phase.</p>
+<h3 id="operational-constraints">2.4.2 Operational constraints</h3>
+<p>O-1. Throughput target: 12–18 patients/day per surgery; ~10-minute consult median; aggregate load 11 → 50 → 300 surgeries.
+O-2. Tech baseline: laptop on dispensing-software desk; LTE/4G connectivity; loadshedding-survivable architecture (≥3 hours offline mode + automatic resync).
+O-3. Paper-fallback MUST be supported: when the system is unavailable the nurse SHALL be able to revert to paper records and the system SHALL backfill from scanned/typed-in entry without integrity loss.
+O-4. Multilingual expectation: English-charting; isiZulu/isiXhosa/Sesotho/Afrikaans patient conversation (and code-switched throughout); transcription engine SHALL handle code-switched conversations and produce an English clinical record for the audit trail.</p>
+<h3 id="technical-constraints">2.4.3 Technical constraints</h3>
+<p>T-1. Platform stack reuse mandated by Willie's directive ("use everything we've already got, don't rewrite") — React 18 + Vite frontend; Express + Node.js backend; Supabase (PostgreSQL + Auth + RLS + Storage); AWS EKS (currently <code>ap-southeast-2</code>; production Sha'p Left = <code>af-south-1</code>); Socket.IO for realtime; Anthropic Claude (Opus 4.6 + Haiku 4.5).
+T-2. ASR engine: ElevenLabs Scribe v1 (REST batch, diarisation enabled, 99-language coverage) for MVP and demo; Nemotron Phase 1 batch parity deferred to v1.3; Phase 2 streaming + Phase 3 fine-tune deferred to v2.
+T-3. Patient identity SHALL be HPRS-compatible at production; demo can use synthetic identifiers.
+T-4. The <code>is_demo</code> / <code>is_synthetic</code> flag SHALL prevent demo records from being promoted to production patient pipelines.</p>
+<h3 id="financial-constraints">2.4.4 Financial constraints</h3>
+<p>F-1. Phase 1 pilot envelope: ZAR 7.8M (≈AUD $660K) for 2 nurse pods over the 30-day Structured Clinical Governance Pilot period (Cipla MoU §3.1.4).
+F-2. Per-consult variable cost target ≤ AU$0.10 (current Sophia post-SDK migration ≈ AU$0.05/consult per <code>memory/architecture-rose-on-messenger-apr27.md</code>).
+F-3. Engineering envelope: 2–3 weeks for one engineer for the MVP demo; pilot uplift estimated 8–12 engineer-weeks; production uplift 6–9 engineer-months.</p>
+<h2 id="assumptions-and-dependencies">2.5 Assumptions and dependencies</h2>
+<p>A-1. PHC STG/EML 8th edition (2024) is the canonical clinical-reasoning anchor and remains stable for the Term of the Cipla MoU (12 months); refreshes are absorbed via reference-data updates.
+A-2. NDOH DHIS reporting schemas remain stable; the Ideal Clinic Facility Profile schema (Cipla regs §6) is treated as the canonical Tier 3 rollup target.
+A-3. The CCMDD pipeline (Daplapmeds for Sha'p Left) accepts external prescription handoffs via paper-equivalent PDF + HPRS-compatible patient ID until a digital interface is published.
+A-4. NICD continues to accept notifiable medical condition reports via the current NICD portal + paper fallback.
+A-5. AWS Cape Town (<code>af-south-1</code>) maintains its current service suite for EKS, RDS, S3, KMS, and the encryption + KMS posture remains FIPS 140-2 Level 2 validated.
+A-6. The Cipla Foundation Section 56(6) permit roster covers the current and future nurse cohort and the supervising medical practitioner roster has HPCSA registration.
+A-7. Tshikululu Definitive Agreements (Tshikululu MoU Article 7.4) close in the 12-month window; if they do not, the Master Agency reverts to a non-binding state and the Sha'p Left build proceeds under the Cipla Foundation MoU only.
+A-8. The Cipla MoU (currently V1.3, sent 30 Apr 2026) reaches signature within the 12-month MoU Term; a definitive pilot agreement under MoU §3.1.4 is executed.</p>
+<hr />
+<h1 id="specific-requirements">3. Specific Requirements</h1>
+<h2 id="functional-requirements">3.1 Functional Requirements</h2>
+<input type="text" id="frSearch" placeholder="Search 128 FRs — by ID (FR-042), priority (Must), tier (T4), or text (consent / discharge / red flag) ..." class="fr-search-input" aria-label="Search functional requirements" />
+<p class="fr-search-hint">Live filter — types as you go, hides any table row that doesn&#x27;t match. Clear the box to restore all rows.</p>
+<script>
+(function () {
+  function init() {
+    var input = document.getElementById('frSearch');
+    if (!input) return;
+    input.addEventListener('input', function (e) {
+      var q = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('article.prose table tbody tr').forEach(function (tr) {
+        var text = tr.innerText.toLowerCase();
+        tr.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+      });
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+})();
+</script>
+<p>The functional requirements below are normative. Each row is a single-clause SHALL statement, traced to a source citation. Priority: Must = MVP/pilot blocker; Should = pilot strongly preferred / production must-have; Could = production nice-to-have. Tier per Cipla MoU Article 2.1 (T1 default; T2/T3/T4 as marked). Source abbreviations: HPCSAB9 = HPCSA Booklet 9 §x; HPCSAB10 = Booklet 10; HPCSAB20 = Booklet 20; SANCC = SANC Code; PCNS = SANC PCNS Competencies; NCS = National Core Standards 2011; ICSM = ICSM Manual; IPC = IPC Practical Manual; NHA = National Health Act 61/2003; POPIA = Act 4/2013; RICA = Act 70/2002; ECT = Act 25/2002; NursA = Nursing Act 33/2005 §56(6); MedA = Medicines Act §22A(15); CMOU = Cipla MoU clauses; TMOU = Tshikululu MoU clauses; MVP = <code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code>.</p>
+<h3 id="patient-identity-consent-and-session-start">3.1.1 Patient identity, consent, and session start</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-001</td>
+<td>Patient lookup</td>
+<td>The system SHALL allow the nurse to search for an existing patient by HPRS-compatible identifier, given name, surname, and date of birth combinations.</td>
+<td>HPCSAB9 §4.1.1; MVP §3 q5</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-002</td>
+<td>Patient creation</td>
+<td>The system SHALL allow the nurse to create a new patient record where no match is found, capturing all 12 mandatory record fields per HPCSAB9 §4.1 by encounter close.</td>
+<td>HPCSAB9 §4.1.1–§4.1.12</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-003</td>
+<td>Identity verification</td>
+<td>The system SHALL prompt the nurse to verbally confirm the patient's full name and date of birth before recording starts.</td>
+<td>NCS §1.5.1.5; SANCC §5.1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-004</td>
+<td>Demo synthetic flag</td>
+<td>The system SHALL persist an <code>is_demo</code> / <code>is_synthetic</code> boolean on every encounter record and SHALL NOT promote demo records into the production patient pipeline.</td>
+<td>MVP §2 demo bar; CMOU 9.1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-005</td>
+<td>DEMO banner</td>
+<td>The system SHALL display a persistent "DEMO — SYNTHETIC PATIENT DATA — NOT FOR CLINICAL USE" banner at the top of every screen when <code>is_demo = true</code>.</td>
+<td>MVP §2 demo bar</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-006</td>
+<td>Telehealth consent payload</td>
+<td>Where any HPCSA-registered remote practitioner is in the loop, the system SHALL display and capture acknowledgement of a telehealth-specific consent screen identifying the practitioner, practice number, transmission types, encryption mechanism in plain language, sub-processors disclosed, and material risks, before the encounter proceeds.</td>
+<td>HPCSAB10 §5.7</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="odd">
+<td>FR-007</td>
+<td>Verbal consent — pre-recording preamble</td>
+<td>The system SHALL play or prompt-display a one-paragraph consent preamble that the nurse reads aloud before the recording begins, and SHALL capture the patient's verbal acknowledgement in the first 30 seconds of audio.</td>
+<td>RICA §4(1); POPIA §11; NCS §1.2.1.2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-008</td>
+<td>Consent failure soft-prompt</td>
+<td>If verbal consent acknowledgement is not transcribed within the first 30 seconds, the system SHALL surface a non-blocking soft-prompt to the nurse to re-elicit consent or pause the recording.</td>
+<td>POPIA §11; SANCC §3</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-009</td>
+<td>Recording start gate</td>
+<td>The system SHALL gate "Start Recording" behind two checkboxes — "I have informed the patient" and "Patient has verbally consented" — independent of the verbal-capture transcript.</td>
+<td>POPIA §11; HPCSAB10 §5.7</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-010</td>
+<td>Refuse-to-consent path</td>
+<td>The system SHALL allow the patient to refuse recording without blocking the consult; in that case the nurse SHALL be able to chart manually with no recording captured.</td>
+<td>SANCC §5.1 (autonomy)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-011</td>
+<td>Persistent recording indicator</td>
+<td>The system SHALL display a persistent on-screen "RECORDING" indicator (red dot + label) whenever audio capture is active.</td>
+<td>HPCSAB20 transparency pillar</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-012</td>
+<td>Stop recording — single click</td>
+<td>The system SHALL allow the nurse to stop recording in a single click.</td>
+<td>SANCC §3 (accountability + control)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-013</td>
+<td>Telehealth-only prohibition</td>
+<td>Where a Tier 4 practitioner is engaged the system SHALL NOT permit a fully-remote consult that lacks any in-person nurse component.</td>
+<td>HPCSAB10 §3.7 + §3.8</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="even">
+<td>FR-014</td>
+<td>Established-relationship prefer flag</td>
+<td>Where a Tier 4 practitioner is engaged for the first time with a particular patient, the system SHALL surface a banner advising that an established practitioner-patient relationship is preferred and SHALL capture explicit one-time consent before continuing.</td>
+<td>HPCSAB10 §3.7</td>
+<td>Should</td>
+<td>T4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vitals-and-clinical-input">3.1.2 Vitals and clinical input</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-015</td>
+<td>Vitals capture</td>
+<td>The system SHALL allow capture of blood pressure, heart rate, respiratory rate, temperature, oxygen saturation, weight, height, BMI, glucose (random/fasting), and HIV-related vitals where indicated.</td>
+<td>HPCSAB9 §4.1.4; PHC STG/EML</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-016</td>
+<td>Vitals validation</td>
+<td>The system SHALL validate vitals against age + sex appropriate physiologic ranges and SHALL flag values outside ranges as red-flags for the differential engine.</td>
+<td>PHC STG/EML</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-017</td>
+<td>POC device integration (future)</td>
+<td>The system SHOULD integrate Bluetooth/serial point-of-care device input (BP cuff, glucometer, pulse oximeter, urinalysis strips) at production phase.</td>
+<td>ICSM Pt-flow; PoC LOI</td>
+<td>Could</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ambient-capture-transcription-and-diarisation">3.1.3 Ambient capture, transcription, and diarisation</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-018</td>
+<td>Ambient continuous recording</td>
+<td>The system SHALL support continuous ambient audio recording for the duration of a clinical encounter, in 25–30s chunks for transcription pipeline reasons.</td>
+<td>MVP §5</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-019</td>
+<td>Multilingual transcription</td>
+<td>The transcription engine SHALL handle conversations in English, isiZulu, isiXhosa, Sesotho, and Afrikaans, including code-switched speech, in MVP and pilot phases.</td>
+<td>MVP §1; HPCSAB20 cultural-appropriateness</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-020</td>
+<td>Production language coverage</td>
+<td>The transcription engine SHALL extend to all 11 SA official languages (add Setswana, Sepedi, Xitsonga, Tshivenda, isiNdebele, siSwati) within 6 months of pilot validation.</td>
+<td>NCS §1.7.1.1</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-021</td>
+<td>Speaker diarisation</td>
+<td>The system SHALL produce per-word speaker labels (<code>speaker = nurse | patient | other</code>) on the transcript for at least 2 speakers (nurse, patient).</td>
+<td>MVP §3 q2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-022</td>
+<td>Three-speaker diarisation</td>
+<td>The system SHOULD support 3 speakers (nurse, patient, accompanying caregiver) at production.</td>
+<td>NCS §1.4.1.3</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-023</td>
+<td>English clinical record</td>
+<td>The system SHALL produce the durable clinical record in English regardless of the spoken language of the consult, capturing the source-language transcript alongside as evidence.</td>
+<td>Tandfonline 2019 (charting language)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-024</td>
+<td>Consult length cap</td>
+<td>The system SHALL cap a single recording session at 30 minutes by default and SHALL auto-stop after 5 minutes of continuous silence; nurse extension is permitted by single-click.</td>
+<td>MVP §6</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-025</td>
+<td>Audio retention</td>
+<td>The system SHALL discard raw audio within 60 seconds of the final-chunk transcription succeeding except where the nurse explicitly opts to retain audio for that encounter (which is logged + auditable).</td>
+<td>POPIA §10 (minimisation); MVP §6</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="history-capture-and-clinical-reasoning">3.1.4 History capture and clinical reasoning</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-026</td>
+<td>Bio-psychosocial history capture</td>
+<td>The system SHALL capture and persist a first-class first-encounter bio-psychosocial history object that updates across visits.</td>
+<td>HPCSAB9 §4.1.2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-027</td>
+<td>Allergy capture</td>
+<td>The system SHALL capture documented allergies and idiosyncrasies as a structured object (allergen + reaction + severity).</td>
+<td>HPCSAB9 §4.1.2; NHA §13</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-028</td>
+<td>Allergy crosscheck</td>
+<td>Before any prescription is committed the system SHALL crosscheck the proposed medication against the patient's documented allergies and SHALL block (hard) on a documented severe allergy and warn (soft) on a documented mild allergy.</td>
+<td>NHA §13; HPCSAB9 §4.1.6</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-029</td>
+<td>Differential generation</td>
+<td>The system SHALL surface a ranked differential diagnosis list where every entry traces to a PHC STG/EML 8th ed (2024) reference or a PACK algorithm node.</td>
+<td>CMOU 2.1 Tier 1; PHC STG/EML</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-030</td>
+<td>Quote-grounding</td>
+<td>The system SHALL never paraphrase clinical findings into the differential without a citation chain back to the underlying conversation transcript or guideline reference.</td>
+<td>SANCC §3 + §4 (veracity)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-031</td>
+<td>Red-flag detection</td>
+<td>The system SHALL detect and prominently surface red-flag findings (sepsis, severe respiratory distress, suicidality, severe hypertension &gt;180/120, severe hypoglycaemia, suspected stroke, suspected ACS, ectopic, severe dehydration, paediatric danger signs) within 5 seconds of the relevant utterance.</td>
+<td>PHC STG/EML; PACK</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-032</td>
+<td>DDI check</td>
+<td>Before any prescription is committed the system SHALL run a drug-drug interaction check against the patient's current medications and SHALL surface major interactions as blocking and minor as soft warnings.</td>
+<td>HPCSAB9 §4.1.6</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-033</td>
+<td>Antimicrobial stewardship</td>
+<td>The system SHALL flag inappropriate antibiotic prescribing per PHC STG/EML 8th ed and SA AMR Framework 2018; antibiotic prescription SHALL require an indication code from the EML algorithm.</td>
+<td>IPC Pt E; AMR Framework 2018</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-034</td>
+<td>Override-with-reason</td>
+<td>The system SHALL require a free-text override reason whenever the nurse declines or modifies an AI suggestion (differential, prescription, referral, or red-flag).</td>
+<td>SANCC §3; HPCSAB20 transparency</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-035</td>
+<td>Override audit</td>
+<td>Every override SHALL be persisted to the immutable audit log with timestamp, user, reason, and the original AI suggestion.</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-036</td>
+<td>Cultural-appropriateness flag</td>
+<td>The system SHALL detect when a clinical recommendation may be culturally inappropriate for the patient's stated language/region and SHALL surface a banner inviting the nurse to verify.</td>
+<td>HPCSAB20 cultural-appropriateness</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scope-of-practice-gate-and-prescription">3.1.5 Scope-of-practice gate and prescription</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-037</td>
+<td>§56(6) permit registry</td>
+<td>The system SHALL maintain, per clinic, a registry of the nurse's Section 56(6) permit metadata (permit issuer, issue date, scope conditions, scope drugs, expiry).</td>
+<td>NursA §56(6)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-038</td>
+<td>PCNS scope mapping</td>
+<td>The system SHALL maintain a mapping of conditions / drugs to "in-scope" vs "out-of-scope" per the PCNS competency framework + the typical Sha'p Left §56(6) permit.</td>
+<td>PCNS Competencies (2014)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-039</td>
+<td>Schedule-level evaluation</td>
+<td>The system SHALL evaluate every proposed prescription against the Medicines Act schedule of the molecule and SHALL allow the nurse to commit only when schedule ≤ 4 (default Section 56(6) ceiling); schedule ≥ 5 SHALL require Tier 4 doctor co-sign.</td>
+<td>NursA §56(6) + MedA §22A(15)</td>
+<td>Must</td>
+<td>T1+T4</td>
+</tr>
+<tr class="even">
+<td>FR-040</td>
+<td>Permit-condition gate</td>
+<td>The system SHALL block a prescription where the molecule is technically schedule ≤ 4 but is excluded by the §56(6) permit conditions of the issuing medical practitioner.</td>
+<td>NursA §56(6); SANCC §3</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-041</td>
+<td>Tier 4 escalation</td>
+<td>The system SHALL provide an in-product escalation flow that routes the encounter to a HPCSA-registered supervising medical practitioner with first-response SLA (target P95 ≤ 4 hours during business hours; ≤ 24 hours otherwise).</td>
+<td>HPCSAB10 §5.1; CMOU Article 2.1 Tier 4</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="even">
+<td>FR-042</td>
+<td>HPCSA credential gate</td>
+<td>The system SHALL verify HPCSA registration of any practitioner enrolled as a Tier 4 supervisor at sign-up and SHALL re-verify at least every 12 months.</td>
+<td>HPCSAB10 §5.1</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="odd">
+<td>FR-043</td>
+<td>Prescription generation</td>
+<td>The system SHALL generate a prescription document containing: prescriber identity (nurse name + SANC number + §56(6) permit ref), patient identity, drug name (PHC STG/EML formulary), strength, route, dose, frequency, duration, indication, allergies acknowledged, signature, date.</td>
+<td>HPCSAB9 §4.1.6; MedA</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-044</td>
+<td>Prescription transmission</td>
+<td>The system SHALL produce a paper-equivalent printable PDF of the prescription, encrypted and signed (electronic signature ECT Act §13), and SHALL support handoff to a CCMDD/Daplapmeds-compatible bundle where available.</td>
+<td>ECT Act §13; ICSM CCMDD</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-045</td>
+<td>Dispense vs refer support</td>
+<td>The system SHALL surface a dispense-vs-refer decision panel categorising the encounter as (a) dispense-on-site (acute, in-scope), (b) refer-to-Daplapmeds (chronic-stable), (c) refer-to-district-hospital (emergency or out-of-scope), (d) refer-to-DCST (specialist).</td>
+<td>ICSM Pt flow; CCMDD</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-046</td>
+<td>EML formulary lock</td>
+<td>The system SHALL only suggest medications listed in the PHC STG/EML 8th ed (2024) formulary; non-EML molecules SHALL be filtered or surfaced behind an "outside formulary" banner with override-with-reason.</td>
+<td>PHC STG/EML; CMOU 2.1 Tier 1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-047</td>
+<td>No prescribing on questionnaire alone</td>
+<td>The system SHALL NOT generate or transmit a prescription based solely on a self-completed online questionnaire; a clinical-judgement step (nurse confirmation or doctor co-sign) SHALL be in the path.</td>
+<td>HPCSAB10 §5.5(b)</td>
+<td>Must</td>
+<td>T1+T2+T4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="discharge-note-patient-education-referrals">3.1.6 Discharge note, patient education, referrals</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-048</td>
+<td>Discharge note generation</td>
+<td>The system SHALL generate a printable patient handout (discharge note) for every consult containing assessment, plan, medications dispensed, follow-up, red-flag warnings, and contact for emergencies.</td>
+<td>NCS §1.2.1.3; NHA §61</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-049</td>
+<td>Patient-language handout</td>
+<td>The discharge note SHALL be available in English plus the patient's stated home language (subset: isiZulu, isiXhosa, Sesotho, Afrikaans at MVP/pilot; all 11 SA official languages by production).</td>
+<td>NCS §1.4.1.3; HPCSAB20</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-050</td>
+<td>Patient education content</td>
+<td>The system SHALL surface plain-language patient education content for the diagnosis or management plan, drawn from a curated NDOH-aligned content library, in the patient's home language where available.</td>
+<td>NCS §1.4.1.3; ICSM</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-051</td>
+<td>Referral pathway</td>
+<td>The system SHALL select the correct district hospital for the patient's geography from the GG R.185/2012 annex and SHALL pre-fill a referral document including reason, urgency, vitals, working diagnosis.</td>
+<td>GG R.185/2012; NCS §1.4.1.1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-052</td>
+<td>Referral scope guard</td>
+<td>The system SHALL NOT suggest a referral to a sub-specialty (e.g. cardiology) unless escalating directly to a regional hospital category; district-hospital referrals SHALL only suggest paeds, OB-Gyn, internal medicine, general surgery, or family physician (GG R.185/2012 §3(4)).</td>
+<td>GG R.185/2012 §3(4)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-053</td>
+<td>Referral acknowledgement loop</td>
+<td>The system SHALL track referral status (sent / acknowledged / completed) where the receiving facility supports a digital acknowledgement; otherwise SHALL surface a manual close-the-loop prompt at follow-up.</td>
+<td>NCS §1.4.1</td>
+<td>Could</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-054</td>
+<td>DCST escalation</td>
+<td>The system SHALL provide a separate escalation path to the District Clinical Specialist Team for clinically complex or specialist consultations, distinct from the Tier 4 supervising-prescribing-authority path.</td>
+<td>ICSM Manual; CMOU 2.1 Tier 4</td>
+<td>Should</td>
+<td>T1+T4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notifiable-conditions-public-health-surveillance">3.1.7 Notifiable conditions, public health, surveillance</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-055</td>
+<td>Notifiable condition flagging</td>
+<td>The system SHALL detect when a working diagnosis is on the SA Notifiable Medical Conditions list and SHALL prompt the nurse to file a NICD report.</td>
+<td>IPC Practical Manual Pt G</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-056</td>
+<td>NICD pre-fill</td>
+<td>The system SHALL pre-fill the NICD report from the encounter record (patient demographics, diagnosis, contact details, vaccination status where relevant) for nurse review and submission.</td>
+<td>IPC Practical Manual Pt G</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-057</td>
+<td>Outbreak surveillance</td>
+<td>The Tier 3 layer SHALL aggregate notifiable-condition flags across clinics for outbreak surveillance and SHALL surface a clinic-cluster signal where ≥ 3 flags of the same condition occur within 7 days within the same district.</td>
+<td>IPC Pt G; ICSM surveillance</td>
+<td>Should</td>
+<td>T3</td>
+</tr>
+<tr class="even">
+<td>FR-058</td>
+<td>Antimicrobial stewardship surveillance</td>
+<td>The Tier 3 layer SHALL aggregate antibiotic-prescription patterns and SHALL produce a quarterly stewardship dashboard per Cipla Foundation.</td>
+<td>IPC Pt E; AMR 2018</td>
+<td>Should</td>
+<td>T3</td>
+</tr>
+<tr class="odd">
+<td>FR-059</td>
+<td>Ideal Clinic Facility Profile rollup</td>
+<td>The Tier 3 layer SHALL produce, for each clinic and on demand, an Ideal Clinic Facility Profile-shaped report (facility identity; personnel by SANC category; service mix; headcount per condition).</td>
+<td>Ideal Clinic Facility Profile</td>
+<td>Should</td>
+<td>T3</td>
+</tr>
+<tr class="even">
+<td>FR-060</td>
+<td>Headcount tooling</td>
+<td>The Tier 3 layer SHALL track and report headcount totals (total, &lt;5y, &gt;5y) and per-condition counts (HTN, DM, Epilepsy, Asthma/COPD, Mental Health, ANC 1st booking, Well-baby Imm, FP, MMC, MOU Deliveries) per the ICSM Facility Data Tool schema.</td>
+<td>ICSM Facility Data Tool</td>
+<td>Should</td>
+<td>T3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-2-multilingual-agentic-triage-regulatory-gated">3.1.8 Tier 2 — Multilingual Agentic Triage (regulatory-gated)</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-061</td>
+<td>Patient-facing triage entry</td>
+<td>Subject to SAHPRA SaMD authorisation, the system SHALL provide a patient-facing triage entry point via SMS, USSD (feature-phone), WhatsApp, or in-clinic kiosk.</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Should</td>
+<td>T2</td>
+</tr>
+<tr class="even">
+<td>FR-062</td>
+<td>Triage symptom assessment</td>
+<td>The Tier 2 layer SHALL produce a structured symptom + risk-stratification summary in the patient's preferred language for nurse review at the in-clinic encounter.</td>
+<td>CMOU 2.1 Tier 2; PACK</td>
+<td>Should</td>
+<td>T2</td>
+</tr>
+<tr class="odd">
+<td>FR-063</td>
+<td>Triage routing</td>
+<td>The Tier 2 layer SHALL route patients to (a) come-to-clinic (acute), (b) book CCMDD pickup (chronic stable), (c) emergency-services (red-flag), with all outputs advisory and subject to clinician review (HPCSAB10 §5.5(b) line).</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Should</td>
+<td>T2</td>
+</tr>
+<tr class="even">
+<td>FR-064</td>
+<td>Triage advisory framing</td>
+<td>The Tier 2 layer SHALL frame all outputs as advisory and SHALL NOT generate prescriptions or dispensing instructions.</td>
+<td>HPCSAB10 §5.5(b)</td>
+<td>Must</td>
+<td>T2</td>
+</tr>
+<tr class="odd">
+<td>FR-065</td>
+<td>Triage handoff to Tier 1</td>
+<td>The Tier 2 triage summary SHALL be handed off to the Tier 1 nurse station as part of the encounter context once the patient arrives at the clinic.</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Should</td>
+<td>T2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="encounter-close-audit-and-retention">3.1.9 Encounter close, audit, and retention</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-066</td>
+<td>Manual encounter close</td>
+<td>The system SHALL close the encounter only when the nurse explicitly confirms (button or verbal confirmation phrase).</td>
+<td>HPCSAB9 §13 (concise + complete)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-067</td>
+<td>Mandatory schema commit</td>
+<td>The system SHALL refuse to close an encounter where any HPCSAB9 §4.1 mandatory field is missing; the nurse SHALL be presented a checklist of missing fields.</td>
+<td>HPCSAB9 §4.1.1–§4.1.12</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-068</td>
+<td>Immutable record</td>
+<td>Once committed, the encounter record SHALL be immutable; corrections SHALL be implemented as new entries linked to the original with the date, the correcting practitioner, and the reason.</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-069</td>
+<td>Audit log entry</td>
+<td>Every encounter close, every record view, every override, every prescription commit, and every Tier 4 escalation SHALL produce an audit log entry.</td>
+<td>HPCSAB9 §4.2 + §8; TMOU 18.5(e)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-070</td>
+<td>Audit log surfaced on patient view</td>
+<td>The audit log SHALL be surfaced on the patient record view to the practitioner-of-record.</td>
+<td>HPCSAB9 §8</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-071</td>
+<td>Retention adult</td>
+<td>The system SHALL retain adult patient records for at least 6 years from the dormant date.</td>
+<td>HPCSAB9 §9</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-072</td>
+<td>Retention minor</td>
+<td>The system SHALL retain records of patients who are minors at the time of the consult until the patient's 21st birthday.</td>
+<td>HPCSAB9 §9</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-073</td>
+<td>Retention mentally incompetent</td>
+<td>The system SHALL retain records of mentally incompetent patients for the patient's lifetime.</td>
+<td>HPCSAB9 §9</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-074</td>
+<td>Retention occupational health</td>
+<td>Occupational health records SHALL be retained for at least 20 years (OHSA 85/1993).</td>
+<td>HPCSAB9 §9; OHSA</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-075</td>
+<td>Retention long-latency</td>
+<td>Records of conditions with long latency (e.g. asbestosis) SHALL be retained for at least 25 years.</td>
+<td>HPCSAB9 §9</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-076</td>
+<td>Termination-of-pregnancy access lock</td>
+<td>TOP-related records SHALL NOT be disclosed to anyone but the patient regardless of age.</td>
+<td>Choice on TOP Act 92/1996; HPCSAB9 §11</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-077</td>
+<td>Minor self-access</td>
+<td>Patients aged 12+ SHALL be able to directly access their own records on request via the DSAR path.</td>
+<td>HPCSAB9 §11</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-078</td>
+<td>Practitioner death / closure custody</td>
+<td>The system SHALL support handover of records to a successor practitioner or identified custodian in the event of practice closure or practitioner death, retained for ≥ 12 months minimum after closure.</td>
+<td>HPCSAB9 §10</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multi-clinic-isolation-sub-processor-disclosure-operator-instructions-binding">3.1.10 Multi-clinic isolation, sub-processor disclosure, operator-instructions binding</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-079</td>
+<td>Per-clinic data scoping</td>
+<td>The system SHALL enforce per-clinic boundary at the data layer (Supabase RLS or equivalent); cross-clinic record access SHALL require explicit consent and SHALL be audited.</td>
+<td>SANCC §4; TMOU 18.5(d)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-080</td>
+<td>Per-nurse data scoping</td>
+<td>The system SHALL enforce per-nurse boundary within a clinic for views beyond the practitioner-of-record.</td>
+<td>SANCC §4</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-081</td>
+<td>Multi-clinic supervisor view</td>
+<td>A Cipla Foundation clinical lead SHALL be able to view, with explicit clinic-level grant, aggregated outcomes data without re-identifying patients across clinics.</td>
+<td>SANCC §4; POPIA §10</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-082</td>
+<td>Sub-processor register</td>
+<td>The system SHALL maintain a sub-processor register (Tshikululu as Sub-Operator; AWS as IaaS sub-processor; Anthropic as model sub-processor; ElevenLabs as ASR sub-processor; etc.) and SHALL surface this register in the patient-facing privacy notice.</td>
+<td>POPIA §20; CMOU 9.2; TMOU 18.2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-083</td>
+<td>Operator-instructions binding</td>
+<td>The system SHALL only process Customer personal information per the documented Customer instructions captured in the DPA executed under CMOU 9.3 / TMOU 18.3.</td>
+<td>POPIA §20–§21; CMOU 9.2; TMOU 18.2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-084</td>
+<td>Sub-processor change notice</td>
+<td>The system SHALL notify the Customer at least 30 days in advance of any change to its sub-processor list.</td>
+<td>POPIA §20; ISO 27018 A.11</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dsar-breach-handling">3.1.11 DSAR + breach handling</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-085</td>
+<td>DSAR endpoint</td>
+<td>The system SHALL expose a DSAR endpoint (web form + email + paper fallback) accepting verified data-subject requests under POPIA §23 / PAIA.</td>
+<td>POPIA §23; PAIA</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-086</td>
+<td>DSAR identity verification</td>
+<td>The system SHALL verify data-subject identity before disclosure (knowledge-based + ID document + practitioner co-verification at clinic where in-person).</td>
+<td>POPIA §23 + §24; PAIA</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-087</td>
+<td>DSAR fulfilment SLA</td>
+<td>The system SHALL fulfil DSAR requests within the regulatory SLA (PAIA: 30 days extendable; POPIA §23: a reasonable time).</td>
+<td>POPIA §23; PAIA</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-088</td>
+<td>DSAR audit</td>
+<td>Every DSAR request SHALL be logged with requestor, scope, fulfilment status, and supporting evidence.</td>
+<td>TMOU 18.5(e); ISO 27701</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-089</td>
+<td>Breach detection hooks</td>
+<td>The system SHALL emit security events to the SOC pipeline at quality (immutable; signed) suitable for incident triage.</td>
+<td>POPIA §22; TMOU 18.8</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-090</td>
+<td>Breach notification clock</td>
+<td>On detection of an actual or suspected personal-information breach affecting Customer PHI, the Operator SHALL notify the Customer (and, where required, the Information Regulator and affected data subjects) within 24 hours.</td>
+<td>TMOU 18.8</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-4-supervising-prescribing-authority">3.1.12 Tier 4 — Supervising Prescribing Authority</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-091</td>
+<td>Supervisor enrolment</td>
+<td>The system SHALL enrol a Tier 4 supervising medical practitioner only after HPCSA registration verification (FR-042).</td>
+<td>HPCSAB10 §5.1</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="even">
+<td>FR-092</td>
+<td>Co-sign workflow</td>
+<td>The Tier 4 supervisor SHALL be able to review the encounter context (transcript + AI summary + proposed prescription) and co-sign, modify, or reject within the SLA window.</td>
+<td>HPCSAB10 §5.1, §5.5(b)</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="odd">
+<td>FR-093</td>
+<td>Supervisor audit</td>
+<td>Every Tier 4 review action SHALL be logged with time, supervisor, action, and reason.</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+<tr class="even">
+<td>FR-094</td>
+<td>Established-relationship check</td>
+<td>The system SHALL check whether the supervisor has prior knowledge of the patient and SHALL flag first-time engagements per FR-014.</td>
+<td>HPCSAB10 §3.7</td>
+<td>Should</td>
+<td>T4</td>
+</tr>
+<tr class="odd">
+<td>FR-095</td>
+<td>Supervisor transmission encryption</td>
+<td>The system SHALL encrypt the encounter package transmitted to the Tier 4 supervisor with TLS 1.3 in transit + AES-256 at rest, and SHALL strip personal identifiers where possible while preserving clinical utility.</td>
+<td>HPCSAB10 §5.9.3 + §5.9.4</td>
+<td>Must</td>
+<td>T4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="loadshedding-connectivity-paper-fallback">3.1.13 Loadshedding / connectivity / paper fallback</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-096</td>
+<td>Offline operation</td>
+<td>The system SHALL operate in offline mode for at least 3 hours, queueing transcription, reasoning, and record-commit operations locally.</td>
+<td>MVP §1 (loadshedding); SAMJ 2019</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-097</td>
+<td>Auto-resync</td>
+<td>On connectivity restoration the system SHALL automatically resync queued operations, surfacing conflicts to the nurse for resolution.</td>
+<td>MVP §1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-098</td>
+<td>Local audio cache</td>
+<td>Audio captured offline SHALL be persisted locally in encrypted form (AES-256) and SHALL be uploaded over the next available connection then purged within 60s of transcription success.</td>
+<td>POPIA §19; TMOU 18.5(a)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-099</td>
+<td>Paper fallback ingest</td>
+<td>The system SHALL provide a typed-in or scanned-document ingest path so paper records made during a system outage can be back-filled to the encounter without integrity loss.</td>
+<td>NHA §61; HPCSAB9 §4.2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-100</td>
+<td>Power state indicator</td>
+<td>The system SHALL surface a power-state indicator (battery / mains / inverter / unknown) to the nurse so consult planning can adapt.</td>
+<td>MVP §1</td>
+<td>Could</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="brandmed-and-external-system-handoff">3.1.14 Brandmed and external-system handoff</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-101</td>
+<td>Brandmed handoff (paper-equivalent)</td>
+<td>The system SHALL produce a paper-equivalent PDF + HPRS-compatible patient identifier suitable for handoff to Brandmed for chronic-disease cases until a digital interface is published.</td>
+<td>MVP §1 (Brandmed reality)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-102</td>
+<td>Brandmed digital interface (future)</td>
+<td>The system SHOULD integrate digitally with the Brandmed API once Cipla executive sponsorship establishes API access.</td>
+<td>CMOU 4.1</td>
+<td>Could</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-103</td>
+<td>CCMDD/Daplapmeds handoff</td>
+<td>The system SHALL produce CCMDD-compatible chronic prescription bundles for stable chronic patients with the correct HPRS-compatible patient ID.</td>
+<td>ICSM CCMDD; NDOH</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-104</td>
+<td>DHIS reporting export</td>
+<td>The Tier 3 layer SHALL produce DHIS-compatible CSV / FHIR <code>MeasureReport</code> / HL7 v2 exports for facility-level reporting (monthly cadence default).</td>
+<td>ICSM; NDOH DHIS</td>
+<td>Should</td>
+<td>T3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="patient-identification-hprs-dispensing">3.1.15 Patient identification, HPRS, dispensing</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-105</td>
+<td>HPRS-compatible patient ID</td>
+<td>The system SHALL allocate or accept HPRS-compatible patient identifiers at production phase.</td>
+<td>NDOH HPRS; CCMDD</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-106</td>
+<td>Dispensing license number capture</td>
+<td>The system SHALL capture and link the clinic dispensing-licence number on every dispensing event.</td>
+<td>MedA + Pharmacy Act; MVP §1</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-107</td>
+<td>Dispense event logging</td>
+<td>The system SHALL log every dispensing event (drug, batch where captured, quantity, patient, prescriber, date, time, dispenser identity) per the dispensing licence requirements.</td>
+<td>MedA; HPCSAB9 §4.1.6</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="demo-phase-guardrails-additional">3.1.16 Demo-phase guardrails (additional)</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-108</td>
+<td>Demo CDSS suppression</td>
+<td>In demo mode (<code>is_demo=true</code>) the CDSS SHALL surface its outputs as "this is what production would do" framing rather than as actionable prescribe/block/recommend.</td>
+<td>MVP §2 demo bar</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-109</td>
+<td>Demo employee release</td>
+<td>The system SHALL store a signed employee release per Botaniqal staffer role-playing a synthetic patient and SHALL block the demo flow for any staffer without a release on file.</td>
+<td>MVP §2 demo bar</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-110</td>
+<td>Demo audit log</td>
+<td>The system SHALL log who viewed or replayed any demo recording (Cipla Foundation, Tshikululu, Botaniqal staff) with timestamps.</td>
+<td>HPCSAB20 transparency; MVP §2</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-111</td>
+<td>Demo acknowledgement slide</td>
+<td>The system SHALL surface a one-page acknowledgement on demo session start: POPIA, HPCSA Booklet 20, SAHPRA MD08-2025/2026 understood; commit to Section 21 and <code>af-south-1</code> for pilot.</td>
+<td>MVP §2 demo bar</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="documentation-transparency-advisory-framing">3.1.17 Documentation, transparency, advisory framing</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-112</td>
+<td>Advisory framing</td>
+<td>Every AI output SHALL be framed as advisory and SHALL be visually distinguished from nurse-authored content.</td>
+<td>HPCSAB20; SANCC §3</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-113</td>
+<td>Source citation panel</td>
+<td>Every clinical recommendation SHALL surface a source-citation chain (PHC STG/EML 8th ed §x.y; PACK algorithm node; transcript span).</td>
+<td>SANCC §3; HPCSAB20 transparency</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-114</td>
+<td>"What changed" delta</td>
+<td>When a recommendation changes during the consult the system SHALL surface a "what changed and why" delta.</td>
+<td>HPCSAB20 transparency</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-115</td>
+<td>Limitations panel</td>
+<td>The system SHALL surface a "what this system is not" limitations panel accessible from the consult view (no diagnosis-only-by-AI; advisory only; PHC scope; etc.).</td>
+<td>HPCSAB20 transparency</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-1-additional-clinical-workflows-derived-from-icsm">3.1.18 Tier 1 — additional clinical workflows derived from ICSM</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-116</td>
+<td>Stream taxonomy</td>
+<td>The opening triage SHALL classify the consult into one of (a) acute / minor ailments, (b) MCWH preventive-promotive, (c) chronic disease management, (d) unplanned vs planned.</td>
+<td>ICSM Manual streams</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-117</td>
+<td>Family planning workflow</td>
+<td>The system SHALL support a family-planning workflow including contraceptive counselling, method initiation, and follow-up within nurse scope.</td>
+<td>PHC STG/EML; PACK</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-118</td>
+<td>NIMART workflow</td>
+<td>The system SHALL support a NIMART workflow (HIV testing, ART initiation eligibility, regimen selection per current PHC STG/EML, adherence counselling, viral load tracking).</td>
+<td>PHC STG/EML; SA HIV Clinicians Society</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-119</td>
+<td>TB workflow</td>
+<td>The system SHALL support a TB workflow (symptom screening, GeneXpert request, contact tracing prompt, notifiable).</td>
+<td>PHC STG/EML; IPC Pt G</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-120</td>
+<td>Mental health flag</td>
+<td>The system SHALL detect mental-health red-flags (suicidality, severe depression, psychosis) and SHALL surface specialist referral / DCST escalation.</td>
+<td>PHC STG/EML; PACK</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="identity-auth-and-access">3.1.19 Identity, auth, and access</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-121</td>
+<td>Nurse role</td>
+<td>The system SHALL provide a <code>role: 'nurse'</code> in the identity store with <code>nurse_sessions</code> table mirroring the existing <code>weight_loss_clinical_staff</code> pattern.</td>
+<td>MVP §3 q6</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-122</td>
+<td>Per-session auth</td>
+<td>The system SHALL authenticate every session via OAuth 2.0 / Supabase Auth; API-key access SHALL be reserved for service accounts only.</td>
+<td>TMOU 18.5(c)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-123</td>
+<td>MFA on privileged</td>
+<td>All privileged / admin accounts (Botaniqal staff, Tier 4 supervisors, Cipla Foundation compliance) SHALL have MFA enforced.</td>
+<td>TMOU 18.5(c)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-124</td>
+<td>WebSocket auth hardening</td>
+<td>The Socket.IO <code>/nurse</code> namespace SHALL enforce server-side JWT validation at the auth handshake (hardening the demo <code>auth: {apiKey}</code> handshake noted in MVP §3 q11).</td>
+<td>MVP §3 q11; TMOU 18.5(c)</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-125</td>
+<td>Session timeout</td>
+<td>Idle sessions SHALL time out after 30 minutes; active consult sessions SHALL not time out during recording.</td>
+<td>TMOU 18.5(c); ISO 27001 A.5.16</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cross-border-data-handling-article-18.4-18.7">3.1.20 Cross-border data handling (Article 18.4 / 18.7)</h3>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 17%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-126</td>
+<td>SA-residency-by-default</td>
+<td>Customer PHI for SA Sha'p Left clinics SHALL be hosted in the Republic of South Africa by default (production phase: AWS <code>af-south-1</code>).</td>
+<td>TMOU 18.4; CMOU 9.4</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="even">
+<td>FR-127</td>
+<td>Cross-border transfer route</td>
+<td>Where any Customer PHI must transit out of SA (e.g. inbound viewing by Botaniqal SRE in AU), the system SHALL apply POPIA §72 routes (consent, adequacy, contractual safeguards) and the Tshikululu MoU 18.7 transfer framework.</td>
+<td>POPIA §72; TMOU 18.7</td>
+<td>Must</td>
+<td>T1</td>
+</tr>
+<tr class="odd">
+<td>FR-128</td>
+<td>Data localisation toggle</td>
+<td>The system SHALL support per-clinic and per-Customer data-localisation toggles to support multi-Territory deployments under the Tshikululu MoU.</td>
+<td>TMOU 18.4 + Article 6</td>
+<td>Should</td>
+<td>T1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="non-functional-requirements">3.2 Non-Functional Requirements</h2>
+<h3 id="security">3.2.1 Security</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-001</td>
+<td>Encryption at rest</td>
+<td>All PHI at rest SHALL be encrypted with AES-256 (FIPS 197) using FIPS 140-2 Level 2 validated KMS, with customer-managed keys where contractually required.</td>
+<td>TMOU 18.5(a); CMOU 9.5(a); FIPS 197/140-2</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-002</td>
+<td>Encryption in transit (default)</td>
+<td>All transport SHALL use TLS 1.2+ (RFC 8446) with TLS 1.3 supported and preferred where the client supports it.</td>
+<td>TMOU 18.5(b); HPCSAB10 §5.9.3</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-003</td>
+<td>Public ingress preference</td>
+<td>Public ingress endpoints SHALL prefer TLS 1.3 negotiation; downgrade to TLS 1.2 SHALL be permitted for compatibility (feature phones, Android &lt;5) per Tshikululu MoU 18.5(b) softened wording.</td>
+<td>TMOU 18.5(b); RFC 8446</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-004</td>
+<td>KMS posture</td>
+<td>KMS keys SHALL be rotated at least annually; CMK access SHALL be IAM-gated and audited.</td>
+<td>TMOU 18.5(g); ISO 27001 A.10</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-005</td>
+<td>RBAC</td>
+<td>Authorisation SHALL implement least-privilege RBAC per NIST SP 800-53 r5 AC family.</td>
+<td>TMOU 18.5(c); CMOU 9.5(c)</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-006</td>
+<td>MFA</td>
+<td>All privileged / admin accounts SHALL enforce MFA.</td>
+<td>TMOU 18.5(c); CMOU 9.5(c)</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-007</td>
+<td>Tenant isolation</td>
+<td>Tenant isolation SHALL be enforced at the database layer via row-level security (PostgreSQL RLS / Supabase RLS).</td>
+<td>TMOU 18.5(d)</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-008</td>
+<td>Network segmentation</td>
+<td>Workloads SHALL run in private subnets; security groups + WAF + AWS network ACLs SHALL enforce least-privilege ingress/egress.</td>
+<td>TMOU 18.5(f)</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-009</td>
+<td>Secrets management</td>
+<td>Secrets SHALL live in a vault (AWS Secrets Manager / SSM Parameter Store / fleet-wide CSM secrets store) with rotation.</td>
+<td>TMOU 18.5(g)</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-010</td>
+<td>Vulnerability management</td>
+<td>Vulnerability management SHALL align with ISO/IEC 27001:2022 A.8.8 and ASD ISM controls 1467 + 1698.</td>
+<td>TMOU 18.5(h); ISO 27001 A.8.8</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-011</td>
+<td>Quarterly external pen-test</td>
+<td>The Operator SHALL commission an external penetration test at least quarterly during pilot and production.</td>
+<td>TMOU 18.5(h); ISO 27001 A.5</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-012</td>
+<td>Daily vuln scan</td>
+<td>The Operator SHALL run a daily authenticated vulnerability scan on production workloads.</td>
+<td>TMOU 18.5(h)</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-013</td>
+<td>SBOM</td>
+<td>The Operator SHALL maintain a Software Bill of Materials per release.</td>
+<td>NIST SSDF; ISO 27001 A.8.30</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-014</td>
+<td>Container hardening</td>
+<td>Container images SHALL be built from minimal hardened base images; SHALL be scanned at build for CVEs ≥ 7.0 CVSS; non-zero findings SHALL block release.</td>
+<td>NIST SSDF; ISO 27001 A.8.28</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="privacy">3.2.2 Privacy</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-015</td>
+<td>POPIA §19 safeguards</td>
+<td>The system SHALL implement POPIA §19 reasonable, technical, and organisational measures to secure personal information.</td>
+<td>POPIA §19</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-016</td>
+<td>POPIA §22 breach notification</td>
+<td>The Operator SHALL notify the Customer of an actual or suspected personal-information breach as soon as reasonably possible and SHALL meet the 24-hour Tshikululu MoU 18.8 clock.</td>
+<td>POPIA §22; TMOU 18.8</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-017</td>
+<td>POPIA §72 cross-border</td>
+<td>Cross-border transfers SHALL only proceed where POPIA §72 routes apply (consent, contractual safeguards, adequacy, binding corporate rules).</td>
+<td>POPIA §72</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-018</td>
+<td>POPIA §26 special PI</td>
+<td>The system SHALL treat all PHI as POPIA §26 special personal information; processing SHALL only occur under §32 (health) authorisation.</td>
+<td>POPIA §26 + §32</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-019</td>
+<td>Data minimisation</td>
+<td>Data collection SHALL be minimised to what is necessary for the purpose recorded in the DPA.</td>
+<td>POPIA §10; ISO 27018 A.2</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-020</td>
+<td>Consent storage</td>
+<td>Patient consent SHALL be persisted as a structured ConsentReceipt object with timestamp, scope, modality (verbal / written / electronic), and revocation history.</td>
+<td>POPIA §11 + §15; ISO 27701</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-021</td>
+<td>DPIA</td>
+<td>A Data Protection Impact Assessment SHALL be completed before any live PHI processing (pilot) and on any material change to processing thereafter.</td>
+<td>POPIA + IR guidance; ISO 27701</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-022</td>
+<td>Information Regulator notification</td>
+<td>The Operator SHALL co-operate with the Customer in any required Information Regulator notification or annual reporting.</td>
+<td>POPIA §17, §22; CMOU 9.6</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reliability">3.2.3 Reliability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-023</td>
+<td>Pilot uptime SLO</td>
+<td>Pilot phase service uptime SHALL be ≥ 99.0% measured monthly.</td>
+<td>TMOU Article 10 (MPTs)</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-024</td>
+<td>Production uptime SLO</td>
+<td>Production phase service uptime SHALL be ≥ 99.5% measured monthly with a target of 99.9%.</td>
+<td>TMOU Article 10</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-025</td>
+<td>MTTR</td>
+<td>Mean Time To Recover from a P1 incident SHALL be ≤ 60 minutes during business hours and ≤ 4 hours otherwise.</td>
+<td>NIST SP 800-61; ISO 27035</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-026</td>
+<td>Loadshedding tolerance</td>
+<td>The clinic-side application SHALL operate fully for ≥ 3 hours offline (battery + inverter baseline) and SHALL auto-resync on reconnect (FR-096 + FR-097).</td>
+<td>MVP §1; SAMJ 2019</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-027</td>
+<td>Connectivity dropout handling</td>
+<td>LTE/4G dropouts ≤ 30 minutes SHALL not result in encounter data loss.</td>
+<td>MVP §1</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-028</td>
+<td>Backup + 2-site</td>
+<td>The system SHALL run automated backups with at least 1 off-site copy (HPCSA Booklet 9 §12 digital storage rules).</td>
+<td>HPCSAB9 §12; ISO 27001 A.8.13</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-029</td>
+<td>RPO / RTO</td>
+<td>RPO SHALL be ≤ 15 minutes; RTO SHALL be ≤ 4 hours for P1 outages.</td>
+<td>ISO 22301 BCM</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-030</td>
+<td>DR tabletop</td>
+<td>Disaster Recovery tabletop SHALL be exercised at least annually with results captured in an audit-ready report.</td>
+<td>ISO 22301</td>
+<td>Should</td>
+</tr>
+</tbody>
+</table>
+<h3 id="performance">3.2.4 Performance</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-031</td>
+<td>Transcription latency P50</td>
+<td>Transcription end-of-chunk to displayed text SHALL be ≤ 8 s P50.</td>
+<td>MVP §5</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-032</td>
+<td>Transcription latency P95</td>
+<td>Transcription end-of-chunk to displayed text SHALL be ≤ 15 s P95.</td>
+<td>MVP §5</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-033</td>
+<td>Reasoning latency P50</td>
+<td>Differential / red-flag reasoning SHALL update within 5 s P50 of the triggering utterance.</td>
+<td>MVP §3; CMOU 2.1 Tier 1</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-034</td>
+<td>Reasoning latency P95</td>
+<td>Differential / red-flag reasoning SHALL update within 12 s P95.</td>
+<td>MVP §3</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-035</td>
+<td>Prescription suggestion latency</td>
+<td>Prescription suggestion (after prescribe-intent) SHALL appear within 3 s P50, 8 s P95.</td>
+<td>UX target</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-036</td>
+<td>Page render</td>
+<td>Initial nurse-view page SHALL render within 2 s on a 3G connection from the SA edge.</td>
+<td>UX target; Web Vitals</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-037</td>
+<td>E2E recording stability</td>
+<td>Continuous-record sessions of up to 30 minutes SHALL not exhibit microphone-permission re-prompts (achieved by keeping <code>MediaStream</code> alive across stop/restart cycles per MVP §5).</td>
+<td>MVP §5</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scalability">3.2.5 Scalability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-038</td>
+<td>11-clinic concurrency</td>
+<td>Pilot SHALL support concurrent ambient consults across 11 clinics with no cross-clinic latency degradation &gt; 20%.</td>
+<td>CMOU recital B; entities/companies/cipla.md</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-039</td>
+<td>50-clinic concurrency</td>
+<td>Production SHALL support 50 concurrent clinics within 12 months of pilot validation.</td>
+<td>CMOU recital B</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-040</td>
+<td>300-clinic concurrency</td>
+<td>Architecture SHALL support 300 concurrent clinics by 2029 without rearchitecting (horizontal scale + RDS read replicas + EKS worker node groups).</td>
+<td>CMOU recital B; entities/companies/cipla.md</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-041</td>
+<td>Peak burst</td>
+<td>The system SHALL handle a 4× peak burst within nominal SLA degradation.</td>
+<td>UX target</td>
+<td>Should</td>
+</tr>
+</tbody>
+</table>
+<h3 id="maintainability">3.2.6 Maintainability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-042</td>
+<td>IaC</td>
+<td>All cloud infrastructure SHALL be Terraform-managed (existing <code>terraform-eks</code> + <code>terraform-aws</code> skill stack).</td>
+<td>NIST SP 800-160; ISO 27001 A.8</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-043</td>
+<td>Immutable infra</td>
+<td>Production deploys SHALL be immutable container images deployed through GitHub Actions to AWS EKS.</td>
+<td>CLAUDE.md Rule 4 (deploy-prod-pr)</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-044</td>
+<td>Blue-green deploy</td>
+<td>Production deploys SHALL support blue-green or canary rollouts with automatic rollback on health-check failure.</td>
+<td>NIST SP 800-160</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-045</td>
+<td>Modular code</td>
+<td>All platform changes specific to the Sha'p Left configuration SHALL live behind feature flags or in clearly isolated modules to preserve the AU build.</td>
+<td>Willie directive (use existing stack)</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="auditability">3.2.7 Auditability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-046</td>
+<td>Append-only audit log</td>
+<td>The audit log SHALL be append-only with cryptographic chain-of-custody; entries SHALL NOT be deletable.</td>
+<td>TMOU 18.5(e); NIST 800-53 AU; HPCSAB9 §4.2 + §8</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-047</td>
+<td>7-year retention</td>
+<td>The audit log SHALL be retained for at least 7 years (NIST 800-53 AU; ASD ISM; HPCSA Booklet 9 §9 6-year minimum + 1-year buffer).</td>
+<td>TMOU 18.5(e); ASD ISM</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-048</td>
+<td>Audit access</td>
+<td>Audit log access SHALL itself be audited (audit-of-audit).</td>
+<td>NIST 800-53 AU-9</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-049</td>
+<td>Evidence pulls</td>
+<td>The Operator SHALL be able to produce, on Customer's reasonable written request and subject to confidentiality, evidence summaries of independent assessments, certifications, latest pen-test/vuln-scan results.</td>
+<td>TMOU 18.6</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="localisation-internationalisation">3.2.8 Localisation / Internationalisation</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-050</td>
+<td>Languages — pilot</td>
+<td>The system SHALL support English, isiZulu, isiXhosa, Sesotho, Afrikaans (ASR + UI + handouts) at pilot.</td>
+<td>MVP §1; HPCSAB20</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-051</td>
+<td>Languages — production</td>
+<td>The system SHALL support all 11 SA official languages within 6 months of pilot validation.</td>
+<td>NCS §1.7.1.1; HPCSAB20</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-052</td>
+<td>Timezone</td>
+<td>The default timezone SHALL be <code>Africa/Johannesburg</code> (SAST, UTC+2).</td>
+<td>Operational</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-053</td>
+<td>Date formats</td>
+<td>The default date format SHALL be ISO 8601 (<code>YYYY-MM-DD</code>); display SHALL respect the patient/nurse locale.</td>
+<td>ISO 8601</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-054</td>
+<td>Units</td>
+<td>All clinical units SHALL be metric (kg, cm, mmol/L, mmHg).</td>
+<td>NDOH STG/EML</td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h3 id="accessibility">3.2.9 Accessibility</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-055</td>
+<td>WCAG 2.1 AA</td>
+<td>Patient-facing surfaces (Tier 2 triage, patient handout PDFs) SHALL meet WCAG 2.1 AA.</td>
+<td>WCAG 2.1; HPCSAB20</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-056</td>
+<td>Nurse view ergonomics</td>
+<td>The nurse view SHALL be operable on a 13-inch laptop screen and SHALL not require horizontal scrolling at 1280×800.</td>
+<td>UX target</td>
+<td>Should</td>
+</tr>
+<tr class="odd">
+<td>NFR-057</td>
+<td>Screen-orientation privacy</td>
+<td>The nurse view SHALL avoid surfacing identifiable patient data above the fold for the patient's incidental visibility.</td>
+<td>NCS §1.1.1.2</td>
+<td>Should</td>
+</tr>
+</tbody>
+</table>
+<h3 id="portability">3.2.10 Portability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-058</td>
+<td>Multi-region</td>
+<td>The platform SHALL be deployable to AWS <code>af-south-1</code> (Cape Town) for SA Customer PHI hosting (Tshikululu MoU 18.4); demo / synthetic data may continue to run on <code>ap-southeast-2</code>.</td>
+<td>TMOU 18.4; CMOU 9.4</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-059</td>
+<td>SADC portability</td>
+<td>Per-Territory deployment SHALL be supported via per-Customer regional configuration; data SHALL not transit between Territories without Article 18.7 transfer arrangements.</td>
+<td>TMOU Article 6 + 18.7</td>
+<td>Should</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interoperability">3.2.11 Interoperability</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 19%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Title</th>
+<th>SHALL statement</th>
+<th>Source</th>
+<th>Pri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NFR-060</td>
+<td>FHIR R4</td>
+<td>The system SHALL expose patient, encounter, observation, condition, medication-request, service-request, document-reference, allergy-intolerance, and consent resources via HL7 FHIR R4 at production.</td>
+<td>HL7 FHIR R4; CMOU 4.1</td>
+<td>Should</td>
+</tr>
+<tr class="even">
+<td>NFR-061</td>
+<td>HL7 v2 (legacy)</td>
+<td>The system SHALL produce HL7 v2 messages where required by NDOH legacy systems (DHIS, NICD).</td>
+<td>HL7 v2; ICSM</td>
+<td>Could</td>
+</tr>
+<tr class="odd">
+<td>NFR-062</td>
+<td>OAuth 2.0</td>
+<td>All API auth SHALL use OAuth 2.0 (or equivalent — Supabase Auth JWT).</td>
+<td>OAuth 2.0; TMOU 18.5(c)</td>
+<td>Must</td>
+</tr>
+<tr class="even">
+<td>NFR-063</td>
+<td>API documentation</td>
+<td>Every API endpoint SHALL be documented in an OpenAPI 3.x (Swagger) specification published to the Customer + Tshikululu agency portal.</td>
+<td>TMOU 18.6 evidence</td>
+<td>Must</td>
+</tr>
+<tr class="odd">
+<td>NFR-064</td>
+<td>SOC2 trajectory</td>
+<td>The Operator SHALL maintain a SOC 2 Type II readiness trajectory and ISO 27001 / 27018 / 27701 certification roadmap targeting 18 months from the Tshikululu MoU Definitive Agreement execution.</td>
+<td>TMOU 18.5 + 18.6</td>
+<td>Should</td>
+</tr>
+</tbody>
+</table>
+<h2 id="use-cases">3.3 Use Cases</h2>
+<h3 id="uc-01-first-consult-with-a-new-patient-acute-urti-presentation-gauteng">UC-01: First consult with a new patient (acute URTI presentation, Gauteng)</h3>
+<ul>
+<li><strong>Primary actor</strong>: PCNS (nurse owner-operator).</li>
+<li><strong>Secondary actors</strong>: Patient (35 yo female, isiZulu home language, code-switches to English).</li>
+<li><strong>Stakeholders</strong>: Cipla Foundation (data quality + clinical-governance signal); Tshikululu (programme rollup).</li>
+<li><strong>Preconditions</strong>: The nurse is signed in (FR-122 + FR-123). The clinic is online and PHI hosting is <code>af-south-1</code> (FR-126). The nurse holds a valid Section 56(6) permit (FR-037).</li>
+<li><strong>Trigger</strong>: Patient walks in with sore throat, fever, cough.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>Nurse uses patient picker (FR-001) → no record found → creates new patient (FR-002), capturing the 12 mandatory fields (HPCSAB9 §4.1).</li>
+<li>Nurse confirms identity verbally (FR-003) and ticks the two consent gates (FR-009).</li>
+<li>Nurse reads the consent preamble and starts recording (FR-007 + FR-018); RECORDING banner shows (FR-011).</li>
+<li>Patient describes symptoms in code-switched isiZulu/English; system transcribes (FR-019) and diarises (FR-021); English clinical record builds in parallel (FR-023).</li>
+<li>System builds a differential (FR-029) — viral URTI vs streptococcal; surfaces a Centor score and PHC STG/EML 8th ed citation (FR-113); flags no red flags (FR-031).</li>
+<li>Nurse takes vitals — temp 38.5, HR 95, BP 124/78, SpO₂ 99%; system validates (FR-016).</li>
+<li>Nurse picks "viral URTI"; system surfaces symptomatic-relief plan; nurse decides to dispense paracetamol; allergy crosscheck passes (FR-028); DDI passes (FR-032); schedule check confirms within §56(6) scope (FR-039 + FR-040); EML formulary lock confirms in-formulary (FR-046).</li>
+<li>Nurse commits prescription (FR-043); printable PDF generated (FR-044); dispense event logged (FR-107).</li>
+<li>Nurse closes encounter (FR-066); schema completeness check passes (FR-067); record committed immutable (FR-068); audit log entry (FR-069); discharge note printed in English + isiZulu (FR-048 + FR-049).</li>
+</ol></li>
+<li><strong>Alternate flows</strong>:
+<ul>
+<li>4a. Patient declines recording: FR-010 path; nurse charts manually with no audio captured.</li>
+<li>5a. System raises severe red-flag (e.g. peritonsillar abscess suspected): FR-031 surface; nurse considers referral (FR-051) — district hospital lookup auto-populates (FR-051 + FR-052); nurse refers.</li>
+</ul></li>
+<li><strong>Postconditions</strong>: Encounter committed; medication dispensed and logged; discharge note delivered to patient; consent receipt persisted (NFR-020).</li>
+<li><strong>Exception handling</strong>: Loadshedding mid-consult: FR-096 + FR-097 cover; clinic continues offline; resyncs on reconnect.</li>
+</ul>
+<h3 id="uc-02-follow-up-consult-with-chronic-stable-hypertensive-patient">UC-02: Follow-up consult with chronic stable hypertensive patient</h3>
+<ul>
+<li><strong>Primary actor</strong>: PCNS.</li>
+<li><strong>Secondary actors</strong>: Patient (60 yo male, hypertension, on amlodipine + HCTZ, sourced via CCMDD).</li>
+<li><strong>Preconditions</strong>: Existing patient record; prior encounters; current medication list.</li>
+<li><strong>Trigger</strong>: Routine 3-monthly check-up; CCMDD pickup due.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>Nurse uses patient picker (FR-001) → match.</li>
+<li>System pre-loads bio-psychosocial + chronic conditions + current meds (FR-026 + FR-027).</li>
+<li>Nurse confirms identity (FR-003); consent gates (FR-009); recording starts (FR-018).</li>
+<li>Nurse takes BP — 138/85; system flags as borderline-controlled.</li>
+<li>System suggests continuation of current regimen + lifestyle counselling; surfaces PHC STG/EML 8th ed reference (FR-113).</li>
+<li>Nurse selects "refer-to-Daplapmeds" (FR-045); CCMDD-compatible bundle generated (FR-103); HPRS ID attached (FR-105).</li>
+<li>Encounter close (FR-066–FR-069); discharge note printed (FR-048).</li>
+</ol></li>
+<li><strong>Alternate flows</strong>:
+<ul>
+<li>4a. BP &gt; 180/120: red-flag (FR-031); nurse considers referral; system suggests Tier 4 escalation (FR-041) for medication intensification beyond §56(6) scope; supervisor co-signs (FR-091 + FR-092).</li>
+</ul></li>
+<li><strong>Postconditions</strong>: CCMDD pickup booked; encounter closed; chronic-disease tracking incremented (Tier 3 NFR-040 rollup).</li>
+</ul>
+<h3 id="uc-03-acute-presentation-requiring-referral-to-district-hospital">UC-03: Acute presentation requiring referral to district hospital</h3>
+<ul>
+<li><strong>Primary actor</strong>: PCNS.</li>
+<li><strong>Secondary actors</strong>: Patient (28 yo male, suspected ACS — central crushing chest pain).</li>
+<li><strong>Preconditions</strong>: New or known patient.</li>
+<li><strong>Trigger</strong>: Patient presents with chest pain, diaphoresis, radiation to left arm.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>Patient lookup / create (FR-001 / FR-002).</li>
+<li>Identity verification + consent (FR-003 + FR-007 + FR-009).</li>
+<li>Recording starts (FR-018); transcription + diarisation (FR-019 + FR-021).</li>
+<li>Vitals: HR 110, BP 165/100, SpO₂ 95%; system validates (FR-016).</li>
+<li>System detects ACS red-flag within 5 s (FR-031); banner + sound; differential includes ACS (FR-029) with PHC STG/EML citation (FR-113).</li>
+<li>System pre-fills urgent referral to district hospital (FR-051) — the correct district hospital is selected from GG R.185/2012 annex based on clinic geography.</li>
+<li>System suppresses prescribing of out-of-scope cardiac meds; suggests aspirin per PHC STG/EML emergency protocol (within §56(6) scope) (FR-039 + FR-046).</li>
+<li>Nurse calls EMS; encounter remains open through transfer; close occurs after handover (FR-066).</li>
+<li>Audit log entry covers full flow including red-flag detection time (FR-069).</li>
+</ol></li>
+<li><strong>Postconditions</strong>: Patient transferred; referral document handed off (FR-051); encounter closed; outcome tracked at follow-up.</li>
+</ul>
+<h3 id="uc-04-notifiable-condition-suspected-tb">UC-04: Notifiable condition — suspected TB</h3>
+<ul>
+<li><strong>Primary actor</strong>: PCNS.</li>
+<li><strong>Secondary actors</strong>: Patient (45 yo female, persistent cough &gt; 2 weeks, weight loss, night sweats).</li>
+<li><strong>Preconditions</strong>: Existing or new patient.</li>
+<li><strong>Trigger</strong>: Patient symptoms triggering TB screening per PHC STG/EML 8th ed.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>Standard intake (FR-001/002, FR-003, FR-007, FR-009, FR-018).</li>
+<li>System raises TB red-flag (FR-031 + FR-119); requests GeneXpert sputum order.</li>
+<li>Nurse orders GeneXpert; system pre-fills NICD report (FR-055 + FR-056).</li>
+<li>Patient given educational material (FR-050) in patient's home language (FR-049).</li>
+<li>Encounter closed; NICD report queued for nurse review and submission.</li>
+<li>Tier 3 surveillance increments cluster signal (FR-057) if pattern emerges.</li>
+</ol></li>
+<li><strong>Postconditions</strong>: Case logged; notifiable report filed; contact tracing prompt for follow-up; chronic disease tracking initiated.</li>
+</ul>
+<h3 id="uc-05-telehealth-supervised-prescribing-tier-4">UC-05: Telehealth-supervised prescribing (Tier 4)</h3>
+<ul>
+<li><strong>Primary actor</strong>: PCNS (in-clinic) + Tier 4 Supervising Medical Practitioner (HPCSA-registered, remote).</li>
+<li><strong>Secondary actors</strong>: Patient.</li>
+<li><strong>Preconditions</strong>: Encounter where the in-scope assessment has identified a need for a Schedule 5 medication (e.g. tramadol post-acute injury). Tier 4 supervisor enrolled with HPCSA verification (FR-042 + FR-091).</li>
+<li><strong>Trigger</strong>: Nurse selects "Tier 4 escalation" within an open encounter.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>System verifies the encounter has captured the established-relationship flag (FR-014 + FR-094).</li>
+<li>Telehealth consent screen displayed (FR-006); patient acknowledges.</li>
+<li>Encrypted package transmitted to supervisor (FR-095); SLA clock starts (FR-041 — P95 ≤ 4 hrs business hours).</li>
+<li>Supervisor reviews transcript + AI summary + proposed prescription; co-signs, modifies, or rejects (FR-092).</li>
+<li>Supervisor action audited (FR-093).</li>
+<li>On co-sign: prescription is committed under the supervisor's HPCSA number (FR-043); dispense logged (FR-107).</li>
+</ol></li>
+<li><strong>Alternate flows</strong>:
+<ul>
+<li>3a. SLA breach (no response within 4 hrs business hours): system escalates to next available supervisor or surfaces the breach to clinic operator + Cipla Foundation compliance.</li>
+<li>4a. Reject: supervisor provides reason; nurse follows alternate plan.</li>
+</ul></li>
+<li><strong>Postconditions</strong>: Co-signed Schedule 5 prescription dispensed; encounter closed.</li>
+</ul>
+<h3 id="uc-06-multi-clinic-supervisor-reviews-aggregate-outcomes">UC-06: Multi-clinic supervisor reviews aggregate outcomes</h3>
+<ul>
+<li><strong>Primary actor</strong>: Cipla Foundation clinical lead (Dr Mamdoo or equivalent).</li>
+<li><strong>Preconditions</strong>: Per-clinic data scoping (FR-079); explicit clinic-level grant (FR-081); MFA-protected admin account (NFR-006).</li>
+<li><strong>Trigger</strong>: Quarterly clinical-governance review.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>Supervisor signs in via MFA (FR-123).</li>
+<li>System surfaces an aggregate dashboard (FR-081) without re-identifying patients.</li>
+<li>Supervisor reviews stewardship metrics (FR-058), notifiable-condition surveillance (FR-057), and Ideal Clinic Profile rollup (FR-059) per clinic.</li>
+<li>Audit log records every record-view action (FR-069 + NFR-046).</li>
+</ol></li>
+<li><strong>Postconditions</strong>: Clinical-governance report produced; no patient re-identification.</li>
+</ul>
+<h3 id="uc-07-data-subject-access-request-popia-23-paia">UC-07: Data Subject Access Request (POPIA §23 / PAIA)</h3>
+<ul>
+<li><strong>Primary actor</strong>: Patient (data subject).</li>
+<li><strong>Secondary actors</strong>: Operator data-subject-rights team; clinic operator (verification).</li>
+<li><strong>Preconditions</strong>: Patient knows clinic of registration; identification credentials available.</li>
+<li><strong>Trigger</strong>: Patient submits DSAR via web form / email / paper.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>DSAR endpoint receives request (FR-085); assigns ticket; SLA clock starts (FR-087).</li>
+<li>System verifies identity (FR-086) — knowledge-based + ID document + clinic co-verification.</li>
+<li>Operator extracts the relevant records (encounter list; consent receipts; prescriptions; referrals).</li>
+<li>Operator assembles DSAR pack and delivers to patient via secure channel.</li>
+<li>DSAR log entry persisted (FR-088); audit log records every action (NFR-046).</li>
+</ol></li>
+<li><strong>Alternate flows</strong>:
+<ul>
+<li>1a. TOP-related records: blocked from disclosure to anyone but the patient (FR-076).</li>
+<li>2a. Verification failure: operator requests additional evidence; SLA paused per regulatory tolerance.</li>
+</ul></li>
+<li><strong>Postconditions</strong>: DSAR fulfilled within SLA; audit log retained 7 years.</li>
+</ul>
+<h3 id="uc-08-privacy-breach-response">UC-08: Privacy breach response</h3>
+<ul>
+<li><strong>Primary actor</strong>: Botaniqal SOC on-call.</li>
+<li><strong>Secondary actors</strong>: Customer (Cipla Foundation); Tshikululu agency; Information Regulator (where required); affected data subjects.</li>
+<li><strong>Preconditions</strong>: Breach detection signal triggered (FR-089).</li>
+<li><strong>Trigger</strong>: Suspected PHI exposure detected.</li>
+<li><strong>Main flow</strong>:
+<ol type="1">
+<li>SOC triages, assesses scope, contains affected resources within 1 hour (NFR-025).</li>
+<li>Within the 24-hour Tshikululu MoU 18.8 clock, Operator notifies Customer via the agreed channel (FR-090).</li>
+<li>Operator preserves forensic evidence in immutable audit log (NFR-046).</li>
+<li>Customer assesses Information Regulator notification trigger (POPIA §22) — Operator co-operates (NFR-022).</li>
+<li>Where data subjects are notified, Operator provides templates + content (POPIA §22(5)).</li>
+<li>Post-incident review (PIR) within 7 days; root cause + remediation captured.</li>
+</ol></li>
+<li><strong>Postconditions</strong>: Breach contained; notifications dispatched; PIR filed; remediation tracked.</li>
+</ul>
+<h2 id="data-requirements">3.4 Data Requirements</h2>
+<h3 id="domain-entities">3.4.1 Domain entities</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 19%" />
+<col style="width: 39%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entity</th>
+<th>Purpose</th>
+<th>Mandatory fields</th>
+<th>Lifecycle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Patient</td>
+<td>Identity + demographics + chronic conditions + bio-psychosocial history</td>
+<td>HPRS-compatible ID; name; DOB; sex; home language; contact; bio-psychosocial history; allergies (HPCSAB9 §4.1.1+§4.1.2)</td>
+<td>Create on first encounter → update across visits → retain per §9 (6yr / 21st birthday / lifetime / 20yr / 25yr) → secure-erase post-retention (FR-071–FR-077)</td>
+</tr>
+<tr class="even">
+<td>Clinic</td>
+<td>Sha'p Left clinic operating context</td>
+<td>clinic_id; name; province; district; sub-district; ward; geo-coords; dispensing-licence number; PCNS roster; §56(6) permit issuer; supervising practitioner roster</td>
+<td>Create on onboarding → annual review per Ideal Clinic Profile (FR-059) → archive on closure with custody transfer (FR-078)</td>
+</tr>
+<tr class="odd">
+<td>Practitioner</td>
+<td>Nurse / supervising MP</td>
+<td>id; name; SANC or HPCSA registration number; permit details (where nurse) or HPCSA registration verification (where MP)</td>
+<td>Enrol → re-verify ≥ annually (FR-042) → archive on departure (FR-078)</td>
+</tr>
+<tr class="even">
+<td>Encounter</td>
+<td>Clinical encounter / consult</td>
+<td>id; patient_id; clinic_id; practitioner_id; start_ts; end_ts; consent_receipt_id; transcript_id; diagnosis list; plan; prescription list; referral list; discharge_note_id; is_demo flag</td>
+<td>Create on session start → close on FR-066 → immutable post-close (FR-068)</td>
+</tr>
+<tr class="odd">
+<td>Consent</td>
+<td>POPIA + RICA + clinical consent receipt</td>
+<td>encounter_id; data_subject_id; modality (verbal/written/electronic/paper); scope; timestamp; revocation history</td>
+<td>Create at consent capture → persist across encounter retention period</td>
+</tr>
+<tr class="even">
+<td>Recording</td>
+<td>Audio capture</td>
+<td>encounter_id; storage_uri (encrypted); start_ts; end_ts; duration; chunks count; ASR confidence</td>
+<td>Create on recording start → discard ≤ 60 s post-transcription (FR-025) unless explicit retain</td>
+</tr>
+<tr class="odd">
+<td>Transcript</td>
+<td>Time-coded, diarised text + per-word speaker labels</td>
+<td>encounter_id; per-word entries; languages detected; English clinical record</td>
+<td>Create on transcription → encrypted at rest (NFR-001) → retain per HPCSAB9 §9</td>
+</tr>
+<tr class="even">
+<td>Diagnosis</td>
+<td>Working diagnosis at encounter close</td>
+<td>encounter_id; ICD-10 code; PHC STG/EML reference; differential list ranked</td>
+<td>Persist with encounter</td>
+</tr>
+<tr class="odd">
+<td>Prescription</td>
+<td>Generated + committed prescription</td>
+<td>encounter_id; prescriber_id; molecule (EML); strength; route; dose; frequency; duration; indication; allergies acknowledged; signature; date; co-sign (if Tier 4)</td>
+<td>Create on commit → immutable; dispense events linked</td>
+</tr>
+<tr class="even">
+<td>DispenseEvent</td>
+<td>On-site dispensing record</td>
+<td>prescription_id; batch_id; quantity; dispenser_id; timestamp; clinic_id</td>
+<td>Create on dispense → audit log entry</td>
+</tr>
+<tr class="odd">
+<td>ReferralEvent</td>
+<td>District hospital / DCST / Tier 4 referral</td>
+<td>encounter_id; type (district/DCST/Tier4); destination; reason; urgency; sent_ts; ack_ts; outcome</td>
+<td>Track until closure (FR-053)</td>
+</tr>
+<tr class="even">
+<td>NICDReport</td>
+<td>Notifiable medical condition report</td>
+<td>encounter_id; condition; pre-fill payload; submitted_ts; submitter; outcome</td>
+<td>Pre-fill on flag (FR-056) → submitted by nurse → audited</td>
+</tr>
+<tr class="odd">
+<td>AuditEvent</td>
+<td>Immutable audit log entry</td>
+<td>id; ts; actor; action; resource; before/after diff (where applicable); reason (where applicable); signature</td>
+<td>Append-only (NFR-046); 7-yr retention (NFR-047)</td>
+</tr>
+<tr class="even">
+<td>ConsentReceipt</td>
+<td>Structured consent token</td>
+<td>id; data_subject; scope; modality; timestamp; signed_payload</td>
+<td>Persist; revocation creates linked entry</td>
+</tr>
+<tr class="odd">
+<td>RetentionPolicy</td>
+<td>Per-record-class retention rules</td>
+<td>record_class; retention_years; legal_basis</td>
+<td>Configurable; audited on change</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hpcsa-booklet-9-4.1-mandatory-record-schema-per-encounter-by-close">3.4.2 HPCSA Booklet 9 §4.1 mandatory record schema (per encounter, by close)</h3>
+<ol type="1">
+<li>Personal (identifying) particulars of the patient (FR-001 + FR-002 capture).</li>
+<li>Bio-psychosocial history including allergies and idiosyncrasies (FR-026 + FR-027).</li>
+<li>Time, date, and place of every consultation (Encounter entity timestamps + clinic_id).</li>
+<li>Assessment of the patient's condition (Diagnosis + differential).</li>
+<li>Proposed clinical management of the patient (Plan).</li>
+<li>Medication and dosage prescribed (Prescription).</li>
+<li>Details of referrals to specialists, if any (ReferralEvent).</li>
+<li>Patient's reaction to treatment or medication, including adverse effects (Plan + follow-up notes).</li>
+<li>Test results (Observation + DiagnosticReport).</li>
+<li>Imaging investigation results (Observation / DocumentReference).</li>
+<li>Information on the times that the patient was booked off from work and the relevant reasons (where applicable).</li>
+<li>Written proof of informed consent, where applicable (Consent + ConsentReceipt).</li>
+</ol>
+<h3 id="retention-rules-hpcsa-booklet-9-9">3.4.3 Retention rules (HPCSA Booklet 9 §9)</h3>
+<ul>
+<li>Adults: ≥ 6 years from the dormant date (FR-071).</li>
+<li>Minors: until the patient's 21st birthday (FR-072).</li>
+<li>Mentally incompetent: lifetime (FR-073).</li>
+<li>Occupational health (OHSA 85/1993): ≥ 20 years (FR-074).</li>
+<li>Long-latency conditions (e.g. asbestosis): ≥ 25 years (FR-075).</li>
+<li>Audit log: 7 years minimum (NFR-047).</li>
+</ul>
+<h3 id="backup-2-site-hpcsa-booklet-9-12">3.4.4 Backup + 2-site (HPCSA Booklet 9 §12)</h3>
+<ul>
+<li>Encrypted (AES-256) at rest (NFR-001).</li>
+<li>Off-site backup copy (NFR-028).</li>
+<li>Write-once / immutable retention guarantees (NFR-046; AWS S3 Object Lock + Glacier transitions for archival classes).</li>
+</ul>
+<h2 id="external-interface-requirements">3.5 External Interface Requirements</h2>
+<h3 id="user-interfaces">3.5.1 User interfaces</h3>
+<ul>
+<li><strong>Nurse view</strong> (<code>/nurse</code> route, React 18 SPA): patient picker → encounter view (transcript pane + clinical-panel pane + prescription/order pane + referral pane + discharge-note pane + audit-log pane); banners (DEMO, RECORDING, TIER 4 ESCALATION, RED FLAG); offline indicator (FR-100); single-screen ergonomics at 1280×800 (NFR-056).</li>
+<li><strong>Supervisor view (Tier 4)</strong>: encounter review queue → encounter detail with transcript + summary + proposed prescription → co-sign / modify / reject controls; mobile-friendly.</li>
+<li><strong>Cipla Foundation compliance view</strong>: aggregate dashboards (Tier 3); per-clinic compliance signals; audit-of-audit access (NFR-048).</li>
+<li><strong>Patient surface (Tier 2)</strong>: USSD menu + SMS + WhatsApp + in-clinic kiosk; WCAG 2.1 AA on web surfaces (NFR-055); patient handout PDF in home language (FR-048 + FR-049).</li>
+<li><strong>DSAR portal</strong> (web form + email): identity verification + request submission (FR-085 + FR-086).</li>
+</ul>
+<h3 id="hardware-interfaces">3.5.2 Hardware interfaces</h3>
+<ul>
+<li>Laptop microphone (built-in or USB headset) for ambient capture (MVP §1).</li>
+<li>Local printer (USB/network) for prescription + discharge note output (FR-044 + FR-048).</li>
+<li>Bluetooth/serial point-of-care devices (BP cuff, glucometer, pulse oximeter) — production phase (FR-017).</li>
+<li>UPS / inverter for loadshedding tolerance (NFR-026).</li>
+</ul>
+<h3 id="software-interfaces">3.5.3 Software interfaces</h3>
+<ul>
+<li><strong>Brandmed</strong> — Phase 2 BD-gated; current handoff is paper-equivalent PDF + HPRS ID (FR-101); future API integration (FR-102).</li>
+<li><strong>CCMDD / Daplapmeds pipeline</strong> — chronic prescription handoff (FR-103); paper-equivalent + HPRS ID until digital interface published.</li>
+<li><strong>MediRecords</strong> — AU adapter exists (<code>medirecords-fhir-*</code> skill family); not used for SA Sha'p Left but reused as the FHIR template.</li>
+<li><strong>NDOH DHIS</strong> — Tier 3 monthly facility-level report export (FR-104).</li>
+<li><strong>NICD portal</strong> — notifiable medical condition report submission (FR-055 + FR-056).</li>
+<li><strong>AWS Cognito or Supabase Auth</strong> — primary identity store; OAuth 2.0 / JWT (NFR-062); MFA on privileged (NFR-006).</li>
+<li><strong>Anthropic API</strong> — Claude Opus 4.6 default for clinical reasoning + Haiku 4.5 for background classification + compression (CLAUDE.md model selection table).</li>
+<li><strong>ElevenLabs Scribe v1</strong> — REST batch ASR + diarisation (MVP §3 q2); future Nemotron Phase 1 batch parity (deferred).</li>
+<li><strong>AWS KMS</strong> — FIPS 140-2 Level 2 KMS (NFR-001 + NFR-004).</li>
+<li><strong>AWS Secrets Manager / SSM Parameter Store / fleet-wide CSM</strong> — secrets vault (NFR-009).</li>
+</ul>
+<h3 id="communications-interfaces">3.5.4 Communications interfaces</h3>
+<ul>
+<li><strong>HL7 FHIR R4</strong> — at production for patient, encounter, observation, condition, medication-request, allergy-intolerance, document-reference, consent (NFR-060).</li>
+<li><strong>HL7 v2</strong> — for legacy NDOH systems where FHIR is not available (NFR-061).</li>
+<li><strong>REST / JSON</strong> — internal + external API surface; OpenAPI 3.x documented (NFR-063).</li>
+<li><strong>WebSocket</strong> (Socket.IO) — realtime panel updates; <code>/nurse</code> namespace; JWT-validated handshake (FR-124).</li>
+<li><strong>SMS</strong> — Africa's Talking (primary, SA + SADC carrier coverage) + Twilio (failover); Tier 2 entry; transactional alerts.</li>
+<li><strong>USSD</strong> — Africa's Talking; Tier 2 feature-phone entry per FN Capital reference pack.</li>
+<li><strong>WhatsApp Business API</strong> — Tier 2 entry; carrier compliance per Meta + POPIA + HPCSA Booklet 10.</li>
+<li><strong>Email</strong> — Microsoft Graph (M365) for clinic-operator notifications + Tshikululu agency notifications.</li>
+</ul>
+<h2 id="constraints-1">3.6 Constraints</h2>
+<h3 id="regulatory-constraints-1">3.6.1 Regulatory constraints</h3>
+<p>Already enumerated in §2.4.1 and traced through the FR/NFR tables in §3.1 + §3.2. The dominant binding clauses are: HPCSA Booklet 9 (§4.1, §4.2, §8, §9, §10, §11, §12, §13); HPCSA Booklet 10 (§3.7, §3.8, §5.1, §5.5(b), §5.7, §5.8, §5.9.3, §5.9.4, §6); SANC Code (§3, §4, §5.1); PCNS Competencies (Schedule 4 ceiling); Section 56(6) Nursing Act + §22A(15) Medicines Act; National Core Standards (§1.1.1.2, §1.2.1.2, §1.2.1.3, §1.4.1.1, §1.4.1.3, §1.5.1.5, §1.7.1.1); GG R.185/2012 (§3(2)(c), §3(4)); ICSM Manual streams; IPC Practical Manual Parts E + G; POPIA §10, §11, §15, §17, §19, §20, §21, §22, §23, §26, §32, §38, §72; RICA §4(1); ECT Act §13; Choice on TOP Act 92/1996; OHSA 85/1993; SAHPRA MD08-2025/2026.</p>
+<h3 id="hardware-constraints">3.6.2 Hardware constraints</h3>
+<p>Loadshedding-tolerant; LTE/4G primary connectivity; ≥ 3 hours offline; battery + inverter baseline. Paper-fallback path mandatory.</p>
+<h3 id="software-stack-constraints">3.6.3 Software-stack constraints</h3>
+<p>Must reuse the existing Sophia stack (Willie's directive). React 18 + Vite frontend; Express + Node.js backend; Supabase PostgreSQL + Auth + RLS; AWS EKS (<code>ap-southeast-2</code> + <code>af-south-1</code>); Anthropic Claude (Opus 4.6 + Haiku 4.5); ElevenLabs Scribe v1; Socket.IO realtime; AWS KMS; AWS Secrets Manager. New Sha'p Left-specific code SHALL live behind feature flags or in clearly isolated modules.</p>
+<h3 id="operational-constraints-1">3.6.4 Operational constraints</h3>
+<p>12–18 patients/day target throughput; ~10-minute consult median; pilot phase 30-day Structured Clinical Governance Pilot (Cipla MoU §3.1.4); pilot pricing ZAR 7.8M for 2 nurse pods.</p>
+<h3 id="schedule-constraints">3.6.5 Schedule constraints</h3>
+<ul>
+<li><strong>MVP demo build</strong> (synthetic data, AU AWS) — done / running per April-May 2026 schedule.</li>
+<li><strong>Pilot uplift</strong> — 8-12 engineer-weeks; gated on Cipla MoU signature + Definitive Pilot Agreement under §3.1.4.</li>
+<li><strong>Production uplift</strong> — 6-9 engineer-months; gated on pilot validation + SAHPRA Section 21 / Class A or C registration + <code>af-south-1</code> migration.</li>
+</ul>
+<h2 id="verification-traceability-matrix">3.7 Verification &amp; Traceability Matrix</h2>
+<p>The matrix below maps every FR/NFR to its source clause(s) and to the verification method per IEEE 29148:2018 §5.2.10 (Inspection / Analysis / Demonstration / Test). Test artefact references are placeholders for the Phase 1 pilot test plan (<code>docs/superpowers/specs/2026-05-08-shap-left-pilot-test-plan.md</code> — to be authored).</p>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 27%" />
+<col style="width: 38%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Source clause</th>
+<th>Verification method</th>
+<th>Test artefact</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FR-001</td>
+<td>HPCSAB9 §4.1.1; MVP §3 q5</td>
+<td>Demonstration</td>
+<td>TC-PA-01 patient-search</td>
+</tr>
+<tr class="even">
+<td>FR-002</td>
+<td>HPCSAB9 §4.1.1–§4.1.12</td>
+<td>Test (schema completeness)</td>
+<td>TC-PA-02</td>
+</tr>
+<tr class="odd">
+<td>FR-003</td>
+<td>NCS §1.5.1.5; SANCC §5.1</td>
+<td>Inspection (UI script) + demonstration</td>
+<td>TC-CN-01</td>
+</tr>
+<tr class="even">
+<td>FR-004</td>
+<td>MVP demo bar; CMOU 9.1</td>
+<td>Test</td>
+<td>TC-DE-01</td>
+</tr>
+<tr class="odd">
+<td>FR-005</td>
+<td>MVP demo bar</td>
+<td>Inspection</td>
+<td>TC-DE-02</td>
+</tr>
+<tr class="even">
+<td>FR-006</td>
+<td>HPCSAB10 §5.7</td>
+<td>Inspection + demonstration</td>
+<td>TC-CN-02</td>
+</tr>
+<tr class="odd">
+<td>FR-007</td>
+<td>RICA §4(1); POPIA §11; NCS §1.2.1.2</td>
+<td>Demonstration</td>
+<td>TC-CN-03</td>
+</tr>
+<tr class="even">
+<td>FR-008</td>
+<td>POPIA §11; SANCC §3</td>
+<td>Test</td>
+<td>TC-CN-04</td>
+</tr>
+<tr class="odd">
+<td>FR-009</td>
+<td>POPIA §11; HPCSAB10 §5.7</td>
+<td>Demonstration</td>
+<td>TC-CN-05</td>
+</tr>
+<tr class="even">
+<td>FR-010</td>
+<td>SANCC §5.1</td>
+<td>Demonstration</td>
+<td>TC-CN-06</td>
+</tr>
+<tr class="odd">
+<td>FR-011</td>
+<td>HPCSAB20 transparency pillar</td>
+<td>Inspection</td>
+<td>TC-CN-07</td>
+</tr>
+<tr class="even">
+<td>FR-012</td>
+<td>SANCC §3</td>
+<td>Demonstration</td>
+<td>TC-CN-08</td>
+</tr>
+<tr class="odd">
+<td>FR-013</td>
+<td>HPCSAB10 §3.7 + §3.8</td>
+<td>Analysis (workflow rule)</td>
+<td>TC-T4-01</td>
+</tr>
+<tr class="even">
+<td>FR-014</td>
+<td>HPCSAB10 §3.7</td>
+<td>Demonstration</td>
+<td>TC-T4-02</td>
+</tr>
+<tr class="odd">
+<td>FR-015</td>
+<td>HPCSAB9 §4.1.4; PHC STG/EML</td>
+<td>Demonstration</td>
+<td>TC-VI-01</td>
+</tr>
+<tr class="even">
+<td>FR-016</td>
+<td>PHC STG/EML</td>
+<td>Test (range validation)</td>
+<td>TC-VI-02</td>
+</tr>
+<tr class="odd">
+<td>FR-017</td>
+<td>ICSM; PoC LOI</td>
+<td>Demonstration (production phase)</td>
+<td>TC-VI-03</td>
+</tr>
+<tr class="even">
+<td>FR-018</td>
+<td>MVP §5</td>
+<td>Test</td>
+<td>TC-AS-01</td>
+</tr>
+<tr class="odd">
+<td>FR-019</td>
+<td>MVP §1; HPCSAB20 cultural-app.</td>
+<td>Test (multilingual benchmark)</td>
+<td>TC-AS-02</td>
+</tr>
+<tr class="even">
+<td>FR-020</td>
+<td>NCS §1.7.1.1</td>
+<td>Test</td>
+<td>TC-AS-03</td>
+</tr>
+<tr class="odd">
+<td>FR-021</td>
+<td>MVP §3 q2</td>
+<td>Test (diarisation accuracy ≥ 80%)</td>
+<td>TC-AS-04</td>
+</tr>
+<tr class="even">
+<td>FR-022</td>
+<td>NCS §1.4.1.3</td>
+<td>Test</td>
+<td>TC-AS-05</td>
+</tr>
+<tr class="odd">
+<td>FR-023</td>
+<td>Tandfonline 2019</td>
+<td>Inspection + demonstration</td>
+<td>TC-AS-06</td>
+</tr>
+<tr class="even">
+<td>FR-024</td>
+<td>MVP §6</td>
+<td>Test</td>
+<td>TC-AS-07</td>
+</tr>
+<tr class="odd">
+<td>FR-025</td>
+<td>POPIA §10; MVP §6</td>
+<td>Inspection (storage probe)</td>
+<td>TC-AS-08</td>
+</tr>
+<tr class="even">
+<td>FR-026</td>
+<td>HPCSAB9 §4.1.2</td>
+<td>Test</td>
+<td>TC-HX-01</td>
+</tr>
+<tr class="odd">
+<td>FR-027</td>
+<td>HPCSAB9 §4.1.2; NHA §13</td>
+<td>Test</td>
+<td>TC-HX-02</td>
+</tr>
+<tr class="even">
+<td>FR-028</td>
+<td>NHA §13; HPCSAB9 §4.1.6</td>
+<td>Test (allergy block on severe)</td>
+<td>TC-AL-01</td>
+</tr>
+<tr class="odd">
+<td>FR-029</td>
+<td>CMOU 2.1 Tier 1; PHC STG/EML</td>
+<td>Test (50-case differential audit)</td>
+<td>TC-RX-01</td>
+</tr>
+<tr class="even">
+<td>FR-030</td>
+<td>SANCC §3 + §4</td>
+<td>Inspection</td>
+<td>TC-RX-02</td>
+</tr>
+<tr class="odd">
+<td>FR-031</td>
+<td>PHC STG/EML; PACK</td>
+<td>Test (red-flag latency ≤ 5s)</td>
+<td>TC-RF-01</td>
+</tr>
+<tr class="even">
+<td>FR-032</td>
+<td>HPCSAB9 §4.1.6</td>
+<td>Test</td>
+<td>TC-DDI-01</td>
+</tr>
+<tr class="odd">
+<td>FR-033</td>
+<td>IPC Pt E; AMR Framework 2018</td>
+<td>Test</td>
+<td>TC-AMR-01</td>
+</tr>
+<tr class="even">
+<td>FR-034</td>
+<td>SANCC §3; HPCSAB20 transparency</td>
+<td>Demonstration</td>
+<td>TC-OV-01</td>
+</tr>
+<tr class="odd">
+<td>FR-035</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Inspection (audit log query)</td>
+<td>TC-OV-02</td>
+</tr>
+<tr class="even">
+<td>FR-036</td>
+<td>HPCSAB20 cultural-app.</td>
+<td>Demonstration</td>
+<td>TC-RX-03</td>
+</tr>
+<tr class="odd">
+<td>FR-037</td>
+<td>NursA §56(6)</td>
+<td>Inspection</td>
+<td>TC-SC-01</td>
+</tr>
+<tr class="even">
+<td>FR-038</td>
+<td>PCNS (2014)</td>
+<td>Inspection</td>
+<td>TC-SC-02</td>
+</tr>
+<tr class="odd">
+<td>FR-039</td>
+<td>NursA §56(6) + MedA §22A(15)</td>
+<td>Test (Schedule 5 block path)</td>
+<td>TC-SC-03</td>
+</tr>
+<tr class="even">
+<td>FR-040</td>
+<td>NursA §56(6)</td>
+<td>Test</td>
+<td>TC-SC-04</td>
+</tr>
+<tr class="odd">
+<td>FR-041</td>
+<td>HPCSAB10 §5.1; CMOU 2.1 Tier 4</td>
+<td>Test (SLA timer)</td>
+<td>TC-T4-03</td>
+</tr>
+<tr class="even">
+<td>FR-042</td>
+<td>HPCSAB10 §5.1</td>
+<td>Inspection + demonstration</td>
+<td>TC-T4-04</td>
+</tr>
+<tr class="odd">
+<td>FR-043</td>
+<td>HPCSAB9 §4.1.6; MedA</td>
+<td>Inspection (PDF schema)</td>
+<td>TC-PR-01</td>
+</tr>
+<tr class="even">
+<td>FR-044</td>
+<td>ECT Act §13</td>
+<td>Demonstration</td>
+<td>TC-PR-02</td>
+</tr>
+<tr class="odd">
+<td>FR-045</td>
+<td>ICSM Pt flow; CCMDD</td>
+<td>Demonstration</td>
+<td>TC-DR-01</td>
+</tr>
+<tr class="even">
+<td>FR-046</td>
+<td>PHC STG/EML; CMOU 2.1 Tier 1</td>
+<td>Test</td>
+<td>TC-FX-01</td>
+</tr>
+<tr class="odd">
+<td>FR-047</td>
+<td>HPCSAB10 §5.5(b)</td>
+<td>Inspection (workflow audit)</td>
+<td>TC-PR-03</td>
+</tr>
+<tr class="even">
+<td>FR-048</td>
+<td>NCS §1.2.1.3; NHA §61</td>
+<td>Test (handout generation)</td>
+<td>TC-DH-01</td>
+</tr>
+<tr class="odd">
+<td>FR-049</td>
+<td>NCS §1.4.1.3; HPCSAB20</td>
+<td>Test</td>
+<td>TC-DH-02</td>
+</tr>
+<tr class="even">
+<td>FR-050</td>
+<td>NCS §1.4.1.3; ICSM</td>
+<td>Demonstration</td>
+<td>TC-PE-01</td>
+</tr>
+<tr class="odd">
+<td>FR-051</td>
+<td>GG R.185/2012; NCS §1.4.1.1</td>
+<td>Test</td>
+<td>TC-RE-01</td>
+</tr>
+<tr class="even">
+<td>FR-052</td>
+<td>GG R.185/2012 §3(4)</td>
+<td>Test</td>
+<td>TC-RE-02</td>
+</tr>
+<tr class="odd">
+<td>FR-053</td>
+<td>NCS §1.4.1</td>
+<td>Demonstration</td>
+<td>TC-RE-03</td>
+</tr>
+<tr class="even">
+<td>FR-054</td>
+<td>ICSM; CMOU 2.1 Tier 4</td>
+<td>Demonstration</td>
+<td>TC-DCST-01</td>
+</tr>
+<tr class="odd">
+<td>FR-055</td>
+<td>IPC Practical Manual Pt G</td>
+<td>Test</td>
+<td>TC-NC-01</td>
+</tr>
+<tr class="even">
+<td>FR-056</td>
+<td>IPC Practical Manual Pt G</td>
+<td>Demonstration</td>
+<td>TC-NC-02</td>
+</tr>
+<tr class="odd">
+<td>FR-057</td>
+<td>IPC Pt G; ICSM surveillance</td>
+<td>Test (cluster signal logic)</td>
+<td>TC-T3-01</td>
+</tr>
+<tr class="even">
+<td>FR-058</td>
+<td>IPC Pt E; AMR 2018</td>
+<td>Demonstration</td>
+<td>TC-T3-02</td>
+</tr>
+<tr class="odd">
+<td>FR-059</td>
+<td>Ideal Clinic Facility Profile</td>
+<td>Test (schema match)</td>
+<td>TC-T3-03</td>
+</tr>
+<tr class="even">
+<td>FR-060</td>
+<td>ICSM Facility Data Tool</td>
+<td>Test</td>
+<td>TC-T3-04</td>
+</tr>
+<tr class="odd">
+<td>FR-061</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Demonstration (regulatory-gated)</td>
+<td>TC-T2-01</td>
+</tr>
+<tr class="even">
+<td>FR-062</td>
+<td>CMOU 2.1 Tier 2; PACK</td>
+<td>Test</td>
+<td>TC-T2-02</td>
+</tr>
+<tr class="odd">
+<td>FR-063</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Test</td>
+<td>TC-T2-03</td>
+</tr>
+<tr class="even">
+<td>FR-064</td>
+<td>HPCSAB10 §5.5(b)</td>
+<td>Inspection (workflow audit)</td>
+<td>TC-T2-04</td>
+</tr>
+<tr class="odd">
+<td>FR-065</td>
+<td>CMOU 2.1 Tier 2</td>
+<td>Demonstration</td>
+<td>TC-T2-05</td>
+</tr>
+<tr class="even">
+<td>FR-066</td>
+<td>HPCSAB9 §13</td>
+<td>Demonstration</td>
+<td>TC-EC-01</td>
+</tr>
+<tr class="odd">
+<td>FR-067</td>
+<td>HPCSAB9 §4.1.1–§4.1.12</td>
+<td>Test (schema completeness)</td>
+<td>TC-EC-02</td>
+</tr>
+<tr class="even">
+<td>FR-068</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Test (immutability)</td>
+<td>TC-EC-03</td>
+</tr>
+<tr class="odd">
+<td>FR-069</td>
+<td>HPCSAB9 §4.2 + §8; TMOU 18.5(e)</td>
+<td>Test</td>
+<td>TC-AU-01</td>
+</tr>
+<tr class="even">
+<td>FR-070</td>
+<td>HPCSAB9 §8</td>
+<td>Demonstration</td>
+<td>TC-AU-02</td>
+</tr>
+<tr class="odd">
+<td>FR-071–FR-077</td>
+<td>HPCSAB9 §9 + §11; Choice on TOP Act 92/1996</td>
+<td>Test (retention engine) + inspection</td>
+<td>TC-RT-01..07</td>
+</tr>
+<tr class="even">
+<td>FR-078</td>
+<td>HPCSAB9 §10</td>
+<td>Inspection (process)</td>
+<td>TC-RT-08</td>
+</tr>
+<tr class="odd">
+<td>FR-079</td>
+<td>SANCC §4; TMOU 18.5(d)</td>
+<td>Test (RLS)</td>
+<td>TC-IS-01</td>
+</tr>
+<tr class="even">
+<td>FR-080</td>
+<td>SANCC §4</td>
+<td>Test</td>
+<td>TC-IS-02</td>
+</tr>
+<tr class="odd">
+<td>FR-081</td>
+<td>SANCC §4; POPIA §10</td>
+<td>Demonstration</td>
+<td>TC-IS-03</td>
+</tr>
+<tr class="even">
+<td>FR-082</td>
+<td>POPIA §20; CMOU 9.2; TMOU 18.2</td>
+<td>Inspection (privacy notice + register)</td>
+<td>TC-PR-04</td>
+</tr>
+<tr class="odd">
+<td>FR-083</td>
+<td>POPIA §20–§21; CMOU 9.2; TMOU 18.2</td>
+<td>Inspection (DPA compliance)</td>
+<td>TC-OP-01</td>
+</tr>
+<tr class="even">
+<td>FR-084</td>
+<td>POPIA §20; ISO 27018 A.11</td>
+<td>Inspection (notice process)</td>
+<td>TC-OP-02</td>
+</tr>
+<tr class="odd">
+<td>FR-085</td>
+<td>POPIA §23; PAIA</td>
+<td>Demonstration</td>
+<td>TC-DSAR-01</td>
+</tr>
+<tr class="even">
+<td>FR-086</td>
+<td>POPIA §23 + §24; PAIA</td>
+<td>Test</td>
+<td>TC-DSAR-02</td>
+</tr>
+<tr class="odd">
+<td>FR-087</td>
+<td>POPIA §23; PAIA</td>
+<td>Test (SLA)</td>
+<td>TC-DSAR-03</td>
+</tr>
+<tr class="even">
+<td>FR-088</td>
+<td>TMOU 18.5(e); ISO 27701</td>
+<td>Inspection</td>
+<td>TC-DSAR-04</td>
+</tr>
+<tr class="odd">
+<td>FR-089</td>
+<td>POPIA §22; TMOU 18.8</td>
+<td>Test (event emission)</td>
+<td>TC-IR-01</td>
+</tr>
+<tr class="even">
+<td>FR-090</td>
+<td>TMOU 18.8</td>
+<td>Test (24-hr drill)</td>
+<td>TC-IR-02</td>
+</tr>
+<tr class="odd">
+<td>FR-091</td>
+<td>HPCSAB10 §5.1</td>
+<td>Inspection</td>
+<td>TC-T4-05</td>
+</tr>
+<tr class="even">
+<td>FR-092</td>
+<td>HPCSAB10 §5.1, §5.5(b)</td>
+<td>Demonstration</td>
+<td>TC-T4-06</td>
+</tr>
+<tr class="odd">
+<td>FR-093</td>
+<td>HPCSAB9 §4.2 + §8</td>
+<td>Test</td>
+<td>TC-T4-07</td>
+</tr>
+<tr class="even">
+<td>FR-094</td>
+<td>HPCSAB10 §3.7</td>
+<td>Demonstration</td>
+<td>TC-T4-08</td>
+</tr>
+<tr class="odd">
+<td>FR-095</td>
+<td>HPCSAB10 §5.9.3 + §5.9.4</td>
+<td>Test</td>
+<td>TC-T4-09</td>
+</tr>
+<tr class="even">
+<td>FR-096</td>
+<td>MVP §1; SAMJ 2019</td>
+<td>Test (offline drill)</td>
+<td>TC-LS-01</td>
+</tr>
+<tr class="odd">
+<td>FR-097</td>
+<td>MVP §1</td>
+<td>Test</td>
+<td>TC-LS-02</td>
+</tr>
+<tr class="even">
+<td>FR-098</td>
+<td>POPIA §19; TMOU 18.5(a)</td>
+<td>Test</td>
+<td>TC-LS-03</td>
+</tr>
+<tr class="odd">
+<td>FR-099</td>
+<td>NHA §61; HPCSAB9 §4.2</td>
+<td>Demonstration</td>
+<td>TC-LS-04</td>
+</tr>
+<tr class="even">
+<td>FR-100</td>
+<td>MVP §1</td>
+<td>Demonstration</td>
+<td>TC-LS-05</td>
+</tr>
+<tr class="odd">
+<td>FR-101</td>
+<td>MVP §1 (Brandmed)</td>
+<td>Demonstration</td>
+<td>TC-BM-01</td>
+</tr>
+<tr class="even">
+<td>FR-102</td>
+<td>CMOU 4.1</td>
+<td>Demonstration (production phase)</td>
+<td>TC-BM-02</td>
+</tr>
+<tr class="odd">
+<td>FR-103</td>
+<td>ICSM CCMDD; NDOH</td>
+<td>Test</td>
+<td>TC-CC-01</td>
+</tr>
+<tr class="even">
+<td>FR-104</td>
+<td>ICSM; NDOH DHIS</td>
+<td>Test</td>
+<td>TC-T3-05</td>
+</tr>
+<tr class="odd">
+<td>FR-105</td>
+<td>NDOH HPRS; CCMDD</td>
+<td>Test</td>
+<td>TC-PA-03</td>
+</tr>
+<tr class="even">
+<td>FR-106</td>
+<td>MedA + Pharmacy Act; MVP §1</td>
+<td>Inspection</td>
+<td>TC-DI-01</td>
+</tr>
+<tr class="odd">
+<td>FR-107</td>
+<td>MedA; HPCSAB9 §4.1.6</td>
+<td>Test</td>
+<td>TC-DI-02</td>
+</tr>
+<tr class="even">
+<td>FR-108–FR-111</td>
+<td>MVP demo bar</td>
+<td>Inspection (demo-bar checklist)</td>
+<td>TC-DE-03..05</td>
+</tr>
+<tr class="odd">
+<td>FR-112–FR-115</td>
+<td>HPCSAB20 transparency; SANCC §3</td>
+<td>Inspection (UI tokens)</td>
+<td>TC-TR-01..04</td>
+</tr>
+<tr class="even">
+<td>FR-116–FR-120</td>
+<td>ICSM streams; PHC STG/EML</td>
+<td>Test (per-workflow E2E)</td>
+<td>TC-WF-01..05</td>
+</tr>
+<tr class="odd">
+<td>FR-121–FR-125</td>
+<td>TMOU 18.5(c); MVP §3 q11</td>
+<td>Test (auth + RLS)</td>
+<td>TC-AU-03..07</td>
+</tr>
+<tr class="even">
+<td>FR-126–FR-128</td>
+<td>TMOU 18.4 + 18.7; CMOU 9.4</td>
+<td>Inspection (deploy config) + analysis</td>
+<td>TC-DR-02..04</td>
+</tr>
+<tr class="odd">
+<td>NFR-001–NFR-014</td>
+<td>Security clauses (TMOU 18.5; ISO 27001/27018; FIPS; ASD ISM)</td>
+<td>Inspection + analysis (architecture review) + test (pen-test)</td>
+<td>TS-SEC-01..14</td>
+</tr>
+<tr class="even">
+<td>NFR-015–NFR-022</td>
+<td>POPIA §10–§72 + IR guidance + TMOU 18.8</td>
+<td>Inspection (DPA + DPIA) + drill</td>
+<td>TS-PRV-01..08</td>
+</tr>
+<tr class="odd">
+<td>NFR-023–NFR-030</td>
+<td>TMOU Article 10; ISO 22301; HPCSAB9 §12</td>
+<td>Test (uptime + DR drill)</td>
+<td>TS-REL-01..08</td>
+</tr>
+<tr class="even">
+<td>NFR-031–NFR-037</td>
+<td>UX targets; MVP §3 + §5</td>
+<td>Test (perf benchmark)</td>
+<td>TS-PER-01..07</td>
+</tr>
+<tr class="odd">
+<td>NFR-038–NFR-041</td>
+<td>CMOU recital B; entities/companies/cipla.md</td>
+<td>Test (load)</td>
+<td>TS-SCA-01..04</td>
+</tr>
+<tr class="even">
+<td>NFR-042–NFR-045</td>
+<td>NIST SP 800-160; CLAUDE.md Rule 4</td>
+<td>Inspection</td>
+<td>TS-MNT-01..04</td>
+</tr>
+<tr class="odd">
+<td>NFR-046–NFR-049</td>
+<td>TMOU 18.5(e) + 18.6; HPCSAB9 §4.2 + §8; NIST 800-53 AU</td>
+<td>Inspection + test</td>
+<td>TS-AUD-01..04</td>
+</tr>
+<tr class="even">
+<td>NFR-050–NFR-054</td>
+<td>HPCSAB20; NCS §1.7.1.1; ISO 8601; STG/EML units</td>
+<td>Test</td>
+<td>TS-LOC-01..05</td>
+</tr>
+<tr class="odd">
+<td>NFR-055–NFR-057</td>
+<td>WCAG 2.1; HPCSAB20; NCS §1.1.1.2</td>
+<td>Inspection (axe-core) + demonstration</td>
+<td>TS-ACC-01..03</td>
+</tr>
+<tr class="even">
+<td>NFR-058–NFR-059</td>
+<td>TMOU 18.4 + Article 6 + 18.7</td>
+<td>Inspection (deploy config)</td>
+<td>TS-POR-01..02</td>
+</tr>
+<tr class="odd">
+<td>NFR-060–NFR-064</td>
+<td>HL7 FHIR R4; HL7 v2; OAuth 2.0; TMOU 18.6</td>
+<td>Inspection + test</td>
+<td>TS-INT-01..05</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="verification-approach">4. Verification Approach</h1>
+<p>The product SHALL be verified prior to live PHI processing through a layered, evidence-producing approach. The verification approach SHALL produce artefacts that are auditor-grade for HPCSA, SANC, OHSC, Information Regulator, SAHPRA, ASD-IRAP, ISO 27001, and SOC 2 Type II review.</p>
+<p><strong>4.1 Clinical safety review.</strong> A clinical safety review covering the differential-generation, red-flag, allergy-crosscheck, DDI, antimicrobial-stewardship, scope-of-practice, and notifiable-condition logic SHALL be conducted by a SA-registered clinical safety officer (initial: Dr Mamdoo; pilot: a SA-registered medical practitioner under contract). The review applies the PHC STG/EML 8th ed (2024) as the canonical clinical reference and produces a clinical safety case file (ISO 14971-aligned hazard analysis + mitigation matrix).</p>
+<p><strong>4.2 IPC and audit walkthrough.</strong> An IPC walkthrough at each pilot clinic SHALL verify Tier 1 + Tier 3 alignment with the National IPC Practical Manual (Parts E + G) — antimicrobial stewardship behaviour and notifiable-condition flagging.</p>
+<p><strong>4.3 Automated test suite.</strong> A continuous-integration suite SHALL run on every commit covering unit, integration, contract (FHIR R4), end-to-end (Playwright), and load. The suite SHALL include: 50-case differential audit; allergy + DDI block paths; Schedule 5 block path; SLA timers; offline-resync drill; cross-language transcription benchmark; immutability test; retention engine test.</p>
+<p><strong>4.4 Penetration test.</strong> External penetration testing SHALL run quarterly during pilot and production (NFR-011) — scope: external attack surface (web + API + USSD/SMS endpoints), authenticated abuse, authorisation bypass, DSAR endpoint, Tier 4 transmission, RLS escape attempts.</p>
+<p><strong>4.5 Load test.</strong> Pre-pilot load test SHALL simulate 50 concurrent clinics × 18 patients/day each = 900 daily encounters with peak-burst assumptions; latencies SHALL stay within NFR-031–NFR-037 targets at peak.</p>
+<p><strong>4.6 Multilingual transcript benchmark.</strong> A quarterly benchmark SHALL test transcription + diarisation against a curated SA multilingual + code-switched corpus (initial: synthetic + Botaniqal employee role-play; production: opt-in clinic-recorded with consent).</p>
+<p><strong>4.7 Scope-of-practice rule audit.</strong> A quarterly rule audit SHALL verify FR-037–FR-040 + FR-046–FR-047 against the current PHC STG/EML edition + the canonical PCNS competency framework + each enrolled nurse's §56(6) permit metadata.</p>
+<p><strong>4.8 Privacy verification.</strong> A POPIA + Tshikululu MoU 18.5 verification SHALL run quarterly: encryption posture, RLS, RBAC + MFA, sub-processor register, DSAR drill, breach drill (24-hr clock), DPIA refresh.</p>
+<p><strong>4.9 Audit drill.</strong> Annually, a full external audit drill SHALL be conducted producing the evidence pack contemplated by Tshikululu MoU 18.6.</p>
+<hr />
+<h1 id="glossary">5. Glossary</h1>
+<p>(See §1.3.)</p>
+<p>Additional informative terms:</p>
+<ul>
+<li><strong>Daplapmeds</strong> — Sha'p Left's chronic medication pickup network (50 points), plugged into NDOH CCMDD.</li>
+<li><strong>PACK</strong> — Practical Approach to Care Kit; the NDOH algorithm guide that operationalises STG/EML at PHC level.</li>
+<li><strong>Ambient digital scribe</strong> — clinical scribe modality where the system listens passively to a consultation and produces a structured clinical record (Heidi Health archetype).</li>
+<li><strong>Tier (1–4)</strong> — the Cipla MoU Article 2.1 deployment tier; this SRS treats Tier 1 as the default and FRs explicitly tag T2/T3/T4 where higher.</li>
+</ul>
+<hr />
+<h1 id="appendix-a-regulatory-citation-index">Appendix A — Regulatory Citation Index</h1>
+<p>The following table indexes every regulatory clause cited in this SRS, with full citation back to its source PDF (or Tavily-extracted public-source equivalent) in <code>/home/adaptation/cipla-regs/</code> or as referenced in <code>concepts/cipla-sa-regulatory-bundle-may2026.md</code>. Citations are quoted verbatim where load-bearing.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 27%" />
+<col style="width: 30%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Citation tag</th>
+<th>Full citation</th>
+<th>Source location</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HPCSAB9 §4.1.1–§4.1.12</td>
+<td>"Health care practitioners should enter and maintain at least the following information for each patient consulted: 4.1.1 Personal (identifying) particulars of the patient; … 4.1.12 Written proof of informed consent, where applicable."</td>
+<td>HPCSA Booklet 9 — <em>Guidelines on the Keeping of Patient Records</em>, 2016, Nov 2022 revision. <code>/home/adaptation/cipla-regs/HPCSA-Booklet-9-PatientRecords.txt</code></td>
+<td>FR-001, FR-002, FR-026, FR-027, FR-067, §3.4.2</td>
+</tr>
+<tr class="even">
+<td>HPCSAB9 §4.2 / §8</td>
+<td>"Records should be kept in non-erasable ink and erasure fluid should not be used." / "No information or entry may be removed from a health record. An error or incorrect entry discovered in the record may be corrected by placing a line through it with ink and correcting it. The date of change must be entered and the correction must be signed in full."</td>
+<td>HPCSA Booklet 9 §4.2, §8</td>
+<td>FR-035, FR-068, FR-069, FR-070, FR-093, NFR-046</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB9 §9</td>
+<td>Retention rules — adults ≥ 6 yrs from dormant date; minors until 21st birthday; mentally incompetent for lifetime; OHSA-related ≥ 20 yrs; long-latency ≥ 25 yrs; "destruction in provincial hospitals only on Deputy DG authorisation".</td>
+<td>HPCSA Booklet 9 §9</td>
+<td>FR-071–FR-077</td>
+</tr>
+<tr class="even">
+<td>HPCSAB9 §10</td>
+<td>Practitioner-death / closure custody; ≥ 12 months custody by successor or named custodian.</td>
+<td>HPCSA Booklet 9 §10</td>
+<td>FR-078</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB9 §11</td>
+<td>Patient access — 12+ direct; under 16 written authorisation; TOP records exception.</td>
+<td>HPCSA Booklet 9 §11</td>
+<td>FR-076, FR-077</td>
+</tr>
+<tr class="even">
+<td>HPCSAB9 §12</td>
+<td>Digital storage — write-once, encrypted, password-protected, off-site backup, "effective safeguards against unauthorised use or retransmission".</td>
+<td>HPCSA Booklet 9 §12</td>
+<td>NFR-028, FR-098</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB9 §13</td>
+<td>"Records should be complete, but concise. Records should be consistent. … A standardised format should be used (e.g. notes should contain in order the history, physical findings, investigations, diagnosis, treatment and outcome.)."</td>
+<td>HPCSA Booklet 9 §13</td>
+<td>FR-066</td>
+</tr>
+<tr class="even">
+<td>HPCSAB10 §3.7</td>
+<td>"Telehealth is intended to be utilised to replicate physical consultations as far as possible, but not as a substitute. … established professional relationship with their patient … desirable … not a compulsory requirement."</td>
+<td>HPCSA Booklet 10 — <em>Ethical Guidelines for Good Practice in Telehealth</em>, December 2021 (revised). <code>/home/adaptation/cipla-regs/HPCSA-Booklet-10-Telehealth.txt</code></td>
+<td>FR-014, FR-094</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB10 §3.8</td>
+<td>"No practitioner may exclusively render professional services through Telehealth."</td>
+<td>HPCSA Booklet 10 §3.8</td>
+<td>FR-013</td>
+</tr>
+<tr class="even">
+<td>HPCSAB10 §5.1</td>
+<td>Competence + registration + authorisation; "In the case of Telehealth across country's borders, practitioner serving South African patients should be registered with the regulating bodies in their original states as well as with the HPCSA."</td>
+<td>HPCSA Booklet 10 §5.1</td>
+<td>FR-041, FR-042, FR-091, UC-05</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB10 §5.5(b)</td>
+<td>"Treatment, including issuing a prescription, based solely on an online questionnaire, does not constitute an acceptable standard of care."</td>
+<td>HPCSA Booklet 10 §5.5(b)</td>
+<td>FR-047, FR-064, FR-092</td>
+</tr>
+<tr class="even">
+<td>HPCSAB10 §5.7</td>
+<td>Telehealth-specific informed consent payload (encryption details + sub-processors + risks).</td>
+<td>HPCSA Booklet 10 §5.7</td>
+<td>FR-006, FR-009</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB10 §5.8</td>
+<td>Confidentiality — encrypted electronic prescriptions / authentication.</td>
+<td>HPCSA Booklet 10 §5.8</td>
+<td>FR-095, NFR-002</td>
+</tr>
+<tr class="even">
+<td>HPCSAB10 §5.9.3 + §5.9.4</td>
+<td>"personal identification should be removed, and the transmitted information is encrypted" / ECT Act 25/2002 + POPIA Act 4/2013 compliance.</td>
+<td>HPCSA Booklet 10 §5.9.3 + §5.9.4</td>
+<td>FR-095, NFR-001, NFR-002</td>
+</tr>
+<tr class="odd">
+<td>HPCSAB10 §6</td>
+<td>"Practitioners are advised to ensure that they manage patients' information in accordance with requirements of POPIA."</td>
+<td>HPCSA Booklet 10 §6</td>
+<td>NFR-015, NFR-022</td>
+</tr>
+<tr class="even">
+<td>HPCSAB20 (Nov 2025)</td>
+<td>AI in healthcare — transparency + cultural-appropriateness + advisory framing pillars.</td>
+<td>HPCSA Booklet 20 PDF (Nov 2025)</td>
+<td>FR-005, FR-019, FR-020, FR-034, FR-036, FR-049, FR-110, FR-112–FR-115</td>
+</tr>
+<tr class="odd">
+<td>SANCC §3</td>
+<td>"As professionals, Nursing Practitioners will be personally accountable for all actions and omissions while carrying out their responsibilities in their profession and must always be able to justify all decisions taken and carried out."</td>
+<td>SANC Code of Ethics for Nursing Practitioners (2013, current) §3. <code>/home/adaptation/cipla-regs/extract-batch1.json</code></td>
+<td>FR-008, FR-012, FR-030, FR-034, FR-040, FR-112</td>
+</tr>
+<tr class="even">
+<td>SANCC §4 / §5.1</td>
+<td>Confidentiality + autonomy.</td>
+<td>SANC Code §4, §5.1.2, §5.1.3</td>
+<td>FR-003, FR-010, FR-079, FR-080, FR-081</td>
+</tr>
+<tr class="odd">
+<td>PCNS (2014)</td>
+<td>SANC Competencies for the Primary Care Nurse Specialist — Schedule 4 ceiling + §56(6) permit framing (full text pending Cloudflare/Cipla Drive ingestion).</td>
+<td>SANC Competencies for the Primary Care Nurse Specialist (2014)</td>
+<td>FR-038</td>
+</tr>
+<tr class="even">
+<td>NursA §56(6)</td>
+<td>Section 56(6) Nursing Act 33/2005 — permit allowing a named PHC nurse to prescribe + dispense up to Schedule 4 independently.</td>
+<td>Nursing Act 33/2005 §56(6)</td>
+<td>FR-037, FR-039, FR-040</td>
+</tr>
+<tr class="odd">
+<td>MedA §22A(15)</td>
+<td>Section 22A(15) Medicines and Related Substances Act 101/1965 — accompanying authority.</td>
+<td>Medicines Act 101/1965 §22A(15)</td>
+<td>FR-039</td>
+</tr>
+<tr class="even">
+<td>GG R.185/2012</td>
+<td>Government Gazette R.185 (2 March 2012), Categories of Hospitals — district referral pathway + scope.</td>
+<td><code>/home/adaptation/cipla-regs/DOH-Reg-Categories-Hospitals.txt</code></td>
+<td>FR-051, FR-052</td>
+</tr>
+<tr class="odd">
+<td>NCS §1.1.1.2</td>
+<td>"Care provided maximises patient privacy."</td>
+<td>National Core Standards (NDOH, 2011), Domain 1 §1.1.1.2. <code>/home/adaptation/cipla-regs/National-Core-Standards.txt</code></td>
+<td>NFR-057</td>
+</tr>
+<tr class="even">
+<td>NCS §1.2.1.2</td>
+<td>"Procedures are followed to get informed consent."</td>
+<td>NCS Domain 1 §1.2.1.2</td>
+<td>FR-007</td>
+</tr>
+<tr class="odd">
+<td>NCS §1.2.1.3</td>
+<td>"All patients receive a discharge report (as required by the National Health Act 61 of 2003)."</td>
+<td>NCS Domain 1 §1.2.1.3</td>
+<td>FR-048</td>
+</tr>
+<tr class="even">
+<td>NCS §1.4.1.1</td>
+<td>"An effective district health care referral policy and system is available, covering continuity of care, emergency care management, infrastructure and resources required."</td>
+<td>NCS Domain 1 §1.4.1.1</td>
+<td>FR-051</td>
+</tr>
+<tr class="odd">
+<td>NCS §1.4.1.3</td>
+<td>"Patients are given information about referrals and specialist bookings."</td>
+<td>NCS Domain 1 §1.4.1.3</td>
+<td>FR-022, FR-049, FR-050</td>
+</tr>
+<tr class="even">
+<td>NCS §1.5.1.5</td>
+<td>"An efficient filing system is in place for patients' records."</td>
+<td>NCS Domain 1 §1.5.1.5</td>
+<td>FR-003</td>
+</tr>
+<tr class="odd">
+<td>NCS §1.7.1.1</td>
+<td>"Services at the health establishment meet national guidelines or licensing specifications."</td>
+<td>NCS Domain 1 §1.7.1.1</td>
+<td>FR-020, NFR-051</td>
+</tr>
+<tr class="even">
+<td>ICSM</td>
+<td>Patient-flow streams (acute / MCWH / chronic / unplanned-vs-planned); DCST supervision; CCMDD pipeline; Facility Data Tool headcount schema.</td>
+<td>NDOH ICSM Manual (5th June FINAL, 2023-04). <code>/home/adaptation/cipla-regs/ICSM-Manual.txt</code></td>
+<td>FR-045, FR-054, FR-057, FR-103, FR-104, FR-116, FR-117</td>
+</tr>
+<tr class="odd">
+<td>Ideal Clinic Facility Profile</td>
+<td>Ideal Clinic + Community Health Centre Facility Profile schema.</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-CHC-Facility-Profile.txt</code></td>
+<td>FR-059</td>
+</tr>
+<tr class="even">
+<td>Ideal Clinic Framework V19</td>
+<td>Ideal Clinic Framework V19 (April 2022) — Component 7 Health Information Management.</td>
+<td><code>/home/adaptation/cipla-regs/Ideal-Clinic-Framework-V19.txt</code></td>
+<td>NFR-060–NFR-063</td>
+</tr>
+<tr class="odd">
+<td>IPC Pt E</td>
+<td>Antimicrobial stewardship — SA Framework for the Prevention and Containment of AMR 2018 alignment.</td>
+<td>National IPC Practical Manual (March 2020) Part E. <code>/home/adaptation/cipla-regs/IPC-Practical-Manual.txt</code></td>
+<td>FR-033, FR-058</td>
+</tr>
+<tr class="even">
+<td>IPC Pt G</td>
+<td>Reporting of Notifiable Medical Conditions.</td>
+<td>IPC Practical Manual Part G</td>
+<td>FR-055, FR-056, FR-057, FR-119</td>
+</tr>
+<tr class="odd">
+<td>NHA §13</td>
+<td>Allergy / informed consent.</td>
+<td>National Health Act 61/2003 §13</td>
+<td>FR-027, FR-028</td>
+</tr>
+<tr class="even">
+<td>NHA §61</td>
+<td>Discharge / disclosure.</td>
+<td>NHA §61</td>
+<td>FR-048, FR-099</td>
+</tr>
+<tr class="odd">
+<td>POPIA §10</td>
+<td>Minimality.</td>
+<td>POPIA Act 4/2013 §10</td>
+<td>FR-025, FR-081, NFR-019</td>
+</tr>
+<tr class="even">
+<td>POPIA §11</td>
+<td>Consent.</td>
+<td>POPIA §11</td>
+<td>FR-007, FR-008, FR-009, NFR-020</td>
+</tr>
+<tr class="odd">
+<td>POPIA §15</td>
+<td>Further processing.</td>
+<td>POPIA §15</td>
+<td>NFR-020</td>
+</tr>
+<tr class="even">
+<td>POPIA §17</td>
+<td>Documentation.</td>
+<td>POPIA §17</td>
+<td>NFR-022</td>
+</tr>
+<tr class="odd">
+<td>POPIA §19</td>
+<td>Security safeguards.</td>
+<td>POPIA §19</td>
+<td>FR-098, NFR-015</td>
+</tr>
+<tr class="even">
+<td>POPIA §20</td>
+<td>Sub-processor + operator.</td>
+<td>POPIA §20</td>
+<td>FR-082, FR-083, FR-084</td>
+</tr>
+<tr class="odd">
+<td>POPIA §21</td>
+<td>Operator instructions binding.</td>
+<td>POPIA §21</td>
+<td>FR-083</td>
+</tr>
+<tr class="even">
+<td>POPIA §22</td>
+<td>Breach notification.</td>
+<td>POPIA §22</td>
+<td>FR-089, NFR-016</td>
+</tr>
+<tr class="odd">
+<td>POPIA §23</td>
+<td>Data-subject access.</td>
+<td>POPIA §23</td>
+<td>FR-085, FR-086, FR-087</td>
+</tr>
+<tr class="even">
+<td>POPIA §26 / §32</td>
+<td>Special PI prohibition + health exception.</td>
+<td>POPIA §26 + §32</td>
+<td>NFR-018</td>
+</tr>
+<tr class="odd">
+<td>POPIA §38</td>
+<td>DPIA.</td>
+<td>POPIA §38</td>
+<td>NFR-021</td>
+</tr>
+<tr class="even">
+<td>POPIA §72</td>
+<td>Cross-border transfer.</td>
+<td>POPIA §72</td>
+<td>FR-127, NFR-017</td>
+</tr>
+<tr class="odd">
+<td>RICA §4(1)</td>
+<td>One-party consent.</td>
+<td>RICA Act 70/2002 §4(1)</td>
+<td>FR-007</td>
+</tr>
+<tr class="even">
+<td>ECT §13</td>
+<td>Electronic signature.</td>
+<td>ECT Act 25/2002 §13</td>
+<td>FR-044</td>
+</tr>
+<tr class="odd">
+<td>OHSA</td>
+<td>Occupational Health and Safety Act 85/1993 — 20-yr retention rule.</td>
+<td>OHSA 85/1993</td>
+<td>FR-074</td>
+</tr>
+<tr class="even">
+<td>Choice on TOP Act</td>
+<td>Choice on Termination of Pregnancy Act 92/1996.</td>
+<td>Act 92/1996</td>
+<td>FR-076</td>
+</tr>
+<tr class="odd">
+<td>CMOU Article 2.1</td>
+<td>Cipla Foundation MoU V1.3 — 4-tier scope (Tier 1 CDSS / Tier 2 Multilingual Agentic Triage / Tier 3 Population Health Surveillance / Tier 4 Supervising Prescribing Authority).</td>
+<td><code>concepts/cipla-mou-apr2026.md</code></td>
+<td>FR-029, FR-046, FR-061–FR-065</td>
+</tr>
+<tr class="even">
+<td>CMOU Article 4 / 10</td>
+<td>First Party SAHPRA SaMD authorisation responsibility; joint reg-pathway determination.</td>
+<td>Cipla MoU Articles 4 + 10</td>
+<td>NFR-058, FR-102</td>
+</tr>
+<tr class="odd">
+<td>CMOU Article 9</td>
+<td>Data Protection — POPIA + Aus Privacy Act + APPs apply; Customer = responsible party; Operator = Botaniqal under documented instructions.</td>
+<td>Cipla MoU Article 9 (incl. 9.5 ten-control schedule)</td>
+<td>FR-082, FR-083, NFR-001–NFR-014</td>
+</tr>
+<tr class="even">
+<td>TMOU Article 6</td>
+<td>Tshikululu MoU Territory — 12 SADC-aligned jurisdictions.</td>
+<td><code>concepts/tshikululu-master-agency-mou-may2026.md</code></td>
+<td>FR-128, NFR-059</td>
+</tr>
+<tr class="odd">
+<td>TMOU Article 18.2</td>
+<td>Roles — Customer = responsible party; Botaniqal = operator; Tshikululu = sub-operator.</td>
+<td>Tshikululu MoU 18.2</td>
+<td>FR-082, FR-083</td>
+</tr>
+<tr class="even">
+<td>TMOU Article 18.3</td>
+<td>Operator agreement / DPA pre-deployment.</td>
+<td>Tshikululu MoU 18.3</td>
+<td>FR-083</td>
+</tr>
+<tr class="odd">
+<td>TMOU Article 18.4</td>
+<td>SA-residency-by-default.</td>
+<td>Tshikululu MoU 18.4</td>
+<td>FR-126, NFR-058</td>
+</tr>
+<tr class="even">
+<td>TMOU Article 18.5(a)–(j)</td>
+<td>Ten-control schedule — encryption at rest (a); encryption in transit (b); RBAC + MFA (c); tenant isolation (d); immutable audit log + 7-yr retention (e); network segmentation (f); secrets vault (g); vuln management (h); incident response + breach notification (i); personnel controls (j).</td>
+<td>Tshikululu MoU 18.5(a)–(j) (= Cipla MoU 9.5 verbatim port)</td>
+<td>NFR-001–NFR-014, NFR-046–NFR-049</td>
+</tr>
+<tr class="odd">
+<td>TMOU Article 18.6</td>
+<td>Evidence + assurance pulls.</td>
+<td>Tshikululu MoU 18.6</td>
+<td>NFR-049, NFR-063, §4.9</td>
+</tr>
+<tr class="even">
+<td>TMOU Article 18.7</td>
+<td>Cross-border transfer arrangements.</td>
+<td>Tshikululu MoU 18.7</td>
+<td>FR-127, NFR-017</td>
+</tr>
+<tr class="odd">
+<td>TMOU Article 18.8</td>
+<td>24-hour breach notification.</td>
+<td>Tshikululu MoU 18.8</td>
+<td>FR-090, NFR-016, UC-08</td>
+</tr>
+<tr class="even">
+<td>TMOU Article 19</td>
+<td>Regulatory Compliance — SAHPRA SaMD + SANC + HPCSA.</td>
+<td>Tshikululu MoU Article 19</td>
+<td>FR-061, FR-091</td>
+</tr>
+<tr class="odd">
+<td>ISO/IEC 27001:2022</td>
+<td>A.5–A.8 control families (vuln mgmt A.8.8; backup A.8.13; container hardening A.8.28; SBOM A.8.30).</td>
+<td>ISO/IEC 27001:2022</td>
+<td>NFR-010, NFR-013, NFR-014, NFR-028, NFR-064</td>
+</tr>
+<tr class="even">
+<td>ISO/IEC 27018:2019</td>
+<td>PII protection in public clouds — A.2 minimisation; A.11 sub-processor.</td>
+<td>ISO/IEC 27018:2019</td>
+<td>NFR-019, FR-084, NFR-064</td>
+</tr>
+<tr class="odd">
+<td>ISO/IEC 27701:2019</td>
+<td>Privacy information management.</td>
+<td>ISO/IEC 27701:2019</td>
+<td>NFR-020, NFR-064, FR-088</td>
+</tr>
+<tr class="even">
+<td>NIST SP 800-53 r5</td>
+<td>AC family + AU family.</td>
+<td>NIST SP 800-53 r5</td>
+<td>NFR-005, NFR-046, NFR-048</td>
+</tr>
+<tr class="odd">
+<td>ASD ISM</td>
+<td>Controls 1467 + 1698 (vuln mgmt); audit retention.</td>
+<td>Australian Government Information Security Manual</td>
+<td>NFR-010, NFR-047</td>
+</tr>
+<tr class="even">
+<td>FIPS 140-2 / 140-3 / 197</td>
+<td>Cryptographic module validation + AES.</td>
+<td>FIPS 140-2 / 140-3 / 197</td>
+<td>NFR-001</td>
+</tr>
+<tr class="odd">
+<td>WCAG 2.1 AA</td>
+<td>Web Content Accessibility Guidelines.</td>
+<td>WCAG 2.1</td>
+<td>NFR-055</td>
+</tr>
+<tr class="even">
+<td>RFC 8446</td>
+<td>TLS 1.3.</td>
+<td>IETF RFC 8446</td>
+<td>NFR-002, NFR-003</td>
+</tr>
+<tr class="odd">
+<td>OAuth 2.0</td>
+<td>Authorization framework.</td>
+<td>IETF RFC 6749 + 6750</td>
+<td>NFR-062, FR-122</td>
+</tr>
+<tr class="even">
+<td>SAHPRA MD08-2025/2026</td>
+<td>AI/ML SaMD framework — registration class TBD; Section 21 unregistered access route during pilot.</td>
+<td>SAHPRA MD08-2025/2026 PDF</td>
+<td>FR-061, NFR-058</td>
+</tr>
+<tr class="odd">
+<td>MVP §1 / §2 / §3 / §5 / §6</td>
+<td>Sha'p Left ambient nurse MVP demo spec — operational reality, demo bar, codebase verification, voice pipeline, consent flow, hard caps.</td>
+<td><code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> + <code>docs/superpowers/specs/2026-04-27-shap-left-ambient-nurse-mvp.md</code></td>
+<td>FR-004, FR-005, FR-018, FR-021, FR-024, FR-025, FR-100, FR-101, FR-108–FR-111, FR-121, FR-124, NFR-026, NFR-027, NFR-031–NFR-037</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cross-references">Cross-references</h2>
+<ul>
+<li><code>concepts/shap-left-ambient-nurse-mvp-apr2026.md</code> — MVP / demo wiki — the production-side scope of this SRS supersedes the MVP for pilot+production but the MVP demo bar remains authoritative for the April-May 2026 demo phase.</li>
+<li><code>concepts/cipla-sa-regulatory-bundle-may2026.md</code> — regulatory canvas + implementation impact matrix — the source of every regulatory traceability tag in §3.1, §3.2, and Appendix A.</li>
+<li><code>concepts/cipla-mou-apr2026.md</code> — Cipla Foundation MoU V1.3 — Article 2.1 (4-tier scope), Article 4 (general obligations), Article 8 (IP), Article 9 (Data Protection — incl. 9.5 ten-control schedule), Article 10 (Regulatory Compliance).</li>
+<li><code>concepts/tshikululu-master-agency-mou-may2026.md</code> — Tshikululu Master Regional Agency MoU v2.2 — Article 6 (Territory), Article 7 (Term + CPs), Article 18 (Data Protection — esp. 18.5(a)-(j) ten-control schedule), Article 19 (Regulatory Compliance).</li>
+<li><code>entities/companies/cipla.md</code> — Sha'p Left operational reality.</li>
+<li><code>concepts/shap-left-rubric-metrics-may2026.md</code> — evaluation rubric + KPIs/SLOs (sister artefact).</li>
+<li><code>concepts/shap-left-demo-to-production-roadmap-may2026.md</code> — demo→production transition plan + risk register (sister artefact).</li>
+</ul>
+<h2 id="change-log">Change Log</h2>
+<ul>
+<li><strong>2026-05-08</strong> — Initial creation. Authored as IEEE/ISO/IEC/IEEE 29148:2018-aligned SRS for the Sha'p Left Ambient Nurse Station. 128 functional requirements (FR-001…FR-128) and 64 non-functional requirements (NFR-001…NFR-064) authored, each traced to a binding regulatory clause or wiki source. 8 use cases (UC-01…UC-08) authored. Data requirements §3.4 enumerates 14 domain entities, the HPCSA Booklet 9 §4.1 12-mandatory-fields schema, and the §9 retention-rules table. External interface requirements §3.5 cover user / hardware / software / communications interfaces. The verification &amp; traceability matrix §3.7 maps every FR/NFR to a verification method per IEEE 29148 §5.2.10. Appendix A indexes every regulatory citation back to its source PDF in <code>/home/adaptation/cipla-regs/</code>. Length: ~10,000 words.</li>
+</ul>
+
+  </article>
+  <aside class="chapter-sidebar">
+  <div class="sidebar-eyebrow">On this page</div>
+  <ul>
+  <li><a href="#purpose" class="h2">1.1 Purpose</a></li>
+  <li><a href="#scope" class="h2">1.2 Scope</a></li>
+  <li><a href="#product-identification" class="h3">1.2.1 Product identification</a></li>
+  <li><a href="#what-it-will-do" class="h3">1.2.2 What it will do</a></li>
+  <li><a href="#what-it-will-not-do" class="h3">1.2.3 What it will not do</a></li>
+  <li><a href="#benefits-objectives-goals" class="h3">1.2.4 Benefits, objectives, goals</a></li>
+  <li><a href="#definitions-acronyms-and-abbreviations" class="h2">1.3 Definitions, Acronyms and Abbreviations</a></li>
+  <li><a href="#references" class="h2">1.4 References</a></li>
+  <li><a href="#binding-sa-primary-law" class="h3">1.4.1 Binding SA primary law</a></li>
+  <li><a href="#binding-sa-secondary-law-regulations" class="h3">1.4.2 Binding SA secondary law / regulations</a></li>
+  <li><a href="#binding-professional-codes-guidelines" class="h3">1.4.3 Binding professional codes / guidelines</a></li>
+  <li><a href="#ndoh-policy-quality-framework" class="h3">1.4.4 NDOH policy / quality framework</a></li>
+  <li><a href="#device-regulator-and-adjacent-regulators" class="h3">1.4.5 Device regulator and adjacent regulators</a></li>
+  <li><a href="#international-standards-referenced-in-mou-clauses" class="h3">1.4.6 International standards referenced in MoU clauses</a></li>
+  <li><a href="#internal-corpus-wiki-repo" class="h3">1.4.7 Internal corpus (wiki + repo)</a></li>
+  <li><a href="#overview-of-the-document" class="h2">1.5 Overview of the document</a></li>
+  <li><a href="#product-perspective" class="h2">2.1 Product perspective</a></li>
+  <li><a href="#product-functions-high-level-enumeration" class="h2">2.2 Product functions (high-level enumeration)</a></li>
+  <li><a href="#user-characteristics" class="h2">2.3 User characteristics</a></li>
+  <li><a href="#constraints" class="h2">2.4 Constraints</a></li>
+  <li><a href="#regulatory-constraints" class="h3">2.4.1 Regulatory constraints</a></li>
+  <li><a href="#operational-constraints" class="h3">2.4.2 Operational constraints</a></li>
+  <li><a href="#technical-constraints" class="h3">2.4.3 Technical constraints</a></li>
+  <li><a href="#financial-constraints" class="h3">2.4.4 Financial constraints</a></li>
+  <li><a href="#assumptions-and-dependencies" class="h2">2.5 Assumptions and dependencies</a></li>
+  <li><a href="#functional-requirements" class="h2">3.1 Functional Requirements</a></li>
+  <li><a href="#patient-identity-consent-and-session-start" class="h3">3.1.1 Patient identity, consent, and session start</a></li>
+  <li><a href="#vitals-and-clinical-input" class="h3">3.1.2 Vitals and clinical input</a></li>
+  <li><a href="#ambient-capture-transcription-and-diarisation" class="h3">3.1.3 Ambient capture, transcription, and diarisation</a></li>
+  <li><a href="#history-capture-and-clinical-reasoning" class="h3">3.1.4 History capture and clinical reasoning</a></li>
+  <li><a href="#scope-of-practice-gate-and-prescription" class="h3">3.1.5 Scope-of-practice gate and prescription</a></li>
+  <li><a href="#discharge-note-patient-education-referrals" class="h3">3.1.6 Discharge note, patient education, referrals</a></li>
+  <li><a href="#notifiable-conditions-public-health-surveillance" class="h3">3.1.7 Notifiable conditions, public health, surveillance</a></li>
+  <li><a href="#tier-2-multilingual-agentic-triage-regulatory-gated" class="h3">3.1.8 Tier 2 — Multilingual Agentic Triage (regulatory-gated)</a></li>
+  <li><a href="#encounter-close-audit-and-retention" class="h3">3.1.9 Encounter close, audit, and retention</a></li>
+  <li><a href="#multi-clinic-isolation-sub-processor-disclosure-operator-instructions-binding" class="h3">3.1.10 Multi-clinic isolation, sub-processor disclosure, operator-instructions binding</a></li>
+  <li><a href="#dsar-breach-handling" class="h3">3.1.11 DSAR + breach handling</a></li>
+  <li><a href="#tier-4-supervising-prescribing-authority" class="h3">3.1.12 Tier 4 — Supervising Prescribing Authority</a></li>
+  <li><a href="#loadshedding-connectivity-paper-fallback" class="h3">3.1.13 Loadshedding / connectivity / paper fallback</a></li>
+  <li><a href="#brandmed-and-external-system-handoff" class="h3">3.1.14 Brandmed and external-system handoff</a></li>
+  <li><a href="#patient-identification-hprs-dispensing" class="h3">3.1.15 Patient identification, HPRS, dispensing</a></li>
+  <li><a href="#demo-phase-guardrails-additional" class="h3">3.1.16 Demo-phase guardrails (additional)</a></li>
+  <li><a href="#documentation-transparency-advisory-framing" class="h3">3.1.17 Documentation, transparency, advisory framing</a></li>
+  <li><a href="#tier-1-additional-clinical-workflows-derived-from-icsm" class="h3">3.1.18 Tier 1 — additional clinical workflows derived from ICSM</a></li>
+  <li><a href="#identity-auth-and-access" class="h3">3.1.19 Identity, auth, and access</a></li>
+  <li><a href="#cross-border-data-handling-article-18.4-18.7" class="h3">3.1.20 Cross-border data handling (Article 18.4 / 18.7)</a></li>
+  <li><a href="#non-functional-requirements" class="h2">3.2 Non-Functional Requirements</a></li>
+  <li><a href="#security" class="h3">3.2.1 Security</a></li>
+  <li><a href="#privacy" class="h3">3.2.2 Privacy</a></li>
+  <li><a href="#reliability" class="h3">3.2.3 Reliability</a></li>
+  <li><a href="#performance" class="h3">3.2.4 Performance</a></li>
+  <li><a href="#scalability" class="h3">3.2.5 Scalability</a></li>
+  <li><a href="#maintainability" class="h3">3.2.6 Maintainability</a></li>
+  <li><a href="#auditability" class="h3">3.2.7 Auditability</a></li>
+  <li><a href="#localisation-internationalisation" class="h3">3.2.8 Localisation / Internationalisation</a></li>
+  <li><a href="#accessibility" class="h3">3.2.9 Accessibility</a></li>
+  <li><a href="#portability" class="h3">3.2.10 Portability</a></li>
+  <li><a href="#interoperability" class="h3">3.2.11 Interoperability</a></li>
+  <li><a href="#use-cases" class="h2">3.3 Use Cases</a></li>
+  <li><a href="#uc-01-first-consult-with-a-new-patient-acute-urti-presentation-gauteng" class="h3">UC-01: First consult with a new patient (acute URTI presentation, Gauteng)</a></li>
+  <li><a href="#uc-02-follow-up-consult-with-chronic-stable-hypertensive-patient" class="h3">UC-02: Follow-up consult with chronic stable hypertensive patient</a></li>
+  <li><a href="#uc-03-acute-presentation-requiring-referral-to-district-hospital" class="h3">UC-03: Acute presentation requiring referral to district hospital</a></li>
+  <li><a href="#uc-04-notifiable-condition-suspected-tb" class="h3">UC-04: Notifiable condition — suspected TB</a></li>
+  <li><a href="#uc-05-telehealth-supervised-prescribing-tier-4" class="h3">UC-05: Telehealth-supervised prescribing (Tier 4)</a></li>
+  <li><a href="#uc-06-multi-clinic-supervisor-reviews-aggregate-outcomes" class="h3">UC-06: Multi-clinic supervisor reviews aggregate outcomes</a></li>
+  <li><a href="#uc-07-data-subject-access-request-popia-23-paia" class="h3">UC-07: Data Subject Access Request (POPIA §23 / PAIA)</a></li>
+  <li><a href="#uc-08-privacy-breach-response" class="h3">UC-08: Privacy breach response</a></li>
+  <li><a href="#data-requirements" class="h2">3.4 Data Requirements</a></li>
+  <li><a href="#domain-entities" class="h3">3.4.1 Domain entities</a></li>
+  <li><a href="#hpcsa-booklet-9-4.1-mandatory-record-schema-per-encounter-by-close" class="h3">3.4.2 HPCSA Booklet 9 §4.1 mandatory record schema (per encounter, by close)</a></li>
+  <li><a href="#retention-rules-hpcsa-booklet-9-9" class="h3">3.4.3 Retention rules (HPCSA Booklet 9 §9)</a></li>
+  <li><a href="#backup-2-site-hpcsa-booklet-9-12" class="h3">3.4.4 Backup + 2-site (HPCSA Booklet 9 §12)</a></li>
+  <li><a href="#external-interface-requirements" class="h2">3.5 External Interface Requirements</a></li>
+  <li><a href="#user-interfaces" class="h3">3.5.1 User interfaces</a></li>
+  <li><a href="#hardware-interfaces" class="h3">3.5.2 Hardware interfaces</a></li>
+  <li><a href="#software-interfaces" class="h3">3.5.3 Software interfaces</a></li>
+  <li><a href="#communications-interfaces" class="h3">3.5.4 Communications interfaces</a></li>
+  <li><a href="#constraints-1" class="h2">3.6 Constraints</a></li>
+  <li><a href="#regulatory-constraints-1" class="h3">3.6.1 Regulatory constraints</a></li>
+  <li><a href="#hardware-constraints" class="h3">3.6.2 Hardware constraints</a></li>
+  <li><a href="#software-stack-constraints" class="h3">3.6.3 Software-stack constraints</a></li>
+  <li><a href="#operational-constraints-1" class="h3">3.6.4 Operational constraints</a></li>
+  <li><a href="#schedule-constraints" class="h3">3.6.5 Schedule constraints</a></li>
+  <li><a href="#verification-traceability-matrix" class="h2">3.7 Verification &amp;amp; Traceability Matrix</a></li>
+  <li><a href="#cross-references" class="h2">Cross-references</a></li>
+  <li><a href="#change-log" class="h2">Change Log</a></li>
+  </ul>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function check() { if (window.BriefingAuth) window.BriefingAuth.requireAuth('./index.html'); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', check); else check();
+})();
+</script>
+<script>
+(function () {
+  // Wait for mermaid to be available, then init
+  function init() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#d4e8df',
+          primaryBorderColor: '#00633c',
+          primaryTextColor: '#00422a',
+          lineColor: '#00633c',
+          fontFamily: '-apple-system, "Inter", sans-serif'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

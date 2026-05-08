@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sha&#x27;p Left Ambient Nurse Station — Full Production Spec · 2026-05-08</title>
+<meta name="description" content="Sha'p Left Ambient Nurse Station — Production Spec briefing for Cipla Foundation, Tshikululu Master Regional Agency, and Botaniqal Medtech." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<div id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-eyebrow">Confidential · Sha'p Left Production Spec</div>
+    <h1>This briefing is password-protected</h1>
+    <p class="lede">Sha'p Left Ambient Nurse Station — full production specification, prepared for Cipla Foundation, Tshikululu Social Investments, AusHealth, and Botaniqal Medtech internal stakeholders. Enter the briefing password to continue.</p>
+    <form id="auth-form" autocomplete="off">
+      <div id="auth-error" class="auth-error">Wrong password. Try again, or contact Willie.</div>
+      <label for="auth-input">Briefing password</label>
+      <input id="auth-input" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <button type="submit">Unlock briefing</button>
+    </form>
+    <div class="auth-fallback">
+      Forgot the password? <a href="mailto:willie@drsophia.ai?subject=Sha%27p%20Left%20briefing%20access">Contact Willie</a>.
+    </div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Production Spec · Confidential · Cipla / Sha'p Left / Tshikululu</div>
+    <h1 class="title">Sha'p Left Ambient Nurse Station — Full Production Specification</h1>
+    <p class="subtitle">From the 24 May demo to a SAHPRA-authorised, POPIA-compliant, multi-clinic, multi-jurisdictional production deployment underneath the Cipla Foundation MoU and Tshikululu Master Regional Agency MoU.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>Version 2.0 · 2026-05-08</span>
+      <span class="pill info"><span class="dot"></span>Author: Botaniqal Medtech</span>
+      <span class="pill warn"><span class="dot"></span>Confidential — do not redistribute</span>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">7</div><div class="label">Chapters</div></div>
+      <div class="stat"><div class="num">~62 K</div><div class="label">Words across spec</div></div>
+      <div class="stat"><div class="num">23</div><div class="label">SA + AU statutes mapped</div></div>
+      <div class="stat"><div class="num">128</div><div class="label">Functional requirements</div></div>
+      <div class="stat"><div class="num">55</div><div class="label">Risks tracked</div></div>
+      <div class="stat"><div class="num">8</div><div class="label">Open decisions</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">Load-bearing findings</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <ul>
+    <li><a href="#exec">Executive summary</a></li>
+    <li><a href="#chapters">Chapters</a></li>
+    <li><a href="#system-map">System map</a></li>
+    <li><a href="#findings">Load-bearing findings</a></li>
+    <li><a href="#status">Status snapshot</a></li>
+    <li><a href="#deep-links">Deep links</a></li>
+    <li><a href="CHANGELOG.html">Changelog</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="exec" class="block">
+  <h2>Executive summary</h2>
+  <p class="lede">The single bound document that turns Willie's voice-input directive — "collect all the data, create detailed wiki, ... so we can build a full SRS, spec, rubric and metric we need to abide by when we go from this demo to a full production implementation" — into 6 chapters anchored in 11 SA regulatory documents from Dr Puni Mamdoo's bundle, 8 adjacent SA statutes, the SAHPRA MD08-2025/2026 SaMD framework, the Cipla Foundation MoU V1.3, and the Tshikululu Master Regional Agency MoU v2.2.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">What this is</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">A frozen 2026-05-08 snapshot of six wiki concept pages, password-protected and bound for distribution to named counterparties. The wiki remains the living source of truth; this briefing is the artefact for review meetings, board packs, and the AusHealth + Cipla data rooms.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Why it matters</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">It closes the regulatory + technical + commercial loop for the <b>24 May demo → 30-day SCGP → 11-clinic Cipla rollout → 50-clinic-by-2029</b> path. Names the <b>8 open decisions</b> the team needs to lock and the <b>2 load-bearing findings</b> from Puni's bundle that re-shape Tier 4 commercial assumptions.</p>
+    </div>
+  </div>
+</section>
+
+<section id="chapters" class="block">
+  <h2>What's inside</h2>
+  <p class="lede">Each chapter is a self-contained HTML page with its own sidebar TOC. Cross-references between chapters use anchor links; references out to the wiki point at <code>github.com/team_willie/wiki/concepts/</code>.</p>
+  <div class="grid-2">
+    <a href="01-meta-idea-and-nurses-station-flow.html" class="chapter-card">
+      <span class="ch-num">Chapter 01</span>
+      <h3>The Meta Idea + Nurses Station Full Flow</h3>
+      <p>Why ambient AI fits SA nurse-led PHC, end-to-end patient journey, the clinic day, the 4-tier build, demo→production differences, and system diagrams.</p>
+      <div class="ch-meta">~11,500 words</div>
+    </a>
+    <a href="02-regulatory-canvas.html" class="chapter-card">
+      <span class="ch-num">Chapter 02</span>
+      <h3>Regulatory Canvas</h3>
+      <p>The 11 documents in Puni Mamdoo&#x27;s regulatory bundle plus 8 adjacent SA statutes. SAHPRA SaMD framework (MD08-2025/2026), POPIA full requirements, cross-border §72 routes.</p>
+      <div class="ch-meta">~9,000 words</div>
+    </a>
+    <a href="03-srs-functional-spec.html" class="chapter-card">
+      <span class="ch-num">Chapter 03</span>
+      <h3>Software Requirements Specification</h3>
+      <p>IEEE/ISO/IEC/IEEE 29148-style SRS — 128 functional requirements, 64 non-functional requirements, 8 use cases, verification criteria, traceability matrix.</p>
+      <div class="ch-meta">~19,000 words</div>
+    </a>
+    <a href="04-rubric-metrics-slos.html" class="chapter-card">
+      <span class="ch-num">Chapter 04</span>
+      <h3>Rubric, Metrics, KPIs, SLOs</h3>
+      <p>Per-consult rubric (16 dimensions × 0–4 scale), 35 SCGP KPIs, 15 SLOs, and the G1/G2/G3 acceptance criteria for the 30-day Structured Clinical Governance Pilot.</p>
+      <div class="ch-meta">~8,000 words</div>
+    </a>
+    <a href="05-demo-to-production-roadmap.html" class="chapter-card">
+      <span class="ch-num">Chapter 05</span>
+      <h3>Demo→Production Roadmap + Risk Register</h3>
+      <p>6-phase ladder, SAHPRA pathway, af-south-1 migration, doctor credentialing, QMS, 55-risk register, pre-production checklist (~85 items), and the 15 open decisions.</p>
+      <div class="ch-meta">~6,500 words</div>
+    </a>
+    <a href="06-document-library.html" class="chapter-card">
+      <span class="ch-num">Chapter 06</span>
+      <h3>Document Library</h3>
+      <p>Pointers to all source PDFs in Puni&#x27;s regulatory bundle, the 7 wiki concept pages, the SharePoint MoU room, and internal cipla-regs cache.</p>
+      <div class="ch-meta">Reference</div>
+    </a>
+    <a href="07-aushealth-opportunity-stack.html" class="chapter-card">
+      <span class="ch-num">Chapter 07 <span class="new-ribbon">NEW</span></span>
+      <h3>AusHealth Opportunity Stack</h3>
+      <p>The parallel investor + customer + product track. Why AusHealth is part of the deal separately — Series A close (Q3 2026), Workplace Health pilot, and the FHIR DiagnosticReport ingestion surface.</p>
+      <div class="ch-meta">~4,800 words</div>
+    </a>
+  </div>
+</section>
+
+<section id="system-map" class="block">
+  <h2>The unified system map</h2>
+  <p class="lede">Cipla / Tshikululu / AusHealth / Botaniqal — how the four-counterparty system works, end to end. Customer (green), Agent (amber), Tech (blue), Investor (red).</p>
+  <div class="mermaid">
+flowchart LR
+    classDef customer fill:#d4e8df,stroke:#00633c,color:#00422a
+    classDef agent fill:#fff0d4,stroke:#d49500,color:#8a5a00
+    classDef tech fill:#dde9f7,stroke:#1c4f8e,color:#1c4f8e
+    classDef investor fill:#fde2e2,stroke:#8a1a1a,color:#8a1a1a
+
+    Cipla["Cipla Foundation NPC<br/>Customer · Responsible Party<br/>11 → 50 → 300 clinics"]:::customer
+    Tshikululu["Tshikululu Social Investments NPC<br/>Exclusive Regional Agent<br/>12 SADC countries · 10-yr"]:::agent
+    Botaniqal["Botaniqal Pty Ltd<br/>SA Operator / Manufacturer<br/>SaMD §22C licence path"]:::tech
+    DrSophia["Dr Sophia AI Pty Ltd<br/>AU Tech Partner<br/>Platform owner + IP holder"]:::tech
+    AusHealth["AusHealth<br/>Investor + AU Customer<br/>Workplace Health surface"]:::investor
+    FN["FN Capital · 5V Capital · RH R&amp;D"]:::investor
+
+    AusHealth -->|Investment Q3| DrSophia
+    FN -->|Equity + debt| DrSophia
+    DrSophia -->|Platform IP licence| Botaniqal
+    Botaniqal -->|Sub-licence Territory| Tshikululu
+    Tshikululu -->|Customer agreements| Cipla
+    Cipla -->|Patient PHI under DPA| Botaniqal
+    Botaniqal -->|af-south-1 hosting| Cipla
+    AusHealth -.->|"Workplace Health<br/>D&amp;A · fatigue · RTW"| DrSophia
+  </div>
+</section>
+
+<section id="findings" class="block">
+  <h2>The three load-bearing findings</h2>
+  <p class="lede">Two surfaced in Puni's regulatory bundle. The third surfaced in the Tshikululu MoU v2.2 redline review. All three re-shape commercial assumptions baked into the Cipla MoU V1.3 and the Tshikululu MoU. They are not blockers for the 24 May demo — they are blockers for Tier 4 commercial scope, clinic-day production rollout, and the 12-13 May board.</p>
+
+  <div class="findings-callout">
+    <h4>Finding 1 · HPCSA Booklet 10 §5.1</h4>
+    <h3>Tier 4 supervising-prescribing authority requires HPCSA-registered SA doctors</h3>
+    <p>The MoU V1.3 Tier 4 scope envisages "remote oversight by AU-trained doctors with AHPRA registration." HPCSA Booklet 10 §5.1 is unambiguous: any practitioner directing care of a SA patient — including ambient AI-mediated oversight — must hold valid HPCSA registration in the relevant register. AU-only registration is non-compliant.</p>
+    <p><b>Implication:</b> the Tier 4 commercial offering needs a SA-doctor recruitment + credentialing pipeline before launch. This is <em>not</em> a tech problem; it is an HR + regulatory programme that runs in parallel with platform build. See Chapter 05 §"Doctor credentialing roadmap."</p>
+  </div>
+
+  <div class="findings-callout">
+    <h4>Finding 2 · NCS §1.2.1.3 + NHA §61</h4>
+    <h3>Every Sha'p Left consult must produce a discharge note</h3>
+    <p>The National Core Standards (NCS) §1.2.1.3 requires a written summary at the end of every encounter, retained for 6 years per NHA §61. The MoU V1.3 Tier 1 scope describes "structured SOAP record" — sufficient for the clinical record but <em>not</em> sufficient for the patient-facing discharge artefact NCS demands. The two are separate documents.</p>
+    <p><b>Implication:</b> Tier 1 MVP must include a printable patient-facing handout from day one — diagnosis (lay-language), medications dispensed, follow-up plan, danger signs, clinic contact. This is regulatory, not UX. See SRS FR-71 through FR-76 in Chapter 03 and the dedicated discharge-note module (no separate SRS section — embedded inside the SOAP module spec).</p>
+  </div>
+
+  <div class="findings-callout">
+    <h4>Finding 3 · Tshikululu MoU v2.2 Articles 3 + 18.2</h4>
+    <h3>Tshikululu role-conflict needs structural resolution before 12-13 May board</h3>
+    <p>Tshikululu MoU v2.2 simultaneously names Tshikululu as <strong>Exclusive Regional Agent</strong> (commercial principal under Article 3) <em>and</em> <strong>Sub-operator (sub-processor)</strong> under POPIA Article 18.2. POPIA §20–21 doesn&#x27;t permit one entity to wear both hats when accepting a Data Subject Access Request — the Operator owes a fiduciary processing duty to the Responsible Party, but the Agent is a commercial counterparty with its own economic interests in the data flow.</p>
+    <p><b>Implication:</b> pre-12–13 May, decide between (a) split Tshikululu into 2 contracting entities (<em>Investments NPC</em> = Agent; <em>Operations Pty Ltd</em> = sub-processor), or (b) restrict Tshikululu&#x27;s data role to non-PHI metadata only. Either path needs Information-Officer sign-off before any clinic enrolment beyond Phase 1 SCGP. See Chapter 05 §"Open decisions" item D-04 (newly elevated to P0).</p>
+  </div>
+</section>
+
+<section id="status" class="block">
+  <h2>Status snapshot — 2026-05-08</h2>
+  <p class="lede">Current state of each phase as set out in Chapter 05 (Demo→Production Roadmap). Targets are written into the Cipla MoU §2.1 (Tier 1 Stage 1 scope) + §3.2 (timeline).</p>
+  <table>
+    <thead><tr><th>Phase</th><th>Target</th><th>Owner</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 0 · Demo build (synthetic data, AU-AWS)</td><td>24 May 2026 demo on Botaniqal AWS Sydney</td><td>Botaniqal eng (Willie + Cursor)</td><td><span class="badge warn">In flight · v5.2 plan signed off 6 May</span></td></tr>
+      <tr><td>Phase 1 · 30-day Structured Clinical Governance Pilot</td><td>Jun-Jul 2026 · 2 nurse pods · synthetic + opt-in real consults under shadow mode</td><td>Cipla Foundation + Botaniqal</td><td><span class="badge info">Pre-flight · awaiting 24 May demo + Julia/Paul sign-off</span></td></tr>
+      <tr><td>Phase 2 · af-south-1 migration + POPIA-compliant production</td><td>Aug-Sep 2026 · SA-resident PHI · Tshikululu sub-processor live</td><td>Botaniqal SRE + LTD Labs counsel</td><td><span class="badge neutral">Planned · audit due post-Phase 1</span></td></tr>
+      <tr><td>Phase 3 · SAHPRA SaMD pre-submission</td><td>Oct 2026 · MD08-2025/2026 Class IIa pathway</td><td>Botaniqal QMS + Paul (consultant)</td><td><span class="badge neutral">Planned · QMS framework drafted, ISO 13485 trajectory</span></td></tr>
+      <tr><td>Phase 4 · 11-clinic Cipla rollout (Tier 1)</td><td>Q1 2027 · KZN + GP provinces</td><td>Cipla Foundation + Tshikululu</td><td><span class="badge neutral">Contingent on Phase 1-3 completion</span></td></tr>
+      <tr><td>Phase 5 · Tier 2-4 expansion + 50-clinic 2029 target</td><td>2027-2029 · 12-country SADC</td><td>Tshikululu Master Agent</td><td><span class="badge neutral">Long-range · subject to Definitive Agreements</span></td></tr>
+      <tr><td>Phase A · AusHealth Q3 close + Workplace Health pilot (parallel)</td><td>Q3 2026 close · Workplace Health pilot Adelaide · FHIR DiagnosticReport ingestion</td><td>AusHealth + Botaniqal eng · Stefan Enderling sponsor</td><td><span class="badge info">Belinda board-recommendation 1 May · 2.5-mo DD · Q3 close indicated</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="deep-links" class="block">
+  <h2>Deep links</h2>
+  <p class="lede">Jump directly to specific subsections rather than the chapter top — for stakeholders who want the precise artefact, not the chapter walk-through.</p>
+  <div class="deep-links">
+    <a href="03-srs-functional-spec.html#patient-identity-consent-and-session-start" class="deep-link"><b>SRS · FR-001 → FR-008</b>Patient identity, consent, session start</a>
+    <a href="03-srs-functional-spec.html#functional-requirements" class="deep-link"><b>SRS · Discharge note FRs</b>FR-71 → FR-76 inside the SOAP module</a>
+    <a href="03-srs-functional-spec.html#functional-requirements" class="deep-link"><b>SRS · Search 128 FRs</b>Live keyword filter across all FR rows</a>
+    <a href="04-rubric-metrics-slos.html#kpi-dashboard" class="deep-link"><b>Rubric · 8-KPI dashboard</b>Live gauges across 35 SCGP KPIs</a>
+    <a href="04-rubric-metrics-slos.html#the-30-day-scgp-kpis-cipla-mou-stage-4" class="deep-link"><b>Rubric · 30-day SCGP gates</b>G1 / G2 / G3 acceptance criteria</a>
+    <a href="05-demo-to-production-roadmap.html#risk-register" class="deep-link"><b>Roadmap · 55-risk heatmap</b>R-01 / R-02 / R-18 / R-19 top residuals</a>
+    <a href="05-demo-to-production-roadmap.html#sahpra-samd-pathway" class="deep-link"><b>Roadmap · SAHPRA pathway</b>MD08-2025/2026 Class IIa pre-submission</a>
+    <a href="05-demo-to-production-roadmap.html#decision-log" class="deep-link"><b>Roadmap · 8 open decisions</b>D-01 → D-08 with owners and deadlines</a>
+    <a href="07-aushealth-opportunity-stack.html" class="deep-link"><b>AusHealth · Open decisions</b>Workplace Health DD + Q3 close path</a>
+    <a href="02-regulatory-canvas.html#synthesis-regulatory-map" class="deep-link"><b>Regulatory · Apex law tree</b>Constitution → NHA → POPIA → clinic</a>
+    <a href="02-regulatory-canvas.html#cross-references" class="deep-link"><b>Regulatory · §72 cross-border</b>POPIA §72(a) sequence diagram</a>
+    <a href="06-document-library.html#puni-bundle" class="deep-link"><b>Library · Puni bundle</b>11 PDFs + 8 adjacent statutes</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <h4>Sha'p Left Ambient Nurse — Production Spec</h4>
+      <ul>
+        <li>Version 1.0 · Built 2026-05-08</li>
+        <li>Author: Botaniqal Medtech</li>
+        <li>Confidential — do not redistribute</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Counterparties</h4>
+      <ul>
+        <li>Cipla Foundation NPC (SA non-profit)</li>
+        <li>Tshikululu Social Investments (Master Regional Agent)</li>
+        <li>AusHealth (technical partner — Adelaide)</li>
+        <li>Sha'p Left platform (Cipla-led PHC initiative)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Source material</h4>
+      <ul>
+        <li><a href="06-document-library.html">Document library</a></li>
+        <li><a href="CHANGELOG.html">Version diff log (v1.0 → v2.0)</a></li>
+        <li>Cipla regs cache: <code>docs/cipla-regs/</code></li>
+        <li>SharePoint: Agentic-AI-Doctor-DataRoom-Lite</li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width: var(--max); margin: 24px auto 0; text-align: center;">
+    <span class="footer-chip">2026-05-08 · v2.0 · Built from wiki/concepts/ · 7 pages</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function init() {
+    if (window.BriefingAuth) window.BriefingAuth.initIndexGate();
+    if (window.mermaid) {
+      window.mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose', flowchart: { curve: 'basis', useMaxWidth: true } });
+      window.mermaid.run({ querySelector: '.mermaid' });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>
