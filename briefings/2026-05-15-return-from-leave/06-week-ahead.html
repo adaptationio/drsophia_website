@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 06 · Week ahead — Return-from-leave briefing</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<script>document.addEventListener('DOMContentLoaded', () => window.BriefingAuth.requireAuth('./index.html'));</script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 06 · Return-from-leave briefing</div>
+    <h1 class="title">The week ahead · 18–30 May</h1>
+    <p class="subtitle">Calendar, key dates, and the things Dwayne is driving in parallel without needing you. The two pressure points are the 24 May SAST Cipla demo and the Tshikululu follow-up &ldquo;end of next week&rdquo; (~22–23 May).</p>
+    <div class="hero-meta">
+      <a class="pill" href="./index.html">← Back to briefing index</a>
+      <a class="pill" href="05-open-loops.html">← Chapter 05</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="calendar" class="block">
+  <h2>Calendar · 18–30 May</h2>
+  <p class="lede">Only the <code>drsophia.ai</code> mailbox shows scheduled events. Botaniqal + LTD Labs calendars are empty (events hosted on drsophia.ai).</p>
+
+  <table>
+    <thead><tr><th>Day</th><th>Date</th><th>Time (Adelaide)</th><th>Event</th><th>Status / notes</th></tr></thead>
+    <tbody>
+      <tr><td>Mon</td><td>18 May</td><td>13:00–14:00</td><td>Weekly ops meeting</td><td><span class="badge warn">Tentative</span> · convert to definitive</td></tr>
+      <tr><td>Tue</td><td><strong>19 May</strong></td><td><strong>11:00 AM</strong></td><td><strong>Personal — Phoebe / Hills Psychology Centre</strong></td><td><span class="badge info">Confirmed (Cliniko)</span></td></tr>
+      <tr><td>Tue</td><td>19 May</td><td>09:00 AM (suggested)</td><td>UpDoc demo with Alfredo (proposed slot)</td><td><span class="badge neutral">Awaiting your confirm</span> · Dwayne leads</td></tr>
+      <tr><td>Wed–Thu</td><td>20–21 May</td><td>AM</td><td>UpDoc demo (alternate slots)</td><td>If 19 May 09:00 doesn't work, AM Wed/Thu also offered</td></tr>
+      <tr><td>Fri</td><td>22 May</td><td>09:30–10:30</td><td>CDSS meeting · GP, MC, Lang</td><td><span class="badge good">Accepted</span></td></tr>
+      <tr><td>Fri / Sat</td><td>22–23 May</td><td>TBC by Jess Moodey</td><td><strong>Tshikululu follow-up meeting</strong></td><td><span class="badge neutral">Invite pending</span> · Jess proposing on Friday</td></tr>
+      <tr><td>Sat</td><td><strong>24 May</strong></td><td><strong>09:00 SAST (16:30 ACST)</strong></td><td><strong>Cipla × Tshikululu × Sha'p Left nurse-pod demo</strong></td><td><span class="badge danger">Gated on PR #864 + Rameez go-ahead</span></td></tr>
+      <tr><td>Mon</td><td>25 May</td><td>13:00–14:00</td><td>Weekly ops meeting</td><td><span class="badge warn">Tentative</span></td></tr>
+      <tr><td>Fri</td><td>29 May</td><td>09:30–10:30</td><td>CDSS meeting</td><td><span class="badge good">Accepted</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="pressure" class="block">
+  <h2>Two pressure points</h2>
+
+  <div class="findings-callout">
+    <h4>1 · Sat 24 May 09:00 SAST</h4>
+    <h3>Cipla × Tshikululu × Sha'p Left nurse-pod demo</h3>
+    <p><strong>9 days out from today.</strong> Engineering is ready (27/27 PASS on full nurse-mode matrix, demo-day infra audit complete, backend pinned to replicas=1 for Socket.IO stability, pre-warm + log-tail strategy in place).</p>
+    <p><strong>Gates remaining:</strong></p>
+    <ul>
+      <li>PR #864 (&ldquo;Sha'p Left Ambient Nurse MVP → PROD&rdquo;) — currently parked &ldquo;DO NOT MERGE — demo gate&rdquo;. Decision yours: merge ahead of demo or hold until demo-day-of.</li>
+      <li>Rameez Johaar (Cipla) silence on the V1.3 MoU. 15+ days. Default is to wait for Tshikululu's natural nudge.</li>
+    </ul>
+    <p>Time zone note: 09:00 SAST = 16:30 ACST. Demo runs on your Saturday afternoon. Plan around it.</p>
+  </div>
+
+  <div class="findings-callout">
+    <h4>2 · ~22–23 May</h4>
+    <h3>Tshikululu follow-up meeting</h3>
+    <p>Lee Henderson took the v2.2 MoU to the Tshikululu Board 12 May, <strong>secured in-principle support</strong>, sent to their legal team. Jess Moodey will propose a meeting time on Friday for end of next week.</p>
+    <p><strong>What you need to be ready for:</strong> if their lawyers come back with redlines on Article 18 (your 9.5 ten-control schedule ported verbatim — AES-256/FIPS KMS, TLS 1.2+/1.3-preferred, RBAC+MFA, 24-hour breach notification, SA-residency-by-default for PHI), you'll want to be in that conversation as the technical voice.</p>
+    <p>Dwayne has already given Tshikululu the &ldquo;people on leave&rdquo; air-cover line on your behalf. No pre-meeting prep required from you — just availability.</p>
+  </div>
+</section>
+
+<section id="dwayne-driving" class="block">
+  <h2>Things Dwayne is driving without you</h2>
+  <p class="lede">Awareness only. You're Cc on most of these; he is gracefully running the AU end while you're out.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">AusHealth Board DD</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Stage 1 DD pack sent to Stefan/Justin/Belinda 8 May. Board recommendation to invest landed 1 May. 2.5-month DD window. Stefan compliance check 4 May resolved.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">UpDoc (Alfredo) demo</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Dwayne moved Alfredo from info@ to dwayne@ on 14 May. He's leading. You're a Cc demo attendee — Tue 19 May 09:00 ACST recommended.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Future Now Capital (Mark + Dev)</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Regulatory pack sent 8 May. AU patent + trademark, IP in Australian Hold-Co, TGA Adam Fenton as direct contact. No reply yet — investor-process timeline.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Acuity Health follow-up</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Leanne 7 May: &ldquo;Phil and I are continuing internal discussions and will be back in touch soon.&rdquo; Dwayne expects update this week (8 May estimate: 35% likely + rising).</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">info@drsophia.ai janitor</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Dwayne offered 15 May: &ldquo;emails going back to 2025 — I'll process and move each, file by Wed.&rdquo; Awaits your one-line go.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">DVA RFI follow-through</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Lodged 12 May. Year-out tender shaping. Dwayne flagged informationally.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">CDSS weekly meeting series</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Fridays 09:30 ACST. Michel facilitating. Otter summaries landing weekly in <code>willie@ltdlabs.com.au</code>.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Weekly ops cadence</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Mondays 13:00 ACST. Michel facilitating. Runs through 8 June.</p>
+    </div>
+  </div>
+</section>
+
+<section id="watching" class="block">
+  <h2>Things to watch this week</h2>
+
+  <ul style="font-size:14.5px;color:var(--ink-700);line-height:1.85;padding-left:18px">
+    <li><strong>Jess Moodey calendar invite</strong> (Tshikululu follow-up, expected Friday).</li>
+    <li><strong>Rameez Johaar response</strong> on Cipla MoU V1.3 — if still silent on 21 May, decide whether to chase.</li>
+    <li><strong>Tshikululu legal redlines</strong> — if Article 18 changes substantively, you'll want eyes-on.</li>
+    <li><strong>AusHealth DD response</strong> — board cycle, not waiting tensely.</li>
+    <li><strong>Acuity Health</strong> — Dwayne expects update this week.</li>
+    <li><strong>TGA Secretary follow-up</strong> on 23 Apr CDSS submission — silence is normal but 20-working-day window is open.</li>
+  </ul>
+</section>
+
+<section id="personal-reminder" class="block">
+  <h2>One personal reminder</h2>
+
+  <div class="callout">
+    <p style="margin-top:0;margin-bottom:0"><strong>Tuesday 19 May, 11:00 AM Adelaide</strong> — Phoebe at Hills Psychology Centre. You filled out four intake forms (New Client / Consent / Fee / DASS 21) on 14 May, and Cliniko sent the reminder yesterday evening. If you're confirming a 09:00 ACST UpDoc demo Tuesday, it sits cleanly before. The afternoon is yours.</p>
+  </div>
+</section>
+
+<section id="close" class="block">
+  <h2>Close</h2>
+  <div class="callout">
+    <p style="margin-top:0">Take care of you and your mum first. Everything in this briefing has been waiting; it can wait another day or three if it needs to.</p>
+    <p style="margin-bottom:0">The team is solid. The platform is solid. You're held. Welcome back when you're ready.</p>
+  </div>
+</section>
+
+<nav class="block" style="text-align:center">
+  <a class="pill" href="./index.html">← Back to briefing index</a>
+  &nbsp;
+  <a class="pill" href="05-open-loops.html">← Chapter 05</a>
+</nav>
+
+</main>
+
+</body>
+</html>

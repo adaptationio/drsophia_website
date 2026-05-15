@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 01 · First hour back — Return-from-leave briefing</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<script>document.addEventListener('DOMContentLoaded', () => window.BriefingAuth.requireAuth('./index.html'));</script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 01 · Return-from-leave briefing</div>
+    <h1 class="title">First hour back · the punch list</h1>
+    <p class="subtitle">Seven items. Each has one-line context. Two are &ldquo;send a draft you've already written.&rdquo; Two are 30-second WhatsApp replies. One is an awareness check with Dwayne. Read top-to-bottom, clear top-to-bottom. ~25 minutes if you go at a calm pace.</p>
+    <div class="hero-meta">
+      <a class="pill" href="./index.html">← Back to briefing index</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="punch-list" class="block">
+  <h2>The seven items</h2>
+  <p class="lede">Sorted: drafts first (because they're already written and unblock other things), then WhatsApp (cheap), then decisions (need 1-2 minutes of thinking each).</p>
+
+  <div class="callout">
+    <p><strong>Before you start:</strong> nothing on this list is broken or burning. Every one of these is a low-cost &ldquo;close the loop&rdquo;. Skip any item that feels too heavy today and come back to it tomorrow.</p>
+  </div>
+
+  <h3 style="margin-top:32px">① Send the Vlad Webflow cleanup draft &nbsp;<span class="badge good">5 min</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> Outlook Drafts in <code>willie@botaniqal.com.au</code> · last modified 12 May 23:35 UTC · 3 days parked.</p>
+    <p><strong>What it asks Vlad to do:</strong> fix two stale &ldquo;Dr Dia&rdquo; references in Webflow page-level custom code on <code>/weight-loss</code>: (1) inline JS fallback <code>var pName = p.name || &quot;Dr. Dia Puspasari&quot;</code> → &ldquo;Dr Shivani Thakur&rdquo;, and (2) the Schema.org JSON-LD founder/employee blocks. Email is in clean Outlook-native Aptos formatting, CC's Ramona. App side is already done (PR #867, live PROD bundle).</p>
+    <p><strong>Why now:</strong> Google reads the Schema.org JSON-LD for structured data — it currently mis-attributes founder/employee to a doctor no longer practising. SEO impact is real but not on fire. Per the &ldquo;Webflow goes to Vlad&rdquo; rule.</p>
+    <p><strong>How to send:</strong> Open Drafts, read once, click Send. No edits expected.</p>
+    <p style="margin-bottom:0"><em>Deep-dive: <a href="02-emails.html#vlad-draft">Chapter 02 · Vlad draft</a> ·  <a href="04-projects.html#shivani-widget">Chapter 04 · Dr Shivani widget</a></em></p>
+  </div>
+
+  <h3 style="margin-top:32px">② Send the Anthropic credit-request draft &nbsp;<span class="badge good">5 min</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> Outlook Drafts in <code>willie@adaptation.io</code> · last modified 7 May 02:06 UTC · 8 days parked.</p>
+    <p><strong>What it asks Anthropic for:</strong> a $1,500 USD goodwill credit on the $1,850–1,950 of attacker spend that hit the Adaptation org between 1–4 May from the leaked <code>VITE_ANTHROPIC_API_KEY</code>. Forensic write-up included (key UUID, timeline, containment ~02:00 UTC 5 May). Also asks for per-key spend-cap as a product feature.</p>
+    <p><strong>Why now:</strong> this is your first credit request in 26 months as a paying customer. Case is strong, but the longer it sits the staler the forensics feel. Send before the credit conversation goes cold.</p>
+    <p><strong>How to send:</strong> Open Drafts, skim once that the dollar figures still match what's in the daily monitor (they should), click Send.</p>
+    <p style="margin-bottom:0"><em>Deep-dive: <a href="02-emails.html#anthropic-draft">Chapter 02 · Anthropic draft</a></em></p>
+  </div>
+
+  <h3 style="margin-top:32px">③ One warm reply to Ramona &nbsp;<span class="badge good">30 sec</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> WhatsApp · 1-on-1 with Ramona · last three messages were 11 May 20:08 &ldquo;Where the pony?? xxx&rdquo;, 12 May 20:56 &ldquo;Koko's ready for bed xx&rdquo;, 12 May 20:59 &ldquo;Willie !!!&rdquo;.</p>
+    <p><strong>What it is:</strong> light, domestic, not distressed. She's at home; Koko's the pet. Probably while you were at RAH with mum.</p>
+    <p><strong>Suggested reply:</strong> something like &ldquo;thinking of you, home tonight xx&rdquo;. Warm and brief. Don't over-explain. She's closest to this and doesn't need a status report.</p>
+    <p style="margin-bottom:0"><em>Skip if you've already touched base verbally.</em></p>
+  </div>
+
+  <h3 style="margin-top:32px">④ One reply to Julia (clinic) that kills three asks &nbsp;<span class="badge good">2 min</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> WhatsApp · 1-on-1 with Julia (clinic side · LID <code>147029682557096</code>) · she has three open asks of you, plus a check-in on mum.</p>
+    <p><strong>The three asks:</strong></p>
+    <ol style="font-size:14px;color:var(--ink-700)">
+      <li><strong>15 May 08:22</strong> — &ldquo;Just checking in on you mate. How things going with your mum?&rdquo;</li>
+      <li><strong>13 May 09:44</strong> — &ldquo;Have some more practice management questions re Stripe/payments I'd value some help with.&rdquo;</li>
+      <li><strong>7 May 09:26</strong> — &ldquo;If you have the same info on Shivani I'd appreciate it. Also if you have a chance pls use Ramona's phone / ask her to take Dia off the clinic WhatsApp group. I can't as Ramona is the only admin.&rdquo;</li>
+    </ol>
+    <p><strong>Suggested reply (one message kills all four):</strong></p>
+    <p style="background:var(--cream-200);padding:12px 16px;border-radius:8px;font-size:13.5px;color:var(--ink-900);margin:0;line-height:1.5"><em>&ldquo;Mum's recovering, thanks for asking. Home with Kokopelli now. Will get to the Stripe questions + Shivani info this week. Ramona — when you're at a PC, can you knock Dia out of the clinic group? Julia can't, you're the only admin.&rdquo;</em></p>
+    <p style="margin-bottom:0"><em>Deep-dive: <a href="03-whatsapp.html#julia-clinic">Chapter 03 · Julia (clinic)</a></em></p>
+  </div>
+
+  <h3 style="margin-top:32px">⑤ Confirm a slot to Dwayne for the UpDoc demo &nbsp;<span class="badge good">1 min</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> Email forward from Dwayne 14 May 03:26 UTC (<code>willie@drsophia.ai</code>) and/or Botaniqal marketing WhatsApp.</p>
+    <p><strong>What he proposed:</strong> 30 min stack walk-through + 30 min Q&amp;A with Alfredo (UpDoc, <code>alfredo@updoc.com.au</code>) any AM Mon 18 – Thu 21 May. Covering Africa pilot (AI Nurse / passive observation), Medicolegal tool for US-owned IME, Q1 2027 TGA Class IIb / Q2 2027 synchronous-consult roadmap.</p>
+    <p><strong>Suggested:</strong> Tue 19 May AM is least conflicted (your Phoebe appointment is 11am that day — schedule before 10am or after 12:30pm Adelaide). Drop one line back to Dwayne in the Botaniqal WA group: &ldquo;Tue 19 May 09:00 ACST works for me.&rdquo;</p>
+    <p style="margin-bottom:0"><em>Awareness only — Dwayne is driving. You'd be a Cc demo attendee. <a href="04-projects.html#updoc">Chapter 04 · UpDoc</a></em></p>
+  </div>
+
+  <h3 style="margin-top:32px">⑥ Authorise Perplexity API key regeneration (or delegate) &nbsp;<span class="badge good">5 min</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Where:</strong> Perplexity console at <code>perplexity.ai</code>.</p>
+    <p><strong>What's broken:</strong> the Perplexity Sonar Pro key has been returning 401 since ~8 May. The v6 multi-provider evidence layer falls through cleanly to Anthropic Haiku 4.5 + <code>web_search_20250305</code>, so there's no customer-facing impact, but Perplexity is the intended primary and is silently disabled. Capability is shipped; key is the only blocker.</p>
+    <p><strong>Suggested:</strong> 5-minute job once authorised. Either you regenerate yourself or tell Dwayne &ldquo;please regenerate the Perplexity key, log new value to CSM as <code>perplexity_sonar_pro</code> and bounce the backend deployment&rdquo;. Either path closes this out.</p>
+    <p style="margin-bottom:0"><em>Deep-dive: <a href="04-projects.html#perplexity">Chapter 04 · Perplexity 401</a></em></p>
+  </div>
+
+  <h3 style="margin-top:32px">⑦ Decide whether to chase Rameez on the Cipla MoU silence &nbsp;<span class="badge warn">2 min thinking</span></h3>
+  <div class="card">
+    <p style="margin-top:0"><strong>Context:</strong> the Cipla Foundation V1.3 MoU was sent to Rameez Johaar (<code>rjohaar@shapleft.com</code>) by Julia on 30 April 13:13 ACST. Silent 15+ days. The 24 May 09:00 SAST nurse-pod demo is now 9 days out. Engineering is ready (27/27 PASS); Cipla silence is the only blocker on PR #864 merging to PROD.</p>
+    <p><strong>The decision:</strong></p>
+    <ul style="font-size:14px;color:var(--ink-700)">
+      <li><strong>Option A — Wait.</strong> Tshikululu (who go-to-marketed for us) will nudge naturally. Lee Henderson at Tshikululu has board-in-principle and is proposing a meeting end of next week (~22–23 May). The Cipla conversation may reopen via that channel.</li>
+      <li><strong>Option B — Chase via Dwayne.</strong> Dwayne owns the relationship — ask him to send a soft &ldquo;hope all's well, anything outstanding on the MoU?&rdquo; nudge. Low risk, signals we're engaged. No draft prepared yet.</li>
+    </ul>
+    <p><strong>Default:</strong> Option A. Cipla silence ahead of a demo isn't unusual in the SADC NGO space; we already have engagement via Tshikululu's board.</p>
+    <p style="margin-bottom:0"><em>Deep-dive: <a href="04-projects.html#cipla">Chapter 04 · Cipla MoU</a> · <a href="04-projects.html#tshikululu">Chapter 04 · Tshikululu</a></em></p>
+  </div>
+
+</section>
+
+<section id="optional" class="block">
+  <h2>Optional · if you've still got energy</h2>
+  <p class="lede">Three more things worth knowing exist. None blocking.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">Skim the DVA RFI PDF Dwayne lodged 12 May</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">File <code>260512 - Botaniqal_DVA_RFI_Response.pdf</code> in your <code>willie@drsophia.ai</code> inbox. 125 KB. Year-out tender shaping. Just check no technical claims need retrospective CTO sign-off. If unsure, leave it — Dwayne flagged it as informational.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Call back the 2 most-active missed-call numbers</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">42 missed calls to the clinic line over the fortnight (3CX notifications to <code>willie@botaniqal.com.au</code>). Two repeats: <code>0420 514 577</code> rang 10 times, <code>0447 424 493</code> rang 6 times. Likely real patients trying to reach the clinic while Ramona is out. Or pass to Trisha at Accounts.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Marketing brochure naming · &ldquo;Sophia Decision&rdquo;</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">Live in the Botaniqal marketing WhatsApp group as of 15 May 11:15. Julia uploaded <code>AUS_Brochure_DrSophiaAI_NEW.pdf</code>. Dwayne wants to send to Sam (AusHealth) today. Architecture rename: Sophia Core / Sophia Decision (was &ldquo;CDSS&rdquo;) / Sophia Assist / Sophia Guard. If you have an opinion, drop it in the group within the next few hours. Otherwise stay silent and they'll ship with the default.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Decision · PR #864 merge timing</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">&ldquo;Sha'p Left Ambient Nurse MVP → PROD (DO NOT MERGE — demo gate)&rdquo; has been parked since 7 May. Engineering ready, but PROD currently runs Sophia general consultation. Decide whether to merge ahead of 24 May or hold until demo-go. Default: hold. <a href="04-projects.html#pr-864">Chapter 04 · PR #864</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="rest" class="block">
+  <h2>Everything else can wait</h2>
+  <p class="lede">A short list of the &ldquo;not this week&rdquo; items so you can see them and consciously park them.</p>
+
+  <ul style="font-size:14.5px;color:var(--ink-700);line-height:1.85;padding-left:18px">
+    <li><strong>NCTS SNOMED CT Affiliate License submission</strong> — handoff drafted 30 Apr, pre-filled, $0 cost, 1–2 business day approval. You're the named signatory but it's not on the critical path for anything imminent.</li>
+    <li><strong>Botaniqal brochure V2.3 feedback to Michel</strong> — he was waiting on your V2.3 read when you went away. Not blocking 24 May. Maybe the right &ldquo;ease back in&rdquo; task later this week.</li>
+    <li><strong>3 daily-cron GitHub workflows failing</strong> — Daily Funnel Report, Marketing Analytics Dashboard, Skills-Based AI System Tests. None deploy-blocking. Same workflows were flagged 6 Apr; skills-test still needs proper test-infra work.</li>
+    <li><strong>Mailchimp consent default-unchecked</strong> — 83/83 Supabase profiles have <code>marketing_consent=False</code>. Known queued issue. Defer.</li>
+    <li><strong>Marketing content sign-off backlog</strong> — Michel has implicitly approved; Dwayne + Julia silent. The 15 May Pharmacy blast (447 contacts) was due today without explicit go/no-go. Force the sign-off when you're back, or treat silence as opt-out and ship with Michel's nod.</li>
+    <li><strong>AWS Free Tier alerts ×2</strong> — account <code>487432950876</code> exceeded 85% twice (2 May, 8 May). Likely small Lambda/CloudWatch line. 2-min check next billing pass.</li>
+    <li><strong>Google Search Console</strong> — &ldquo;New reasons prevent pages from being indexed&rdquo; on <code>botaniqal.com.au</code> (14 May). Likely linked to Webflow Dr Dia → Shivani transition. Vlad's territory ultimately.</li>
+    <li><strong>EKS K8s 1.34</strong> — stable on both DEV + PROD. No 1.35 movement signal. Nothing to do.</li>
+    <li><strong>Ron Ielasi Webflow workspace invite</strong> — 3 reminders. Unclear who Ron is. Vlad handles Webflow. Decline or ignore.</li>
+    <li><strong>Roman Kir / Cole at Formspree / David APVAS dev lead</strong> — three cold-outreach asks. Roman is a second nudge; Cole is a 15–20 min feedback call request; David is a real dev lead worth a one-line decline-with-referral when you have a minute.</li>
+  </ul>
+</section>
+
+<section id="personal" class="block">
+  <h2>One personal note</h2>
+  <p class="lede">Surfaced gently because it's already in your calendar.</p>
+
+  <div class="callout">
+    <p style="margin-top:0"><strong>Tuesday 19 May, 11:00 AM Adelaide</strong> — Phoebe at Hills Psychology Centre. You filled out four intake forms (New Client / Consent / Fee / DASS 21) on 14 May, and Cliniko sent the reminder yesterday evening. Worth knowing it's there, and worth blocking the UpDoc demo slot around it (item ⑤ above suggests 09:00 ACST Tuesday, which sits cleanly before).</p>
+  </div>
+</section>
+
+<nav class="block" style="text-align:center">
+  <a class="pill" href="./index.html">← Back to briefing index</a>
+  &nbsp;
+  <a class="pill" href="02-emails.html">Chapter 02 · Emails →</a>
+</nav>
+
+</main>
+
+</body>
+</html>

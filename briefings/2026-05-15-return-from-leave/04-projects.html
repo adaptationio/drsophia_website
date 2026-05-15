@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 04 · Projects — Return-from-leave briefing</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<script>document.addEventListener('DOMContentLoaded', () => window.BriefingAuth.requireAuth('./index.html'));</script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 04 · Return-from-leave briefing</div>
+    <h1 class="title">Projects · what moved</h1>
+    <p class="subtitle">20 in-flight initiatives across the fortnight. The platform held up. 6 versioned releases shipped. 27/27 PASS on the full nurse-mode validation matrix. Zero production incidents. Below is the per-project status, what moved, what's stuck, and what needs you.</p>
+    <div class="hero-meta">
+      <a class="pill" href="./index.html">← Back to briefing index</a>
+      <a class="pill" href="03-whatsapp.html">← Chapter 03</a>
+      <a class="pill" href="05-open-loops.html">Chapter 05 →</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="broken" class="block">
+  <h2>🚨 Broken now · look at these first</h2>
+  <p class="lede">All low-stakes. None deploy-blocking. None affecting patients.</p>
+
+  <ul style="font-size:14.5px;color:var(--ink-700);line-height:1.85;padding-left:18px">
+    <li><strong>3 daily-cron GitHub workflows have been failing every single day</strong> since before you left.
+      <ul>
+        <li><code>Daily Funnel Report</code> · 8 failures in a row (last 14 May 21:51 UTC)</li>
+        <li><code>Marketing Analytics Dashboard</code> · 8 failures in a row (last 14 May 20:10 UTC)</li>
+        <li><code>Skills-Based AI System Tests</code> · 8 failures in a row (last 14 May 03:08 UTC)</li>
+      </ul>
+      <strong>None are deploy-blocking.</strong> Pipeline itself healthy; only scheduled report jobs are red. Same workflows flagged 6 Apr — funnel fix landed but skills-test still needs proper test-infra work.
+    </li>
+    <li id="perplexity"><strong>Perplexity API key still returning 401</strong> (last verified 8 May). The v6 multi-provider evidence layer ships with Anthropic web_search as the live fallback — it works, but Perplexity Sonar Pro is the intended primary and is silently disabled. <strong>Awaiting key regeneration from the Perplexity console.</strong> Botaniqal-side fix, not vendor outage.</li>
+    <li id="cipla"><strong>Cipla Foundation MoU V1.3</strong> · sent to Rameez Johaar 30 Apr 13:13 ACST. <strong>15+ days of silence.</strong> No reply from Rameez, Dr Punithasvaree, P Mamdoo or any other Cipla/Sha'p Left address. The Yogesh-Ranchod-locked <strong>24 May 09:00 SAST nurse-pod demo</strong> is now 9 days away.</li>
+    <li id="pr-864"><strong>PR #864</strong> (&ldquo;Sha'p Left Ambient Nurse MVP → PROD&rdquo;) still open since 7 May, tagged &ldquo;DO NOT MERGE — demo gate&rdquo;. Needs to land before the 24 May demo can run on PROD. Currently parked.</li>
+  </ul>
+</section>
+
+<section id="deadlines" class="block">
+  <h2>⏰ Deadlines in the next 14 days</h2>
+
+  <table>
+    <thead><tr><th>Date</th><th>Item</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td>12–13 May (past)</td><td>Tshikululu board meeting — v2.2 MoU was supposed to be circulated by 5–6 May</td><td>Dwayne (you only spot-checked Article 18.5)</td></tr>
+      <tr><td><strong>24 May 09:00 SAST</strong></td><td>Cipla × Tshikululu × Sha'p Left nurse-pod demo on Sophia v6.x</td><td>Engineering ready; gated on PR #864 + Rameez go-ahead</td></tr>
+      <tr><td>~22–23 May</td><td>Tshikululu follow-up meeting · Jess Moodey to propose time on Friday</td><td>Dwayne + Julia + Willie</td></tr>
+      <tr><td>Rolling 20-working-day window</td><td>TGA Secretary follow-up to 23 Apr submission (Llea Bouradas)</td><td>No movement to date — silence expected</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="decisions" class="block">
+  <h2>❓ Decisions you need to make</h2>
+  <p class="lede">Six decisions waiting. None are five-alarm. The drafts are written; the relationships are warm.</p>
+
+  <ol style="font-size:14.5px;color:var(--ink-700);line-height:1.85;padding-left:18px">
+    <li><strong>Send the Aaron Rose email confirming records received.</strong> Draft sits in <code>willie@drsophia.ai</code> Outlook Drafts (HTML, Aptos 12pt, Word-filtered, replies in-thread to Dwayne's 5 May forward). Markdown copy at <code>docs/handoffs/2026-05-11-aaron-rose-records-received-draft.md</code>. Awaiting your &ldquo;send it&rdquo;.</li>
+    <li><strong>Send the Vlad Webflow cleanup email.</strong> Draft in <code>willie@botaniqal.com.au</code> Outlook Drafts. Two stale &ldquo;Dr Dia&rdquo; refs in Vlad's Webflow custom code (Schema.org JSON-LD founder + inline JS fallback). Markdown at <code>docs/handoffs/2026-05-13-vlad-weight-loss-widget-cleanup-draft.md</code>. CC's Ramona. Awaiting &ldquo;send it&rdquo;.</li>
+    <li><strong>Decide if Dwayne should send the AusHealth scope-check email to Stefan.</strong> Draft at <code>docs/handoffs/2026-05-08-aushealth-scope-check-draft.md</code>. Three scope questions: TGA Rule 2.15 boundary, geography-flag in shared prompt-builder, breach-notification SLA (24h SADC vs 30d AU NDB). Dwayne is the proposed sender.</li>
+    <li><strong>Decide whether to chase Rameez on the Cipla MoU silence.</strong> 15+ days silent, demo in 9 days. Default: wait for Tshikululu's natural nudge. Alternative: Dwayne-led follow-up. No draft prepared — surfacing for your call.</li>
+    <li><strong>NCTS SNOMED CT Affiliate License submission.</strong> Handoff drafted 30 Apr at <code>docs/handoffs/2026-04-30-ncts-organisation-registration-draft.md</code>. Pre-filled, $0 cost, 1–2 business day approval. <strong>You're the named signatory.</strong> Pending your review since before you went away.</li>
+    <li><strong>PR #864 merge decision (Sha'p Left nurse MVP → PROD).</strong> Currently parked behind &ldquo;demo gate&rdquo;. Engineering says ready; merge unlocks PROD nurse mode. Surgical PROD fixes have been routing around it (PR #865 reliability, PR #867 Shivani widget).</li>
+  </ol>
+</section>
+
+<section id="wins" class="block">
+  <h2>✨ Wins to celebrate</h2>
+  <p class="lede">The team had a genuinely good fortnight. Listing in one place so it's not all stress.</p>
+
+  <div class="grid-2">
+    <div class="tile new">
+      <h4>v6 → v6.6 ship-train · 6 releases in one fortnight</h4>
+      <p>Every one paired with a Playwright audit doc. Cadence is clean.</p>
+    </div>
+    <div class="tile new">
+      <h4>v6.5.4 · first all-green deploy</h4>
+      <p>Landed 11 May. Fixed a 5min→10min kubectl rollout timeout that had been crying-wolf on previous deploys.</p>
+    </div>
+    <div class="tile new">
+      <h4>27/27 PASS · nurse-mode validation</h4>
+      <p>Full v6.x matrix passed 9 May. Demo-ready certification.</p>
+    </div>
+    <div class="tile new">
+      <h4>Dr Shivani availability widget · LIVE</h4>
+      <p>PROD 13 May. Marketing site reads &ldquo;with Dr Shivani Thakur&rdquo;. Three layers fixed in a single 9-line PR.</p>
+    </div>
+    <div class="tile new">
+      <h4>5 leaked AI provider keys rotated</h4>
+      <p>All five (Anthropic, OpenAI, ElevenLabs, Gemini, BACKEND_API_KEY) rotated end-to-end (4–5 May closure). 38 Playwright screenshots. <code>import.meta.env</code> leak vector fixed.</p>
+    </div>
+    <div class="tile new">
+      <h4>EVIDENCE panel · Perplexity Sonar Pro wired</h4>
+      <p>Per-chunk parallel fan-out + Anthropic 1h prompt cache (90% read discount). Speedup from 20s cold to 2–3s warm.</p>
+    </div>
+    <div class="tile new">
+      <h4>Sub-second escalation watcher</h4>
+      <p>Live. Fires red banner inside 100ms, before the LLM responds. isiZulu + Afrikaans + Schedule-5 drug names included.</p>
+    </div>
+    <div class="tile new">
+      <h4>JWT auto-refresh · v6.5.6</h4>
+      <p>Survives 1h+ demo sessions. Sophia bypasses Supabase session so this required a custom refresh path.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cipla-block" class="block">
+  <h2>Project-by-project</h2>
+  <p class="lede">Each project: <strong>Status</strong> · <strong>What moved</strong> · <strong>What's blocked</strong> · <strong>What needs you</strong>.</p>
+
+  <h3 style="margin-top:32px">1 · Cipla Foundation MoU V1.3</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Sent to Rameez Johaar (<code>rjohaar@shapleft.com</code>) 30 Apr 13:13 ACST. Silent 15+ days.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Nothing on Cipla's side. Internal wiki + Tshikululu MoU treat it as one Customer deployment under the Master Agency.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What's blocked:</strong> External response from Cipla. With 24 May demo locked, this is the loudest soft-flag.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision on whether to chase. Default: wait for Tshikululu's natural nudge. Dwayne owns relationship.</p>
+  </div>
+
+  <h3 id="tshikululu" style="margin-top:32px">2 · Tshikululu Master Agency MoU v2.2 · 12-country SADC · 10-year exclusive</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Internal redline complete 4 May. Dwayne &ldquo;G2G to send&rdquo; 4 May 13:41 ACST. Your Article 18.5 spot-check reply (&ldquo;They are all good&rdquo;) sent 4 May 13:40 ACST. <strong>Tshikululu Board secured in-principle 12 May. Now in their legal review.</strong> Jess Moodey proposing follow-up meeting end of next week (~22–23 May).</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Dwayne approved track changes (TGA-registration scope note on Rose vs Dr Sophia). You went GREEN on (a) AES-256/FIPS KMS + (c) RBAC+MFA, YELLOW on (b) TLS 1.3 wording (softened to &ldquo;supported and preferred&rdquo;). Lee Henderson took to Board 12 May, secured in-principle, sent to legal. 14 May: Dwayne acknowledged leave constraints, Lee accepting end-of-next-week timing.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What's blocked:</strong> Tshikululu legal review. If redlines surface on Article 18 (your 9.5 ten-control schedule ported verbatim), you'll need to be in that conversation.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Watch for Jess's calendar invite (Friday-issued).</p>
+  </div>
+
+  <h3 style="margin-top:32px">3 · AusHealth Diagnostics · Stefan Enderling</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> 30 Apr meeting rescheduled to Fri 1 May 13:00 ACST. <strong>Board recommendation to invest landed 1 May.</strong> 2.5-month DD window in flight. Q3 close indicated.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Stefan's &ldquo;Quick Compliance check&rdquo; on Tshikululu MoU Article 18.5 (a/b/c) on 4 May. Your HTML reply drafted in <code>willie@drsophia.ai</code> Drafts (GREEN/GREEN/YELLOW) — confirm with Dwayne whether sent. Briefing pack at <code>docs.drsophia.ai/briefings/2026-04-30/</code> still live (same password).</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What's blocked:</strong> AusHealth scope-check email to Stefan — drafted, awaiting your go-ahead.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision on whether Dwayne sends the scope-check (item #3 in decisions).</p>
+  </div>
+
+  <h3 style="margin-top:32px">4 · TGA CDSS Exemption Response · Llea Bouradas</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ Submitted 23 Apr 03:18 UTC from <code>dwayne@ltdlabs.com.au</code> (Response ID <code>ANON-EH3X-D4JK-5</code>). 20-working-day Secretary follow-up window open.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Nothing. TGA silence is normal at this stage.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Nothing unless TGA responds. If they do, thread lives on <code>dwayne@ltdlabs.com.au</code>, not <code>dwayne@drsophia.ai</code>.</p>
+  </div>
+
+  <h3 style="margin-top:32px">5 · Aaron Rose case</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Both MRIs (20 Jan 2026 Alfred RT / 13 Apr 2026 Gippsland CCC) <strong>ingested 11 May</strong> into MediRecords (corrIds <code>0953bd1f…</code> + <code>0936a9b0…</code>) + Supabase profile metadata.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Sophia live in PROD UI now recalls &ldquo;13 April 2026 — Significant progression with increased vasogenic oedema and multifocal nodular/ring enhancement (~23 × 30 mm)…&rdquo; after consult-step <code>history</code>. Wiki entity page at <code>team_willie/wiki/entities/people/aaron-rose.md</code> clarifies patient-side-AI-synthesis boundary (we are NOT his treating clinic; Dr Shivani is NOT his clinician).</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>Known carry:</strong> Jan 20 scan also held under older corrId <code>7684f089-81dd-4353-b55e-bf30e9115b66</code> (Ramona-uploaded Feb 2026). Both copies retained, flagged in metadata. Not deleted.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision #1 — say &ldquo;send it&rdquo; on the Aaron email confirming records received.</p>
+  </div>
+
+  <h3 id="shivani-widget" style="margin-top:32px">6 · Dr Shivani availability widget · PROD</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ LIVE on PROD 13 May 2026 via PR #867 (admin-merged). Badge on <code>www.botaniqal.com.au/weight-loss</code> reads &ldquo;with Dr Shivani Thakur · 15 min phone consultation · $59 AUD&rdquo;.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Three-layered fix (hardcoded fallback in <code>calendly.js:152</code> + missing ConfigMap env var on both PROD and DEV). Validation evidence captured (DEV API, PROD API, in-cluster ConfigMap, live DOM screenshot). Audit at <code>docs/audit/2026-05-13-availability-widget-shivani-prod.md</code>.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What's blocked:</strong> Two Webflow-side &ldquo;Dr Dia&rdquo; stragglers (Schema.org JSON-LD founder/employee + inline JS fallback) — owned by Vlad per CLAUDE.md §0.4.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision #2 — say &ldquo;send it&rdquo; on the Vlad email draft.</p>
+  </div>
+
+  <h3 style="margin-top:32px">7 · Vlad Discovery Phase Proposal</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Issued 22 Apr 2026 — AU$5,760 / 48-hr / 4-wk, valid until 12 May, kickoff 28 Apr–2 May. <strong>No engagement signal across the 4 mailboxes</strong> on the discovery package proper. The 12 May validity window has expired.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Vlad remains the Webflow-owner and will receive the widget-cleanup email when you green-light. Notion + Strategy Map activity through 13 May.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Awareness — decide whether to follow up or let the discovery package lapse.</p>
+  </div>
+
+  <h3 style="margin-top:32px">8 · Sha'p Left ambient nurse MVP</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> v6.x ship-train brought it to demo-ready. 27/27 PASS full nurse-mode validation 9 May. PR #864 parked (&ldquo;DO NOT MERGE — demo gate&rdquo;). PROD currently runs Sophia general consultation; nurse mode DEV-only until that PR merges.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved (massive):</strong> v6.1 heterogeneous 9-team Sophia (Perplexity + Gemini + GPT-5.5 lazy gates, 16× speedup). v6.2 nurse picker → sidebar accordion. v6.3 Tier 1 (escalation banner + 5 UX fixes). v6.3 Tier 2 (top recording bar + keyboard shortcuts ⌘E / Space / Esc). v6.4 patient-centric sidebar + cross-patient state isolation. v6.4.1/v6.4.2 (3/3 Willie bugs fixed). v6.5 prior-visit context injection (6/6 PASS). v6.5.2 multi-persona validation (4/4 PASS). v6.5.3 TTS empty-text + stream-orphan dedupe (&ldquo;99% noise drop&rdquo;). v6.5.4 deploy timeout fix.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>Demo-day infra audit (8 May):</strong> backend stays at replicas=1 for 24 May demo (no Redis adapter for Socket.IO yet → multi-replica would silently break panels). Pre-warm + log-tail strategy in place. Doc: <code>docs/audit/2026-05-08-demo-day-infra.md</code>.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>af-south-1 readiness audit (8 May):</strong> post-24-May work item per Tshikululu MoU Article 18.4 SA-residency-by-default. Cluster + ECR + ALB + Supabase migration plan scoped. Doc: <code>docs/audit/2026-05-08-af-south-1-readiness.md</code>.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision on whether to merge PR #864 ahead of demo or hold.</p>
+  </div>
+
+  <h3 style="margin-top:32px">9 · Perplexity API 401</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Still 401 as of 8 May. Service falls through cleanly to Anthropic Haiku 4.5 + <code>web_search_20250305</code>. <strong>No customer-facing impact.</strong></p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Multi-provider evidence layer fully shipped in v6 (<code>backend/src/services/MultiProviderEvidenceService.js</code> + <code>backend/src/routes/evidenceRouter.js</code>). Tenant-aware domain whitelists for <code>shap_left</code> / <code>botaniqal_weight_loss</code> / <code>medicolegal</code> / <code>standard</code>. Nurse-router wire-up live in commit <code>1d9b03e2</code>.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Authorise key regeneration via Perplexity console (or delegate to Dwayne). 5-min task once authorised.</p>
+  </div>
+
+  <h3 style="margin-top:32px">10 · v6.6 extended-search progress indicator</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ LIVE both DEV and PROD as of 12 May. Bundle hashes: DEV <code>index-B5Wf4yPy.js</code>, PROD <code>index-CmUPhxvE.js</code>.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What moved:</strong> Dwayne ask 12 May. Root cause: 30s safety timeout in chat host killing the streaming bubble mid-stream during Opus 4.7 adaptive thinking. Bumped to 180s + progressive subtitle rotation in <code>InlineThinkingIndicator</code> at 10/25/50/90s thresholds. PROD Playwright capture confirmed.</p>
+  </div>
+
+  <h3 style="margin-top:32px">11 · JWT auto-refresh v6.5.6</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ LIVE DEV (<code>4b2ec1e1</code>) + PROD. Poison test passes, banner renders, session stays LIVE through expiry.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What moved:</strong> Uses <code>sessionStorage.refresh_token</code> + <code>supa.auth.refreshSession()</code> directly because Sophia bypasses Supabase session. Audit at <code>docs/audit/2026-05-12-v6.5.6-jwt-refresh.md</code>.</p>
+  </div>
+
+  <h3 style="margin-top:32px">12 · K8s graceful shutdown / 150s UI timeout reliability fix</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ LIVE DEV (commit <code>243ee6eb</code>) + PROD via PR #865 (merged 11 May).</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What moved:</strong> Triggered by Aaron's 11 May UI consult hanging at &ldquo;Thought for 1741s&rdquo; — a coincident GH Actions deploy killed the in-flight <code>/api/claude</code> request. Fix: pod <code>lifecycle.preStop: sleep 15</code>, <code>terminationGracePeriodSeconds: 180</code>, <code>strategy.maxSurge=1/maxUnavailable=0</code>. UI: <code>InlineThinkingIndicator</code> timeouts at 150s with &ldquo;Connection lost&rdquo; visual + onTimeout reset wiring across <code>ChatInteraction</code>, <code>ConsultationLayout</code>, <code>ModernDiagnosticMode</code>.</p>
+  </div>
+
+  <h3 style="margin-top:32px">13 · SES IAM + Mailchimp lead webhook</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> ✅ LIVE on PROD (commit <code>b26081f4</code>, continuing the 30 Apr fix). Emails are flowing.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>What moved:</strong> Mailchimp Leads list <code>b45b378bb1</code> webhook <code>f60ddf31f1</code> wired to PROD. <code>signup_stalled</code> funnel-stage never-fired bug fixed (LIKE-match). GET handler for Mailchimp probe added. <code>dualAuth</code> public-path bypass for <code>/api/webhooks/leads/*</code>. The base-layout <code>{{content}}</code> → <code>{{{content}}}</code> HTML-escape bug fixed in commit <code>057babf0</code> (had been firing literal <code>&amp;lt;p&amp;gt;</code> to patients for 30+ days).</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Awareness — Splice's Zapier still runs in parallel for redundancy. Decision on when to retire Splice can wait.</p>
+  </div>
+
+  <h3 id="updoc" style="margin-top:32px">14 · UpDoc demo (Alfredo)</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Dwayne 14 May 03:26 UTC forwarded the demo request from Alfredo (<code>alfredo@updoc.com.au</code>). Dwayne now primary contact. Proposing Mon 18 – Thu 21 May AM, 30-min stack + 30-min Q&amp;A.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>Scope:</strong> Africa pilot (AI Nurse / passive observation), Medicolegal tool for US-owned IME, Q1 2027 TGA Class IIb + Q2 2027 synchronous-consult roadmap (&gt;$5/consult domestically).</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Confirm a slot to Dwayne. Tue 19 May 09:00 ACST recommended (sits cleanly before your 11am Phoebe appointment).</p>
+  </div>
+
+  <h3 style="margin-top:32px">15 · EKS · K8s 1.34</h3>
+  <div class="card">
+    <p style="margin:0;font-size:14px;color:var(--ink-700)">Stable on K8s 1.34 (both DEV + PROD) since 6 Apr. No 1.35 movement signal in the fortnight. Nothing to do.</p>
+  </div>
+
+  <h3 style="margin-top:32px">16 · Botaniqal brochure V2.3 (Michel)</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> <strong>No movement signal</strong> in the fortnight. Michel was waiting on your V2.3 feedback when you went away. Most-recent Michel email in any mailbox was his 4 May &ldquo;side note&rdquo; on Tshikululu MoU.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Read brochure V2.3 + send feedback to Michel. Not on critical-path for 24 May demo. Likely the right &ldquo;ease back in&rdquo; task.</p>
+  </div>
+
+  <h3 style="margin-top:32px">17 · Adaptation.io research engine + Tshikululu pipeline</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> <strong>Wiki platform shipped end-to-end in the fortnight.</strong> 5-layer architecture deployed: Postgres + Gateway + Admin Portal + MCP service + auto-merge CI on Railway. Paul Robinson's research-bot token issued (13/13 enforcement probes pass). Sierra publish-chain complete on adaptation.ai. Daily intel sweeps running clean.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Awareness only. Paul has working access via research-bot.</p>
+  </div>
+
+  <h3 style="margin-top:32px">18 · HubSpot / Mailchimp / Meta API / Google Ads integration health</h3>
+  <div class="card">
+    <p style="margin:0;font-size:14px;color:var(--ink-700)">No outage signals across the fortnight. Mailchimp webhook actively delivering. SES sending after the IAM fix. HubSpot quiet. Nothing observable to do.</p>
+  </div>
+
+  <h3 style="margin-top:32px">19 · Trello board · <code>trello.com/b/kOupi2vA/botaniqal</code></h3>
+  <div class="card">
+    <p style="margin:0;font-size:14px;color:var(--ink-700)">Archive completed end of April (191 files / 1.8 GB / 70 cards / 198 comments). API key/token generated under Ramona's &ldquo;Botaniqal Archive&rdquo; workspace. Stored in <code>~/.csm/tokens-tmp/trello-2026-04-27.txt</code>. No new cards assigned to you in fortnight. Splice-Marketing-managed.</p>
+  </div>
+
+  <h3 style="margin-top:32px">20 · GitHub workflow failures</h3>
+  <div class="card">
+    <p style="margin-top:0;font-size:14px;color:var(--ink-700)"><strong>Status:</strong> Pipeline (DEV + PROD deploys) ✅ healthy. <strong>3 scheduled jobs failing daily</strong> — listed at top of this page.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>What needs you:</strong> Decision on whether to invest fix-time on the scheduled reports or accept the red. None of them block production.</p>
+  </div>
+</section>
+
+<section id="other" class="block">
+  <h2>A few things worth knowing</h2>
+  <p class="lede">Don't fit a project bucket; worth seeing.</p>
+
+  <ul style="font-size:14.5px;color:var(--ink-700);line-height:1.85;padding-left:18px">
+    <li><strong>Wiki entity page for Aaron Rose</strong> now lives at <code>team_willie/wiki/entities/people/aaron-rose.md</code> — canonical source-of-truth. Sensitive PHI; don't paste contents beyond the wiki.</li>
+    <li><strong>Acuity Health demo (Wed 6 May 12pm)</strong> — Acuity-style scanned-PDF extraction + IRIS report generation shipped (<code>/api/medicolegal/my-data</code> / <code>/my-report</code> / <code>/my-ask</code>). 5-pass validation evidence captured. NOT the Cipla demo — distinct workstream for the medicolegal vertical.</li>
+    <li><strong>5-key security incident closure (4–5 May)</strong> — all 5 leaked AI provider keys rotated end-to-end with PROD validated clean (38 Playwright screenshots + <code>REMEDIATION-REPORT.md</code>). Outstanding from the fleet incident (not your scope): 4 non-Botaniqal cloud keys, 3 over-scoped GitHub PATs, Anthropic credit ticket, git-history scrub.</li>
+    <li><strong><code>claude-mem</code> session directory at 4.1G</strong> — the largest in the fleet for this project. Standing flag, not urgent.</li>
+    <li><strong>5 uncommitted files in tree</strong> · <code>docs/audit/2026-05-08-form1-anneke-state.png</code>, <code>docs/handoffs/2026-05-11-aaron-rose-records-received-draft.md</code>, <code>frontend/public/assets/nurse-demo-audio.mp3</code>, 3 external/* submodule pointer drift, <code>project-wiki/log.md</code> + <code>project-wiki/status/current.md</code> modified. All low-stakes carries.</li>
+    <li><strong>Code with Claude 2026 conference</strong> (6 May) — 12 new Anthropic announcements covering Managed Agents API, <code>/goal</code> slash command, <code>claude agents</code> TUI (v2.1.139), Dreaming, Cowork tab, doubled limits, SpaceX deal. <strong>Separate credit pool for Agent SDK + <code>claude -p</code> from 2026-06-15.</strong> Not actionable now; awareness for when you're back.</li>
+  </ul>
+</section>
+
+<nav class="block" style="text-align:center">
+  <a class="pill" href="./index.html">← Back to briefing index</a>
+  &nbsp;
+  <a class="pill" href="03-whatsapp.html">← Chapter 03</a>
+  &nbsp;
+  <a class="pill" href="05-open-loops.html">Chapter 05 →</a>
+</nav>
+
+</main>
+
+</body>
+</html>

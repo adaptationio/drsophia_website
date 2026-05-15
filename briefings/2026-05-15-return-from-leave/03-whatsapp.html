@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 03 · WhatsApp — Return-from-leave briefing</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<script>document.addEventListener('DOMContentLoaded', () => window.BriefingAuth.requireAuth('./index.html'));</script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 03 · Return-from-leave briefing</div>
+    <h1 class="title">WhatsApp · 8 active chats</h1>
+    <p class="subtitle">257 messages across 14 days. Most are check-ins or sympathy — most people have explicitly told you &ldquo;focus on mom, this can wait.&rdquo; The only true &ldquo;today&rdquo; pressure is the brochure-naming call in the marketing group, and even that has a sane default if you stay silent.</p>
+    <div class="hero-meta">
+      <a class="pill" href="./index.html">← Back to briefing index</a>
+      <a class="pill" href="02-emails.html">← Chapter 02</a>
+      <a class="pill" href="04-projects.html">Chapter 04 →</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="lid-key" class="block">
+  <h2>Identifier key · LIDs → people</h2>
+  <p class="lede">The bridge stores LIDs not phone numbers. Here's the resolved mapping for the 14-day window.</p>
+
+  <table>
+    <thead><tr><th>LID / number</th><th>Person</th><th>Confidence</th></tr></thead>
+    <tbody>
+      <tr><td><code>132598894489698</code> / <code>61400022191</code></td><td>Willie (self, two device IDs)</td><td>confirmed</td></tr>
+      <tr><td><code>26861312696531</code></td><td>Dwayne Boyes</td><td>confirmed</td></tr>
+      <tr><td><code>199552921563210</code></td><td>Julia (business — Splice/Hubspot/Vlad/info@/regulatory)</td><td>confirmed</td></tr>
+      <tr><td><code>147029682557096</code></td><td>Julia (clinic — scripts/Shivani/practice mgmt)</td><td>high</td></tr>
+      <tr><td><code>119219735805956</code></td><td>Ramona (partner)</td><td>confirmed</td></tr>
+      <tr><td><code>234054309965889</code></td><td>Dr Shivani Thakur</td><td>confirmed</td></tr>
+      <tr><td><code>61429204042</code></td><td>Clinic contact (NP roster / 3CX missed calls)</td><td>medium</td></tr>
+      <tr><td><code>61489286672</code></td><td><strong>Unknown</strong> — 28 outbound Willie messages, zero received. Likely a senior advisor / mentor / close family. Worth identifying.</td><td>low</td></tr>
+    </tbody>
+  </table>
+
+  <p>No voice notes received in window. No call records in this bridge schema. 13 media items (12 images, 1 PDF). Notable: <code>AUS_Brochure_DrSophiaAI_NEW.pdf</code> from Julia in marketing group 15 May 11:15 — the booklet Sam at AusHealth is waiting on.</p>
+</section>
+
+<section id="p1" class="block">
+  <h2>P1 · direct ask awaiting reply / time-sensitive</h2>
+
+  <div class="findings-callout">
+    <h4>1 · Live now (next few hours)</h4>
+    <h3>Brochure naming call in the Botaniqal marketing group</h3>
+    <p><strong>Chat:</strong> Botaniqal marketing check in (<code>g.us 120363417300124223</code>) · <strong>Window:</strong> 15 May 11:15–12:01.</p>
+    <p>Julia uploaded <code>AUS_Brochure_DrSophiaAI_NEW.pdf</code> at 11:15. Dwayne wants to send it to Sam (AusHealth) <strong>today</strong>. Julia: &ldquo;please please read in full before sending… i've gone thru it but everytime i look again i find something else to fix.&rdquo; Architecture rename in flight: <strong>CDSS → &ldquo;Sophia Decision&rdquo;</strong> (Dwayne pushed back on &ldquo;Decisioning&rdquo; as convoluted; Julia landed on &ldquo;Sophia Decision — clinical decision support layer&rdquo; at 11:18). Bundle: Sophia Core / Sophia Decision / Sophia Assist / Sophia Guard.</p>
+    <p><strong>Who spoke last:</strong> Julia 12:01 — &ldquo;i now have complete access to info@ ….Guard is up and will goal keep from today&rdquo;.</p>
+    <p><strong>Why P1:</strong> Dwayne planning to send to Sam (AusHealth) today. If you have an opinion on naming, last call is this afternoon. Otherwise Dwayne + Julia ship without you.</p>
+    <p><strong>Suggested reply (group):</strong> <em>&ldquo;Trust you both. 'Sophia Decision' lands cleaner than 'Decisioning.' Send when Julia's happy.&rdquo;</em> — or stay silent, they're handling it.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0">2 · Julia business · info@ password just resolved (15 May 12:01)</h4>
+    <p style="font-size:14px;color:var(--ink-700);margin:0">Last unanswered: Julia &ldquo;all done!&rdquo; at 12:01. Was a back-and-forth where you forgot to hit save on the password (<code>DSi2026!@#$</code>). She's now sole pilot of <code>info@botaniqal.com.au</code>. <strong>Closed-loop. No reply needed.</strong> Context: Julia volunteered to take info@ lead after the 14 May &ldquo;dick pic / suspicious email&rdquo; incident in the marketing group.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0">3 · Dwayne 1-on-1 · Aaron Rose MRI ingestion (resolved 11 May)</h4>
+    <p style="font-size:14px;color:var(--ink-700)">Last unanswered: Dwayne &ldquo;Great work agents: 25 tokens ❤️&rdquo; 13 May 11:32 — affectionate sign-off, no reply needed.</p>
+    <p style="font-size:14px;color:var(--ink-700)"><strong>Arc:</strong> 11 May 09:59 Dwayne asked if Aaron's 5 May MRI was in MediRecords. You replied 10:22 &ldquo;mum got air lifted to RAH at 1am last night… will get Aaron stuff sorted this morning&rdquo;. You shipped at 16:19 &ldquo;aaron rose is good to go&rdquo;. Dwayne: &ldquo;Legend — thank you.&rdquo; Closed.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0"><strong>Action:</strong> None on WhatsApp. Thumbs-up on Dwayne's check-in tone suffices.</p>
+  </div>
+</section>
+
+<section id="p2" class="block">
+  <h2>P2 · wants an answer this week</h2>
+
+  <div class="findings-callout" id="julia-clinic">
+    <h4>4 · Three asks · kill with one reply</h4>
+    <h3>Julia (clinic, <code>147029682557096</code>)</h3>
+    <p><strong>Last unanswered:</strong> &ldquo;Just checking in on you mate. How things going with your mum?&rdquo; — 15 May 08:22.</p>
+    <p><strong>Backlog she's parked but will return to:</strong></p>
+    <ul>
+      <li><strong>13 May 09:44</strong> — &ldquo;Have some more practice management questions re Stripe/payments I'd value some help with. Thanks!&rdquo;</li>
+      <li><strong>7 May 09:26</strong> — &ldquo;If you have the same info on Shivani I'd appreciate it. Also if you have a chance pls use Ramona phones / ask her to take Dia off the clinic WhatsApp group. I can't as Ramona is the only admin.&rdquo;</li>
+      <li><strong>6 May 13:27 / 16:19 / 16:25 / 16:32</strong> — patient routing, cancelling Jaque, follow-up. All closed-loop or her handling.</li>
+    </ul>
+    <p><strong>Suggested reply (1-on-1):</strong></p>
+    <p style="background:var(--cream-200);padding:12px 16px;border-radius:8px;font-size:13.5px;color:var(--ink-900);margin:0;line-height:1.5"><em>&ldquo;Mum's recovering. Home with Kokopelli now. Will get to Stripe Qs + Shivani info this week. Ramona — can you knock Dia out of the clinic group when you're at a PC? Julia can't (you're the only admin).&rdquo;</em></p>
+    <p style="margin-bottom:0"><em>Kills three asks at once + the mum check-in.</em></p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0">5 · Dwayne in marketing group · 5V / Tshikululu / Acuity / FN Capital broadcasts</h4>
+    <p style="font-size:14px;color:var(--ink-700);margin:0">Informational team broadcasts 1 / 4 / 7 / 8 May. No direct ask of you. Dwayne assesses Acuity at &ldquo;35% likely, and rising&rdquo; as of 8 May. Tshikululu commercial summary went out 7–8 May (Julia drafted, both reviewed). <strong>No reply needed on WhatsApp.</strong> Check Outlook for any Rameez/Tshikululu thread movement.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0">6 · Julia (group, 11 May 12:22) · leads mgmt + Vlad + brand book</h4>
+    <p style="font-size:14px;color:var(--ink-700)">Direct @Willie ask in the marketing group, four items: (1) send leads-mgmt sequences for a manual email to all leads with Meta form, (2) Vlad's 1st iteration this week, (3) logo + brand-book update by Wednesday, (4) new brochure following week.</p>
+    <p style="font-size:14px;color:var(--ink-700);margin-bottom:0">Your reply 12:35: &ldquo;just sent through an email&rdquo; — partial close. <strong>Item (1) the sequence dump</strong> may be pending if your email reply wasn't complete. Items 2–4 are Julia's deliverables. <strong>Action: verify Outlook reply included the lead nurture sequences. If yes, closed.</strong></p>
+  </div>
+</section>
+
+<section id="p3" class="block">
+  <h2>P3 · FYI / sympathy / soft check-ins (no reply pressure)</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">Dwayne · sympathy cascade (1 May 10:05–17:15)</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">Three messages: &ldquo;Please, take this time to be with family ❤️&rdquo; · &ldquo;God Bless you my friend — and my prayers are with you and Ramona ❤️&rdquo; · &ldquo;Can I order you guys some food parcels? Or is there anything you and the family need over this coming week? Fot Chef meals are all fresh, good macros and tasty. Just hollah out mate.&rdquo;</p>
+      <p style="font-size:14px;color:var(--ink-700);margin-top:8px;margin-bottom:0"><strong>Status:</strong> You've been in active back-and-forth with Dwayne every day since. He knows. No reply expected on the food offer specifically.</p>
+    </div>
+
+    <div class="card">
+      <h4 style="margin-top:0">Julia (clinic) · bereavement check-ins</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">1 May: &ldquo;Thinking of you mate. So sorry for your loss.&rdquo; · 4 May: &ldquo;Hope you guys are okay&rdquo; / &ldquo;I'm sorry mate, I am thinking of you both. Sending you a big hug&rdquo; · 13 May 18:06: &ldquo;It's been a shit and long run. I really hope it turns the corner soon.&rdquo;</p>
+      <p style="font-size:14px;color:var(--ink-700);margin-top:8px;margin-bottom:0"><strong>Status:</strong> You've responded warmly across these. The latest 15 May 08:22 check-in is the one sitting unanswered — covered in P2 #4 with the kill-three-asks reply.</p>
+    </div>
+
+    <div class="card">
+      <h4 style="margin-top:0">Julia (business) · &ldquo;focus on mom&rdquo; (14 May 14:20)</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0">After you told her &ldquo;Just with my mum at the RAH&rdquo;: &ldquo;Oh fuck sorry. No idea sorry. Hope all ok. This can wait. Focus on mom.&rdquo; Returned 15 May only to close out the info@ password loop. <strong>She is explicitly giving you airspace.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="ramona" class="block">
+  <h2>Family · Ramona</h2>
+
+  <div class="findings-callout">
+    <h4>Three messages 11–12 May · unanswered</h4>
+    <h3>Light, domestic, not distressed</h3>
+    <ul>
+      <li><strong>11 May 20:08</strong> — &ldquo;Where the pony??xxx&rdquo;</li>
+      <li><strong>12 May 20:56</strong> — &ldquo;Koko's ready for bed xx&rdquo;</li>
+      <li><strong>12 May 20:59</strong> — &ldquo;Willie !!!&rdquo;</li>
+    </ul>
+    <p>The kisses + &ldquo;Willie !!!&rdquo; suggest gentle nudges, not distress. Likely while you were at RAH with mum (mum was air-lifted ~11 May 01:00).</p>
+    <p><strong>Suggested:</strong> No reply needed if already resolved in person. Otherwise a quick &ldquo;thinking of you, home tonight xx&rdquo; closes the loop.</p>
+    <p style="margin-bottom:0"><strong>Tone:</strong> Warm + brief. Don't over-explain. She is closest to this and doesn't need a status report.</p>
+  </div>
+</section>
+
+<section id="outbound" class="block">
+  <h2>Outbound-only threads · Willie sent, no reply received</h2>
+  <p class="lede">Both contacts appear to be close confidants based on tone — they receive what you send but don't transact back in writing. Worth identifying before sending more.</p>
+
+  <div class="card">
+    <h4 style="margin-top:0"><code>61489286672</code> · 28 outbound, zero received (1–6 May)</h4>
+    <ul style="font-size:14px;color:var(--ink-700);margin:0">
+      <li><strong>1 May 16:12</strong> · &ldquo;all good. thank you for the offer, but we went and bought cheat food, pies, ice cream, vanilla slice etc to snack on, exhausted about to go lay on lounge and close our eyes for a bit&rdquo; — bereavement-evening message to a close confidant.</li>
+      <li><strong>5 May 12:35–13:01</strong> · extended brief about Jo Hands / Isabella Pham / Five V Capital diligence overlap. Adaptation AI/Dr Sophia strategic coordination context. &ldquo;I had a booking in my adaptation ai website for a discovery call, we did some background checks on her this what the agents uncovered.&rdquo;</li>
+      <li><strong>5 May 12:34</strong> · &ldquo;Ramona has text Shivani to get the script redone for Jelena, and told Shivani Ramona is on leave and Dwayne will contact&rdquo;.</li>
+      <li><strong>5 May 12:55</strong> · &ldquo;i guess my question is how to approach the meeting&rdquo;.</li>
+      <li><strong>6 May 10:52</strong> · &ldquo;ok im leaving any updates for now. unless you find something major&rdquo; — sign-off.</li>
+    </ul>
+    <p style="font-size:14px;color:var(--ink-700);margin-top:12px;margin-bottom:0"><strong>Likely:</strong> a senior advisor / mentor / family member you brief in writing. Possibly your father, a board director, or Paul Robinson. Worth identifying before sending anything else. If the contact name is missing in your phone, open the conversation in WhatsApp and the contact name should resolve from your address book.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0"><code>61429204042</code> · 6 outbound 4–6 May, no replies</h4>
+    <ul style="font-size:14px;color:var(--ink-700);margin:0">
+      <li>NP roster timings, &ldquo;are you receiving the call for the clinic&rdquo;.</li>
+      <li><strong>4 May 10:19</strong> · raw share: &ldquo;its hard, The shock has gone and the grief has kicked in. i have in my studio, setup and matress next to me with nice pillows so she is not alone. Just getting everything setup with her coms and making a list of things to get sorted for her so she can switch off and just grieve.&rdquo;</li>
+    </ul>
+    <p style="font-size:14px;color:var(--ink-700);margin-top:12px;margin-bottom:0"><strong>Likely:</strong> from March context this was someone coordinating with you on &ldquo;Dia's session&rdquo; (then-prescribing doctor) — probably an NP, clinic partner, or close friend who also lost someone. Sympathy was reciprocal in March. Probably a friend who knows you'd reach out when ready — not waiting on a transaction.</p>
+  </div>
+</section>
+
+<section id="recommend" class="block">
+  <h2>What needs you / what can wait</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">Touch this week (~10 minutes total)</h4>
+      <ol style="font-size:14px;color:var(--ink-700);margin:0">
+        <li><strong>Ramona</strong> — close the 12 May &ldquo;Willie !!!&rdquo; loop with one warm message.</li>
+        <li><strong>Julia (clinic)</strong> — one reply covering mum + Stripe + Ramona-removes-Dia.</li>
+        <li><strong>Marketing group</strong> — optional ack on Sophia Decision naming. If silent, Dwayne + Julia ship anyway.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Can wait</h4>
+      <ul style="font-size:14px;color:var(--ink-700);margin:0">
+        <li>Five V / FN Capital / Acuity / Tshikululu pipeline — Dwayne running it.</li>
+        <li>Aaron Rose MRI — closed.</li>
+        <li>AusHealth board recommendation — DD process.</li>
+        <li>8 sympathy messages from Dwayne + Julia — already acknowledged in flow.</li>
+        <li>Clinic comms group — Julia + Shivani running script ops smoothly.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Identify before next sweep</h4>
+      <ul style="font-size:14px;color:var(--ink-700);margin:0">
+        <li><code>61489286672</code> — 28 outbound, zero reply. Confirm contact name from phone address book.</li>
+        <li><code>61429204042</code> — 6 outbound, zero reply. Same.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<nav class="block" style="text-align:center">
+  <a class="pill" href="./index.html">← Back to briefing index</a>
+  &nbsp;
+  <a class="pill" href="02-emails.html">← Chapter 02</a>
+  &nbsp;
+  <a class="pill" href="04-projects.html">Chapter 04 →</a>
+</nav>
+
+</main>
+
+</body>
+</html>

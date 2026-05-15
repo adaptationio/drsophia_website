@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Return-from-leave briefing · 15 May 2026</title>
+<meta name="description" content="Personal triage briefing for Willie Prosek — emails, WhatsApp, projects, open loops across the two weeks 1–15 May 2026." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="assets/auth.js" defer></script>
+</head>
+<body class="auth-locked">
+<noscript><div class="ns-msg">JavaScript is required to view this confidential briefing.</div></noscript>
+
+<div id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-eyebrow">Personal · Confidential</div>
+    <h1>Welcome back, Willie</h1>
+    <p class="lede">Two weeks of correspondence + project state, gathered quietly while you were away. Sending love to you and your mum. Enter the briefing password to continue.</p>
+    <form id="auth-form" autocomplete="off">
+      <div id="auth-error" class="auth-error">Wrong password. Try again.</div>
+      <label for="auth-input">Briefing password</label>
+      <input id="auth-input" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <button type="submit">Unlock briefing</button>
+    </form>
+    <div class="auth-fallback">
+      Same password as the 8 May briefing.
+    </div>
+  </div>
+</div>
+
+<script>document.addEventListener('DOMContentLoaded', () => window.BriefingAuth.initIndexGate());</script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Return-from-leave briefing · 15 May 2026</div>
+    <h1 class="title">Welcome back, mate.</h1>
+    <p class="subtitle">The platform held up. People know. Nothing is actually broken. Below is the full picture of the fortnight you missed — sized so you can stop at Chapter 1 if that's all you've got energy for today.</p>
+    <div class="hero-meta">
+      <span class="pill">🟢 Production · stable</span>
+      <span class="pill">📨 4 mailboxes · 14 days</span>
+      <span class="pill">💬 257 WhatsApp messages</span>
+      <span class="pill">📦 6 versioned releases shipped</span>
+      <span class="pill">📅 24 May SAST · Cipla nurse demo locked</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="summary" class="block">
+  <h2>The 60-second read</h2>
+  <p class="lede">If you only read this one box today, that's enough. Everything else is here for when you've got energy.</p>
+
+  <div class="callout">
+    <p><strong>Big wins.</strong> Tshikululu Board secured in-principle approval on the 12-country, 10-year exclusive Master Agency MoU (12 May). AusHealth Board recommended to invest (1 May, 2.5-month DD now running). Acuity demo went well — Leanne happy, medicolegal module on their roadmap. Dr Shivani widget LIVE on PROD. Aaron Rose's MRIs ingested and Sophia in PROD recalls them word-for-word.</p>
+    <p><strong>Two emails in your Outlook Drafts waiting on a single &ldquo;send it&rdquo;.</strong> Anthropic credit request ($1,500 USD, 8 days parked) and Vlad Webflow Dr&nbsp;Dia&nbsp;→&nbsp;Dr&nbsp;Shivani cleanup (3 days parked). Both written. Read once, send.</p>
+    <p><strong>One soft-flag.</strong> Cipla Foundation has been silent for 15+ days on the V1.3 MoU Julia sent Rameez on 30 April. The 24 May SAST nurse-pod demo is 9 days out; engineering is ready; Cipla silence is the only blocker. Dwayne has the relationship — your call whether to chase or wait for Tshikululu's natural nudge.</p>
+    <p><strong>People who know and gave you air-cover.</strong> Dwayne, both Julias, Michel and Ramona have all explicitly said &ldquo;focus on mom, this can wait.&rdquo; No one is waiting tensely. Dwayne has been carrying the AU end gracefully — your name has been spoken well in front of Acuity, AusHealth and UpDoc.</p>
+  </div>
+</section>
+
+<section id="chapters" class="block">
+  <h2>What's inside · start with Chapter 1</h2>
+  <p class="lede">Each chapter is self-contained. The first one is the only one you need to read today — 7 items, ~25 minutes to clear. The rest are deep-dives for when you've got headspace.</p>
+
+  <div class="grid-2">
+    <a href="01-first-hour.html" class="chapter-card">
+      <span class="ch-num">Chapter 01 <span class="new-ribbon">START HERE</span></span>
+      <h3>First hour back · the punch list</h3>
+      <p>Seven items, each with one-line context. Two are &ldquo;send a draft you've already written&rdquo;. Two are 30-second WhatsApp replies. One is an awareness check with Dwayne. Read top-to-bottom, clear top-to-bottom.</p>
+      <div class="ch-meta">~25 minutes total · links into deep-dives</div>
+    </a>
+
+    <a href="02-emails.html" class="chapter-card">
+      <span class="ch-num">Chapter 02</span>
+      <h3>Emails · 4 mailboxes</h3>
+      <p>Full triage of <code>willie@adaptation.io</code>, <code>@drsophia.ai</code>, <code>@botaniqal.com.au</code>, <code>@ltdlabs.com.au</code>. Tiered P1/P2/P3, drafts review, calendar, top senders.</p>
+      <div class="ch-meta">1 thread needs eyes · 2 drafts unsent · 23 informational</div>
+    </a>
+
+    <a href="03-whatsapp.html" class="chapter-card">
+      <span class="ch-num">Chapter 03</span>
+      <h3>WhatsApp · 8 active chats</h3>
+      <p>Ramona, Dwayne, both Julias, the clinic + marketing groups. What needs a one-line reply, what's a soft check-in, who said &ldquo;focus on mom&rdquo;.</p>
+      <div class="ch-meta">3 unanswered direct asks · 11 soft check-ins · 2 unknowns</div>
+    </a>
+
+    <a href="04-projects.html" class="chapter-card">
+      <span class="ch-num">Chapter 04</span>
+      <h3>Projects · what moved</h3>
+      <p>20 in-flight initiatives. Tshikululu, Cipla, AusHealth, TGA, Sha'p Left, Acuity, Aaron Rose, Vlad, v6.x ship-train. Status, what moved, what's stuck, what needs you.</p>
+      <div class="ch-meta">6 versioned releases · 27/27 PASS · 0 production incidents</div>
+    </a>
+
+    <a href="05-open-loops.html" class="chapter-card">
+      <span class="ch-num">Chapter 05</span>
+      <h3>Open loops · A vs B</h3>
+      <p>Section A: balls in your court (13 items). Section B: balls in someone else's court (5 items). Ranked by urgency × business importance. Most of A is closeable in under a minute each.</p>
+      <div class="ch-meta">13 yours · 5 theirs · ~20 min to clear A</div>
+    </a>
+
+    <a href="06-week-ahead.html" class="chapter-card">
+      <span class="ch-num">Chapter 06</span>
+      <h3>The week ahead</h3>
+      <p>Calendar 18–30 May, the 24 May SAST Cipla demo, Tshikululu follow-up window, your Tuesday 11am Phoebe appointment, the things Dwayne is driving without you.</p>
+      <div class="ch-meta">2 weekly ops · 2 CDSS · 1 personal · 1 SADC demo</div>
+    </a>
+  </div>
+</section>
+
+<section id="wins" class="block">
+  <h2>Wins to celebrate</h2>
+  <p class="lede">The team had a serious fortnight while you were out. Worth seeing them all in one place — most needed zero attention from you.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-num">v6 → v6.6</div>
+      <div class="kpi-label">Six versioned releases in two weeks. Every one paired with a Playwright audit doc. Cadence is clean.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">27/27</div>
+      <div class="kpi-label">Full nurse-mode validation matrix PASS (9 May). Demo-ready certification ahead of the 24 May Cipla nurse-pod showcase.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">Tshikululu Board</div>
+      <div class="kpi-label">In-principle approval secured on the 12-country, 10-year exclusive SADC Master Agency MoU. Their legal review now under way.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">AusHealth Board</div>
+      <div class="kpi-label">Board recommendation to invest landed 1 May. DD pack sent 8 May. Q3 close indicated. Stefan / Justin / Belinda running it.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">Aaron's MRIs live</div>
+      <div class="kpi-label">Both scans (20 Jan Alfred RT, 13 Apr Gippsland CCC) ingested 11 May. Sophia in PROD recalls them in consult.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">JWT 1h+ survives</div>
+      <div class="kpi-label">v6.5.6 auto-refresh shipped to PROD. Demo sessions now survive expiry cleanly. PR #865 reliability fix also on PROD.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">Dr Shivani live</div>
+      <div class="kpi-label">Availability widget LIVE on PROD 13 May. Marketing site reads &ldquo;with Dr Shivani Thakur&rdquo;. Three layers fixed in a 9-line PR.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">All 5 keys rotated</div>
+      <div class="kpi-label">Leaked AI-provider key incident (4–5 May) closed end-to-end. 38 Playwright screenshots. <code>import.meta.env</code> vector fixed.</div>
+    </div>
+  </div>
+</section>
+
+<section id="people" class="block">
+  <h2>People who said the right thing</h2>
+  <p class="lede">Soft signal — but worth seeing in one place. None of these are tasks; just a record that you're held.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4 style="margin-top:0">Dwayne</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">1 May, three messages in a row: &ldquo;Please, take this time to be with family ❤️&rdquo; · &ldquo;God Bless you my friend — my prayers are with you and Ramona ❤️&rdquo; · offered to send Fot Chef food parcels. In active flow since. Said publicly to Acuity + AusHealth that &ldquo;Willie is at 10/10ths on Sophia and Rose architecture.&rdquo;</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Julia (business)</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">14 May, after you mentioned mum at the RAH: &ldquo;Oh fuck sorry. No idea sorry. Hope all ok. This can wait. Focus on mom.&rdquo; Returned only on 15 May to close out the info@ password loop. Otherwise giving you airspace.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Julia (clinic)</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">1 May, 4 May, 13 May, 15 May. &ldquo;Thinking of you mate. So sorry for your loss.&rdquo; · &ldquo;I'm so sorry mate, I am thinking of you both. Sending you a big hug.&rdquo; · 15 May 08:22: &ldquo;Just checking in on you mate. How things going with your mum?&rdquo;</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Michel</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">Said publicly in the marketing-pack thread: &ldquo;This is AWESOME!!!!! Love this!&rdquo; (11 May overnight read). Has been quietly running the weekly ops cadence in your absence.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Ramona</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">11–12 May light pings from home: &ldquo;Where the pony?? xxx&rdquo; · &ldquo;Koko's ready for bed xx&rdquo; · &ldquo;Willie !!!&rdquo;. Light, domestic, not distressed. One warm reply when you're up to it.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Paul Robinson</h4>
+      <p style="font-size:14px;color:var(--ink-700);margin:0;">Code of Conduct training closed cleanly. Per the comms-rules guardrail (<code>wiki/entities/people/paul-robinson.md</code>), no re-engagement required unless asked.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="inner">
+    <div><strong>Return-from-leave briefing</strong> · generated 15 May 2026 · synthesised from 4 mailboxes, WhatsApp bridge, wiki log, git history + GitHub state across 14 days (1–15 May 2026). Personal · do not share. Same password as the 8 May briefing. SHA-256 client-side gate, sessionStorage scoped.</div>
+  </div>
+</footer>
+
+</main>
+
+</body>
+</html>
